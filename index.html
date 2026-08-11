@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="it" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rush — Il cervello operativo della tua attività</title>
+<meta name="description" content="Rush integra, migliora o sostituisce i sistemi che già usi — cassa, gestionali, Excel, fatture, magazzino — e ci mette sopra un'AI che trasforma i tuoi dati in decisioni, in italiano.">
+<meta name="theme-color" content="#08080A">
+
+<meta property="og:title" content="Rush — Il cervello operativo della tua attività">
+<meta property="og:description" content="Integriamo, miglioriamo o sostituiamo i sistemi che già usi — e ci mettiamo sopra un'AI che trasforma i tuoi dati in decisioni.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<!-- Ambient background layers -->
+<div class="ambient" aria-hidden="true">
+  <div class="ambient__grid"></div>
+  <div class="ambient__orb ambient__orb--1"></div>
+  <div class="ambient__orb ambient__orb--2"></div>
+  <div class="ambient__noise"></div>
+</div>
+
+<a class="skip-link" href="#main">Salta al contenuto</a>
+
+<!-- ══════════════ 0 · NAVBAR ══════════════ -->
+<header class="nav" id="nav">
+  <nav class="nav__inner" aria-label="Navigazione principale">
+    <a class="nav__brand" href="#hero" aria-label="Rush — home">
+      <span class="nav__logo" aria-hidden="true">R</span>
+      <span class="nav__word">Rush</span>
+    </a>
+    <div class="nav__links">
+      <a href="#visione" class="nav__link">Visione</a>
+      <a href="#come-funziona" class="nav__link">Come funziona</a>
+      <a href="#ristorazione" class="nav__link">Ristorazione</a>
+      <a href="#contatti" class="nav__link">Contatti</a>
+    </div>
+    <div class="nav__right">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambia tema" title="Cambia tema">
+        <span class="theme-toggle__icon" aria-hidden="true"></span>
+      </button>
+      <a href="#contatti" class="btn btn--primary btn--sm">Richiedi accesso</a>
+    </div>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ══════════════ 1 · HERO ══════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero__spot" aria-hidden="true"></div>
+
+    <!-- converging systems -->
+    <div class="converge" aria-hidden="true">
+      <svg class="converge__lines" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="var(--accent)" stop-opacity="0"/>
+            <stop offset="100%" stop-color="var(--accent)" stop-opacity=".55"/>
+          </linearGradient>
+        </defs>
+        <path class="converge__line" d="M120,90 C400,180 500,300 600,320"/>
+        <path class="converge__line" d="M1080,90 C800,180 700,300 600,320"/>
+        <path class="converge__line" d="M80,330 C320,330 460,325 600,320"/>
+        <path class="converge__line" d="M1120,330 C880,330 740,325 600,320"/>
+        <path class="converge__line" d="M160,560 C420,470 500,360 600,320"/>
+        <path class="converge__line" d="M1040,560 C780,470 700,360 600,320"/>
+      </svg>
+      <span class="converge__node" style="--x:9%;  --y:14%">Cassa</span>
+      <span class="converge__node" style="--x:83%; --y:14%">Gestionale</span>
+      <span class="converge__node" style="--x:4%;  --y:50%">Excel</span>
+      <span class="converge__node" style="--x:86%; --y:50%">Fatture</span>
+      <span class="converge__node" style="--x:12%; --y:85%">Magazzino</span>
+      <span class="converge__node" style="--x:80%; --y:85%">API</span>
+      <span class="converge__core"><span>Rush</span></span>
+    </div>
+
+    <div class="hero__content container">
+      <a class="badge reveal" data-reveal="fade" href="#come-funziona">
+        <span class="badge__dot"></span> Su misura · AI-native
+      </a>
+      <h1 class="hero__title" data-wordfill-load>Il cervello su misura<br>della tua attività.</h1>
+      <p class="hero__sub reveal" data-reveal="fade" data-delay="200">
+        Integriamo, miglioriamo o sostituiamo i sistemi che già usi — e ci mettiamo
+        sopra un'AI che trasforma i tuoi dati in decisioni.
+      </p>
+      <div class="hero__cta reveal" data-reveal="fade" data-delay="320">
+        <a href="#contatti" class="btn btn--primary btn--lg">Richiedi accesso</a>
+        <a href="#problema" class="btn btn--ghost btn--lg">Guarda come funziona <span aria-hidden="true">↓</span></a>
+      </div>
+      <ul class="hero__trust reveal" data-reveal="fade" data-delay="440">
+        <li>Su misura</li>
+        <li>Infrastruttura europea</li>
+        <li>GDPR</li>
+        <li>AI-native</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══════════════ 2 · IL PROBLEMA ══════════════ -->
+  <section class="problem" id="problema">
+    <div class="container container--narrow">
+      <p class="eyebrow reveal" data-reveal="fade">Il problema</p>
+      <h2 class="manifesto" data-wordfill>
+        I tuoi dati esistono già. Sono sparsi in sistemi che non si parlano.
+        Così ti costano tempo, generano errori e nessuno li sfrutta davvero.
+      </h2>
+    </div>
+  </section>
+
+  <!-- ══════════════ 3 · COS'È RUSH ══════════════ -->
+  <section class="whatis" id="come-funziona">
+    <div class="container">
+      <div class="section-head reveal" data-reveal="up">
+        <span class="pill"><span class="pill__ico">◍</span> Cos'è Rush</span>
+        <h2 class="section-title">Non ti chiediamo di ricominciare da zero.<br>Partiamo da quello che hai già.</h2>
+      </div>
+
+      <div class="triad">
+        <article class="tri-card reveal" data-reveal="up" data-delay="0">
+          <div class="tri-card__num">01</div>
+          <div class="tri-card__ico" aria-hidden="true">⇄</div>
+          <h3>Integriamo</h3>
+          <p>Colleghiamo i sistemi che tieni e li facciamo finalmente parlare tra loro.</p>
+        </article>
+        <article class="tri-card reveal" data-reveal="up" data-delay="120">
+          <div class="tri-card__num">02</div>
+          <div class="tri-card__ico" aria-hidden="true">↗</div>
+          <h3>Miglioriamo</h3>
+          <p>Dove uno strumento c'è ma è debole, lo potenziamo senza buttare via nulla.</p>
+        </article>
+        <article class="tri-card reveal" data-reveal="up" data-delay="240">
+          <div class="tri-card__num">03</div>
+          <div class="tri-card__ico" aria-hidden="true">✦</div>
+          <h3>Sostituiamo</h3>
+          <p>Dove serve, lo rimpiazziamo con qualcosa fatto per come lavori tu.</p>
+        </article>
+      </div>
+
+      <!-- Sticky brain diagram -->
+      <div class="brain">
+        <div class="brain__sticky">
+          <p class="brain__lead reveal" data-reveal="fade">E poi ci mettiamo sopra il cervello.</p>
+          <div class="brain__flow">
+            <div class="flow-step reveal" data-reveal="up" data-step="1">
+              <span class="flow-step__badge">Collega</span>
+              <p>Un unico posto dove confluisce tutto ciò che produci.</p>
+            </div>
+            <div class="flow-arrow" aria-hidden="true">→</div>
+            <div class="flow-step reveal" data-reveal="up" data-step="2" data-delay="120">
+              <span class="flow-step__badge">Capisce</span>
+              <p>L'AI legge i tuoi numeri e trova quello che conta.</p>
+            </div>
+            <div class="flow-arrow" aria-hidden="true">→</div>
+            <div class="flow-step reveal" data-reveal="up" data-step="3" data-delay="240">
+              <span class="flow-step__badge">Risponde</span>
+              <p>Chiedi in italiano, ottieni la risposta con numeri e fonti.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ 4 · COSA CI GUADAGNI ══════════════ -->
+  <section class="benefits">
+    <div class="container">
+      <div class="section-head reveal" data-reveal="up">
+        <span class="pill"><span class="pill__ico">✦</span> E quindi?</span>
+        <h2 class="section-title">Cosa ci guadagni</h2>
+      </div>
+      <div class="bento">
+        <article class="benefit reveal" data-reveal="up">
+          <div class="benefit__ico" aria-hidden="true">◷</div>
+          <h3>Meno tempo</h3>
+          <p>Ciò che fai a mano ogni settimana — report, controlli, ricerche — lo fa il sistema. Da più schermate a una domanda.</p>
+        </article>
+        <article class="benefit reveal" data-reveal="up" data-delay="100">
+          <div class="benefit__ico" aria-hidden="true">◈</div>
+          <h3>Meno errori</h3>
+          <p>Niente più dati ricopiati a mano: riconciliazioni e confronti automatici. Le cose non ti sfuggono più.</p>
+        </article>
+        <article class="benefit reveal" data-reveal="up" data-delay="200">
+          <div class="benefit__ico" aria-hidden="true">◧</div>
+          <h3>Più dati sfruttabili</h3>
+          <p>I numeri che contano, sempre aggiornati e in un posto solo. Basta con l'Excel di fine mese.</p>
+        </article>
+        <article class="benefit reveal" data-reveal="up" data-delay="300">
+          <div class="benefit__ico" aria-hidden="true">⚡</div>
+          <h3>Decisioni più veloci</h3>
+          <p>Chiedi in italiano, ottieni la risposta subito, con la fonte. Anomalie trovate prima che diventino problemi.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ 5 · COME PENSA RUSH ══════════════ -->
+  <section class="principles" id="visione">
+    <div class="container">
+      <div class="section-head reveal" data-reveal="up">
+        <span class="pill"><span class="pill__ico">◇</span> Come pensa Rush</span>
+        <h2 class="section-title">I principi</h2>
+      </div>
+
+      <div class="principle reveal" data-reveal="up">
+        <div class="principle__text">
+          <span class="principle__idx">01</span>
+          <h3>Su misura, non a pacchetto</h3>
+          <p>Nessun cliente riceve la stessa cosa di un altro. Il prodotto è vivo e cresce con te — non un template da riempire.</p>
+        </div>
+        <div class="principle__visual" aria-hidden="true">
+          <div class="viz-tailored">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="principle principle--rev reveal" data-reveal="up">
+        <div class="principle__text">
+          <span class="principle__idx">02</span>
+          <h3>AI-native, non AI-spruzzata</h3>
+          <p>L'intelligenza è il centro, non un bottone in più. Chiedi in italiano, rispondiamo con dati e fonti.</p>
+        </div>
+        <div class="principle__visual" aria-hidden="true">
+          <div class="viz-ai"><span class="viz-ai__core"></span></div>
+        </div>
+      </div>
+
+      <div class="principle reveal" data-reveal="up">
+        <div class="principle__text">
+          <span class="principle__idx">03</span>
+          <h3>I tuoi dati restano tuoi</h3>
+          <p>Infrastruttura europea, cifratura, isolamento per cliente, export sempre possibile.</p>
+        </div>
+        <div class="principle__visual" aria-hidden="true">
+          <div class="viz-shield">🇪🇺</div>
+        </div>
+      </div>
+
+      <div class="principle principle--rev reveal" data-reveal="up">
+        <div class="principle__text">
+          <span class="principle__idx">04</span>
+          <h3>Cresce con te</h3>
+          <p>Parti dall'essenziale, aggiungi pezzi quando servono. Non paghi ciò che non usi.</p>
+        </div>
+        <div class="principle__visual" aria-hidden="true">
+          <div class="viz-grow"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ 6 · LA PROVA: RISTORAZIONE ══════════════ -->
+  <section class="proof" id="ristorazione">
+    <div class="proof__glow" aria-hidden="true"></div>
+    <div class="container">
+      <div class="proof__grid">
+        <div class="proof__intro reveal" data-reveal="up">
+          <span class="pill"><span class="pill__ico">◆</span> La prova</span>
+          <h2 class="section-title">La prima cosa che abbiamo costruito così è Rush per la ristorazione.</h2>
+          <p class="proof__lead">È la prova, non il confine. Un locale reale — il nostro primo cliente founding — che ogni giorno legge margini, fornitori, magazzino e personale in un posto solo.</p>
+          <a href="#" class="btn btn--primary">Scopri Rush per la ristorazione <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="proof__previews">
+          <div class="preview preview--a reveal" data-reveal="scale">
+            <span class="preview__tag">Margini reali</span>
+            <div class="preview__bars"><i style="--h:40%"></i><i style="--h:70%"></i><i style="--h:55%"></i><i style="--h:85%"></i></div>
+          </div>
+          <div class="preview preview--b reveal" data-reveal="scale" data-delay="120">
+            <span class="preview__tag">Chat in italiano</span>
+            <p class="preview__chat">"Quanto ho incassato questa settimana rispetto alla scorsa?"</p>
+          </div>
+          <div class="preview preview--c reveal" data-reveal="scale" data-delay="240">
+            <span class="preview__tag">Magazzino sotto soglia</span>
+            <div class="preview__dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ 7 · COME LAVORIAMO ══════════════ -->
+  <section class="method">
+    <div class="container">
+      <div class="section-head reveal" data-reveal="up">
+        <span class="pill"><span class="pill__ico">◎</span> Come lavoriamo</span>
+        <h2 class="section-title">Un metodo, non una promessa</h2>
+      </div>
+      <div class="method__steps">
+        <div class="mstep reveal" data-reveal="up">
+          <span class="mstep__n">01</span>
+          <h3>Analizziamo come lavori davvero</h3>
+          <p>Partiamo dai tuoi flussi reali, non da un questionario standard.</p>
+        </div>
+        <div class="mstep reveal" data-reveal="up" data-delay="100">
+          <span class="mstep__n">02</span>
+          <h3>Costruiamo solo il pezzo che serve</h3>
+          <p>Niente moduli inutili: il delta su misura, montato in fretta sul core.</p>
+        </div>
+        <div class="mstep reveal" data-reveal="up" data-delay="200">
+          <span class="mstep__n">03</span>
+          <h3>Collegando ciò che hai già</h3>
+          <p>Il tuo stack resta al suo posto. Rush lo mette in dialogo.</p>
+        </div>
+      </div>
+      <ul class="pillars reveal" data-reveal="fade">
+        <li><span aria-hidden="true">◭</span> Stack europeo</li>
+        <li><span aria-hidden="true">◈</span> Sicurezza e cifratura</li>
+        <li><span aria-hidden="true">✦</span> AI di frontiera</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══════════════ 8 · VISIONE ══════════════ -->
+  <section class="vision">
+    <div class="container">
+      <div class="section-head reveal" data-reveal="up">
+        <span class="pill"><span class="pill__ico">➛</span> Dove stiamo andando</span>
+        <h2 class="section-title">La ristorazione è solo l'inizio</h2>
+      </div>
+      <div class="timeline">
+        <div class="tl-item reveal" data-reveal="up">
+          <span class="tl-item__when">Oggi</span>
+          <h3>La ristorazione</h3>
+          <p>Bar e ristoranti: sistemi scollegati, decisioni a naso. Il primo dominio dove Rush ha dimostrato il metodo.</p>
+        </div>
+        <div class="tl-item reveal" data-reveal="up" data-delay="120">
+          <span class="tl-item__when">Domani</span>
+          <h3>Gli stessi problemi, altrove</h3>
+          <p>Ogni settore che vive di sistemi che non si parlano.</p>
+          <ul class="tl-sectors">
+            <li>Retail</li><li>Logistica</li><li>Servizi</li><li>Officine</li><li>Studi professionali</li>
+          </ul>
+        </div>
+      </div>
+      <p class="vision__note reveal" data-reveal="fade">Rush è un metodo e una piattaforma, non un singolo tool.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════ 9 · CTA FINALE ══════════════ -->
+  <section class="cta" id="contatti">
+    <div class="cta__orb" aria-hidden="true"></div>
+    <div class="container container--narrow">
+      <div class="cta__head reveal" data-reveal="up">
+        <h2 class="section-title">Rush sta nascendo.<br>Entra tra i primi.</h2>
+        <p class="cta__sub">Lascia un contatto: ti scriviamo noi, senza impegno.</p>
+      </div>
+
+      <div class="cta__switch reveal" data-reveal="fade">
+        <button class="cta__tab is-active" type="button" data-audience="business">Ho un'attività da far girare meglio</button>
+        <button class="cta__tab" type="button" data-audience="partner">Sono un partner o un investitore</button>
+      </div>
+
+      <form class="cta__form reveal" data-reveal="up" id="accessForm" novalidate>
+        <div class="field">
+          <label for="f-name">Nome</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required placeholder="Come ti chiami">
+        </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required placeholder="tu@esempio.it">
+        </div>
+        <div class="field" data-field="business">
+          <label for="f-activity">La tua attività</label>
+          <input id="f-activity" name="activity" type="text" placeholder="Es. bar, ristorante, retail…">
+        </div>
+        <div class="field field--hidden" data-field="partner">
+          <label for="f-org">Organizzazione</label>
+          <input id="f-org" name="org" type="text" placeholder="Azienda o fondo">
+        </div>
+        <div class="field field--full">
+          <label for="f-msg">Messaggio <span class="field__opt">(facoltativo)</span></label>
+          <textarea id="f-msg" name="message" rows="3" placeholder="Raccontaci in due righe cosa vorresti far girare meglio"></textarea>
+        </div>
+        <button class="btn btn--primary btn--lg btn--block" type="submit">Richiedi accesso</button>
+        <p class="cta__formnote">Nessuno spam. Ti rispondiamo entro pochi giorni.</p>
+        <p class="cta__success" id="formSuccess" hidden>Grazie — abbiamo ricevuto la tua richiesta. Ti scriviamo presto. ✦</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- ══════════════ 10 · FOOTER ══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a class="nav__brand" href="#hero" aria-label="Rush — home">
+          <span class="nav__logo" aria-hidden="true">R</span>
+          <span class="nav__word">Rush</span>
+        </a>
+        <p class="footer__tag">Il cervello operativo della tua attività, su misura per come lavori.</p>
+      </div>
+      <nav class="footer__links" aria-label="Link footer">
+        <div class="footer__col">
+          <span class="footer__h">Prodotto</span>
+          <a href="#come-funziona">Come funziona</a>
+          <a href="#visione">Visione</a>
+          <a href="#ristorazione">Ristorazione</a>
+        </div>
+        <div class="footer__col">
+          <span class="footer__h">Azienda</span>
+          <a href="#contatti">Contatti</a>
+          <a href="#">Privacy</a>
+          <a href="#">GDPR</a>
+        </div>
+        <div class="footer__col">
+          <span class="footer__h">Social</span>
+          <a href="#">LinkedIn</a>
+          <a href="#">Instagram</a>
+          <a href="#">X</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer__bottom">
+      <span>© Rush — progetto in sviluppo</span>
+      <button class="theme-toggle theme-toggle--foot" type="button" data-theme-toggle aria-label="Cambia tema">
+        <span class="theme-toggle__icon" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>
