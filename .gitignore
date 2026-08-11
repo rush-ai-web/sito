@@ -1,0 +1,6 @@
+node_modules/
+.DS_Store
+*.local
+.vite/
+
+# docs/ NON è ignorata: è l'output di build che GitHub Pages serve
