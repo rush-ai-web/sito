@@ -82,44 +82,59 @@
 
 /* ------------------------------------------------------------
    2. Card con bagliore d'angolo.
-   Nel tema la luce nasce dietro all'icona, in alto a sinistra,
-   e si spegne verso il centro. Sull'hover si accende.
+   Nel tema la luce nasce dietro all'icona, in alto a sinistra.
+   È la stessa vignetta della guida con il centro spostato: resta
+   un livello di background, così nessun transform può spegnerla.
    ------------------------------------------------------------ */
-.card--glow {
-  overflow: hidden;
-  isolation: isolate;
+.card.card--glow {
+  background-image: var(--card-vig-tl);
 }
 
-.card--glow::before {
+/* il respiro: un secondo velo che si accende e si spegne piano.
+   Vive su ::after in flusso normale, mai dietro alla card. */
+.card.card--glow::after {
   content: '';
   position: absolute;
-  z-index: -1;
-  top: -40%;
-  left: -18%;
-  width: 78%;
-  aspect-ratio: 1;
-  border-radius: 50%;
+  inset: 0;
+  border-radius: inherit;
   pointer-events: none;
   background: radial-gradient(
-    50% 50% at 50% 50%,
-    color-mix(in srgb, var(--text) 9%, transparent) 0%,
-    transparent 70%
+    58% 52% at 16% 0%,
+    color-mix(in srgb, var(--text) 7%, transparent) 0%,
+    transparent 72%
   );
-  opacity: 0.75;
+  opacity: 0.55;
+  animation: cardBreath 7s var(--e-lift) infinite;
   transition: opacity var(--d-lift) var(--e-lift);
 }
 
-.card--glow:hover::before {
+.card--hover:hover::after {
   opacity: 1;
 }
 
 /* variante con l'accento: usata sulle card che parlano di AI */
-.card--glow-accent::before {
+.card.card--glow-accent::after {
   background: radial-gradient(
-    50% 50% at 50% 50%,
-    color-mix(in srgb, var(--accent) 22%, transparent) 0%,
-    transparent 70%
+    58% 52% at 16% 0%,
+    color-mix(in srgb, var(--accent) 26%, transparent) 0%,
+    transparent 72%
   );
+}
+
+@keyframes cardBreath {
+  0%,
+  100% {
+    opacity: 0.42;
+  }
+  50% {
+    opacity: 0.78;
+  }
+}
+
+/* il contenuto sta sopra al velo */
+.card > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* ------------------------------------------------------------
@@ -157,8 +172,8 @@
   gap: 14px;
   padding: 12px 22px 12px 12px;
   border-radius: var(--r-pill);
-  background: linear-gradient(180deg, var(--surface-top), var(--surface));
-  border: 0.5px solid var(--hairline);
+  background-image: var(--card-vig);
+  border: 1px solid var(--hairline-strong);
   box-shadow: var(--sh-1);
 }
 
@@ -263,8 +278,8 @@
    ------------------------------------------------------------ */
 .frame {
   border-radius: var(--r-lg);
-  border: 0.5px solid var(--hairline-strong);
-  background: linear-gradient(180deg, var(--surface-top), var(--surface));
+  border: 1px solid var(--hairline-strong);
+  background-image: var(--card-vig);
   box-shadow: var(--sh-3);
   overflow: hidden;
 }
@@ -465,5 +480,348 @@
 @media (prefers-reduced-motion: reduce) {
   .marquee__track {
     animation: none !important;
+  }
+}
+
+/* ============================================================
+   ANIMAZIONI IN LOOP
+   Tutte con easing di decelerazione, lente, a bassa ampiezza:
+   devono farsi notare come atmosfera, mai come effetto.
+   ============================================================ */
+
+/* 1. L'alone di brand respira e va alla deriva, come nel video */
+.fx-brand {
+  animation: brandDrift 19s var(--e-lift) infinite;
+}
+
+@keyframes brandDrift {
+  0%,
+  100% {
+    transform: translate3d(-3%, 0, 0) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate3d(3%, -3%, 0) scale(1.14);
+    opacity: 1;
+  }
+}
+
+/* 2. Il faro di sezione pulsa piano */
+.fx-spot::after {
+  animation: spotPulse 13s var(--e-lift) infinite;
+}
+
+@keyframes spotPulse {
+  0%,
+  100% {
+    opacity: 0.75;
+    scale: 1;
+  }
+  50% {
+    opacity: 1;
+    scale: 1.07;
+  }
+}
+
+/* 3. Una lama di luce scende lungo la maglia di sfondo */
+.fx-grid::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 34%;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in srgb, var(--text) 4%, transparent) 50%,
+    transparent 100%
+  );
+  animation: gridScan 11s var(--e-lift) infinite;
+}
+
+@keyframes gridScan {
+  0% {
+    transform: translateY(-120%);
+    opacity: 0;
+  }
+  18% {
+    opacity: 1;
+  }
+  72% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(320%);
+    opacity: 0;
+  }
+}
+
+/* 4. Hairline che si accende: un riflesso che scorre sui divisori
+   della scalinata e dei passi */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--accent) 55%, transparent) 50%,
+    transparent 100%
+  );
+  animation: shimmerRun 6.5s var(--e-lift) infinite;
+}
+
+@keyframes shimmerRun {
+  0% {
+    transform: translateX(-100%);
+  }
+  55%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 5. Il riquadro icona ha un riflesso che passa ogni tanto */
+.icon-tile {
+  position: relative;
+  overflow: hidden;
+}
+
+.icon-tile > svg {
+  position: relative;
+  z-index: 1;
+}
+
+.icon-tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    color-mix(in srgb, var(--btn-ink) 26%, transparent) 50%,
+    transparent 65%
+  );
+  animation: tileSheen 8s var(--e-lift) infinite;
+}
+
+@keyframes tileSheen {
+  0% {
+    transform: translateX(-130%);
+  }
+  40%,
+  100% {
+    transform: translateX(130%);
+  }
+}
+
+/* 6. Anello che si espande attorno al dot live — il "battito"
+   del sistema, ripreso dalla dashboard */
+.pulse-ring {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+}
+
+.pulse-ring::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid var(--pos);
+  animation: ringOut 2.6s var(--e-out) infinite;
+}
+
+@keyframes ringOut {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(3.4);
+    opacity: 0;
+  }
+}
+
+/* 7. Barre del grafico che risalgono in continuo */
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 140px;
+  padding-bottom: 10px;
+  border-bottom: 0.5px solid var(--hairline);
+}
+
+.bars i {
+  flex: 1;
+  border-radius: 4px 4px 2px 2px;
+  background: color-mix(in srgb, var(--text) 22%, transparent);
+  transform-origin: bottom;
+  animation: barRise 4.2s var(--e-lift) infinite;
+}
+
+.bars i:last-child {
+  background: var(--accent);
+}
+
+.bars i:nth-child(1) { animation-delay: 0s; }
+.bars i:nth-child(2) { animation-delay: 0.18s; }
+.bars i:nth-child(3) { animation-delay: 0.36s; }
+.bars i:nth-child(4) { animation-delay: 0.54s; }
+.bars i:nth-child(5) { animation-delay: 0.72s; }
+
+@keyframes barRise {
+  0%,
+  100% {
+    height: 34%;
+  }
+  50% {
+    height: 92%;
+  }
+}
+
+/* 8. Il bordo in accento della card marcata scorre piano */
+.card--marked::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent) 30%,
+    color-mix(in srgb, var(--accent) 40%, #fff) 50%,
+    var(--accent) 70%,
+    transparent 100%
+  );
+  background-size: 220% 100%;
+  animation: markedRun 7s var(--e-lift) infinite;
+}
+
+@keyframes markedRun {
+  0%,
+  100% {
+    background-position: 120% 0;
+  }
+  50% {
+    background-position: -20% 0;
+  }
+}
+
+/* chi ha chiesto meno movimento non deve vedere nessun loop */
+@media (prefers-reduced-motion: reduce) {
+  .fx-brand,
+  .fx-spot::after,
+  .fx-grid::after,
+  .shimmer::after,
+  .icon-tile::after,
+  .pulse-ring::before,
+  .bars i,
+  .card--marked::before,
+  .card.card--glow::after {
+    animation: none !important;
+  }
+  .fx-grid::after,
+  .shimmer::after,
+  .icon-tile::after {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------
+   Anteprima dashboard: grafico + flusso documenti
+   ------------------------------------------------------------ */
+.frame__split {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 34px;
+  margin-top: 34px;
+  padding-top: 26px;
+  border-top: 0.5px solid var(--hairline);
+}
+
+.feed {
+  display: flex;
+  flex-direction: column;
+}
+
+.feed__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: var(--s-row) 0;
+  border-bottom: 0.5px solid var(--hairline);
+}
+
+.feed__k {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feed__v {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+@media (max-width: 720px) {
+  .frame__split {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+}
+
+/* riflesso che scorre sul filo superiore della scalinata */
+.shimmer-top {
+  position: relative;
+}
+
+.shimmer-top::before {
+  content: '';
+  position: absolute;
+  top: -0.5px;
+  left: 0;
+  width: 34%;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--accent) 70%, transparent),
+    transparent
+  );
+  animation: stairRun 8s var(--e-lift) infinite;
+}
+
+@keyframes stairRun {
+  0% {
+    transform: translateX(-40%);
+    opacity: 0;
+  }
+  15%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(330%);
+    opacity: 0;
   }
 }

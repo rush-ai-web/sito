@@ -48,7 +48,7 @@ export default function Metodo() {
         {PASSI.map(({ n, icon, t, d }) => (
           <Item key={n} className="step">
             <Pill>{n}</Pill>
-            <div className="step__line" />
+            <div className="step__line shimmer" />
             <IconTile icon={icon} size="sm" ghost />
             <h3 className="t-card" style={{ margin: '18px 0 10px' }}>
               {t}

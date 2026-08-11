@@ -69,7 +69,7 @@ export default function Numeri() {
         sub="Non da quante funzioni ha nel listino. Questi sono gli effetti che misuriamo quando un sistema Rush entra in produzione."
       />
 
-      <Group className="stair" each={0.1}>
+      <Group className="stair shimmer-top" each={0.1}>
         {KPI.map((k) => (
           <Kpi key={k.label} {...k} />
         ))}

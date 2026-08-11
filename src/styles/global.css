@@ -205,13 +205,25 @@ h4 {
    Superfici — gradiente leggero, hairline, ombra doppia.
    Nessuna card flat con bordo 1px.
    ============================================================ */
+/* La card di riferimento della guida ("Hairline & vignette"):
+   vignetta radiale dall'alto, bordo 1px hairline forte, raggio 16.
+   Il sollevamento sta qui e non in Framer Motion: FM non sa
+   interpolare `var(--sh-2)` e il suo transform creava un nuovo
+   contesto di impilamento che spegneva il bagliore. */
 .card {
   position: relative;
-  background: linear-gradient(180deg, var(--surface-top), var(--surface));
-  border: 0.5px solid var(--hairline);
+  background-image: var(--card-vig);
+  border: 1px solid var(--hairline-strong);
   border-radius: var(--r-card);
   box-shadow: var(--sh-1);
   padding: var(--s-card);
+  transition: box-shadow var(--d-lift) var(--e-lift), translate var(--d-lift) var(--e-lift);
+}
+
+/* sollevamento: mai un cambio di colore netto, solo alzata e ombra */
+.card--hover:hover {
+  translate: 0 -4px;
+  box-shadow: var(--sh-2);
 }
 
 .card--lg {
@@ -336,8 +348,8 @@ h4 {
 }
 
 .chip--surface {
-  background: linear-gradient(180deg, var(--surface-top), var(--surface));
-  border: 0.5px solid var(--hairline);
+  background-image: var(--card-vig);
+  border: 1px solid var(--hairline-strong);
   box-shadow: var(--sh-1);
   color: var(--text);
 }
@@ -605,8 +617,8 @@ h4 {
   align-items: center;
   padding: 12px 22px 12px 12px;
   border-radius: var(--r-pill);
-  background: linear-gradient(180deg, var(--surface-top), var(--surface));
-  border: 0.5px solid var(--hairline);
+  background-image: var(--card-vig);
+  border: 1px solid var(--hairline-strong);
   box-shadow: var(--sh-1);
   font-size: 14.5px;
   font-weight: 500;
@@ -788,8 +800,8 @@ h4 {
 .palette {
   width: min(100%, 580px);
   border-radius: var(--r-lg);
-  background: linear-gradient(180deg, var(--surface-top), var(--surface));
-  border: 0.5px solid var(--hairline-strong);
+  background-image: var(--card-vig);
+  border: 1px solid var(--hairline-strong);
   box-shadow: var(--sh-3);
   overflow: hidden;
 }
@@ -1157,4 +1169,25 @@ textarea.input {
   .wordmark {
     margin-top: 34px;
   }
+}
+
+/* pillole e orbita: stesso sollevamento delle card, sempre in CSS */
+.pillcard,
+.orbit__card {
+  background-image: var(--card-vig);
+  border: 1px solid var(--hairline-strong);
+  transition: box-shadow var(--d-lift) var(--e-lift), translate var(--d-lift) var(--e-lift);
+}
+
+.pillcard:hover,
+.orbit__card:hover {
+  translate: 0 -4px;
+  box-shadow: var(--sh-2);
+}
+
+/* anche il riquadro grande e i chip in superficie seguono la
+   vignetta della guida, mai un gradiente lineare */
+.frame,
+.chip--surface {
+  background-image: var(--card-vig);
 }

@@ -9,7 +9,7 @@ import {
   Smartphone,
 } from 'lucide-react';
 import { Section, Head, IconTile } from './ui';
-import { floatIn, liftHover } from '../lib/motion';
+import { floatIn } from '../lib/motion';
 
 /* Le sei card che orbitano attorno al titolo. `pos` è la
    posizione assoluta sul desktop; sotto i 1160px l'orbita si
@@ -39,7 +39,6 @@ export default function Soluzione() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.1 }}
-            whileHover={liftHover}
           >
             {/* respiro continuo: ogni card ondeggia con un ritmo suo */}
             <motion.div

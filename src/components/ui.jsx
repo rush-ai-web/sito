@@ -1,6 +1,6 @@
 import { createContext, forwardRef, useContext } from 'react';
 import { motion } from 'framer-motion';
-import { fadeUp, inView, liftHover, stagger } from '../lib/motion';
+import { fadeUp, inView, stagger } from '../lib/motion';
 
 export const ThemeCtx = createContext('light');
 
@@ -112,11 +112,13 @@ export const Item = forwardRef(function Item({ as = 'div', className = '', child
   );
 });
 
-/* Card che si solleva: mai un cambio di colore netto, solo un
-   leggero sollevamento con l'easing di decelerazione */
+/* Card che si solleva. Il sollevamento è CSS (`.card--hover`):
+   Framer Motion non interpola `var(--sh-2)` e il suo transform
+   creava un contesto di impilamento che spegneva il bagliore.
+   Qui FM resta responsabile solo della comparsa allo scroll. */
 export const LiftCard = forwardRef(function LiftCard({ className = '', children, ...rest }, ref) {
   return (
-    <motion.div ref={ref} className={className} variants={fadeUp} whileHover={liftHover} {...rest}>
+    <motion.div ref={ref} className={`${className} card--hover`} variants={fadeUp} {...rest}>
       {children}
     </motion.div>
   );
@@ -166,7 +168,7 @@ export function IconTile({ icon: Icon, size = 'md', ghost = false, accent = fals
 /* Card-pillola: riquadro icona + due righe. Il mattone ricorrente. */
 export function PillCard({ icon: Icon, children, className = '', ...rest }) {
   return (
-    <motion.div className={`pillcard ${className}`} whileHover={liftHover} {...rest}>
+    <motion.div className={`pillcard ${className}`} {...rest}>
       <IconTile icon={Icon} size="sm" />
       <span>{children}</span>
     </motion.div>

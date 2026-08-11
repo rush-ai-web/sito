@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   Layers,
   Blocks,
@@ -9,7 +9,8 @@ import {
   ArrowUpRight,
 } from 'lucide-react';
 import { Section, Head, Group, Item, GlowCard, IconTile, LiveDot } from './ui';
-import { useClock, useCountUp } from '../lib/hooks';
+import { useClock, useCountUp, useLiveFeed } from '../lib/hooks';
+import { DUR, EASE_MODAL } from '../lib/motion';
 
 const CARDS = [
   {
@@ -35,13 +36,15 @@ const CARDS = [
   },
 ];
 
-/* La finestra di prodotto: un estratto di dashboard con i tre
-   dettagli riconoscibili — conteggio animato, orologio, dot live. */
+/* La finestra di prodotto: un estratto di dashboard con i quattro
+   dettagli riconoscibili — conteggio animato, orologio, dot live,
+   e un flusso di documenti che continua a scorrere da solo. */
 function Anteprima() {
   const { time, date } = useClock();
   const [rIncassi, incassi] = useCountUp(184200, { dec: 0 });
   const [rOre, ore] = useCountUp(142, { dec: 0 });
   const [rCosto, costo] = useCountUp(28, { dec: 1 });
+  const feed = useLiveFeed();
 
   return (
     <div className="frame">
@@ -58,7 +61,9 @@ function Anteprima() {
 
       <div className="frame__body">
         <p className="t-small" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-          <LiveDot />
+          <span className="pulse-ring">
+            <LiveDot />
+          </span>
           In diretta · {date}
         </p>
 
@@ -77,6 +82,48 @@ function Anteprima() {
             <p className="t-label">Ore lavorate</p>
             <p className="t-kpi num">{ore}h</p>
             <p className="delta delta--warn">3 da approvare</p>
+          </div>
+        </div>
+
+        <div className="frame__split">
+          {/* grafico che continua a muoversi */}
+          <div>
+            <p className="t-label" style={{ marginBottom: 14 }}>
+              Incassi · ultime settimane
+            </p>
+            <div className="bars" aria-hidden="true">
+              <i />
+              <i />
+              <i />
+              <i />
+              <i />
+            </div>
+          </div>
+
+          {/* documenti che entrano da soli, uno dopo l'altro */}
+          <div>
+            <p className="t-label" style={{ marginBottom: 10 }}>
+              Documenti registrati ora
+            </p>
+            <div className="feed">
+              <AnimatePresence initial={false} mode="popLayout">
+                {feed.map((r) => (
+                  <motion.div
+                    className="feed__row"
+                    key={r.id}
+                    layout
+                    initial={{ opacity: 0, y: -14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 14 }}
+                    transition={{ duration: DUR.pop, ease: EASE_MODAL }}
+                  >
+                    <span className="feed__k">{r.chi}</span>
+                    <span className="chip">{r.tipo}</span>
+                    <span className="num feed__v">€{r.importo}</span>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>

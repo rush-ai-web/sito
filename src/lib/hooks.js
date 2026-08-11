@@ -120,3 +120,32 @@ export function useHotkey(handler) {
     return () => window.removeEventListener('keydown', onKey);
   }, [handler]);
 }
+
+/* ---------- Flusso documenti in diretta ----------
+   Un ciclo continuo: ogni pochi secondi entra una riga nuova in
+   cima e l'ultima esce. Serve a far vedere, senza dirlo, che il
+   sistema registra da solo mentre guardi. */
+const FORNITORI = [
+  { chi: 'Distillerie Rossi', tipo: 'SDI', importo: '892' },
+  { chi: 'Caseificio Marche', tipo: 'SDI', importo: '340' },
+  { chi: 'Frutta & Co', tipo: 'FOTO', importo: '127' },
+  { chi: 'Forno Adriatico', tipo: 'SDI', importo: '215' },
+  { chi: 'Cantina Verdi', tipo: 'SDI', importo: '564' },
+  { chi: 'Ittica Adriatica', tipo: 'FOTO', importo: '298' },
+];
+
+export function useLiveFeed(size = 3, ms = 2600) {
+  const reduce = useReducedMotion();
+  const [start, setStart] = useState(0);
+
+  useEffect(() => {
+    if (reduce) return;
+    const id = setInterval(() => setStart((i) => (i + 1) % FORNITORI.length), ms);
+    return () => clearInterval(id);
+  }, [reduce, ms]);
+
+  return Array.from({ length: size }, (_, k) => {
+    const f = FORNITORI[(start + k) % FORNITORI.length];
+    return { ...f, id: `${f.chi}-${Math.floor((start + k) / FORNITORI.length)}` };
+  });
+}
