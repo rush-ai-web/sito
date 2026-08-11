@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, forwardRef, useContext } from 'react';
 import { motion } from 'framer-motion';
 import { fadeUp, inView, liftHover, stagger } from '../lib/motion';
 
@@ -9,18 +9,59 @@ export const ThemeCtx = createContext('light');
    `invert` alterna chiaro/scuro lungo lo scroll, come nel tema
    di riferimento. `data-tone` dice alla navbar su che fondo si
    trova, così la pillola può invertirsi.
+   `grid` e `spot` accendono la maglia di sfondo e il faro.
    ------------------------------------------------------------ */
-export function Section({ id, invert = false, large = false, className = '', children }) {
+export function Section({
+  id,
+  invert = false,
+  large = false,
+  grid = false,
+  spot = false,
+  accentSpot = false,
+  className = '',
+  children,
+}) {
   const theme = useContext(ThemeCtx);
   const dark = invert ? theme !== 'dark' : theme === 'dark';
+  const fx = [
+    grid && 'fx-grid',
+    spot && 'fx-spot',
+    spot && accentSpot && 'fx-accent-glow',
+    invert && 'invert',
+    large && 'section--lg',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <section
-      id={id}
-      data-tone={dark ? 'dark' : 'light'}
-      className={`section ${large ? 'section--lg' : ''} ${invert ? 'invert' : ''} ${className}`}
-    >
+    <section id={id} data-tone={dark ? 'dark' : 'light'} className={`section ${fx} ${className}`}>
       <div className="wrap">{children}</div>
     </section>
+  );
+}
+
+/* ------------------------------------------------------------
+   Head — testata di sezione: pillola, titolo, sommario.
+   Centrata di default, come ogni sezione del tema.
+   ------------------------------------------------------------ */
+export function Head({ icon, label, title, sub, left = false, children }) {
+  return (
+    <Group className={`head ${left ? 'head--left' : ''}`} each={0.09}>
+      {label ? (
+        <Item>
+          <Pill icon={icon}>{label}</Pill>
+        </Item>
+      ) : null}
+      <Item as="h2" className="t-sec">
+        {title}
+      </Item>
+      {sub ? (
+        <Item as="p" className="t-body">
+          {sub}
+        </Item>
+      ) : null}
+      {children}
+    </Group>
   );
 }
 
@@ -43,9 +84,10 @@ export function Reveal({ i = 0, as = 'div', className = '', children, ...rest })
 }
 
 /* Group — contenitore che scagliona i figli */
-export function Group({ delay = 0, each = 0.07, className = '', children, ...rest }) {
+export function Group({ delay = 0, each = 0.07, as = 'div', className = '', children, ...rest }) {
+  const M = motion[as] || motion.div;
   return (
-    <motion.div
+    <M
       className={className}
       variants={stagger(delay, each)}
       initial="hidden"
@@ -54,26 +96,45 @@ export function Group({ delay = 0, each = 0.07, className = '', children, ...res
       {...rest}
     >
       {children}
-    </motion.div>
+    </M>
   );
 }
 
-/* Item — figlio di Group */
-export function Item({ className = '', children, ...rest }) {
+/* Item — figlio di Group.
+   Inoltra il ref: serve a useCountUp, che deve osservare il nodo
+   vero per far partire il conteggio quando entra in viewport. */
+export const Item = forwardRef(function Item({ as = 'div', className = '', children, ...rest }, ref) {
+  const M = motion[as] || motion.div;
   return (
-    <motion.div className={className} variants={fadeUp} {...rest}>
+    <M ref={ref} className={className} variants={fadeUp} {...rest}>
       {children}
-    </motion.div>
+    </M>
   );
-}
+});
 
 /* Card che si solleva: mai un cambio di colore netto, solo un
    leggero sollevamento con l'easing di decelerazione */
-export function LiftCard({ className = '', children, ...rest }) {
+export const LiftCard = forwardRef(function LiftCard({ className = '', children, ...rest }, ref) {
   return (
-    <motion.div className={className} whileHover={liftHover} {...rest}>
+    <motion.div ref={ref} className={className} variants={fadeUp} whileHover={liftHover} {...rest}>
       {children}
     </motion.div>
+  );
+});
+
+/* ------------------------------------------------------------
+   GlowCard — la card del tema: bagliore dietro all'icona,
+   riquadro icona, titolo, testo. Si solleva sull'hover.
+   ------------------------------------------------------------ */
+export function GlowCard({ icon, title, children, accent = false, className = '' }) {
+  return (
+    <LiftCard className={`card card--lg card--glow ${accent ? 'card--glow-accent' : ''} ${className}`}>
+      {icon ? <IconTile icon={icon} accent={accent} /> : null}
+      <h3 className="t-card" style={{ marginTop: icon ? 26 : 0, marginBottom: 12 }}>
+        {title}
+      </h3>
+      <p className="t-body">{children}</p>
+    </LiftCard>
   );
 }
 
@@ -91,15 +152,24 @@ export function Pill({ icon: Icon, children, tone = 'surface' }) {
   );
 }
 
-export function IconTile({ icon: Icon, size = 'md', ghost = false }) {
+export function IconTile({ icon: Icon, size = 'md', ghost = false, accent = false }) {
+  const cls = ['icon-tile', size === 'sm' && 'icon-tile--sm', ghost && 'icon-tile--ghost', accent && 'icon-tile--accent']
+    .filter(Boolean)
+    .join(' ');
   return (
-    <span
-      className={`icon-tile ${size === 'sm' ? 'icon-tile--sm' : ''} ${
-        ghost ? 'icon-tile--ghost' : ''
-      }`}
-    >
+    <span className={cls}>
       <Icon size={size === 'sm' ? 17 : 20} strokeWidth={1.75} />
     </span>
+  );
+}
+
+/* Card-pillola: riquadro icona + due righe. Il mattone ricorrente. */
+export function PillCard({ icon: Icon, children, className = '', ...rest }) {
+  return (
+    <motion.div className={`pillcard ${className}`} whileHover={liftHover} {...rest}>
+      <IconTile icon={Icon} size="sm" />
+      <span>{children}</span>
+    </motion.div>
   );
 }
 

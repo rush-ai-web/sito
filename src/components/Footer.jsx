@@ -4,26 +4,27 @@ import { LiveDot } from './ui';
 
 const COLONNE = [
   [
-    'Prodotto',
+    'Cosa facciamo',
     [
-      ['Il problema', '#problema'],
-      ['Cos’è Rush', '#prodotto'],
-      ['Cosa ci guadagni', '#vantaggi'],
-      ['Come pensa', '#principi'],
+      ['Gestionali su misura', '#prodotto'],
+      ['Automazioni', '#prodotto'],
+      ['AI integrata', '#prodotto'],
+      ['Integrazioni', '#prodotto'],
     ],
   ],
   [
     'Azienda',
     [
       ['Come lavoriamo', '#metodo'],
-      ['Visione', '#visione'],
-      ['La prova: ristorazione', '#ristorazione'],
+      ['Perché Rush', '#principi'],
+      ['Risultati', '#numeri'],
+      ['Ristorazione', '#ristorazione'],
     ],
   ],
   [
     'Contatti',
     [
-      ['Richiedi accesso', '#accesso'],
+      ['Parliamo del tuo progetto', '#contatti'],
       ['info@rush.it', 'mailto:info@rush.it'],
     ],
   ],
@@ -37,23 +38,26 @@ export default function Footer() {
       <div className="wrap">
         <div className="footer__grid">
           <div>
-            <a href="#top" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, fontSize: 19, fontWeight: 600, letterSpacing: '-0.02em' }}>
+            <a
+              href="#home"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 9,
+                fontSize: 19,
+                fontWeight: 600,
+                letterSpacing: '-0.02em',
+              }}
+            >
               <Zap size={20} strokeWidth={2} />
               Rush
             </a>
-            <p className="t-small" style={{ marginTop: 16, maxWidth: 300 }}>
-              Un gestionale intelligente per chi ha già tutti i sistemi che gli servono, e nessuno
-              che glieli faccia parlare.
+            <p className="t-small" style={{ marginTop: 16, maxWidth: 320 }}>
+              Software house italiana. Progettiamo e sviluppiamo gestionali su misura, con dati in
+              tempo reale, automazioni e intelligenza artificiale integrata.
             </p>
             {/* orologio live — signature move */}
-            <div
-              style={{
-                marginTop: 24,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 10,
-              }}
-            >
+            <div style={{ marginTop: 24, display: 'inline-flex', alignItems: 'center', gap: 10 }}>
               <LiveDot />
               <span>
                 <time className="num" style={{ fontWeight: 500, letterSpacing: '-0.02em' }}>
@@ -70,7 +74,7 @@ export default function Footer() {
             <div className="footer__col" key={titolo}>
               <h4>{titolo}</h4>
               {voci.map(([label, href]) => (
-                <a key={href} href={href}>
+                <a key={label} href={href}>
                   {label}
                 </a>
               ))}
@@ -80,8 +84,13 @@ export default function Footer() {
 
         <div className="footer__base">
           <span>© {new Date().getFullYear()} Rush · Infrastruttura europea, GDPR compliant</span>
-          <span>Prima demo — contenuti e integrazioni in evoluzione</span>
+          <span>Demo — contenuti e integrazioni in evoluzione</span>
         </div>
+
+        {/* wordmark gigante, sfumato verso il basso */}
+        <span className="wordmark" aria-hidden="true">
+          Rush
+        </span>
       </div>
     </footer>
   );

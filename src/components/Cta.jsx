@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { Check, Mail } from 'lucide-react';
 import { DUR, EASE_MODAL, inView } from '../lib/motion';
-import { LiveDot, Reveal, Section } from './ui';
+import { Group, Item, LiveDot, Pill, Section } from './ui';
 
 const TABS = [
-  ['business', 'Ho un’attività'],
+  ['progetto', 'Ho un progetto'],
   ['partner', 'Voglio collaborare'],
 ];
 
 export default function Cta() {
-  const [aud, setAud] = useState('business');
+  const [aud, setAud] = useState('progetto');
   const [sent, setSent] = useState(false);
 
   const onSubmit = (e) => {
@@ -20,34 +20,25 @@ export default function Cta() {
   };
 
   return (
-    <Section id="accesso" invert large>
+    <Section id="contatti" invert large grid>
       <div className="row2" style={{ alignItems: 'start' }}>
-        <div className="row2__text">
-          <Reveal>
-            <p className="t-label">Accesso anticipato</p>
-          </Reveal>
-          <Reveal i={1}>
-            <h2 className="t-sec" style={{ marginTop: 20 }}>
-              Raccontaci com’è messo il tuo locale.
-            </h2>
-          </Reveal>
-          <Reveal i={2}>
-            <p className="t-body" style={{ marginTop: 20 }}>
-              Apriamo pochi accessi per volta, perché ogni attivazione parte da una mappatura fatta
-              a mano. Scrivici quali sistemi usi: ti diciamo se Rush ci si collega già oggi o cosa
-              manca.
-            </p>
-          </Reveal>
-          <Reveal i={3}>
-            <p
-              className="t-small"
-              style={{ marginTop: 26, display: 'flex', alignItems: 'center', gap: 10 }}
-            >
-              <LiveDot />
-              Rispondiamo entro due giorni lavorativi.
-            </p>
-          </Reveal>
-        </div>
+        <Group className="row2__text stack" each={0.08}>
+          <Item>
+            <Pill icon={Mail}>Contatti</Pill>
+          </Item>
+          <Item as="h2" className="t-sec">
+            Raccontaci come lavori oggi.
+          </Item>
+          <Item as="p" className="t-body">
+            Il primo incontro serve a capire se un gestionale su misura ha senso per te — e, se non
+            ce l'ha, te lo diciamo. Scrivici che software usi e dove si perde più tempo: ti
+            rispondiamo con un'idea concreta di perimetro, tempi e costi.
+          </Item>
+          <Item as="p" className="t-small" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <LiveDot />
+            Rispondiamo entro due giorni lavorativi.
+          </Item>
+        </Group>
 
         <motion.div
           className="card card--lg"
@@ -83,7 +74,6 @@ export default function Cta() {
               <motion.form
                 key="form"
                 onSubmit={onSubmit}
-                noValidate={false}
                 initial={{ opacity: 1 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: DUR.pop, ease: EASE_MODAL }}
@@ -122,12 +112,12 @@ export default function Cta() {
                     type="email"
                     name="email"
                     required
-                    placeholder="nome@illocale.it"
+                    placeholder="nome@azienda.it"
                   />
                 </label>
 
                 <AnimatePresence mode="wait" initial={false}>
-                  {aud === 'business' ? (
+                  {aud === 'progetto' ? (
                     <motion.label
                       key="b"
                       className="field"
@@ -137,11 +127,11 @@ export default function Cta() {
                       transition={{ duration: DUR.pop, ease: EASE_MODAL }}
                       style={{ overflow: 'hidden' }}
                     >
-                      <span className="field__label">Attività e sistemi che usi</span>
+                      <span className="field__label">Azienda e sistemi che usi</span>
                       <textarea
                         className="input"
                         name="contesto"
-                        placeholder="Bar con cucina a Fano. Cassa Zucchetti, fatture su Aruba, magazzino su Excel."
+                        placeholder="Azienda di produzione, 40 dipendenti. Gestionale legacy per gli ordini, magazzino su Excel, presenze su carta."
                       />
                     </motion.label>
                   ) : (
@@ -158,14 +148,18 @@ export default function Cta() {
                       <textarea
                         className="input"
                         name="contesto"
-                        placeholder="Seguo una ventina di locali come consulente e vorrei capire se ha senso proporlo."
+                        placeholder="Sono consulente e seguo una ventina di aziende: vorrei capire se ha senso proporlo."
                       />
                     </motion.label>
                   )}
                 </AnimatePresence>
 
-                <button className="btn btn--primary" type="submit" style={{ width: '100%', justifyContent: 'center' }}>
-                  Richiedi accesso
+                <button
+                  className="btn btn--primary"
+                  type="submit"
+                  style={{ width: '100%', justifyContent: 'center' }}
+                >
+                  Invia richiesta
                 </button>
 
                 <p className="t-small faint" style={{ fontSize: 13 }}>

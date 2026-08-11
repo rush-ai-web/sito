@@ -1,17 +1,21 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Moon, Sun, Zap } from 'lucide-react';
 import { DUR, EASE_MODAL } from '../lib/motion';
 import { useNavTone } from '../lib/hooks';
 
 const LINKS = [
-  ['Il problema', '#problema'],
-  ['Cos’è Rush', '#prodotto'],
-  ['Come pensa', '#principi'],
-  ['La prova', '#ristorazione'],
+  ['Cosa costruiamo', '#prodotto'],
+  ['Come lavoriamo', '#metodo'],
+  ['Perché Rush', '#principi'],
+  ['Ristorazione', '#ristorazione'],
 ];
 
 export default function Nav({ theme, onToggleTheme }) {
   const tone = useNavTone();
+  const { scrollY } = useScroll();
+  /* la pillola si stringe leggermente appena parte lo scroll,
+     come nel tema di riferimento */
+  const scale = useTransform(scrollY, [0, 160], [1, 0.97]);
 
   return (
     <motion.header
@@ -21,8 +25,8 @@ export default function Nav({ theme, onToggleTheme }) {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.7, ease: EASE_MODAL, delay: 0.1 }}
     >
-      <div className="nav__pill">
-        <a className="nav__brand" href="#top">
+      <motion.div className="nav__pill" style={{ scale }}>
+        <a className="nav__brand" href="#home">
           <Zap size={19} strokeWidth={2} />
           Rush
         </a>
@@ -55,10 +59,10 @@ export default function Nav({ theme, onToggleTheme }) {
           </motion.span>
         </button>
 
-        <a className="nav__cta" href="#accesso">
-          Richiedi accesso
+        <a className="nav__cta" href="#contatti">
+          Parliamone
         </a>
-      </div>
+      </motion.div>
     </motion.header>
   );
 }

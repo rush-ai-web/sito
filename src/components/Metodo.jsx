@@ -1,68 +1,59 @@
-import { Group, Item, LiftCard, Reveal, Section } from './ui';
+import { GitBranch, Search, PenTool, Rocket, RefreshCw } from 'lucide-react';
+import { Section, Head, Group, Item, IconTile, Pill } from './ui';
 
 const PASSI = [
   {
-    n: '01',
-    t: 'Mappiamo quello che hai',
-    d: 'Quale cassa, quale portale di fatturazione, quale commercialista, quali fogli Excel tenuti a mano. Prima di scrivere una riga di codice sappiamo da dove arrivano i dati.',
+    n: 'Passo 01',
+    icon: Search,
+    t: 'Analisi sul campo',
+    d: 'Veniamo a vedere come lavori davvero: chi fa cosa, dove si perde tempo, quali dati esistono già e dove sono fermi.',
   },
   {
-    n: '02',
-    t: 'Colleghiamo e ripuliamo',
-    d: 'Import di tre-sei mesi di fatture storiche e una sessione dedicata a risolvere gli abbinamenti ambigui. Rush parte già con una mappatura sua, non da zero.',
+    n: 'Passo 02',
+    icon: PenTool,
+    t: 'Progetto e prototipo',
+    d: 'Disegniamo il sistema e ti mostriamo le schermate vere prima di scrivere il codice definitivo. Si corregge lì, non dopo.',
   },
   {
-    n: '03',
-    t: 'Restiamo dentro',
-    d: 'I moduli si attivano quando servono, non tutti al primo giorno. Ogni correzione che fai stringe il sistema attorno al tuo locale.',
+    n: 'Passo 03',
+    icon: Rocket,
+    t: 'Sviluppo e messa in linea',
+    d: 'Costruiamo, importiamo i tuoi dati storici, colleghiamo i sistemi esistenti e formiamo chi lo userà ogni giorno.',
   },
-];
-
-const PILASTRI = [
-  ['Un cliente alla volta', 'Preferiamo pochi locali seguiti davvero a molti lasciati soli dopo l’onboarding.'],
-  ['Moduli, non pacchetti', 'Si parte dall’essenziale e si cresce. Nessuno paga per una sezione che non apre mai.'],
-  ['Niente scope infinito', 'Costruiamo per incrementi verificabili. Quello che non è pronto non viene raccontato come se lo fosse.'],
+  {
+    n: 'Passo 04',
+    icon: RefreshCw,
+    t: 'Evoluzione continua',
+    d: "L'azienda cambia e il gestionale la segue: nuovi moduli, nuove automazioni, nuove integrazioni quando servono.",
+  },
 ];
 
 export default function Metodo() {
   return (
-    <Section id="metodo" large>
-      <div className="section__head">
-        <Reveal>
-          <p className="t-label">Come lavoriamo</p>
-        </Reveal>
-        <Reveal i={1}>
-          <h2 className="t-sec" style={{ marginTop: 20 }}>
-            Tre passaggi, nessuna sorpresa.
-          </h2>
-        </Reveal>
-      </div>
+    <Section id="metodo" invert grid>
+      <Head
+        icon={GitBranch}
+        label="Come lavoriamo"
+        title={
+          <>
+            Dal primo incontro alla produzione
+            <br />
+            in otto settimane
+          </>
+        }
+        sub="Niente capitolati da trecento pagine. Si parte da un modulo che risolve il problema più caro, e da lì si cresce."
+      />
 
-      <Group className="grid grid-3" delay={0.05}>
-        {PASSI.map((p) => (
-          <Item key={p.n}>
-            <LiftCard className="card card--lg" style={{ height: '100%' }}>
-              <span className="num t-label">{p.n}</span>
-              <h3 className="t-card" style={{ marginTop: 20 }}>
-                {p.t}
-              </h3>
-              <p className="t-small" style={{ marginTop: 12 }}>
-                {p.d}
-              </p>
-            </LiftCard>
-          </Item>
-        ))}
-      </Group>
-
-      <Group className="grid grid-3" delay={0.1} style={{ marginTop: 'var(--s-sec)' }}>
-        {PILASTRI.map(([t, d]) => (
-          <Item key={t}>
-            <div style={{ paddingTop: 20, borderTop: '0.5px solid var(--hairline)' }}>
-              <b style={{ fontWeight: 600, letterSpacing: '-0.015em' }}>{t}</b>
-              <p className="t-small" style={{ marginTop: 8 }}>
-                {d}
-              </p>
-            </div>
+      <Group className="steps" each={0.1}>
+        {PASSI.map(({ n, icon, t, d }) => (
+          <Item key={n} className="step">
+            <Pill>{n}</Pill>
+            <div className="step__line" />
+            <IconTile icon={icon} size="sm" ghost />
+            <h3 className="t-card" style={{ margin: '18px 0 10px' }}>
+              {t}
+            </h3>
+            <p className="t-small">{d}</p>
           </Item>
         ))}
       </Group>

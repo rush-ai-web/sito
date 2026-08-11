@@ -2,13 +2,14 @@ import { useTheme } from './lib/hooks';
 import { ThemeCtx } from './components/ui';
 import Nav from './components/Nav';
 import Hero from './components/Hero';
+import Settori from './components/Settori';
 import Problema from './components/Problema';
+import Soluzione from './components/Soluzione';
 import Prodotto from './components/Prodotto';
-import Vantaggi from './components/Vantaggi';
-import Principi from './components/Principi';
-import Ristorazione from './components/Ristorazione';
+import Numeri from './components/Numeri';
 import Metodo from './components/Metodo';
-import Visione from './components/Visione';
+import Ristorazione from './components/Ristorazione';
+import Principi from './components/Principi';
 import Cta from './components/Cta';
 import Footer from './components/Footer';
 import Fab from './components/Fab';
@@ -20,14 +21,23 @@ export default function App() {
     <ThemeCtx.Provider value={theme}>
       <Nav theme={theme} onToggleTheme={toggleTheme} />
       <main>
+        {/* chiaro */}
         <Hero />
+        <Settori />
+        {/* scuro */}
         <Problema />
+        {/* chiaro */}
+        <Soluzione />
+        {/* scuro */}
         <Prodotto />
-        <Vantaggi />
-        <Principi />
-        <Ristorazione />
+        {/* chiaro */}
+        <Numeri />
+        {/* scuro */}
         <Metodo />
-        <Visione />
+        {/* chiaro */}
+        <Ristorazione />
+        <Principi />
+        {/* scuro */}
         <Cta />
       </main>
       <Footer />
