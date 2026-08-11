@@ -316,13 +316,15 @@
   display: block;
   width: 100%;
   margin-top: 56px;
+  font-family: var(--ff-display);
   font-size: clamp(84px, 21vw, 290px);
-  font-weight: 600;
-  letter-spacing: -0.055em;
-  line-height: 0.78;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 0.82;
   text-align: center;
+  text-transform: uppercase;
   color: var(--text);
-  opacity: 0.055;
+  opacity: 0.06;
   user-select: none;
   pointer-events: none;
   /* sfuma verso il basso, non finisce mai di netto */

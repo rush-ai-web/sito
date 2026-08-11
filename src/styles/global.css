@@ -2,6 +2,27 @@
 @import './effects.css';
 
 /* ============================================================
+   Horizon — font di titolazione del brand.
+   Va sui pezzi grandi (hero, titoli di sezione, KPI, wordmark);
+   il resto della pagina resta su Inter, come da guida.
+   ============================================================ */
+@font-face {
+  font-family: 'Horizon';
+  src: url('../fonts/Horizon.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Horizon';
+  src: url('../fonts/Horizon-Outlined.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic; /* variante contorno riconoscibile via italic */
+  font-display: swap;
+}
+
+/* ============================================================
    Base
    ============================================================ */
 *,
@@ -84,16 +105,31 @@ h4 {
   line-height: 1.06;
 }
 
+/* Titolo hero — Horizon: letter-spacing riaperto perché la
+   proporzione geometrica del font non ama il -3.5% di Inter */
 .t-hero {
-  font-size: clamp(40px, 6.6vw, 84px);
-  letter-spacing: -0.035em; /* -3.5% */
-  line-height: 1.02;
+  font-family: var(--ff-display);
+  font-size: clamp(38px, 6.2vw, 78px);
+  letter-spacing: -0.01em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
+/* Titolo di sezione — Horizon con proporzioni Apple.
+   Le sezioni "head" centrate ridichiarano la larghezza massima
+   più stretta perché Horizon è più largo di Inter e trascinerebbe
+   il titolo su troppe righe. */
 .t-sec {
-  font-size: clamp(30px, 3.9vw, 50px);
-  letter-spacing: -0.02em; /* -2% */
-  line-height: 1.08;
+  font-family: var(--ff-display);
+  font-size: clamp(26px, 3.2vw, 40px);
+  letter-spacing: 0;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+/* con Horizon la testata respira di più */
+.head .t-sec {
+  max-width: 18ch;
 }
 
 .t-card {
@@ -474,9 +510,11 @@ h4 {
   display: flex;
   align-items: center;
   gap: 9px;
+  font-family: var(--ff-display);
   font-size: 17px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   margin-right: 6px;
 }
 

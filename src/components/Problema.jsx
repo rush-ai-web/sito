@@ -27,9 +27,7 @@ export default function Problema() {
         label="Il problema"
         title={
           <>
-            I gestionali standard costringono
-            <br />
-            l'azienda ad adattarsi al software
+            I gestionali standard costringono l'azienda ad adattarsi al software
           </>
         }
         sub="Dovrebbe essere il contrario. Un sistema che non segue i tuoi processi diventa una tassa quotidiana su chi ci lavora."

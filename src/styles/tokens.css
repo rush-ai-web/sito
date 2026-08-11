@@ -84,6 +84,12 @@
   --e-modal: cubic-bezier(0.16, 1, 0.3, 1);
 
   --maxw: 1160px;
+
+  /* Famiglie tipografiche: Horizon per i titoli, Inter per tutto
+     il resto. Non si mischiano dentro alla stessa parola. */
+  --ff-display: 'Horizon', 'Inter Variable', 'Inter', -apple-system, sans-serif;
+  --ff-body: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', sans-serif;
 }
 
 /* ---- Colore: DARK. Non è opzionale, è un requisito al pari del light. ---- */

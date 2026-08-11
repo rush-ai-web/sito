@@ -139,9 +139,7 @@ export default function Prodotto() {
         label="Cosa costruiamo"
         title={
           <>
-            Un solo sistema al posto
-            <br />
-            di sei strumenti scollegati
+            Un solo sistema al posto di sei strumenti scollegati
           </>
         }
         sub="Tutto quello che oggi vive in gestionali diversi, fogli di calcolo e messaggi torna in un posto solo — e resta aggiornato da solo."

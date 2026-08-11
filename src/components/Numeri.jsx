@@ -61,9 +61,7 @@ export default function Numeri() {
         label="Risultati"
         title={
           <>
-            Un gestionale si giudica
-            <br />
-            da quanto lavoro ti toglie
+            Un gestionale si giudica da quanto lavoro ti toglie
           </>
         }
         sub="Non da quante funzioni ha nel listino. Questi sono gli effetti che misuriamo quando un sistema Rush entra in produzione."

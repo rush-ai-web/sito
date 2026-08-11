@@ -63,9 +63,7 @@ export default function Soluzione() {
           label="La soluzione"
           title={
             <>
-              Un gestionale disegnato
-              <br />
-              attorno a come lavori già
+              Un gestionale disegnato attorno a come lavori già
             </>
           }
           sub="Partiamo dai tuoi processi, non da un template. Quello che serve c'è, quello che non serve non lo paghi."

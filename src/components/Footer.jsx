@@ -44,9 +44,11 @@ export default function Footer() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 9,
-                fontSize: 19,
-                fontWeight: 600,
-                letterSpacing: '-0.02em',
+                fontFamily: 'var(--ff-display)',
+                fontSize: 20,
+                fontWeight: 400,
+                letterSpacing: '0.02em',
+                textTransform: 'uppercase',
               }}
             >
               <Zap size={20} strokeWidth={2} />

@@ -36,9 +36,7 @@ export default function Metodo() {
         label="Come lavoriamo"
         title={
           <>
-            Dal primo incontro alla produzione
-            <br />
-            in otto settimane
+            Dal primo incontro alla produzione in otto settimane
           </>
         }
         sub="Niente capitolati da trecento pagine. Si parte da un modulo che risolve il problema più caro, e da lì si cresce."

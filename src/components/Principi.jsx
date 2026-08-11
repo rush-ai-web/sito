@@ -42,9 +42,7 @@ export default function Principi() {
         label="Perché Rush"
         title={
           <>
-            Una software house,
-            <br />
-            non un rivenditore di licenze
+            Una software house, non un rivenditore di licenze
           </>
         }
         sub="La differenza si sente il giorno in cui chiedi una modifica: da noi diventa una release, non un preventivo."
