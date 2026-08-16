@@ -1,1 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1D1D1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 100">
+  <!-- dark background pill -->
+  <rect width="90" height="100" rx="20" fill="#1d1d1f"/>
+  <!-- R — white -->
+  <rect x="9" y="9" width="15" height="82" fill="#f5f5f7"/>
+  <rect x="9" y="9" width="72" height="15" fill="#f5f5f7"/>
+  <rect x="66" y="9" width="15" height="38" fill="#f5f5f7"/>
+  <polygon points="24,38 81,38 81,47 43,47" fill="#f5f5f7"/>
+  <polygon points="43,47 61,47 81,91 63,91" fill="#f5f5f7"/>
+  <!-- blue accent -->
+  <polygon points="24,71 39,55 57,71 42,87" fill="#5B80D0"/>
+</svg>
