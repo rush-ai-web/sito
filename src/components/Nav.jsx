@@ -2,31 +2,11 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Moon, Sun } from 'lucide-react';
 import { DUR, EASE_MODAL } from '../lib/motion';
 
-function LogoMark({ size = 26 }) {
-  const h = size;
-  const w = Math.round(size * 0.9);
+function LogoMark() {
   return (
-    <svg
-      width={w}
-      height={h}
-      viewBox="0 0 90 100"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      style={{ flexShrink: 0 }}
-    >
-      {/* left vertical bar */}
-      <rect x="9" y="9" width="15" height="82" fill="currentColor" />
-      {/* top crossbar */}
-      <rect x="9" y="9" width="72" height="15" fill="currentColor" />
-      {/* bowl right wall */}
-      <rect x="66" y="9" width="15" height="38" fill="currentColor" />
-      {/* bowl base — trapezoid that narrows toward the leg */}
-      <polygon points="24,38 81,38 81,47 43,47" fill="currentColor" />
-      {/* diagonal leg — parallelogram going down-right */}
-      <polygon points="43,47 61,47 81,91 63,91" fill="currentColor" />
-      {/* brand accent — blue rhombus in the gap */}
-      <polygon points="24,71 39,55 57,71 42,87" fill="#5B80D0" />
-    </svg>
+    <span className="nav__logo-wrap">
+      <img src="./rush-logo.png" alt="" aria-hidden="true" className="nav__logo-img" />
+    </span>
   );
 }
 
