@@ -10,6 +10,16 @@ const TITLE = ['Gestionali', 'su', 'misura,', 'con', "l'AI", 'dentro.'];
 export default function Hero() {
   return (
     <section id="home" data-tone="light" className="section hero fx-grain">
+      {/* immagine di sfondo — ancorata in basso, sopra il grain */}
+      <motion.div
+        className="hero__scene"
+        style={{ backgroundImage: `url(${sceneUrl})` }}
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.1, ease: EASE_MODAL, delay: 0.35 }}
+        aria-hidden="true"
+      />
+
       <div className="wrap hero__top">
         <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: DUR.modal, ease: EASE_MODAL }}>
           <Pill icon={Sparkles}>Software house · gestionali &amp; AI</Pill>
@@ -53,16 +63,6 @@ export default function Hero() {
           </a>
         </motion.div>
       </div>
-
-      {/* immagine di apertura — sotto il testo, mai sovrapposta */}
-      <motion.div
-        className="hero__scene"
-        style={{ backgroundImage: `url(${sceneUrl})` }}
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.1, ease: EASE_MODAL, delay: 0.35 }}
-        aria-hidden="true"
-      />
     </section>
   );
 }
