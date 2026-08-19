@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
-import { Sparkles, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { Sparkles, ArrowRight } from 'lucide-react';
 import { Pill } from './ui';
 import { wordUp, fadeUp, EASE_MODAL, DUR } from '../lib/motion';
 
 const sceneUrl = `${import.meta.env.BASE_URL}hero-umano-ai.png`;
 
-const TITLE = ['Gestionali', 'su', 'misura,', 'con', "l'AI", 'dentro.'];
+const TITLE = ['Gestionali', 'su', 'misura,', 'resi', 'intelligenti', "dall'AI."];
 
 export default function Hero() {
   return (
@@ -53,13 +53,17 @@ export default function Hero() {
           initial="hidden"
           animate="show"
         >
-          <a className="btn btn--primary" href="#contatti">
-            Parliamone
-            <ArrowRight size={17} strokeWidth={1.75} />
+          <a className="btn btn--primary btn--hero" href="#contatti">
+            Prenota una call
+            <span className="btn__arrow">
+              <ArrowRight size={17} strokeWidth={2} />
+            </span>
           </a>
-          <a className="hero__link" href="#prodotto">
-            <ArrowUpRight size={16} strokeWidth={1.75} />
-            Cosa costruiamo
+          <a className="btn btn--secondary btn--hero" href="#prodotto">
+            Scopri come funziona
+            <span className="btn__arrow">
+              <ArrowRight size={17} strokeWidth={2} />
+            </span>
           </a>
         </motion.div>
       </div>

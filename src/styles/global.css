@@ -635,19 +635,69 @@ h4 {
   margin-top: 4px;
 }
 
-.hero__link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--text);
-  padding: 10px 4px;
-  transition: opacity var(--d-hover) var(--e-out);
+/* ---- CTA dell'hero: freccia che ruota su + alone d'accento ---- */
+.btn--hero {
+  position: relative;
+  height: 50px;
+  padding-inline: 24px;
+  /* niente cambio d'opacità globale: l'hover è gestito dagli effetti sotto */
+  transition: transform var(--d-lift) var(--e-lift), box-shadow var(--d-lift) var(--e-lift),
+    border-color var(--d-hover) var(--e-out);
 }
 
-.hero__link:hover {
-  opacity: 0.65;
+.btn--hero:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+/* la freccia parte orizzontale e al passaggio ruota verso l'alto-destra */
+.btn__arrow {
+  display: inline-flex;
+  transition: transform var(--d-lift) var(--e-lift);
+}
+
+.btn--hero:hover .btn__arrow {
+  transform: rotate(-45deg) translateX(1px);
+}
+
+/* alone d'accento blu che si accende attorno al bottone (solo luce) */
+.btn--hero::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: 0 0 0 0 transparent;
+  opacity: 0;
+  transition: opacity var(--d-lift) var(--e-lift), box-shadow var(--d-lift) var(--e-lift);
+}
+
+.btn--hero:hover::after {
+  opacity: 1;
+  box-shadow: 0 6px 26px -4px var(--accent-glow, rgba(74, 114, 204, 0.5)),
+    0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent);
+  animation: heroGlowPulse 2.4s var(--e-lift) infinite;
+}
+
+@keyframes heroGlowPulse {
+  0%,
+  100% {
+    box-shadow: 0 6px 24px -6px var(--accent-glow, rgba(74, 114, 204, 0.45)),
+      0 0 0 1px color-mix(in srgb, var(--accent) 32%, transparent);
+  }
+  50% {
+    box-shadow: 0 8px 34px -4px var(--accent-glow, rgba(74, 114, 204, 0.62)),
+      0 0 0 1px color-mix(in srgb, var(--accent) 50%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn--hero:hover::after {
+    animation: none;
+  }
+  .btn--hero:hover {
+    transform: none;
+  }
 }
 
 /* la scena: immagine di sfondo ancorata in fondo alla sezione,
