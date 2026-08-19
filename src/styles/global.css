@@ -616,9 +616,21 @@ h4 {
 
 .hero__title {
   margin: 0;
-  max-width: 22ch;
+  max-width: 20ch;
   font-size: clamp(30px, 4.4vw, 58px);
   line-height: 1.04;
+}
+
+.hero__sub {
+  max-width: 560px;
+  margin: 0 auto;
+  font-size: clamp(16px, 1.3vw, 19px);
+}
+
+/* la riga risultato pesa di più: è il beneficio concreto */
+.hero__sub-strong {
+  color: var(--text);
+  font-weight: 600;
 }
 
 /* garantisce uno spazio visibile tra le parole animate,

@@ -5,7 +5,7 @@ import { wordUp, fadeUp, EASE_MODAL, DUR } from '../lib/motion';
 
 const sceneUrl = `${import.meta.env.BASE_URL}hero-umano-ai.png`;
 
-const TITLE = ['Gestionali', 'su', 'misura,', 'resi', 'intelligenti', "dall'AI."];
+const TITLE = ['Non', 'compri', 'un', 'gestionale.', 'Te', 'lo', 'costruiamo.'];
 
 export default function Hero() {
   return (
@@ -46,10 +46,21 @@ export default function Hero() {
           ))}
         </h1>
 
+        <motion.p
+          className="t-body hero__sub"
+          variants={fadeUp}
+          custom={6}
+          initial="hidden"
+          animate="show"
+        >
+          Software su misura + AI integrata.{' '}
+          <strong className="hero__sub-strong">Meno tempo perso, meno costi, più margine.</strong>
+        </motion.p>
+
         <motion.div
           className="btn-row hero__cta"
           variants={fadeUp}
-          custom={7}
+          custom={8}
           initial="hidden"
           animate="show"
         >
