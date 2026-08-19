@@ -721,6 +721,8 @@ h4 {
   right: 0;
   bottom: 0;
   z-index: 2;
+  /* l'immagine è puramente decorativa: non deve rubare i click ai bottoni */
+  pointer-events: none;
   background-repeat: no-repeat;
   background-position: center bottom;
   /* fascia panoramica full-width: 100% larghezza, altezza proporzionale */
