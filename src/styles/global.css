@@ -638,30 +638,15 @@ h4 {
   opacity: 0.65;
 }
 
-/* la scena: immagine panoramica, occupa lo spazio residuo in fondo.
-   l'URL dell'immagine viene passata inline dal componente (Vite gestisce l'asset). */
+/* la scena: immagine panoramica, larga tutto lo schermo, in fondo all'hero.
+   L'URL viene passata inline dal componente (Vite gestisce l'asset). */
 .hero__scene {
   flex: 1;
   min-height: 0;
   width: 100%;
   background-repeat: no-repeat;
   background-position: center bottom;
-  background-size: contain;
-  /* soft dissolve verso il colore di sfondo, ai bordi */
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    #000 12%,
-    #000 88%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    #000 12%,
-    #000 88%,
-    transparent 100%
-  );
+  background-size: 100% auto;
 }
 
 /* ============================================================
