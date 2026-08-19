@@ -658,14 +658,15 @@ h4 {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 52vh;
+  height: 54vh;
   z-index: 2;
   background-repeat: no-repeat;
   background-position: center bottom;
-  background-size: cover;
+  /* contain: l'immagine intera è sempre visibile, mai ritagliata */
+  background-size: contain;
   /* dissolve verso l'alto, così l'immagine emerge dallo sfondo */
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 32%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 32%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 30%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 30%);
 }
 
 /* ============================================================
