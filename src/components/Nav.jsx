@@ -32,8 +32,7 @@ export default function Nav({ theme, onToggleTheme }) {
     >
       <div className="nav__pill">
         <a className="nav__brand" href="#home">
-          <LogoMark size={26} />
-          Rush
+          <LogoMark />
         </a>
 
         <nav className="nav__links">

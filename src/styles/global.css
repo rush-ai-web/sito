@@ -487,45 +487,42 @@ h4 {
   align-items: center;
   gap: 10px;
   height: 58px;
-  padding: 0 8px 0 14px;
+  padding: 0 8px 0 10px;
   border-radius: var(--r-pill);
   background: color-mix(in srgb, #0a0a0a 97%, transparent);
   -webkit-backdrop-filter: saturate(160%) blur(24px);
   backdrop-filter: saturate(160%) blur(24px);
-  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  /* bordo bianco spento stile Qloud */
+  border: 1px solid rgba(255, 255, 255, 0.13);
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3);
   color: var(--nav-ink);
 }
 
-/* logo badge: mini riquadro bianco che ospita il PNG con sfondo bianco */
+/* il logo occupa tutto il brand link — niente testo RUSH accanto */
+.nav__brand {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* badge: leggermente arrotondato, sfondo bianco per il PNG white-bg */
 .nav__logo-wrap {
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 7px;
+  width: 40px;
+  height: 40px;
+  border-radius: 9px;
   background: #fff;
   flex-shrink: 0;
   overflow: hidden;
 }
 
 .nav__logo-img {
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   object-fit: contain;
 }
 
-.nav__brand {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  font-family: var(--ff-display);
-  font-size: 17px;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  margin-right: 6px;
-}
 
 .nav__links {
   display: flex;
