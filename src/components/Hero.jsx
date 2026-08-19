@@ -3,7 +3,7 @@ import { Sparkles, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Pill } from './ui';
 import { wordUp, fadeUp, EASE_MODAL, DUR } from '../lib/motion';
 
-const sceneUrl = `${import.meta.env.BASE_URL}sfondo-umano-ai.png`;
+const sceneUrl = `${import.meta.env.BASE_URL}hero-umano-ai.png`;
 
 const TITLE = ['Gestionali', 'su', 'misura,', 'con', "l'AI", 'dentro.'];
 

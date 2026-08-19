@@ -658,15 +658,14 @@ h4 {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 54vh;
   z-index: 2;
   background-repeat: no-repeat;
   background-position: center bottom;
-  /* contain: l'immagine intera è sempre visibile, mai ritagliata */
-  background-size: contain;
-  /* dissolve verso l'alto, così l'immagine emerge dallo sfondo */
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 30%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 30%);
+  /* fascia panoramica full-width: 100% larghezza, altezza proporzionale */
+  background-size: 100% auto;
+  /* altezza = larghezza / ratio immagine (1920/600 = 3.2) */
+  aspect-ratio: 1920 / 600;
+  max-height: 58vh;
 }
 
 /* ============================================================
