@@ -18,7 +18,11 @@ export default function Hero() {
         {/* il titolo si compone parola per parola */}
         <h1 className="t-hero hero__title">
           {TITLE.map((w, i) => (
-            <span key={w + i} style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}>
+            <span
+              key={w + i}
+              className="hero__word"
+              style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}
+            >
               <motion.span
                 style={{ display: 'inline-block' }}
                 variants={wordUp}
@@ -28,7 +32,6 @@ export default function Hero() {
               >
                 {w}
               </motion.span>
-              {i < TITLE.length - 1 ? ' ' : ''}
             </span>
           ))}
         </h1>

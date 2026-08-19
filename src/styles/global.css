@@ -615,7 +615,18 @@ h4 {
 
 .hero__title {
   margin: 0;
-  max-width: 15ch;
+  max-width: 22ch;
+  font-size: clamp(30px, 4.4vw, 58px);
+  line-height: 1.04;
+}
+
+/* garantisce uno spazio visibile tra le parole animate,
+   perché il font Horizon renderizza lo spazio quasi a zero. */
+.hero__word {
+  margin-right: 0.32em;
+}
+.hero__word:last-child {
+  margin-right: 0;
 }
 
 .hero__cta {
