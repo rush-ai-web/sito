@@ -1,23 +1,22 @@
 import { motion } from 'framer-motion';
-import { Sparkles, Check, ArrowRight } from 'lucide-react';
-import { Pill, LiveDot } from './ui';
+import { Sparkles, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { Pill } from './ui';
 import { wordUp, fadeUp, EASE_MODAL, DUR } from '../lib/motion';
+
+const sceneUrl = `${import.meta.env.BASE_URL}sfondo-umano-ai.png`;
 
 const TITLE = ['Gestionali', 'su', 'misura,', 'con', "l'AI", 'dentro.'];
 
-const TRUST = ['Software proprietario', 'Dati in tempo reale', 'Automazioni su misura'];
-
 export default function Hero() {
   return (
-    <section id="home" data-tone="light" className="section section--lg hero fx-grid fx-spot">
-      <span className="fx-brand" aria-hidden="true" />
-      <div className="wrap hero__inner">
+    <section id="home" data-tone="light" className="section hero fx-grain">
+      <div className="wrap hero__top">
         <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: DUR.modal, ease: EASE_MODAL }}>
           <Pill icon={Sparkles}>Software house · gestionali &amp; AI</Pill>
         </motion.div>
 
         {/* il titolo si compone parola per parola */}
-        <h1 className="t-hero" style={{ maxWidth: '17ch' }}>
+        <h1 className="t-hero hero__title">
           {TITLE.map((w, i) => (
             <span key={w + i} style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}>
               <motion.span
@@ -29,61 +28,38 @@ export default function Hero() {
               >
                 {w}
               </motion.span>
-              {i < TITLE.length - 1 ? ' ' : ''}
+              {i < TITLE.length - 1 ? ' ' : ''}
             </span>
           ))}
         </h1>
 
-        <motion.p
-          className="t-body hero__sub"
-          variants={fadeUp}
-          custom={5}
-          initial="hidden"
-          animate="show"
-        >
-          Progettiamo e sviluppiamo il sistema gestionale che la tua azienda usa davvero: costruito
-          sui tuoi processi, non su quelli di un software preconfezionato. Dati reali sempre
-          aggiornati, automazioni al posto del lavoro manuale, intelligenza artificiale integrata
-          dove serve.
-        </motion.p>
-
         <motion.div
-          className="btn-row"
+          className="btn-row hero__cta"
           variants={fadeUp}
           custom={7}
           initial="hidden"
           animate="show"
-          style={{ justifyContent: 'center' }}
         >
           <a className="btn btn--primary" href="#contatti">
-            Parliamo del tuo progetto
+            Parliamone
             <ArrowRight size={17} strokeWidth={1.75} />
           </a>
-          <a className="btn btn--secondary" href="#soluzione">
+          <a className="hero__link" href="#prodotto">
+            <ArrowUpRight size={16} strokeWidth={1.75} />
             Cosa costruiamo
           </a>
         </motion.div>
-
-        <motion.div className="hero__trust" variants={fadeUp} custom={9} initial="hidden" animate="show">
-          {TRUST.map((t) => (
-            <span key={t}>
-              <Check size={15} strokeWidth={2} />
-              {t}
-            </span>
-          ))}
-        </motion.div>
-
-        <motion.p
-          className="t-small hero__live"
-          variants={fadeUp}
-          custom={11}
-          initial="hidden"
-          animate="show"
-        >
-          <LiveDot />
-          Sistemi in produzione · dati aggiornati in tempo reale
-        </motion.p>
       </div>
+
+      {/* immagine di apertura — sotto il testo, mai sovrapposta */}
+      <motion.div
+        className="hero__scene"
+        style={{ backgroundImage: `url(${sceneUrl})` }}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.1, ease: EASE_MODAL, delay: 0.35 }}
+        aria-hidden="true"
+      />
     </section>
   );
 }

@@ -585,56 +585,83 @@ h4 {
 
 
 /* ============================================================
-   Hero
+   Hero — occupa esattamente la prima schermata, testo sopra e
+   scena umano/AI sotto. Nessuna sovrapposizione.
    ============================================================ */
 .hero {
   position: relative;
-  padding-top: 178px;
-  padding-bottom: var(--s-hero-lg);
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-top: 130px;
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+  isolation: isolate;
 }
 
-.hero__inner {
+.hero__top {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 26px;
+  gap: 22px;
   text-align: center;
-  max-width: 980px;
+  max-width: 1000px;
   margin-inline: auto;
+  padding-bottom: 28px;
 }
 
-/* il titolo respira più degli altri blocchi */
-.hero__inner h1 {
-  margin-block: 6px;
+.hero__title {
+  margin: 0;
+  max-width: 15ch;
 }
 
-.hero__sub {
-  max-width: 620px;
-  margin-inline: auto;
-}
-
-.hero__trust {
-  display: flex;
-  flex-wrap: wrap;
+.hero__cta {
   justify-content: center;
-  gap: 10px 26px;
-  color: var(--text-2);
-  font-size: 14.5px;
+  margin-top: 4px;
 }
 
-.hero__trust span {
+.hero__link {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  padding: 10px 4px;
+  transition: opacity var(--d-hover) var(--e-out);
 }
 
-.hero__live {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
+.hero__link:hover {
+  opacity: 0.65;
+}
+
+/* la scena: immagine panoramica, occupa lo spazio residuo in fondo.
+   l'URL dell'immagine viene passata inline dal componente (Vite gestisce l'asset). */
+.hero__scene {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: contain;
+  /* soft dissolve verso il colore di sfondo, ai bordi */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 12%,
+    #000 88%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 12%,
+    #000 88%,
+    transparent 100%
+  );
 }
 
 /* ============================================================
