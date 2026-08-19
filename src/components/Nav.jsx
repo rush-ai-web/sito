@@ -5,7 +5,7 @@ import { DUR, EASE_MODAL } from '../lib/motion';
 function LogoMark() {
   return (
     <span className="nav__logo-wrap">
-      <img src="./rush-logo.png" alt="" aria-hidden="true" className="nav__logo-img" />
+      <img src="./rush-logo-dark.png" alt="" aria-hidden="true" className="nav__logo-img" />
     </span>
   );
 }
