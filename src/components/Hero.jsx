@@ -64,7 +64,7 @@ export default function Hero() {
           initial="hidden"
           animate="show"
         >
-          Software su misura + AI integrata.{' '}
+          <span className="hero__sub-accent">Software su misura + AI integrata.</span>
           <strong className="hero__sub-strong">Meno tempo perso, meno costi, più margine.</strong>
         </motion.p>
 
@@ -81,7 +81,7 @@ export default function Hero() {
               <ArrowRight size={17} strokeWidth={2} />
             </span>
           </a>
-          <a className="btn btn--secondary btn--hero" href="#prodotto">
+          <a className="btn btn--hero btn--accent" href="#prodotto">
             Scopri come funziona
             <span className="btn__arrow">
               <ArrowRight size={17} strokeWidth={2} />

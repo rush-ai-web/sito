@@ -354,6 +354,14 @@ h4 {
   padding-inline: 12px;
 }
 
+/* bottone in blu d'accento — sfondo pieno con leggera sfumatura */
+.btn--accent {
+  background: linear-gradient(135deg, #6a8ce8 0%, #5b7fe0 45%, #4a72cc 100%);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: var(--sh-1);
+}
+
 .btn:disabled {
   opacity: 0.35;
   cursor: not-allowed;
@@ -628,13 +636,25 @@ h4 {
 }
 
 .hero__sub {
-  max-width: 560px;
+  max-width: 620px;
   margin: 0 auto;
   font-size: clamp(16px, 1.3vw, 19px);
 }
 
-/* la riga risultato pesa di più: è il beneficio concreto */
+/* prima frase: blu d'accento con leggera sfumatura, ma con contrasto pieno */
+.hero__sub-accent {
+  display: block;
+  font-weight: 600;
+  background: linear-gradient(90deg, #3f63c8 0%, #5b7fe0 50%, #4a72cc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #4a72cc; /* fallback per browser senza clip */
+}
+
+/* la riga risultato pesa di più: è il beneficio concreto, va a capo */
 .hero__sub-strong {
+  display: block;
   color: var(--text);
   font-weight: 600;
 }
