@@ -579,9 +579,9 @@ h4 {
   font-size: 14.5px;
   font-weight: 600;
   letter-spacing: -0.01em;
-  /* gradiente bianco → blu accento */
-  background: linear-gradient(130deg, #ffffff 0%, #7aaae8 55%, #4a72cc 100%);
-  color: #0f1624;
+  /* stesso stile del secondo bottone hero: blu accento pieno, testo bianco */
+  background: linear-gradient(135deg, #6a8ce8 0%, #5b7fe0 45%, #4a72cc 100%);
+  color: #fff;
   box-shadow: 0 1px 6px rgba(74, 114, 204, 0.35);
   transition: filter var(--d-hover) var(--e-out), box-shadow var(--d-hover) var(--e-out);
 }
