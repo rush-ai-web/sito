@@ -35,14 +35,12 @@ export default function Fab() {
         whileHover={{ opacity: 0.9 }}
         aria-label="Chiedi a Rush"
       >
-        {/* scia luminosa che percorre il bordo, come nel form di riferimento */}
-        <svg className="fab__beam" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
-          <rect className="fab__beam-base" x="1" y="1" width="98" height="38" rx="19" pathLength="100" vectorEffect="non-scaling-stroke" />
-          <rect className="fab__beam-run" x="1" y="1" width="98" height="38" rx="19" pathLength="100" vectorEffect="non-scaling-stroke" />
-          <rect className="fab__beam-core" x="1" y="1" width="98" height="38" rx="19" pathLength="100" vectorEffect="non-scaling-stroke" />
-        </svg>
-        <Sparkles size={18} strokeWidth={1.75} />
-        <span className="fab__text">Chiedi a Rush</span>
+        {/* raggio di luce che ruota dietro al contenuto */}
+        <span className="fab__glow" aria-hidden="true" />
+        <span className="fab__inner">
+          <Sparkles size={18} strokeWidth={1.75} />
+          <span className="fab__text">Chiedi a Rush</span>
+        </span>
       </motion.button>
 
       <AnimatePresence>

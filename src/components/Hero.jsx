@@ -7,8 +7,8 @@ const sceneUrl = `${import.meta.env.BASE_URL}hero-umano-ai.png`;
 
 /* due frasi, ognuna sempre sulla sua riga */
 const SENTENCES = [
-  ['Non', 'compri', 'un', 'gestionale.'],
-  ['Te', 'lo', 'costruiamo.'],
+  ['Un', 'gestionale', 'costruito'],
+  ['attorno', 'alla', 'tua', 'azienda.'],
 ];
 
 /* cosa cambia quando il gestionale è tuo: ciò che cala e ciò che cresce.
