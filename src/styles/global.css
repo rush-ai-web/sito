@@ -1057,56 +1057,48 @@ h4 {
   color: #1d1d1f;
 }
 
-/* anello luminoso: due punti-luce che percorrono il perimetro del pill.
-   Uso offset-path così la velocità lungo il bordo è realmente costante
-   (il conic-gradient su un pill dava velocità apparente variabile,
-   più veloce sui lati corti e più lenta su quelli lunghi). */
-.fab__ring {
+/* per animare l'angolo del conic-gradient serve la variabile tipizzata */
+@property --fab-a {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* bordo luminoso sempre presente attorno al pill: anello blu costante
+   con una scia più brillante che scorre in loop lungo il perimetro. */
+.fab::before {
+  content: '';
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
+  inset: -1.5px;
   z-index: -1;
-}
-
-.fab__spark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 40px;
-  height: 40px;
-  margin: -20px 0 0 -20px;
-  border-radius: 50%;
-  /* punto luce bianco-azzurro con code diluite */
-  background: radial-gradient(
-    circle,
-    #ffffff 0%,
-    #cfe0ff 20%,
-    var(--accent) 42%,
-    color-mix(in srgb, var(--accent) 35%, transparent) 62%,
-    transparent 82%
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--fab-a),
+    var(--accent) 0deg,
+    #e8f0ff 30deg,
+    #ffffff 60deg,
+    #e8f0ff 90deg,
+    var(--accent) 130deg,
+    var(--accent) 360deg
   );
-  /* segue il rettangolo del pill (angoli molto arrotondati) */
-  offset-path: inset(0 round 999px);
-  offset-distance: 0%;
-  offset-rotate: 0deg;
-  animation: fabSpark 3.6s linear infinite;
-  mix-blend-mode: screen;
+  /* mask che ritaglia solo l'anello di bordo */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: fabRing 3.6s linear infinite;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 55%, transparent));
 }
 
-/* il secondo punto sta esattamente a metà giro: continuità totale */
-.fab__spark--2 {
-  animation-delay: -1.8s;
-}
-
-@keyframes fabSpark {
+@keyframes fabRing {
   to {
-    offset-distance: 100%;
+    --fab-a: 360deg;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fab__spark {
+  .fab::before {
     animation: none;
   }
 }
