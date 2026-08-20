@@ -640,38 +640,37 @@ h4 {
   margin: 2px auto 0;
 }
 
-/* prima frase: sottotitolo con più peso di layout, blu d'accento e una
-   banda luminosa che attraversa il testo in loop (shimmer). */
+/* prima frase: sottotitolo con più peso di layout (Inter), blu d'accento
+   con una banda luminosa larga e morbida che scorre lenta in loop. */
 .hero__sub-accent {
   display: block;
-  font-family: var(--ff-display);
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.005em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   font-size: clamp(20px, 2.3vw, 30px);
-  line-height: 1.15;
+  line-height: 1.2;
+  /* colori vicini + transizioni ampie = shimmer soft, non netto */
   background: linear-gradient(
     100deg,
-    #3f63c8 0%,
-    #3f63c8 38%,
-    #b3cbfa 50%,
-    #3f63c8 62%,
-    #3f63c8 100%
+    #4a6bce 0%,
+    #4a6bce 30%,
+    #7f9ee8 50%,
+    #4a6bce 70%,
+    #4a6bce 100%
   );
-  background-size: 250% auto;
+  background-size: 300% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: #3f5cb8; /* fallback per browser senza clip */
-  animation: accentSheen 3.4s linear infinite;
+  color: #4a6bce; /* fallback per browser senza clip */
+  animation: accentSheen 9s ease-in-out infinite;
 }
 
 @keyframes accentSheen {
   from {
-    background-position: 250% center;
+    background-position: 300% center;
   }
   to {
-    background-position: -50% center;
+    background-position: -100% center;
   }
 }
 
