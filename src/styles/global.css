@@ -652,11 +652,39 @@ h4 {
   color: #4a72cc; /* fallback per browser senza clip */
 }
 
-/* la riga risultato pesa di più: è il beneficio concreto, va a capo */
-.hero__sub-strong {
-  display: block;
+/* i tre benefici concreti, ognuno in una chip con icona d'accento */
+.hero__wins {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 12px;
+  margin-top: 2px;
+}
+
+.hero__win {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding-inline: 15px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--hairline-strong);
+  background-image: var(--card-vig);
+  box-shadow: var(--sh-1);
+  font-size: 14.5px;
+  font-weight: 500;
   color: var(--text);
-  font-weight: 600;
+  transition: box-shadow var(--d-lift) var(--e-lift), translate var(--d-lift) var(--e-lift);
+}
+
+.hero__win:hover {
+  translate: 0 -2px;
+  box-shadow: var(--sh-2);
+}
+
+/* l'icona è l'elemento identità: accento */
+.hero__win svg {
+  color: var(--accent);
 }
 
 /* garantisce uno spazio visibile tra le parole animate,

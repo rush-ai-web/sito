@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { Sparkles, ArrowRight, Timer, PiggyBank, TrendingUp } from 'lucide-react';
 import { Pill } from './ui';
 import { wordUp, fadeUp, EASE_MODAL, DUR } from '../lib/motion';
 
@@ -65,13 +65,34 @@ export default function Hero() {
           animate="show"
         >
           <span className="hero__sub-accent">Software su misura + AI integrata.</span>
-          <strong className="hero__sub-strong">Meno tempo perso, meno costi, più margine.</strong>
         </motion.p>
+
+        {/* i tre benefici, con icona, al posto della riga di testo */}
+        <motion.div
+          className="hero__wins"
+          variants={fadeUp}
+          custom={7}
+          initial="hidden"
+          animate="show"
+        >
+          <span className="hero__win">
+            <Timer size={17} strokeWidth={2} />
+            Meno tempo perso
+          </span>
+          <span className="hero__win">
+            <PiggyBank size={17} strokeWidth={2} />
+            Meno costi
+          </span>
+          <span className="hero__win">
+            <TrendingUp size={17} strokeWidth={2} />
+            Più margine
+          </span>
+        </motion.div>
 
         <motion.div
           className="btn-row hero__cta"
           variants={fadeUp}
-          custom={8}
+          custom={9}
           initial="hidden"
           animate="show"
         >
