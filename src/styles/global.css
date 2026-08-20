@@ -617,13 +617,14 @@ h4 {
 .hero__title {
   margin: 0;
   max-width: none;
-  font-size: clamp(28px, 4.1vw, 56px);
-  line-height: 1.06;
+  font-size: clamp(24px, 3.6vw, 48px);
+  line-height: 1.08;
 }
 
-/* ogni frase su una riga propria */
+/* ogni frase su una riga propria, che non va mai a capo su desktop */
 .hero__line {
   display: block;
+  white-space: nowrap;
 }
 
 .hero__sub {
@@ -1176,6 +1177,10 @@ textarea.input {
   }
   .hero {
     padding-top: 132px;
+  }
+  /* su mobile le frasi possono andare a capo, altrimenti sforano */
+  .hero__line {
+    white-space: normal;
   }
   .grid-2,
   .grid-3,
