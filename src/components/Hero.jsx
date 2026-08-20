@@ -67,7 +67,7 @@ export default function Hero() {
           <span className="hero__sub-accent">Software su misura + AI integrata.</span>
         </motion.p>
 
-        {/* i tre benefici, con icona, al posto della riga di testo */}
+        {/* i tre benefici: icona in piastrella soft-accent + testo, in fila */}
         <motion.div
           className="hero__wins"
           variants={fadeUp}
@@ -75,18 +75,18 @@ export default function Hero() {
           initial="hidden"
           animate="show"
         >
-          <span className="hero__win">
-            <Timer size={17} strokeWidth={2} />
-            Meno tempo perso
-          </span>
-          <span className="hero__win">
-            <PiggyBank size={17} strokeWidth={2} />
-            Meno costi
-          </span>
-          <span className="hero__win">
-            <TrendingUp size={17} strokeWidth={2} />
-            Più margine
-          </span>
+          {[
+            [Timer, 'Meno tempo perso'],
+            [PiggyBank, 'Meno costi'],
+            [TrendingUp, 'Più margine'],
+          ].map(([Icon, label]) => (
+            <span className="hero__win" key={label}>
+              <span className="hero__win__ic">
+                <Icon size={17} strokeWidth={2} />
+              </span>
+              {label}
+            </span>
+          ))}
         </motion.div>
 
         <motion.div

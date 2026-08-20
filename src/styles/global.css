@@ -652,39 +652,39 @@ h4 {
   color: #4a72cc; /* fallback per browser senza clip */
 }
 
-/* i tre benefici concreti, ognuno in una chip con icona d'accento */
+/* i tre benefici: fila leggera, senza box; l'icona sta in una
+   piastrella soft-accent, il testo accanto. */
 .hero__wins {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px 12px;
-  margin-top: 2px;
+  align-items: center;
+  gap: 12px 28px;
+  margin-top: 4px;
 }
 
 .hero__win {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 38px;
-  padding-inline: 15px;
-  border-radius: var(--r-pill);
-  border: 1px solid var(--hairline-strong);
-  background-image: var(--card-vig);
-  box-shadow: var(--sh-1);
-  font-size: 14.5px;
+  gap: 10px;
+  font-size: 15px;
   font-weight: 500;
-  color: var(--text);
-  transition: box-shadow var(--d-lift) var(--e-lift), translate var(--d-lift) var(--e-lift);
+  color: var(--text-2);
 }
 
-.hero__win:hover {
-  translate: 0 -2px;
-  box-shadow: var(--sh-2);
-}
-
-/* l'icona è l'elemento identità: accento */
-.hero__win svg {
+.hero__win__ic {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--accent-soft);
   color: var(--accent);
+  transition: transform var(--d-lift) var(--e-lift);
+}
+
+.hero__win:hover .hero__win__ic {
+  transform: translateY(-2px);
 }
 
 /* garantisce uno spazio visibile tra le parole animate,
