@@ -616,9 +616,14 @@ h4 {
 
 .hero__title {
   margin: 0;
-  max-width: 20ch;
-  font-size: clamp(30px, 4.4vw, 58px);
-  line-height: 1.04;
+  max-width: none;
+  font-size: clamp(28px, 4.1vw, 56px);
+  line-height: 1.06;
+}
+
+/* ogni frase su una riga propria */
+.hero__line {
+  display: block;
 }
 
 .hero__sub {

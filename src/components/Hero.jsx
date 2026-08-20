@@ -5,7 +5,11 @@ import { wordUp, fadeUp, EASE_MODAL, DUR } from '../lib/motion';
 
 const sceneUrl = `${import.meta.env.BASE_URL}hero-umano-ai.png`;
 
-const TITLE = ['Non', 'compri', 'un', 'gestionale.', 'Te', 'lo', 'costruiamo.'];
+/* due frasi, ognuna sempre sulla sua riga */
+const SENTENCES = [
+  ['Non', 'compri', 'un', 'gestionale.'],
+  ['Te', 'lo', 'costruiamo.'],
+];
 
 export default function Hero() {
   return (
@@ -25,23 +29,30 @@ export default function Hero() {
           <Pill icon={Sparkles}>Software house · gestionali &amp; AI</Pill>
         </motion.div>
 
-        {/* il titolo si compone parola per parola */}
+        {/* il titolo si compone parola per parola; ogni frase è una riga */}
         <h1 className="t-hero hero__title">
-          {TITLE.map((w, i) => (
-            <span
-              key={w + i}
-              className="hero__word"
-              style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}
-            >
-              <motion.span
-                style={{ display: 'inline-block' }}
-                variants={wordUp}
-                custom={i}
-                initial="hidden"
-                animate="show"
-              >
-                {w}
-              </motion.span>
+          {SENTENCES.map((words, s) => (
+            <span key={s} className="hero__line">
+              {words.map((w, i) => {
+                const idx = s * 4 + i;
+                return (
+                  <span
+                    key={w + i}
+                    className="hero__word"
+                    style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}
+                  >
+                    <motion.span
+                      style={{ display: 'inline-block' }}
+                      variants={wordUp}
+                      custom={idx}
+                      initial="hidden"
+                      animate="show"
+                    >
+                      {w}
+                    </motion.span>
+                  </span>
+                );
+              })}
             </span>
           ))}
         </h1>
