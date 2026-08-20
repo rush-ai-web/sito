@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import { Sparkles, ArrowRight, Timer, Wallet, TrendingUp } from 'lucide-react';
+import { Sparkles, ArrowRight, Minus, Plus } from 'lucide-react';
 import { Pill, IconTile } from './ui';
 import { wordUp, fadeUp, EASE_MODAL, DUR } from '../lib/motion';
 
@@ -11,12 +11,14 @@ const SENTENCES = [
   ['Te', 'lo', 'costruiamo.'],
 ];
 
-/* i tre benefici fluttuano nello sfondo, ognuno in una posizione diversa,
-   sopra le mani — mai sopra il titolo. */
+/* i benefici fluttuano nello sfondo, ognuno in una posizione diversa,
+   sopra le mani — mai sopra il titolo. Segnati con − (cala) e + (cresce). */
 const FLOATS = [
-  { icon: Timer, t: 'Meno tempo perso', pos: { top: '55%', left: '4%' } },
-  { icon: TrendingUp, t: 'Più margine', pos: { top: '52%', right: '5%' } },
-  { icon: Wallet, t: 'Meno costi', pos: { top: '78%', left: '9%' } },
+  { sign: '-', t: 'Tempo perso', pos: { top: '50%', left: '3%' } },
+  { sign: '-', t: 'Errori manuali', pos: { top: '70%', left: '12%' } },
+  { sign: '-', t: 'Costi fissi', pos: { top: '86%', left: '5%' } },
+  { sign: '+', t: 'Margine', pos: { top: '50%', right: '4%' } },
+  { sign: '+', t: 'Controllo', pos: { top: '72%', right: '9%' } },
 ];
 
 export default function Hero() {
@@ -36,18 +38,18 @@ export default function Hero() {
 
       {/* i tre benefici fluttuanti nello sfondo, ognuno in una posizione.
           Il wrapper posiziona; è l'intero contenitore-card che fluttua. */}
-      {FLOATS.map(({ icon, t, pos }, i) => (
+      {FLOATS.map(({ sign, t, pos }, i) => (
         <div key={t} className="hero__float" style={pos} aria-hidden="true">
           <motion.div
             className="hero__float-card"
             initial={{ opacity: 0, y: 14 }}
             animate={reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, -8, 0] }}
             transition={{
-              opacity: { duration: 0.6, ease: EASE_MODAL, delay: 0.5 + i * 0.15 },
-              y: { duration: 5.4 + i * 0.7, ease: 'easeInOut', repeat: Infinity, delay: 0.6 + i * 0.5 },
+              opacity: { duration: 0.6, ease: EASE_MODAL, delay: 0.5 + i * 0.12 },
+              y: { duration: 5.4 + i * 0.6, ease: 'easeInOut', repeat: Infinity, delay: 0.6 + i * 0.4 },
             }}
           >
-            <IconTile icon={icon} size="sm" />
+            <IconTile icon={sign === '+' ? Plus : Minus} size="sm" accent={sign === '+'} />
             <span>{t}</span>
           </motion.div>
         </div>
