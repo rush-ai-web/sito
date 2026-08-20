@@ -37,6 +37,11 @@ export default function Fab() {
       >
         <Sparkles size={18} strokeWidth={1.75} />
         <span className="fab__text">Chiedi a Rush</span>
+        {/* due punti luce che percorrono il perimetro a velocità costante */}
+        <span className="fab__ring" aria-hidden="true">
+          <span className="fab__spark" />
+          <span className="fab__spark fab__spark--2" />
+        </span>
       </motion.button>
 
       <AnimatePresence>

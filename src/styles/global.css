@@ -1057,47 +1057,57 @@ h4 {
   color: #1d1d1f;
 }
 
-/* per animare l'angolo del conic-gradient serve la variabile tipizzata */
-@property --fab-a {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
-}
-
-/* anello d'accento che gira in loop lungo il bordo del bottone.
-   Il conic-gradient copre un rettangolo leggermente più grande del bottone
-   e la mask scava il centro, così resta visibile solo un anello sottile
-   di luce che scorre lungo il perimetro. */
-.fab::before {
-  content: '';
+/* anello luminoso: due punti-luce che percorrono il perimetro del pill.
+   Uso offset-path così la velocità lungo il bordo è realmente costante
+   (il conic-gradient su un pill dava velocità apparente variabile,
+   più veloce sui lati corti e più lenta su quelli lunghi). */
+.fab__ring {
   position: absolute;
-  inset: -2px;
-  z-index: -1;
+  inset: 0;
   border-radius: inherit;
-  padding: 2px;
-  background: conic-gradient(
-    from var(--fab-a),
-    transparent 0deg,
-    transparent 200deg,
-    color-mix(in srgb, var(--accent) 35%, transparent) 250deg,
-    var(--accent) 300deg,
-    #a5c0f5 325deg,
-    var(--accent) 345deg,
-    color-mix(in srgb, var(--accent) 35%, transparent) 360deg
-  );
-  /* mask che tiene solo il bordo (2px), scavando il centro */
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: fabRing 3.4s linear infinite;
-  /* alone morbido dello stesso accento che segue il punto di luce */
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 60%, transparent));
+  pointer-events: none;
+  z-index: -1;
 }
 
-@keyframes fabRing {
+.fab__spark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border-radius: 50%;
+  /* punto luce bianco-azzurro con code diluite */
+  background: radial-gradient(
+    circle,
+    #ffffff 0%,
+    #cfe0ff 20%,
+    var(--accent) 42%,
+    color-mix(in srgb, var(--accent) 35%, transparent) 62%,
+    transparent 82%
+  );
+  /* segue il rettangolo del pill (angoli molto arrotondati) */
+  offset-path: inset(0 round 999px);
+  offset-distance: 0%;
+  offset-rotate: 0deg;
+  animation: fabSpark 3.6s linear infinite;
+  mix-blend-mode: screen;
+}
+
+/* il secondo punto sta esattamente a metà giro: continuità totale */
+.fab__spark--2 {
+  animation-delay: -1.8s;
+}
+
+@keyframes fabSpark {
   to {
-    --fab-a: 360deg;
+    offset-distance: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fab__spark {
+    animation: none;
   }
 }
 
