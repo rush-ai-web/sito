@@ -80,10 +80,8 @@ export default function Hero() {
             [PiggyBank, 'Meno costi'],
             [TrendingUp, 'Più margine'],
           ].map(([Icon, label]) => (
-            <span className="hero__win" key={label}>
-              <span className="hero__win__ic">
-                <Icon size={17} strokeWidth={2} />
-              </span>
+            <span className="chip chip--surface hero__win" key={label}>
+              <Icon size={14} strokeWidth={1.75} />
               {label}
             </span>
           ))}

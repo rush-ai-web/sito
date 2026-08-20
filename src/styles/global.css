@@ -652,39 +652,31 @@ h4 {
   color: #4a72cc; /* fallback per browser senza clip */
 }
 
-/* i tre benefici: fila leggera, senza box; l'icona sta in una
-   piastrella soft-accent, il testo accanto. */
+/* i tre benefici: stesse pillole della label in alto, icona in accento */
 .hero__wins {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 12px 28px;
+  gap: 10px;
   margin-top: 4px;
 }
 
+/* le chip dei benefici sono un filo più alte e con l'icona d'accento */
 .hero__win {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--text-2);
+  height: 34px;
+  padding-inline: 14px;
+  font-size: 13.5px;
+  transition: box-shadow var(--d-lift) var(--e-lift), translate var(--d-lift) var(--e-lift);
 }
 
-.hero__win__ic {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 9px;
-  background: var(--accent-soft);
+.hero__win svg {
   color: var(--accent);
-  transition: transform var(--d-lift) var(--e-lift);
 }
 
-.hero__win:hover .hero__win__ic {
-  transform: translateY(-2px);
+.hero__win:hover {
+  translate: 0 -2px;
+  box-shadow: var(--sh-2);
 }
 
 /* garantisce uno spazio visibile tra le parole animate,
