@@ -1057,48 +1057,58 @@ h4 {
   color: #1d1d1f;
 }
 
-/* per animare l'angolo del conic-gradient serve la variabile tipizzata */
-@property --fab-a {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
-}
-
-/* bordo luminoso sempre presente attorno al pill: anello blu costante
-   con una scia più brillante che scorre in loop lungo il perimetro. */
-.fab::before {
-  content: '';
+/* scia luminosa che percorre il bordo del pill.
+   Un <rect> SVG con pathLength normalizzato a 100: animando lo
+   stroke-dashoffset, il segmento visibile corre lungo il perimetro
+   a velocità costante (impossibile col conic-gradient su un pill). */
+.fab__beam {
   position: absolute;
-  inset: -1.5px;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   z-index: -1;
-  border-radius: inherit;
-  padding: 1.5px;
-  background: conic-gradient(
-    from var(--fab-a),
-    var(--accent) 0deg,
-    #e8f0ff 30deg,
-    #ffffff 60deg,
-    #e8f0ff 90deg,
-    var(--accent) 130deg,
-    var(--accent) 360deg
-  );
-  /* mask che ritaglia solo l'anello di bordo */
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: fabRing 3.6s linear infinite;
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 55%, transparent));
+  overflow: visible;
+  pointer-events: none;
 }
 
-@keyframes fabRing {
+.fab__beam rect {
+  fill: none;
+}
+
+/* bordo di base: sempre presente, tenue */
+.fab__beam-base {
+  stroke: color-mix(in srgb, var(--accent) 20%, transparent);
+  stroke-width: 1.5;
+}
+
+/* la scia d'accento che corre */
+.fab__beam-run {
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 18 82;
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--accent) 80%, transparent));
+  animation: fabBeam 3.6s linear infinite;
+}
+
+/* il cuore bianco della scia, più corto, per il look tech */
+.fab__beam-core {
+  stroke: #eaf1ff;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 7 93;
+  animation: fabBeam 3.6s linear infinite;
+}
+
+@keyframes fabBeam {
   to {
-    --fab-a: 360deg;
+    stroke-dashoffset: -100;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fab::before {
+  .fab__beam-run,
+  .fab__beam-core {
     animation: none;
   }
 }
