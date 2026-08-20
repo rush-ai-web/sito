@@ -1061,14 +1061,14 @@ h4 {
   position: absolute;
   inset: -100%;
   z-index: -1;
+  /* solo colore d'accento: un arco che sfuma in modo simmetrico */
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    transparent 205deg,
-    color-mix(in srgb, var(--accent) 40%, transparent) 255deg,
-    var(--accent) 300deg,
-    #dbe6ff 325deg,
-    var(--accent) 345deg,
+    transparent 210deg,
+    color-mix(in srgb, var(--accent) 45%, transparent) 260deg,
+    var(--accent) 310deg,
+    color-mix(in srgb, var(--accent) 45%, transparent) 350deg,
     transparent 360deg
   );
   animation: fabSpin 3.8s linear infinite;
