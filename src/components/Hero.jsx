@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { Sparkles, ArrowRight, Timer, Wallet, TrendingUp } from 'lucide-react';
 import { Pill, IconTile } from './ui';
-import { wordUp, fadeUp, floatIn, EASE_MODAL, DUR } from '../lib/motion';
+import { wordUp, fadeUp, EASE_MODAL, DUR } from '../lib/motion';
 
 const sceneUrl = `${import.meta.env.BASE_URL}hero-umano-ai.png`;
 
@@ -12,11 +12,11 @@ const SENTENCES = [
 ];
 
 /* i tre benefici fluttuano nello sfondo, ognuno in una posizione diversa,
-   come le card orbitanti della sezione Soluzione. */
+   sopra le mani — mai sopra il titolo. */
 const FLOATS = [
-  { icon: Timer, t: 'Meno tempo perso', pos: { top: '20%', left: '4%' } },
-  { icon: TrendingUp, t: 'Più margine', pos: { top: '16%', right: '4%' } },
-  { icon: Wallet, t: 'Meno costi', pos: { top: '52%', right: '9%' } },
+  { icon: Timer, t: 'Meno tempo perso', pos: { top: '55%', left: '4%' } },
+  { icon: TrendingUp, t: 'Più margine', pos: { top: '52%', right: '5%' } },
+  { icon: Wallet, t: 'Meno costi', pos: { top: '78%', left: '9%' } },
 ];
 
 export default function Hero() {
@@ -34,27 +34,23 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      {/* i tre benefici fluttuanti nello sfondo, ognuno in una posizione */}
+      {/* i tre benefici fluttuanti nello sfondo, ognuno in una posizione.
+          Il wrapper posiziona; è l'intero contenitore-card che fluttua. */}
       {FLOATS.map(({ icon, t, pos }, i) => (
-        <motion.div
-          key={t}
-          className="hero__float"
-          style={pos}
-          variants={floatIn}
-          custom={i + 2}
-          initial="hidden"
-          animate="show"
-        >
-          {/* fluttua l'intero blocco, con un ritmo suo */}
+        <div key={t} className="hero__float" style={pos} aria-hidden="true">
           <motion.div
-            className="hero__float-inner"
-            animate={reduce ? {} : { y: [0, -7, 0] }}
-            transition={{ duration: 5.4 + i * 0.7, ease: 'easeInOut', repeat: Infinity, delay: i * 0.5 }}
+            className="hero__float-card"
+            initial={{ opacity: 0, y: 14 }}
+            animate={reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, -8, 0] }}
+            transition={{
+              opacity: { duration: 0.6, ease: EASE_MODAL, delay: 0.5 + i * 0.15 },
+              y: { duration: 5.4 + i * 0.7, ease: 'easeInOut', repeat: Infinity, delay: 0.6 + i * 0.5 },
+            }}
           >
             <IconTile icon={icon} size="sm" />
             <span>{t}</span>
           </motion.div>
-        </motion.div>
+        </div>
       ))}
 
       <div className="wrap hero__top">
