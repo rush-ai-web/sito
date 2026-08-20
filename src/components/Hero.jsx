@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion';
-import { Sparkles, ArrowRight, Timer, PiggyBank, TrendingUp } from 'lucide-react';
-import { Pill } from './ui';
-import { wordUp, fadeUp, EASE_MODAL, DUR } from '../lib/motion';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Sparkles, ArrowRight, Timer, Wallet, TrendingUp } from 'lucide-react';
+import { Pill, IconTile } from './ui';
+import { wordUp, fadeUp, floatIn, EASE_MODAL, DUR } from '../lib/motion';
 
 const sceneUrl = `${import.meta.env.BASE_URL}hero-umano-ai.png`;
 
@@ -11,7 +11,17 @@ const SENTENCES = [
   ['Te', 'lo', 'costruiamo.'],
 ];
 
+/* i tre benefici fluttuano nello sfondo, ognuno in una posizione diversa,
+   come le card orbitanti della sezione Soluzione. */
+const FLOATS = [
+  { icon: Timer, t: 'Meno tempo perso', pos: { top: '20%', left: '4%' } },
+  { icon: TrendingUp, t: 'Più margine', pos: { top: '16%', right: '4%' } },
+  { icon: Wallet, t: 'Meno costi', pos: { top: '52%', right: '9%' } },
+];
+
 export default function Hero() {
+  const reduce = useReducedMotion();
+
   return (
     <section id="home" data-tone="light" className="section hero fx-grain">
       {/* immagine di sfondo — ancorata in basso, sopra il grain */}
@@ -23,6 +33,29 @@ export default function Hero() {
         transition={{ duration: 1.1, ease: EASE_MODAL, delay: 0.35 }}
         aria-hidden="true"
       />
+
+      {/* i tre benefici fluttuanti nello sfondo, ognuno in una posizione */}
+      {FLOATS.map(({ icon, t, pos }, i) => (
+        <motion.div
+          key={t}
+          className="hero__float"
+          style={pos}
+          variants={floatIn}
+          custom={i + 2}
+          initial="hidden"
+          animate="show"
+        >
+          {/* fluttua l'intero blocco, con un ritmo suo */}
+          <motion.div
+            className="hero__float-inner"
+            animate={reduce ? {} : { y: [0, -7, 0] }}
+            transition={{ duration: 5.4 + i * 0.7, ease: 'easeInOut', repeat: Infinity, delay: i * 0.5 }}
+          >
+            <IconTile icon={icon} size="sm" />
+            <span>{t}</span>
+          </motion.div>
+        </motion.div>
+      ))}
 
       <div className="wrap hero__top">
         <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: DUR.modal, ease: EASE_MODAL }}>
@@ -67,30 +100,10 @@ export default function Hero() {
           <span className="hero__sub-accent">Software su misura + AI integrata.</span>
         </motion.p>
 
-        {/* i tre benefici: icona in piastrella soft-accent + testo, in fila */}
-        <motion.div
-          className="hero__wins"
-          variants={fadeUp}
-          custom={7}
-          initial="hidden"
-          animate="show"
-        >
-          {[
-            [Timer, 'Meno tempo perso'],
-            [PiggyBank, 'Meno costi'],
-            [TrendingUp, 'Più margine'],
-          ].map(([Icon, label]) => (
-            <span className="chip chip--surface hero__win" key={label}>
-              <Icon size={14} strokeWidth={1.75} />
-              {label}
-            </span>
-          ))}
-        </motion.div>
-
         <motion.div
           className="btn-row hero__cta"
           variants={fadeUp}
-          custom={9}
+          custom={7}
           initial="hidden"
           animate="show"
         >
