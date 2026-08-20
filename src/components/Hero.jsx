@@ -11,14 +11,39 @@ const SENTENCES = [
   ['Te', 'lo', 'costruiamo.'],
 ];
 
-/* cosa cambia quando il gestionale è tuo: una riga ordinata,
-   ciò che cala a sinistra, ciò che cresce a destra. */
+/* cosa cambia quando il gestionale è tuo: ciò che cala e ciò che cresce.
+   Scorrono in una striscia sotto l'hero, sempre leggibile. */
 const OUTCOMES = [
   { sign: '−', t: 'Tempo perso' },
-  { sign: '−', t: 'Errori manuali' },
   { sign: '+', t: 'Margine' },
-  { sign: '+', t: 'Controllo' },
+  { sign: '−', t: 'Errori manuali' },
+  { sign: '+', t: 'Controllo sui dati' },
+  { sign: '−', t: 'Costi fissi' },
+  { sign: '+', t: 'Automazioni' },
+  { sign: '−', t: 'Doppi inserimenti' },
+  { sign: '+', t: 'Decisioni sui numeri veri' },
 ];
+
+/* striscia scorrevole sotto l'hero: la lista è duplicata così
+   il loop si chiude senza stacco. */
+export function OutcomeTicker() {
+  return (
+    <div className="ticker" aria-label="Cosa cambia con un gestionale su misura">
+      <div className="ticker__track">
+        {[0, 1].map((copy) => (
+          <div className="ticker__group" key={copy} aria-hidden={copy === 1}>
+            {OUTCOMES.map(({ sign, t }) => (
+              <span className={`oc ${sign === '+' ? 'is-up' : 'is-down'}`} key={t}>
+                <span className="oc__sign">{sign}</span>
+                {t}
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Hero() {
   return (
@@ -95,22 +120,6 @@ export default function Hero() {
               <ArrowRight size={17} strokeWidth={2} />
             </span>
           </a>
-        </motion.div>
-
-        {/* cosa cambia: riga ordinata, ciò che cala e ciò che cresce */}
-        <motion.div
-          className="hero__outcomes"
-          variants={fadeUp}
-          custom={9}
-          initial="hidden"
-          animate="show"
-        >
-          {OUTCOMES.map(({ sign, t }) => (
-            <span className={`hero__oc ${sign === '+' ? 'is-up' : 'is-down'}`} key={t}>
-              <span className="hero__oc-sign">{sign}</span>
-              {t}
-            </span>
-          ))}
         </motion.div>
       </div>
     </section>

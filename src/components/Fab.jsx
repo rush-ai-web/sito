@@ -37,7 +37,6 @@ export default function Fab() {
       >
         <Sparkles size={18} strokeWidth={1.75} />
         <span className="fab__text">Chiedi a Rush</span>
-        <span className="fab__kbd num">⌘K</span>
       </motion.button>
 
       <AnimatePresence>

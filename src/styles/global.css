@@ -674,53 +674,95 @@ h4 {
   }
 }
 
-/* ---- cosa cambia: riga ordinata sotto i CTA ----
-   segno in un quadratino, testo accanto. Ciò che cresce è in accento. */
-.hero__outcomes {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 10px 22px;
-  margin-top: 18px;
+/* ============================================================
+   Ticker "cosa cambia" — striscia scorrevole sotto l'hero.
+   Fa da respiro tra l'hero e la prima sezione, e resta sempre
+   leggibile perché ha una fascia sua.
+   ============================================================ */
+.ticker {
+  position: relative;
+  overflow: hidden;
+  padding-block: 20px;
+  background: var(--bg);
+  border-block: 0.5px solid var(--hairline);
+  /* sfuma ai lati: gli elementi entrano ed escono, non tagliano */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 9%,
+    #000 91%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%);
 }
 
-.hero__oc {
+.ticker__track {
+  display: flex;
+  width: max-content;
+  animation: tickerRun 42s linear infinite;
+}
+
+/* in hover si ferma: l'utente può leggere con calma */
+.ticker:hover .ticker__track {
+  animation-play-state: paused;
+}
+
+.ticker__group {
+  display: flex;
+  align-items: center;
+  gap: 34px;
+  padding-right: 34px;
+}
+
+@keyframes tickerRun {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* la singola voce: segno in un quadratino, testo accanto */
+.oc {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  font-size: 14.5px;
+  gap: 10px;
+  font-size: 15px;
   font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--text-2);
   white-space: nowrap;
 }
 
-.hero__oc-sign {
+.oc__sign {
   display: grid;
   place-items: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 7px;
-  font-size: 14px;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  font-size: 15px;
   font-weight: 600;
   line-height: 1;
 }
 
 /* ciò che cala: neutro, sobrio */
-.hero__oc.is-down .hero__oc-sign {
+.oc.is-down .oc__sign {
   background: color-mix(in srgb, var(--text) 7%, transparent);
-  color: var(--text-2);
+  color: var(--text-3);
 }
 
 /* ciò che cresce: accento, è la parte che deve risaltare */
-.hero__oc.is-up {
+.oc.is-up {
   color: var(--text);
 }
 
-.hero__oc.is-up .hero__oc-sign {
+.oc.is-up .oc__sign {
   background: var(--accent-soft);
   color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker__track {
+    animation: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -992,7 +1034,7 @@ h4 {
   align-items: center;
   gap: 10px;
   height: 50px;
-  padding: 0 8px 0 20px;
+  padding: 0 22px;
   border-radius: var(--r-pill);
   border: 0;
   cursor: pointer;
@@ -1001,7 +1043,10 @@ h4 {
   font-size: 15px;
   font-weight: 500;
   letter-spacing: -0.01em;
-  box-shadow: var(--sh-3);
+  /* ombra + alone d'accento morbido attorno */
+  box-shadow: var(--sh-3), 0 0 22px -4px color-mix(in srgb, var(--accent) 42%, transparent);
+  /* il bordo luminoso vive nello ::before, dietro al bottone */
+  isolation: isolate;
 }
 
 :root[data-theme='dark'] .fab {
@@ -1009,15 +1054,36 @@ h4 {
   color: #1d1d1f;
 }
 
-.fab__kbd {
-  display: inline-grid;
-  place-items: center;
-  height: 30px;
-  padding-inline: 9px;
-  border-radius: var(--r-pill);
-  background: color-mix(in srgb, currentColor 16%, transparent);
-  font-size: 12.5px;
-  font-weight: 500;
+/* anello d'accento che gira in loop lungo il bordo:
+   un conic-gradient che ruota dietro al bottone e sporge di 1.5px. */
+.fab::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  z-index: -1;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 200deg,
+    color-mix(in srgb, var(--accent) 55%, transparent) 268deg,
+    var(--accent) 310deg,
+    color-mix(in srgb, var(--accent) 55%, transparent) 352deg,
+    transparent 360deg
+  );
+  animation: fabRing 3.6s linear infinite;
+}
+
+@keyframes fabRing {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fab::before {
+    animation: none;
+  }
 }
 
 .palette__scrim {
