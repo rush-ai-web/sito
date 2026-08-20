@@ -1,6 +1,6 @@
-import { motion, useReducedMotion } from 'framer-motion';
-import { Sparkles, ArrowRight, Minus, Plus } from 'lucide-react';
-import { Pill, IconTile } from './ui';
+import { motion } from 'framer-motion';
+import { Sparkles, ArrowRight } from 'lucide-react';
+import { Pill } from './ui';
 import { wordUp, fadeUp, EASE_MODAL, DUR } from '../lib/motion';
 
 const sceneUrl = `${import.meta.env.BASE_URL}hero-umano-ai.png`;
@@ -11,19 +11,16 @@ const SENTENCES = [
   ['Te', 'lo', 'costruiamo.'],
 ];
 
-/* i benefici fluttuano nello sfondo, ognuno in una posizione diversa,
-   sopra le mani — mai sopra il titolo. Segnati con − (cala) e + (cresce). */
-const FLOATS = [
-  { sign: '-', t: 'Tempo perso', pos: { top: '50%', left: '3%' } },
-  { sign: '-', t: 'Errori manuali', pos: { top: '70%', left: '12%' } },
-  { sign: '-', t: 'Costi fissi', pos: { top: '86%', left: '5%' } },
-  { sign: '+', t: 'Margine', pos: { top: '50%', right: '4%' } },
-  { sign: '+', t: 'Controllo', pos: { top: '72%', right: '9%' } },
+/* cosa cambia quando il gestionale è tuo: una riga ordinata,
+   ciò che cala a sinistra, ciò che cresce a destra. */
+const OUTCOMES = [
+  { sign: '−', t: 'Tempo perso' },
+  { sign: '−', t: 'Errori manuali' },
+  { sign: '+', t: 'Margine' },
+  { sign: '+', t: 'Controllo' },
 ];
 
 export default function Hero() {
-  const reduce = useReducedMotion();
-
   return (
     <section id="home" data-tone="light" className="section hero fx-grain">
       {/* immagine di sfondo — ancorata in basso, sopra il grain */}
@@ -35,25 +32,6 @@ export default function Hero() {
         transition={{ duration: 1.1, ease: EASE_MODAL, delay: 0.35 }}
         aria-hidden="true"
       />
-
-      {/* i tre benefici fluttuanti nello sfondo, ognuno in una posizione.
-          Il wrapper posiziona; è l'intero contenitore-card che fluttua. */}
-      {FLOATS.map(({ sign, t, pos }, i) => (
-        <div key={t} className="hero__float" style={pos} aria-hidden="true">
-          <motion.div
-            className="hero__float-card"
-            initial={{ opacity: 0, y: 14 }}
-            animate={reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, -8, 0] }}
-            transition={{
-              opacity: { duration: 0.6, ease: EASE_MODAL, delay: 0.5 + i * 0.12 },
-              y: { duration: 5.4 + i * 0.6, ease: 'easeInOut', repeat: Infinity, delay: 0.6 + i * 0.4 },
-            }}
-          >
-            <IconTile icon={sign === '+' ? Plus : Minus} size="sm" accent={sign === '+'} />
-            <span>{t}</span>
-          </motion.div>
-        </div>
-      ))}
 
       <div className="wrap hero__top">
         <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: DUR.modal, ease: EASE_MODAL }}>
@@ -117,6 +95,22 @@ export default function Hero() {
               <ArrowRight size={17} strokeWidth={2} />
             </span>
           </a>
+        </motion.div>
+
+        {/* cosa cambia: riga ordinata, ciò che cala e ciò che cresce */}
+        <motion.div
+          className="hero__outcomes"
+          variants={fadeUp}
+          custom={9}
+          initial="hidden"
+          animate="show"
+        >
+          {OUTCOMES.map(({ sign, t }) => (
+            <span className={`hero__oc ${sign === '+' ? 'is-up' : 'is-down'}`} key={t}>
+              <span className="hero__oc-sign">{sign}</span>
+              {t}
+            </span>
+          ))}
         </motion.div>
       </div>
     </section>

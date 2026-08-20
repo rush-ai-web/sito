@@ -674,28 +674,53 @@ h4 {
   }
 }
 
-/* ---- i tre benefici fluttuanti: stile delle card orbitanti ----
-   il wrapper si limita a posizionare; è la card interna a fluttuare. */
-.hero__float {
-  position: absolute;
-  z-index: 2;
-  pointer-events: none;
+/* ---- cosa cambia: riga ordinata sotto i CTA ----
+   segno in un quadratino, testo accanto. Ciò che cresce è in accento. */
+.hero__outcomes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px 22px;
+  margin-top: 18px;
 }
 
-.hero__float-card {
-  display: flex;
+.hero__oc {
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 11px 20px 11px 11px;
-  border-radius: var(--r-pill);
-  background-image: var(--card-vig);
-  border: 1px solid var(--hairline-strong);
-  box-shadow: var(--sh-1);
+  gap: 9px;
   font-size: 14.5px;
   font-weight: 500;
-  letter-spacing: -0.012em;
-  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--text-2);
   white-space: nowrap;
+}
+
+.hero__oc-sign {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* ciò che cala: neutro, sobrio */
+.hero__oc.is-down .hero__oc-sign {
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+  color: var(--text-2);
+}
+
+/* ciò che cresce: accento, è la parte che deve risaltare */
+.hero__oc.is-up {
+  color: var(--text);
+}
+
+.hero__oc.is-up .hero__oc-sign {
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1215,10 +1240,6 @@ textarea.input {
     grid-template-columns: 1fr 1fr;
   }
   .orbit {
-    display: none;
-  }
-  /* i benefici fluttuanti stringerebbero il testo dell'hero */
-  .hero__float {
     display: none;
   }
   /* senza i link, toggle e CTA vanno spinti a destra a mano */
