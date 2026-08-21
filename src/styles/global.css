@@ -635,10 +635,6 @@ h4 {
   white-space: nowrap;
 }
 
-/* respiro tra la prima e la seconda frase del titolo */
-.hero__line + .hero__line {
-  margin-top: 25px;
-}
 
 .hero__sub {
   max-width: 760px;
@@ -1040,14 +1036,14 @@ h4 {
   right: 22px;
   bottom: 22px;
   z-index: 55;
-  padding: 1.5px; /* spessore del bordo luminoso */
+  padding: 2.5px; /* spessore del bordo luminoso */
   border-radius: var(--r-pill);
   border: 0;
   cursor: pointer;
   background: var(--fab-bg);
   overflow: hidden;
   isolation: isolate;
-  box-shadow: var(--sh-3), 0 0 20px -6px color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: var(--sh-3), 0 0 24px -4px color-mix(in srgb, var(--accent) 60%, transparent);
 }
 
 :root[data-theme='dark'] .fab {
@@ -1061,14 +1057,15 @@ h4 {
   position: absolute;
   inset: -100%;
   z-index: -1;
-  /* solo colore d'accento: un arco che sfuma in modo simmetrico */
+  /* solo colore d'accento: un arco ampio e luminoso che sfuma ai lati */
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    transparent 210deg,
-    color-mix(in srgb, var(--accent) 45%, transparent) 260deg,
-    var(--accent) 310deg,
-    color-mix(in srgb, var(--accent) 45%, transparent) 350deg,
+    transparent 150deg,
+    color-mix(in srgb, var(--accent) 55%, transparent) 210deg,
+    var(--accent) 285deg,
+    var(--accent) 320deg,
+    color-mix(in srgb, var(--accent) 55%, transparent) 355deg,
     transparent 360deg
   );
   animation: fabSpin 3.8s linear infinite;
