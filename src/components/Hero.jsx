@@ -1,15 +1,11 @@
 import { motion } from 'framer-motion';
 import { Sparkles, ArrowRight } from 'lucide-react';
 import { Pill } from './ui';
+import HeroScene from './HeroScene';
 import { wordUp, fadeUp, EASE_MODAL, DUR } from '../lib/motion';
 
-const sceneUrl = `${import.meta.env.BASE_URL}hero-umano-ai.png`;
-
-/* due frasi, ognuna sempre sulla sua riga */
-const SENTENCES = [
-  ['Un', 'gestionale', 'costruito'],
-  ['attorno', 'alla', 'tua', 'azienda.'],
-];
+/* il titolo si compone parola per parola e va a capo da solo */
+const TITLE = ['Un', 'gestionale', 'costruito', 'attorno', 'alla', 'tua', 'azienda.'];
 
 /* cosa cambia quando il gestionale è tuo: ciò che cala e ciò che cresce.
    Scorrono in una striscia sotto l'hero, sempre leggibile. */
@@ -48,79 +44,83 @@ export function OutcomeTicker() {
 export default function Hero() {
   return (
     <section id="home" data-tone="light" className="section hero fx-grain">
-      {/* immagine di sfondo — ancorata in basso, sopra il grain */}
-      <motion.div
-        className="hero__scene"
-        style={{ backgroundImage: `url(${sceneUrl})` }}
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.1, ease: EASE_MODAL, delay: 0.35 }}
-        aria-hidden="true"
-      />
+      <div className="wrap hero__grid">
+        {/* colonna sinistra: quello che diciamo */}
+        <div className="hero__text">
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: DUR.modal, ease: EASE_MODAL }}
+          >
+            <Pill icon={Sparkles}>Software house · gestionali &amp; AI</Pill>
+          </motion.div>
 
-      <div className="wrap hero__top">
-        <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: DUR.modal, ease: EASE_MODAL }}>
-          <Pill icon={Sparkles}>Software house · gestionali &amp; AI</Pill>
-        </motion.div>
+          <h1 className="t-hero hero__title">
+            {TITLE.map((w, i) => (
+              <span
+                key={w + i}
+                className="hero__word"
+                style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}
+              >
+                <motion.span
+                  style={{ display: 'inline-block' }}
+                  variants={wordUp}
+                  custom={i}
+                  initial="hidden"
+                  animate="show"
+                >
+                  {w}
+                </motion.span>
+              </span>
+            ))}
+          </h1>
 
-        {/* il titolo si compone parola per parola; ogni frase è una riga */}
-        <h1 className="t-hero hero__title">
-          {SENTENCES.map((words, s) => (
-            <span key={s} className="hero__line">
-              {words.map((w, i) => {
-                const idx = s * 4 + i;
-                return (
-                  <span
-                    key={w + i}
-                    className="hero__word"
-                    style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}
-                  >
-                    <motion.span
-                      style={{ display: 'inline-block' }}
-                      variants={wordUp}
-                      custom={idx}
-                      initial="hidden"
-                      animate="show"
-                    >
-                      {w}
-                    </motion.span>
-                  </span>
-                );
-              })}
-            </span>
-          ))}
-        </h1>
+          <motion.p
+            className="hero__lead"
+            variants={fadeUp}
+            custom={7}
+            initial="hidden"
+            animate="show"
+          >
+            <span className="hero__sub-accent">Software su misura + AI integrata.</span>
+          </motion.p>
 
-        <motion.p
-          className="t-body hero__sub"
-          variants={fadeUp}
-          custom={6}
-          initial="hidden"
-          animate="show"
-        >
-          <span className="hero__sub-accent">Software su misura + AI integrata.</span>
-        </motion.p>
+          <motion.p
+            className="t-body hero__sub"
+            variants={fadeUp}
+            custom={8}
+            initial="hidden"
+            animate="show"
+          >
+            Progettiamo il sistema attorno ai tuoi processi, non il contrario. I dati restano
+            aggiornati da soli, i documenti si registrano da soli, il lavoro ripetitivo esce dalla
+            giornata.
+          </motion.p>
 
-        <motion.div
-          className="btn-row hero__cta"
-          variants={fadeUp}
-          custom={7}
-          initial="hidden"
-          animate="show"
-        >
-          <a className="btn btn--primary btn--hero" href="#contatti">
-            Prenota una call
-            <span className="btn__arrow">
-              <ArrowRight size={17} strokeWidth={2} />
-            </span>
-          </a>
-          <a className="btn btn--hero btn--accent" href="#prodotto">
-            Scopri come funziona
-            <span className="btn__arrow">
-              <ArrowRight size={17} strokeWidth={2} />
-            </span>
-          </a>
-        </motion.div>
+          <motion.div
+            className="btn-row hero__cta"
+            variants={fadeUp}
+            custom={9}
+            initial="hidden"
+            animate="show"
+          >
+            <a className="btn btn--primary btn--hero" href="#contatti">
+              Prenota una call
+              <span className="btn__arrow">
+                <ArrowRight size={17} strokeWidth={2} />
+              </span>
+            </a>
+            <a className="btn btn--hero btn--accent" href="#prodotto">
+              Scopri come funziona
+              <span className="btn__arrow">
+                <ArrowRight size={17} strokeWidth={2} />
+              </span>
+            </a>
+          </motion.div>
+        </div>
+
+        {/* colonna destra: il sistema al lavoro */}
+        <HeroScene />
       </div>
     </section>
   );

@@ -593,62 +593,63 @@ h4 {
 
 
 /* ============================================================
-   Hero — occupa esattamente la prima schermata, testo sopra e
-   scena umano/AI sotto. Nessuna sovrapposizione.
+   Hero — due colonne: a sinistra il messaggio, a destra il
+   sistema al lavoro. Occupa la prima schermata.
    ============================================================ */
 .hero {
   position: relative;
-  height: 100vh;
-  height: 100svh;
-  padding-top: 128px;
-  padding-bottom: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-top: 132px;
+  padding-bottom: 72px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
   overflow: hidden;
   isolation: isolate;
 }
 
-.hero__top {
+.hero__grid {
   position: relative;
   z-index: 3;
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 56px;
+  width: 100%;
+}
+
+.hero__text {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  text-align: center;
-  max-width: 1000px;
-  margin-inline: auto;
+  align-items: flex-start;
+  gap: 18px;
+  max-width: 600px;
 }
 
 .hero__title {
   margin: 0;
-  max-width: none;
-  font-size: clamp(24px, 3.6vw, 48px);
-  line-height: 1.08;
+  max-width: 13ch;
+  font-size: clamp(30px, 3.9vw, 54px);
+  line-height: 1.06;
 }
 
-/* ogni frase su una riga propria, che non va mai a capo su desktop */
-.hero__line {
-  display: block;
-  white-space: nowrap;
+.hero__lead {
+  margin: 0;
 }
-
 
 .hero__sub {
-  max-width: 760px;
-  margin: 2px auto 0;
+  max-width: 520px;
+  margin: 0;
 }
 
-/* prima frase: sottotitolo con più peso di layout (Inter), blu d'accento
-   con una banda luminosa larga e morbida che scorre lenta in loop. */
+/* frase-guida: blu d'accento con una banda luminosa larga e
+   morbida che scorre lenta in loop. */
 .hero__sub-accent {
   display: block;
   font-weight: 600;
   letter-spacing: -0.01em;
-  font-size: clamp(20px, 2.3vw, 30px);
-  line-height: 1.2;
+  font-size: clamp(19px, 1.9vw, 25px);
+  line-height: 1.25;
   /* colori vicini + transizioni ampie = shimmer soft, non netto */
   background: linear-gradient(
     100deg,
@@ -782,8 +783,7 @@ h4 {
 }
 
 .hero__cta {
-  justify-content: center;
-  margin-top: 4px;
+  margin-top: 8px;
 }
 
 /* ---- CTA dell'hero: freccia che ruota su + alone d'accento ---- */
@@ -851,24 +851,410 @@ h4 {
   }
 }
 
-/* la scena: immagine di sfondo ancorata in fondo alla sezione,
-   larga tutto lo schermo. Sta sopra il grain, sotto al testo.
-   L'URL viene passata inline dal componente (Vite gestisce l'asset). */
-.hero__scene {
+/* ============================================================
+   Scena dell'hero — il sistema al lavoro.
+   Le fonti sparse in alto entrano nel nucleo AI e ne escono
+   ordinate in basso: è il "prima → dopo" in un colpo d'occhio.
+   ============================================================ */
+.scene {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 520 / 470;
+  margin-left: auto;
+  border-radius: var(--r-lg);
+  background-image: var(--card-vig);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: var(--sh-2);
+  overflow: hidden;
+  isolation: isolate;
+  font-size: 12px;
+  letter-spacing: -0.008em;
+}
+
+/* maglia sottile di fondo */
+.scene__mesh {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(to right, var(--hairline) 0.5px, transparent 0.5px),
+    linear-gradient(to bottom, var(--hairline) 0.5px, transparent 0.5px);
+  background-size: 34px 34px;
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 45%, #000 30%, transparent 78%);
+  mask-image: radial-gradient(120% 90% at 50% 45%, #000 30%, transparent 78%);
+}
+
+/* passata di luce che scende piano, in loop */
+.scene__scan {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
-  z-index: 2;
-  /* l'immagine è puramente decorativa: non deve rubare i click ai bottoni */
+  height: 130px;
   pointer-events: none;
-  background-repeat: no-repeat;
-  background-position: center bottom;
-  /* fascia panoramica full-width: 100% larghezza, altezza proporzionale */
-  background-size: 100% auto;
-  /* altezza = larghezza / ratio immagine (1920/600 = 3.2) */
-  aspect-ratio: 1920 / 600;
-  max-height: 58vh;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--accent) 8%, transparent),
+    transparent
+  );
+  animation: sceneScan 9s ease-in-out infinite;
+}
+
+@keyframes sceneScan {
+  0% {
+    top: -130px;
+    opacity: 0;
+  }
+  12%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+/* etichetta di stato in alto a sinistra */
+.scene__head {
+  position: absolute;
+  top: 15px;
+  left: 17px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  z-index: 4;
+}
+
+.scene__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);
+  animation: sceneDot 2.2s var(--e-out) infinite;
+}
+
+@keyframes sceneDot {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 7px transparent;
+  }
+}
+
+/* ---- i fili ---- */
+.scene__wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.wire {
+  fill: none;
+  stroke: var(--hairline-strong);
+  stroke-width: 1.25;
+}
+
+/* l'impulso che corre lungo il filo: pathLength 100 rende la
+   velocità identica su fili di lunghezza diversa */
+.wire--pulse {
+  stroke: var(--accent);
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-dasharray: 14 86;
+  animation: wireRun 3.2s linear infinite;
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--accent) 70%, transparent));
+}
+
+.wire--trunk {
+  animation-duration: 1.6s;
+}
+
+@keyframes wireRun {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ---- le fonti, in alto ---- */
+.scene__src {
+  position: absolute;
+  top: 13.2%;
+  translate: -50% -50%;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 11px 6px 6px;
+  border-radius: var(--r-pill);
+  background-image: var(--card-vig);
+  /* tratteggiato: oggi questi sistemi non si parlano */
+  border: 1px dashed color-mix(in srgb, var(--text) 18%, transparent);
+  box-shadow: var(--sh-1);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.scene__src-ic {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+  color: var(--text-2);
+  animation: srcFlash 3.2s var(--e-out) infinite;
+}
+
+/* al passaggio dell'impulso la fonte si accende un istante */
+@keyframes srcFlash {
+  0%,
+  84%,
+  100% {
+    background: color-mix(in srgb, var(--text) 6%, transparent);
+    color: var(--text-2);
+  }
+  92% {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+}
+
+/* ---- il nucleo ---- */
+.scene__core {
+  position: absolute;
+  top: 47.9%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: 3;
+  width: 78px;
+  height: 78px;
+  display: grid;
+  place-items: center;
+}
+
+/* anello d'accento che gira */
+.scene__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 1.5px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 170deg,
+    color-mix(in srgb, var(--accent) 50%, transparent) 240deg,
+    var(--accent) 305deg,
+    color-mix(in srgb, var(--accent) 50%, transparent) 350deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: coreSpin 4.2s linear infinite;
+}
+
+@keyframes coreSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* aloni che si allargano e svaniscono */
+.scene__halo {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  animation: coreHalo 3.4s var(--e-out) infinite;
+}
+
+.scene__halo--2 {
+  animation-delay: 1.7s;
+}
+
+@keyframes coreHalo {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.85);
+    opacity: 0;
+  }
+}
+
+.scene__core-in {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background-image: var(--card-vig);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: var(--sh-2), 0 0 20px -6px color-mix(in srgb, var(--accent) 55%, transparent);
+  color: var(--accent);
+}
+
+/* ---- i risultati, in basso ---- */
+.scene__feed {
+  position: absolute;
+  left: 17px;
+  right: 17px;
+  top: 66.5%;
+  bottom: 44px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  overflow: hidden;
+}
+
+.scene__row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 11px;
+  border-radius: 11px;
+  background-image: var(--card-vig);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: var(--sh-1);
+  font-size: 11.5px;
+  color: var(--text-2);
+}
+
+.scene__row-ic {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+  color: var(--text-2);
+}
+
+/* i documenti letti dall'AI sono l'identità: vanno in accento */
+.scene__row.is-ai .scene__row-ic {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.scene__row-t {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text);
+}
+
+.scene__row-v {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+/* ---- piede ---- */
+.scene__foot {
+  position: absolute;
+  left: 17px;
+  right: 17px;
+  bottom: 15px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.scene__foot b {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* micro-istogramma che pulsa: il polso del sistema */
+.scene__bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 16px;
+}
+
+.scene__bars i {
+  width: 3px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--accent) 55%, transparent);
+  animation: sceneBar 1.8s var(--e-out) infinite;
+}
+
+.scene__bars i:nth-child(1) {
+  height: 40%;
+  animation-delay: 0s;
+}
+.scene__bars i:nth-child(2) {
+  height: 70%;
+  animation-delay: 0.14s;
+}
+.scene__bars i:nth-child(3) {
+  height: 50%;
+  animation-delay: 0.28s;
+}
+.scene__bars i:nth-child(4) {
+  height: 90%;
+  animation-delay: 0.42s;
+}
+.scene__bars i:nth-child(5) {
+  height: 60%;
+  animation-delay: 0.56s;
+}
+.scene__bars i:nth-child(6) {
+  height: 80%;
+  animation-delay: 0.7s;
+}
+
+@keyframes sceneBar {
+  0%,
+  100% {
+    transform: scaleY(0.55);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene__scan,
+  .scene__dot,
+  .wire--pulse,
+  .scene__src-ic,
+  .scene__ring,
+  .scene__halo,
+  .scene__bars i {
+    animation: none;
+  }
 }
 
 /* ============================================================
@@ -1311,6 +1697,21 @@ textarea.input {
   .row2--rev .row2__text {
     order: 0;
   }
+  /* hero in colonna: prima il messaggio, poi la scena */
+  .hero {
+    min-height: 0;
+    padding-bottom: var(--s-hero);
+  }
+  .hero__grid {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+  .hero__text {
+    max-width: 620px;
+  }
+  .scene {
+    margin-inline: auto;
+  }
   .cascade {
     grid-template-columns: repeat(2, 1fr);
     gap: 34px 0;
@@ -1352,11 +1753,7 @@ textarea.input {
     padding-inline: 18px;
   }
   .hero {
-    padding-top: 132px;
-  }
-  /* su mobile le frasi possono andare a capo, altrimenti sforano */
-  .hero__line {
-    white-space: normal;
+    padding-top: 120px;
   }
   .grid-2,
   .grid-3,
