@@ -852,178 +852,455 @@ h4 {
 }
 
 /* ============================================================
-   Scena dell'hero — una superficie di prodotto, non un diagramma.
-   Un pannello che respira, una curva che scorre piano, poche
-   righe che si rinnovano. Nient'altro.
+   Scena dell'hero — una finestra di prodotto densa e viva.
+   Tutto quello che oggi sta su fogli diversi finisce qui:
+   i numeri che contano in alto, l'andamento e i movimenti sotto,
+   le fonti che restano allineate in fondo.
    ============================================================ */
 .scene {
   position: relative;
   width: 100%;
-  max-width: 520px;
+  max-width: 540px;
   margin-left: auto;
-  padding-bottom: 26px;
+  padding: 8px 0 34px;
 }
 
-.scene__panel {
-  border-radius: var(--r-lg);
-  background-image: var(--card-vig);
-  border: 1px solid var(--hairline-strong);
-  box-shadow: var(--sh-2);
-  overflow: hidden;
-}
-
-.scene__panel-in {
-  padding: 26px 26px 20px;
-}
-
-.scene__top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.scene__lab {
-  margin: 0 0 6px;
-  font-size: 12.5px;
-  font-weight: 500;
-  color: var(--text-3);
-}
-
-.scene__kpi {
-  margin: 0;
-  font-size: 38px;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-
-.scene__delta {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--accent);
-  background: var(--accent-soft);
-  padding: 5px 10px;
-  border-radius: var(--r-pill);
-}
-
-/* ---- la curva ---- */
-.scene__chart {
-  position: relative;
-  height: 108px;
-  margin: 18px -26px 6px;
-  overflow: hidden;
-}
-
-.scene__chart svg {
+/* alone d'accento dietro alla finestra */
+.scene__glow {
   position: absolute;
-  inset: 0;
-  width: 200%;
-  height: 100%;
-  animation: sceneFlow 26s linear infinite;
+  inset: 12% -6% 18% 6%;
+  border-radius: 50%;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    color-mix(in srgb, var(--accent) 22%, transparent) 0%,
+    transparent 72%
+  );
+  filter: blur(38px);
+  animation: sceneGlow 12s ease-in-out infinite;
+  pointer-events: none;
 }
 
-.scene__line {
-  stroke: var(--accent);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-@keyframes sceneFlow {
-  to {
-    transform: translateX(-50%);
+@keyframes sceneGlow {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.07);
   }
 }
 
-/* ---- le righe ---- */
-.scene__rows {
-  display: flex;
-  flex-direction: column;
+/* ---- la finestra ---- */
+.win {
+  position: relative;
+  border-radius: var(--r-lg);
+  background-image: var(--card-vig);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: var(--sh-3);
+  overflow: hidden;
+  font-size: 12px;
+  letter-spacing: -0.008em;
 }
 
-.scene__row {
+.win__bar {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 11px 0;
-  border-top: 0.5px solid var(--hairline);
+  padding: 0 12px;
+  height: 40px;
+  border-bottom: 0.5px solid var(--hairline);
+  background: color-mix(in srgb, var(--text) 3%, transparent);
 }
 
-.scene__row-ic {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  flex-shrink: 0;
-  border-radius: 9px;
-  background: color-mix(in srgb, var(--text) 5%, transparent);
-  color: var(--text-2);
+.win__dots {
+  display: inline-flex;
+  gap: 6px;
 }
 
-.scene__row-txt {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
+.win__dots i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--text) 14%, transparent);
 }
 
-.scene__row-txt b {
-  font-size: 13.5px;
-  font-weight: 500;
-  color: var(--text);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.scene__row-txt em {
-  font-size: 12px;
-  font-style: normal;
-  color: var(--text-3);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.scene__row-v {
-  flex-shrink: 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-2);
-}
-
-/* ---- la scheda che galleggia ---- */
-.scene__chip {
-  position: absolute;
-  left: -14px;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  padding: 13px 18px;
-  border-radius: var(--r-card);
-  background-image: var(--card-vig);
-  border: 1px solid var(--hairline-strong);
-  box-shadow: var(--sh-2);
-}
-
-.scene__chip-k {
+.win__path {
   font-size: 11.5px;
   font-weight: 500;
   color: var(--text-3);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.scene__chip-v {
-  font-size: 17px;
+.win__path em {
+  font-style: normal;
+  opacity: 0.5;
+}
+
+/* cursore che lampeggia: dettaglio da strumento, non da brochure */
+.win__caret {
+  width: 1.5px;
+  height: 12px;
+  margin-left: 3px;
+  background: var(--accent);
+  animation: winCaret 1.1s steps(1) infinite;
+}
+
+@keyframes winCaret {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.win__tabs {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: auto;
+  padding: 2px;
+  border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+}
+
+.win__tab {
+  position: relative;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px 11px;
+  border-radius: var(--r-pill);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-3);
+  transition: color var(--d-hover) var(--e-out);
+}
+
+.win__tab.is-on {
+  color: var(--text);
+}
+
+.win__tab span {
+  position: relative;
+  z-index: 1;
+}
+
+.win__tab-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-pill);
+  background-image: var(--card-vig);
+  box-shadow: var(--sh-1);
+}
+
+/* ---- i numeri che contano ---- */
+.win__kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.win__kpi {
+  padding: 14px 14px 15px;
+  border-right: 0.5px solid var(--hairline);
+  border-bottom: 0.5px solid var(--hairline);
+}
+
+.win__kpi:last-child {
+  border-right: 0;
+}
+
+.win__kpi-lab {
+  margin: 0 0 5px;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.win__kpi-val {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.win__kpi-d {
+  margin: 4px 0 0;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+.win__kpi-d.is-up {
+  color: var(--pos);
+}
+
+/* ---- corpo ---- */
+.win__body {
+  display: grid;
+  grid-template-columns: 42% 58%;
+}
+
+.win__chart,
+.win__log {
+  padding: 13px 14px 14px;
+}
+
+.win__chart {
+  border-right: 0.5px solid var(--hairline);
+}
+
+.win__chart-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--text-3);
+}
+
+.win__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.win__live::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: winLive 1.9s var(--e-out) infinite;
+}
+
+@keyframes winLive {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* colonne */
+.win__bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  height: 96px;
+}
+
+.win__bar-w {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.win__bar-w i {
+  width: 100%;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--text) 12%, transparent);
+  transition: background var(--d-hover) var(--e-out);
+}
+
+.win__bar-w.is-hot i {
+  background: var(--accent);
+}
+
+/* etichetta che salta da una colonna all'altra */
+.win__tip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  translate: -50% 0;
+  padding: 3px 7px;
+  border-radius: 7px;
+  background: var(--btn-fill);
+  color: var(--btn-ink);
+  font-size: 9.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: var(--sh-2);
+  z-index: 2;
+}
+
+/* ---- registro ---- */
+.win__log-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  height: 96px;
+  overflow: hidden;
+  /* le righe vecchie svaniscono in fondo */
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+}
+
+.win__lr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 11px;
+}
+
+.win__lr-t {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-2);
+}
+
+.win__lr-v {
+  flex-shrink: 0;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+.win__lr.is-in .win__lr-v {
+  color: var(--pos);
+}
+
+.win__lr.is-auto .win__lr-v {
+  color: var(--accent);
+}
+
+/* ---- piede: le fonti allineate ---- */
+.win__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 11px 14px 12px;
+  border-top: 0.5px solid var(--hairline);
+  background: color-mix(in srgb, var(--text) 2.5%, transparent);
+}
+
+.win__src {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: var(--r-pill);
+  border: 0.5px solid var(--hairline);
+  background: color-mix(in srgb, var(--text) 4%, transparent);
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--text-3);
+}
+
+.win__src svg {
+  color: var(--pos);
+}
+
+.win__src.is-run {
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.win__src.is-run svg {
+  color: var(--accent);
+}
+
+.win__spin {
+  animation: winSpin 1.1s linear infinite;
+}
+
+@keyframes winSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---- schede che galleggiano ---- */
+.fcard {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 15px;
+  border-radius: var(--r-card);
+  background-image: var(--card-vig);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: var(--sh-3);
+}
+
+.fcard--a {
+  left: -26px;
+  top: 26%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.fcard--b {
+  right: -18px;
+  bottom: 8px;
+}
+
+.fcard__k {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.fcard__k b {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.fcard__v {
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--text);
 }
 
+.fcard__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .scene__chart svg {
+  .scene__glow,
+  .win__caret,
+  .win__live::before,
+  .win__spin {
     animation: none;
   }
 }
