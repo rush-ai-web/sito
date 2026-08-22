@@ -3,7 +3,9 @@ import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } fr
 import { Check, Loader } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
 
-const logoUrl = `${import.meta.env.BASE_URL}rush-logo.png`;
+/* il marchio su fondo bianco per il tema chiaro, su fondo nero per lo scuro */
+const logoLight = `${import.meta.env.BASE_URL}rush-logo.png`;
+const logoDark = `${import.meta.env.BASE_URL}rush-logo-dark.png`;
 
 /* Gli stessi conti visti su tre finestre temporali: cambiando
    periodo tutto si ricalcola, che è il punto di avere i dati veri. */
@@ -108,7 +110,7 @@ export default function HeroScene() {
     return () => clearInterval(id);
   }, [reduce]);
 
-  const rows = Array.from({ length: 3 }, (_, k) => {
+  const rows = Array.from({ length: 2 }, (_, k) => {
     const i = (feed + k) % LOG.length;
     return { ...LOG[i], id: `${i}-${Math.floor((feed + k) / LOG.length)}` };
   });
@@ -126,8 +128,8 @@ export default function HeroScene() {
         {/* testata: il marchio e il periodo */}
         <div className="win__bar">
           <span className="win__brand">
-            <img src={logoUrl} alt="" />
-            Rush
+            <img className="win__logo win__logo--l" src={logoLight} alt="" />
+            <img className="win__logo win__logo--d" src={logoDark} alt="" />
           </span>
           <span className="win__tabs">
             {PERIODI.map((x, i) => (
@@ -211,21 +213,8 @@ export default function HeroScene() {
               {f}
             </span>
           ))}
+          <span className="win__saved num">12 ore recuperate a settimana</span>
         </div>
-      </motion.div>
-
-      {/* una sola scheda, agganciata al bordo inferiore: non copre nulla */}
-      <motion.div
-        className="fcard"
-        initial={{ opacity: 0, y: 12 }}
-        animate={reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, -7, 0] }}
-        transition={{
-          opacity: { duration: 0.7, ease: EASE_MODAL, delay: 0.75 },
-          y: { duration: 9.5, ease: 'easeInOut', repeat: Infinity, delay: 0.75 },
-        }}
-      >
-        <span className="fcard__k">Ore recuperate</span>
-        <span className="fcard__v num">12 / settimana</span>
       </motion.div>
     </div>
   );
