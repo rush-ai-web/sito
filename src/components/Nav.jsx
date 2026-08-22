@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, ArrowRight } from 'lucide-react';
 import { DUR, EASE_MODAL } from '../lib/motion';
 
 function LogoMark() {
@@ -65,6 +65,9 @@ export default function Nav({ theme, onToggleTheme }) {
 
         <a className="nav__cta" href="#contatti">
           Parliamone
+          <span className="nav__cta-badge">
+            <ArrowRight size={14} strokeWidth={2.4} />
+          </span>
         </a>
       </div>
     </motion.header>

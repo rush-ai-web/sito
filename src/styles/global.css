@@ -579,11 +579,29 @@ h4 {
   font-size: 14.5px;
   font-weight: 600;
   letter-spacing: -0.01em;
+  gap: 10px;
+  padding: 0 6px 0 20px;
   /* stesso stile del secondo bottone hero: blu accento pieno, testo bianco */
   background: linear-gradient(135deg, #6a8ce8 0%, #5b7fe0 45%, #4a72cc 100%);
   color: #fff;
   box-shadow: 0 1px 6px rgba(74, 114, 204, 0.35);
   transition: filter var(--d-hover) var(--e-out), box-shadow var(--d-hover) var(--e-out);
+}
+
+.nav__cta-badge {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #4a72cc;
+  transition: transform var(--d-hover) var(--e-out);
+}
+
+.nav__cta:hover .nav__cta-badge {
+  transform: translateX(2px);
 }
 
 .nav__cta:hover {
@@ -856,14 +874,15 @@ h4 {
   margin-top: 8px;
 }
 
-/* ---- CTA dell'hero: freccia che ruota su + alone d'accento ---- */
+/* ---- CTA dell'hero: pastiglia con badge circolare, la freccia
+   scorre dentro al badge al passaggio ---- */
 .btn--hero {
   position: relative;
-  height: 50px;
-  padding-inline: 24px;
-  /* niente cambio d'opacità globale: l'hover è gestito dagli effetti sotto */
-  transition: transform var(--d-lift) var(--e-lift), box-shadow var(--d-lift) var(--e-lift),
-    border-color var(--d-hover) var(--e-out);
+  height: 56px;
+  gap: 14px;
+  padding: 0 6px 0 26px;
+  font-size: 16px;
+  transition: transform var(--d-lift) var(--e-lift), box-shadow var(--d-lift) var(--e-lift);
 }
 
 .btn--hero:hover {
@@ -871,14 +890,31 @@ h4 {
   transform: translateY(-2px);
 }
 
-/* la freccia parte orizzontale e al passaggio ruota verso l'alto-destra */
-.btn__arrow {
-  display: inline-flex;
+.btn__badge {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--btn-ink);
+  color: var(--btn-fill);
+  overflow: hidden;
   transition: transform var(--d-lift) var(--e-lift);
 }
 
-.btn--hero:hover .btn__arrow {
-  transform: rotate(-45deg) translateX(1px);
+.btn__badge svg {
+  transition: transform var(--d-lift) var(--e-lift);
+}
+
+.btn--hero:hover .btn__badge svg {
+  transform: translateX(2px);
+}
+
+/* sul bottone d'accento il badge resta bianco con la freccia blu */
+.btn--accent .btn__badge {
+  background: #fff;
+  color: #4a72cc;
 }
 
 /* alone d'accento blu che si accende attorno al bottone (solo luce) */
@@ -895,9 +931,7 @@ h4 {
 
 .btn--hero:hover::after {
   opacity: 1;
-  box-shadow: 0 6px 26px -4px var(--accent-glow, rgba(74, 114, 204, 0.5)),
-    0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent);
-  animation: heroGlowPulse 2.4s var(--e-lift) infinite;
+  box-shadow: 0 8px 26px -6px rgba(0, 0, 0, 0.28);
 }
 
 @keyframes heroGlowPulse {
@@ -922,28 +956,39 @@ h4 {
 }
 
 /* ============================================================
-   Scena dell'hero — una finestra di prodotto, ordinata.
-   Sezioni impilate a tutta larghezza: marchio e periodo in alto,
-   i conti che contano, l'andamento, i movimenti, le fonti.
+   Scena dell'hero — una finestra raccolta al centro, con quello
+   che il sistema fa da solo che le orbita attorno.
    ============================================================ */
 .scene {
   position: relative;
   width: 100%;
-  max-width: 600px;
-  margin-left: auto;
+  max-width: 560px;
+  margin-inline: auto;
+  padding: 52px 30px 62px;
 }
 
-/* alone d'accento dietro alla finestra */
+/* maglia di fondo: dà struttura senza pesare */
+.scene__mesh {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(to right, var(--hairline) 0.5px, transparent 0.5px),
+    linear-gradient(to bottom, var(--hairline) 0.5px, transparent 0.5px);
+  background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(80% 70% at 50% 50%, #000 20%, transparent 80%);
+  mask-image: radial-gradient(80% 70% at 50% 50%, #000 20%, transparent 80%);
+}
+
 .scene__glow {
   position: absolute;
-  inset: 10% -8% 20% 4%;
+  inset: 14% 8% 16%;
   border-radius: 50%;
   background: radial-gradient(
     50% 50% at 50% 50%,
     color-mix(in srgb, var(--accent) 20%, transparent) 0%,
     transparent 72%
   );
-  filter: blur(42px);
+  filter: blur(46px);
   animation: sceneGlow 13s ease-in-out infinite;
   pointer-events: none;
 }
@@ -956,31 +1001,30 @@ h4 {
   }
   50% {
     opacity: 0.85;
-    transform: scale(1.06);
+    transform: scale(1.07);
   }
 }
 
-/* ---- la finestra ---- */
+/* ---- la finestra: cornice fuori, schermo dentro ---- */
 .win {
   position: relative;
-  border-radius: var(--r-lg);
+  z-index: 2;
+  border-radius: 18px;
   background-image: var(--card-vig);
   border: 1px solid var(--hairline-strong);
   box-shadow: var(--sh-3);
-  overflow: hidden;
+  padding: 0 9px 9px;
 }
 
-/* testata */
-.win__bar {
+/* la cornice in stile finestra */
+.win__chrome {
   display: flex;
   align-items: center;
-  gap: 13px;
-  padding: 11px 14px;
-  border-bottom: 0.5px solid var(--hairline);
-  background: color-mix(in srgb, var(--text) 3%, transparent);
+  gap: 12px;
+  height: 42px;
+  padding-inline: 5px;
 }
 
-/* semaforo della finestra */
 .win__dots {
   display: inline-flex;
   gap: 6px;
@@ -988,8 +1032,8 @@ h4 {
 }
 
 .win__dots i {
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
 }
 
@@ -1010,12 +1054,11 @@ h4 {
 }
 
 .win__logo {
-  height: 17px;
+  height: 15px;
   width: auto;
   object-fit: contain;
 }
 
-/* il marchio giusto per il tema in corso */
 .win__logo--d {
   display: none;
 }
@@ -1028,13 +1071,14 @@ h4 {
   display: block;
 }
 
+/* periodo: la voce attiva è nera su pastiglia chiara */
 .win__tabs {
   display: inline-flex;
-  gap: 2px;
+  gap: 1px;
   margin-left: auto;
-  padding: 3px;
+  padding: 2px;
   border-radius: var(--r-pill);
-  background: color-mix(in srgb, var(--text) 5%, transparent);
+  background: color-mix(in srgb, var(--text) 6%, transparent);
 }
 
 .win__tab {
@@ -1042,17 +1086,16 @@ h4 {
   border: 0;
   background: transparent;
   cursor: pointer;
-  padding: 6px 14px;
+  padding: 4px 11px;
   border-radius: var(--r-pill);
-  font-size: 11.5px;
+  font-size: 10.5px;
   font-weight: 600;
   color: var(--text-3);
   transition: color var(--d-hover) var(--e-out);
 }
 
-/* il periodo attivo è pieno d'accento: si vede da lontano */
 .win__tab.is-on {
-  color: #fff;
+  color: var(--text);
 }
 
 .win__tab span {
@@ -1064,8 +1107,16 @@ h4 {
   position: absolute;
   inset: 0;
   border-radius: var(--r-pill);
-  background: linear-gradient(135deg, #6a8ce8 0%, #5b7fe0 45%, #4a72cc 100%);
-  box-shadow: 0 1px 6px rgba(74, 114, 204, 0.4);
+  background: var(--bg);
+  box-shadow: var(--sh-1);
+}
+
+/* ---- lo schermo ---- */
+.win__screen {
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg);
+  border: 0.5px solid var(--hairline);
 }
 
 /* ---- i conti ---- */
@@ -1076,7 +1127,7 @@ h4 {
 }
 
 .win__kpi {
-  padding: 13px 14px 14px;
+  padding: 12px 12px 13px;
   border-right: 0.5px solid var(--hairline);
   min-width: 0;
 }
@@ -1086,9 +1137,9 @@ h4 {
 }
 
 .win__kpi-lab {
-  margin: 0 0 7px;
-  font-size: 10.5px;
-  font-weight: 500;
+  margin: 0 0 5px;
+  font-size: 9.5px;
+  font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -1099,15 +1150,15 @@ h4 {
 
 .win__kpi-val {
   margin: 0;
-  font-size: 22px;
+  font-size: 19px;
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1.05;
 }
 
 .win__kpi-d {
-  margin: 6px 0 0;
-  font-size: 11px;
+  margin: 4px 0 0;
+  font-size: 10px;
   font-weight: 500;
   color: var(--text-3);
   white-space: nowrap;
@@ -1120,58 +1171,41 @@ h4 {
   color: var(--pos);
 }
 
-/* ---- l'avviso: il sistema segnala prima che sia un problema ---- */
+/* ---- l'avviso ---- */
 .win__alert {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 14px;
+  padding: 8px 12px;
   border-bottom: 0.5px solid var(--hairline);
-  background: color-mix(in srgb, var(--warn) 11%, transparent);
+  background: color-mix(in srgb, var(--warn) 10%, transparent);
   color: var(--warn);
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 600;
   overflow: hidden;
 }
 
-.win__alert svg {
-  flex-shrink: 0;
-}
-
 /* ---- sezioni ---- */
 .win__sec {
-  padding: 13px 14px 14px;
+  padding: 12px;
   border-bottom: 0.5px solid var(--hairline);
 }
 
 .win__sec--rows {
-  border-bottom: 0;
-  padding-bottom: 12px;
+  padding-block: 4px 6px;
 }
 
 .win__hd {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 11px;
-  font-size: 11.5px;
-  font-weight: 500;
-  color: var(--text-2);
-}
-
-.win__hd-v {
-  font-size: 11px;
+  margin-bottom: 10px;
+  font-size: 10.5px;
   font-weight: 600;
   color: var(--text-3);
 }
 
-/* colonne */
 .win__bars {
   display: flex;
   align-items: flex-end;
-  gap: 6px;
-  height: 68px;
+  gap: 5px;
+  height: 54px;
 }
 
 .win__col {
@@ -1183,8 +1217,8 @@ h4 {
 
 .win__col i {
   width: 100%;
-  border-radius: 4px;
-  background: color-mix(in srgb, var(--text) 11%, transparent);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--text) 10%, transparent);
 }
 
 .win__col.is-top i {
@@ -1200,7 +1234,7 @@ h4 {
 .win__row {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   padding: 7px 0;
   border-top: 0.5px solid var(--hairline);
 }
@@ -1214,11 +1248,10 @@ h4 {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 1px;
 }
 
 .win__row-t b {
-  font-size: 13px;
+  font-size: 11.5px;
   font-weight: 500;
   color: var(--text);
   overflow: hidden;
@@ -1227,7 +1260,7 @@ h4 {
 }
 
 .win__row-t em {
-  font-size: 11.5px;
+  font-size: 10.5px;
   font-style: normal;
   color: var(--text-3);
   overflow: hidden;
@@ -1237,7 +1270,7 @@ h4 {
 
 .win__row-v {
   flex-shrink: 0;
-  font-size: 12.5px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-2);
 }
@@ -1250,23 +1283,22 @@ h4 {
   color: var(--accent);
 }
 
-/* ---- le fonti allineate ---- */
+/* ---- le fonti ---- */
 .win__foot {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  padding: 11px 14px 12px;
-  border-top: 0.5px solid var(--hairline);
+  gap: 5px;
+  padding: 10px 12px 11px;
 }
 
 .win__src {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 11px;
+  gap: 5px;
+  padding: 4px 9px;
   border-radius: var(--r-pill);
   border: 0.5px solid var(--hairline);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
   color: var(--text-3);
 }
@@ -1295,13 +1327,71 @@ h4 {
   }
 }
 
-/* etichetta che spiega cosa sono le pill accanto */
-.win__foot-lab {
-  display: inline-flex;
+/* ---- le schede che orbitano attorno ---- */
+.sat {
+  position: absolute;
+  z-index: 3;
+  display: flex;
   align-items: center;
-  margin-right: 3px;
-  font-size: 11px;
-  font-weight: 500;
+  gap: 10px;
+  padding: 9px 14px 9px 10px;
+  border-radius: 14px;
+  background-image: var(--card-vig);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: var(--sh-3);
+  white-space: nowrap;
+}
+
+.sat--a {
+  top: 8px;
+  left: -14px;
+}
+
+.sat--b {
+  top: 40%;
+  right: -22px;
+}
+
+.sat--c {
+  bottom: 6px;
+  left: 24px;
+}
+
+.sat__ic {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+  color: var(--text-2);
+}
+
+.sat__ic.is-ok {
+  background: color-mix(in srgb, var(--pos) 12%, transparent);
+  color: var(--pos);
+}
+
+.sat__ic.is-accent {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.sat__t {
+  display: flex;
+  flex-direction: column;
+}
+
+.sat__t b {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.sat__t em {
+  font-size: 10.5px;
+  font-style: normal;
   color: var(--text-3);
 }
 

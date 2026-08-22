@@ -109,14 +109,14 @@ export default function Hero() {
           >
             <a className="btn btn--primary btn--hero" href="#contatti">
               Prenota una call
-              <span className="btn__arrow">
-                <ArrowRight size={17} strokeWidth={2} />
+              <span className="btn__badge">
+                <ArrowRight size={16} strokeWidth={2.2} />
               </span>
             </a>
             <a className="btn btn--hero btn--accent" href="#prodotto">
               Scopri come funziona
-              <span className="btn__arrow">
-                <ArrowRight size={17} strokeWidth={2} />
+              <span className="btn__badge">
+                <ArrowRight size={16} strokeWidth={2.2} />
               </span>
             </a>
           </motion.div>
