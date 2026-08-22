@@ -698,9 +698,9 @@ h4 {
 
 .hero__title {
   margin: 0;
-  max-width: 16ch;
-  font-size: clamp(28px, 3.3vw, 44px);
-  line-height: 1.1;
+  max-width: 18ch;
+  font-size: clamp(25px, 2.7vw, 37px);
+  line-height: 1.12;
 }
 
 .hero__lead {
@@ -931,6 +931,7 @@ h4 {
   width: 100%;
   max-width: 600px;
   margin-left: auto;
+  perspective: 1400px;
 }
 
 /* alone d'accento dietro alla finestra */
@@ -963,6 +964,8 @@ h4 {
 /* ---- la finestra ---- */
 .win {
   position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
   border-radius: var(--r-lg);
   background-image: var(--card-vig);
   border: 1px solid var(--hairline-strong);
@@ -1108,6 +1111,24 @@ h4 {
   color: var(--pos);
 }
 
+/* ---- l'avviso: il sistema segnala prima che sia un problema ---- */
+.win__alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-bottom: 0.5px solid var(--hairline);
+  background: color-mix(in srgb, var(--warn) 11%, transparent);
+  color: var(--warn);
+  font-size: 11.5px;
+  font-weight: 600;
+  overflow: hidden;
+}
+
+.win__alert svg {
+  flex-shrink: 0;
+}
+
 /* ---- sezioni ---- */
 .win__sec {
   padding: 13px 14px 14px;
@@ -1134,6 +1155,45 @@ h4 {
   font-size: 11px;
   font-weight: 600;
   color: var(--text-3);
+}
+
+.win__legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--text-3);
+}
+
+.win__legend::before {
+  content: '';
+  width: 16px;
+  height: 0;
+  border-top: 1.5px dashed var(--text-3);
+}
+
+/* area di tracciato: colonne sotto, confronto sopra */
+.win__plot {
+  position: relative;
+}
+
+.win__prev {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.win__prev polyline {
+  fill: none;
+  stroke: var(--text-3);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* colonne */
