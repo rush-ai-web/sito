@@ -1,13 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  AnimatePresence,
-  animate,
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-  useTransform,
-} from 'framer-motion';
+import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } from 'framer-motion';
 import { Check, Loader, TriangleAlert } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
 
@@ -26,9 +18,8 @@ const PERIODI = [
       { lab: 'Materie prime', v: 28.4, fmt: 'pct', d: '−1,5 pt', tone: 'up' },
     ],
     bars: [42, 58, 36, 70, 52, 88, 64, 76],
-    prev: [38, 46, 44, 55, 58, 62, 60, 58],
     top: 5,
-    alert: 'Costo materie sopra soglia · Marchesi +12%',
+    alert: 'Le materie prime ti costano il 12% in più',
   },
   {
     k: 'Settimana',
@@ -38,9 +29,8 @@ const PERIODI = [
       { lab: 'Materie prime', v: 27.9, fmt: 'pct', d: '−0,8 pt', tone: 'up' },
     ],
     bars: [55, 40, 72, 48, 84, 60, 92, 68],
-    prev: [48, 44, 58, 50, 62, 64, 70, 62],
     top: 6,
-    alert: '3 fatture in scadenza entro venerdì · €4.180',
+    alert: 'Venerdì scadono 3 fatture da pagare',
   },
   {
     k: 'Mese',
@@ -50,9 +40,8 @@ const PERIODI = [
       { lab: 'Materie prime', v: 28.1, fmt: 'pct', d: '−2,1 pt', tone: 'up' },
     ],
     bars: [38, 64, 50, 78, 44, 68, 96, 72],
-    prev: [40, 52, 52, 60, 54, 62, 74, 66],
     top: 6,
-    alert: 'Scorta sotto minimo su 2 referenze · riordino pronto',
+    alert: 'Stanno finendo 2 prodotti in magazzino',
   },
 ];
 
@@ -102,26 +91,6 @@ export default function HeroScene() {
   const reduce = useReducedMotion();
   const [tab, setTab] = useState(0);
 
-  /* la finestra si inclina di poco seguendo il cursore */
-  const px = useMotionValue(0);
-  const py = useMotionValue(0);
-  const sx = useSpring(px, { stiffness: 110, damping: 20, mass: 0.5 });
-  const sy = useSpring(py, { stiffness: 110, damping: 20, mass: 0.5 });
-  const rotateY = useTransform(sx, [-0.5, 0.5], ['-5.5deg', '5.5deg']);
-  const rotateX = useTransform(sy, [-0.5, 0.5], ['4.5deg', '-4.5deg']);
-
-  const onMove = (e) => {
-    if (reduce) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    px.set((e.clientX - r.left) / r.width - 0.5);
-    py.set((e.clientY - r.top) / r.height - 0.5);
-  };
-
-  const onLeave = () => {
-    px.set(0);
-    py.set(0);
-  };
-
   const [feed, setFeed] = useState(0);
   const [fonte, setFonte] = useState(3);
 
@@ -151,12 +120,11 @@ export default function HeroScene() {
   });
 
   return (
-    <div className="scene" aria-hidden="true" onMouseMove={onMove} onMouseLeave={onLeave}>
+    <div className="scene" aria-hidden="true">
       <span className="scene__glow" />
 
       <motion.div
         className="win"
-        style={reduce ? undefined : { rotateX, rotateY }}
         initial={{ opacity: 0, y: 22 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: EASE_MODAL, delay: 0.2 }}
@@ -214,32 +182,16 @@ export default function HeroScene() {
         <div className="win__sec">
           <div className="win__hd">
             <span>Utile per giorno</span>
-            <span className="win__legend">periodo precedente</span>
           </div>
-          <div className="win__plot">
-            <div className="win__bars">
-              {p.bars.map((h, i) => (
-                <span className={`win__bar ${i === p.top ? 'is-top' : ''}`} key={i}>
-                  <motion.i
-                    animate={{ height: `${h}%` }}
-                    transition={{ duration: 0.7, ease: EASE_MODAL, delay: i * 0.04 }}
-                  />
-                </span>
-              ))}
-            </div>
-            {/* il confronto: dov'eri nel periodo prima */}
-            <svg className="win__prev" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <motion.polyline
-                key={p.k}
-                points={p.prev
-                  .map((v, i) => `${(i + 0.5) * (100 / p.prev.length)},${100 - v}`)
-                  .join(' ')}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, ease: EASE_MODAL, delay: 0.25 }}
-                vectorEffect="non-scaling-stroke"
-              />
-            </svg>
+          <div className="win__bars">
+            {p.bars.map((h, i) => (
+              <span className={`win__col ${i === p.top ? 'is-top' : ''}`} key={i}>
+                <motion.i
+                  animate={{ height: `${h}%` }}
+                  transition={{ duration: 0.7, ease: EASE_MODAL, delay: i * 0.04 }}
+                />
+              </span>
+            ))}
           </div>
         </div>
 
@@ -273,6 +225,7 @@ export default function HeroScene() {
 
         {/* le fonti che restano allineate */}
         <div className="win__foot">
+          <span className="win__foot-lab">Aggiornato da</span>
           {FONTI.map((f, i) => (
             <span key={f} className={`win__src ${i === fonte ? 'is-run' : ''}`}>
               {i === fonte ? (
@@ -283,7 +236,6 @@ export default function HeroScene() {
               {f}
             </span>
           ))}
-          <span className="win__saved num">12 ore recuperate a settimana</span>
         </div>
       </motion.div>
     </div>

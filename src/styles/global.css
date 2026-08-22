@@ -931,7 +931,6 @@ h4 {
   width: 100%;
   max-width: 600px;
   margin-left: auto;
-  perspective: 1400px;
 }
 
 /* alone d'accento dietro alla finestra */
@@ -964,8 +963,6 @@ h4 {
 /* ---- la finestra ---- */
 .win {
   position: relative;
-  transform-style: preserve-3d;
-  will-change: transform;
   border-radius: var(--r-lg);
   background-image: var(--card-vig);
   border: 1px solid var(--hairline-strong);
@@ -977,11 +974,13 @@ h4 {
 .win__bar {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 10px 14px;
+  gap: 13px;
+  padding: 11px 14px;
   border-bottom: 0.5px solid var(--hairline);
+  background: color-mix(in srgb, var(--text) 3%, transparent);
 }
 
+/* semaforo della finestra */
 .win__dots {
   display: inline-flex;
   gap: 6px;
@@ -989,19 +988,29 @@ h4 {
 }
 
 .win__dots i {
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--text) 13%, transparent);
+}
+
+.win__dots i:nth-child(1) {
+  background: #ff5f57;
+}
+.win__dots i:nth-child(2) {
+  background: #febc2e;
+}
+.win__dots i:nth-child(3) {
+  background: #28c840;
 }
 
 .win__brand {
   display: inline-flex;
   align-items: center;
+  min-width: 0;
 }
 
 .win__logo {
-  height: 21px;
+  height: 17px;
   width: auto;
   object-fit: contain;
 }
@@ -1157,45 +1166,6 @@ h4 {
   color: var(--text-3);
 }
 
-.win__legend {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 10.5px;
-  font-weight: 500;
-  color: var(--text-3);
-}
-
-.win__legend::before {
-  content: '';
-  width: 16px;
-  height: 0;
-  border-top: 1.5px dashed var(--text-3);
-}
-
-/* area di tracciato: colonne sotto, confronto sopra */
-.win__plot {
-  position: relative;
-}
-
-.win__prev {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: visible;
-}
-
-.win__prev polyline {
-  fill: none;
-  stroke: var(--text-3);
-  stroke-width: 1.5;
-  stroke-dasharray: 4 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
 /* colonne */
 .win__bars {
   display: flex;
@@ -1204,20 +1174,20 @@ h4 {
   height: 68px;
 }
 
-.win__bar {
+.win__col {
   flex: 1;
   height: 100%;
   display: flex;
   align-items: flex-end;
 }
 
-.win__bar i {
+.win__col i {
   width: 100%;
   border-radius: 4px;
   background: color-mix(in srgb, var(--text) 11%, transparent);
 }
 
-.win__bar.is-top i {
+.win__col.is-top i {
   background: var(--accent);
 }
 
@@ -1325,14 +1295,14 @@ h4 {
   }
 }
 
-/* il guadagno di tempo, in coda alle fonti: nessuna sovrapposizione */
-.win__saved {
+/* etichetta che spiega cosa sono le pill accanto */
+.win__foot-lab {
   display: inline-flex;
   align-items: center;
-  margin-left: auto;
+  margin-right: 3px;
   font-size: 11px;
-  font-weight: 600;
-  color: var(--accent);
+  font-weight: 500;
+  color: var(--text-3);
 }
 
 @media (prefers-reduced-motion: reduce) {
