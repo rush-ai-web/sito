@@ -44,6 +44,9 @@ export function OutcomeTicker() {
 export default function Hero() {
   return (
     <section id="home" data-tone="light" className="section hero fx-grain">
+      {/* velo di luce che si muove piano dietro a tutto */}
+      <span className="hero__aurora" aria-hidden="true" />
+
       <div className="wrap hero__grid">
         {/* colonna sinistra: quello che diciamo */}
         <div className="hero__text">

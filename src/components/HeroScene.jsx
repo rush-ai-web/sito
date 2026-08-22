@@ -125,8 +125,13 @@ export default function HeroScene() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: EASE_MODAL, delay: 0.2 }}
       >
-        {/* testata: il marchio e il periodo */}
+        {/* testata in stile finestra: semaforo, marchio, periodo */}
         <div className="win__bar">
+          <span className="win__dots">
+            <i />
+            <i />
+            <i />
+          </span>
           <span className="win__brand">
             <img className="win__logo win__logo--l" src={logoLight} alt="" />
             <img className="win__logo win__logo--d" src={logoDark} alt="" />
@@ -157,9 +162,6 @@ export default function HeroScene() {
         <div className="win__sec">
           <div className="win__hd">
             <span>Utile per giorno</span>
-            <span className="win__hd-v num">
-              picco €{(p.bars[p.top] * 62).toLocaleString('it-IT')}
-            </span>
           </div>
           <div className="win__bars">
             {p.bars.map((h, i) => (
