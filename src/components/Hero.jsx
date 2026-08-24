@@ -138,20 +138,16 @@ export default function Hero() {
       <span className="hero__aurora" aria-hidden="true" />
 
       <div className="wrap hero__wrap">
-        <motion.p
-          className="hero__eyebrow"
+        <motion.div
+          className="hero__logo-eyebrow"
           variants={fadeUp}
           custom={0}
           initial="hidden"
           animate="show"
         >
-          {COSE.map((c, i) => (
-            <span key={c}>
-              {i > 0 && <i>/</i>}
-              {c}
-            </span>
-          ))}
-        </motion.p>
+          <img src="./rush-logo-dark.png" alt="Rush" className="hero__logo-img hero__logo-img--l" />
+          <img src="./rush-logo.png" alt="Rush" className="hero__logo-img hero__logo-img--d" />
+        </motion.div>
 
         <h1 className="hero__title">
           <span className="hero__line">
@@ -182,13 +178,13 @@ export default function Hero() {
           initial="hidden"
           animate="show"
         >
-          <a className="btn btn--primary btn--hero" href="#contatti">
+          <a className="btn btn--hero btn--accent" href="#contatti">
             Prenota una call
             <span className="btn__badge">
               <ArrowRight size={16} strokeWidth={2.2} />
             </span>
           </a>
-          <a className="btn btn--hero btn--accent" href="#prodotto">
+          <a className="btn btn--primary btn--hero" href="#prodotto">
             Scopri come funziona
             <span className="btn__badge">
               <ArrowRight size={16} strokeWidth={2.2} />

@@ -694,30 +694,30 @@ h4 {
   text-align: center;
 }
 
-/* cosa facciamo, secco, sopra al titolo */
-.hero__eyebrow {
+/* logo Rush centrato sopra al titolo, al posto dell'eyebrow testuale */
+.hero__logo-eyebrow {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  gap: 16px;
   margin: 0 0 52px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--text-3);
 }
 
-.hero__eyebrow span {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
+.hero__logo-img {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
 }
 
-.hero__eyebrow i {
-  font-style: normal;
-  color: var(--accent);
+/* mostra logo scuro su sfondo chiaro, logo chiaro in dark mode */
+.hero__logo-img--d {
+  display: none;
+}
+
+:root[data-theme='dark'] .hero__logo-img--l {
+  display: none;
+}
+
+:root[data-theme='dark'] .hero__logo-img--d {
+  display: block;
 }
 
 /* ---- il titolo: la promessa ---- */
@@ -745,7 +745,7 @@ h4 {
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
-  padding: 0.15em 0.42em;
+  padding: 0.18em 0.42em;
   border-radius: 0.24em;
   color: #fff;
   position: relative;
@@ -813,7 +813,6 @@ h4 {
 .hero__pill-c-wrap {
   display: inline-block;
   overflow: hidden;
-  padding-bottom: 0.06em;
   line-height: 1;
 }
 
@@ -918,8 +917,8 @@ h4 {
 .hero__stage {
   position: relative;
   z-index: 2;
-  margin-top: 76px;
-  padding-top: 80px;
+  margin-top: 40px;
+  padding-top: 60px;
   padding-bottom: 40px;
 }
 
@@ -1075,7 +1074,7 @@ h4 {
 }
 
 .hero__cta {
-  margin-top: 8px;
+  margin-top: 64px;
 }
 
 /* ---- CTA dell'hero: pastiglia con badge circolare, la freccia
@@ -1100,7 +1099,6 @@ h4 {
   inset: 6px 8px -14px;
   border-radius: inherit;
   z-index: -1;
-  background: color-mix(in srgb, currentColor 65%, transparent);
   filter: blur(28px);
   opacity: 0;
   transition: opacity var(--d-lift) var(--e-lift);
@@ -1110,9 +1108,14 @@ h4 {
   opacity: 0.9;
 }
 
-/* il primario in hover prende un alone del colore d'accento */
+/* bottone blu: alone blu */
+.btn--hero.btn--accent::after {
+  background: rgba(74, 114, 204, 0.7);
+}
+
+/* bottone nero/primario: alone scuro */
 .btn--hero.btn--primary::after {
-  background: color-mix(in srgb, var(--accent) 55%, transparent);
+  background: rgba(0, 0, 0, 0.55);
 }
 
 .btn__badge {
@@ -1142,22 +1145,7 @@ h4 {
   color: #4a72cc;
 }
 
-/* alone d'accento blu che si accende attorno al bottone (solo luce) */
-.btn--hero::after {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  pointer-events: none;
-  box-shadow: 0 0 0 0 transparent;
-  opacity: 0;
-  transition: opacity var(--d-lift) var(--e-lift), box-shadow var(--d-lift) var(--e-lift);
-}
-
-.btn--hero:hover::after {
-  opacity: 1;
-  box-shadow: 0 8px 26px -6px rgba(0, 0, 0, 0.28);
-}
+/* rimosso: logica ombra consolidata sopra */
 
 @keyframes heroGlowPulse {
   0%,
