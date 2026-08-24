@@ -104,8 +104,6 @@ const TextRotate = forwardRef(function TextRotate(
 
   return (
     <motion.span className={`tr ${mainClassName}`} layout transition={transition}>
-      <span className="sr-only">{texts[i]}</span>
-
       <AnimatePresence mode={animatePresenceMode} initial={animatePresenceInitial}>
         <motion.div key={i} className="tr__group" layout aria-hidden="true">
           {(splitBy === 'characters'
