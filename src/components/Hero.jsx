@@ -1,14 +1,17 @@
 import { motion } from 'framer-motion';
-import { Sparkles, ArrowRight } from 'lucide-react';
-import { Pill } from './ui';
+import { ArrowRight } from 'lucide-react';
 import HeroScene from './HeroScene';
-import { wordUp, fadeUp, EASE_MODAL, DUR } from '../lib/motion';
+import { wordUp, fadeUp, EASE_MODAL } from '../lib/motion';
 
-/* il titolo si compone parola per parola e va a capo da solo */
-const TITLE = ['Un', 'gestionale', 'costruito', 'attorno', 'alla', 'tua', 'azienda.'];
+/* il titolo si compone parola per parola, su due registri:
+   la prima riga piena, la seconda a contorno. */
+const L1 = ['Un', 'gestionale', 'costruito'];
+const L2 = ['attorno', 'alla', 'tua', 'azienda'];
 
-/* cosa cambia quando il gestionale è tuo: ciò che cala e ciò che cresce.
-   Scorrono in una striscia sotto l'hero, sempre leggibile. */
+/* cosa facciamo, elencato secco negli angoli */
+const COSE = ['Gestionali su misura', 'Automazioni end-to-end', 'AI dentro al flusso'];
+
+/* cosa cambia quando il gestionale è tuo: ciò che cala e ciò che cresce. */
 const OUTCOMES = [
   { sign: '−', t: 'Tempo perso' },
   { sign: '+', t: 'Margine' },
@@ -20,8 +23,6 @@ const OUTCOMES = [
   { sign: '+', t: 'Decisioni sui numeri veri' },
 ];
 
-/* striscia scorrevole sotto l'hero: la lista è duplicata così
-   il loop si chiude senza stacco. */
 export function OutcomeTicker() {
   return (
     <div className="ticker" aria-label="Cosa cambia con un gestionale su misura">
@@ -41,57 +42,49 @@ export function OutcomeTicker() {
   );
 }
 
+function Word({ w, i, cls = '' }) {
+  return (
+    <span className={`hero__word ${cls}`}>
+      <motion.span
+        style={{ display: 'inline-block' }}
+        variants={wordUp}
+        custom={i}
+        initial="hidden"
+        animate="show"
+      >
+        {w}
+      </motion.span>
+    </span>
+  );
+}
+
 export default function Hero() {
   return (
     <section id="home" data-tone="light" className="section hero fx-grain">
-      {/* velo di luce che si muove piano dietro a tutto */}
       <span className="hero__aurora" aria-hidden="true" />
 
-      <div className="wrap hero__grid">
-        {/* colonna sinistra: quello che diciamo */}
-        <div className="hero__text">
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: DUR.modal, ease: EASE_MODAL }}
-          >
-            <Pill icon={Sparkles}>Software house · gestionali &amp; AI</Pill>
-          </motion.div>
-
-          <h1 className="t-hero hero__title">
-            {TITLE.map((w, i) => (
-              <span
-                key={w + i}
-                className="hero__word"
-                style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}
-              >
-                <motion.span
-                  style={{ display: 'inline-block' }}
-                  variants={wordUp}
-                  custom={i}
-                  initial="hidden"
-                  animate="show"
-                >
-                  {w}
-                </motion.span>
-              </span>
-            ))}
-          </h1>
-
-          <motion.p
-            className="hero__lead"
+      <div className="wrap hero__wrap">
+        {/* riga alta: cosa facciamo a sinistra, cosa significa a destra */}
+        <div className="hero__band">
+          <motion.ul
+            className="hero__list"
             variants={fadeUp}
-            custom={7}
+            custom={0}
             initial="hidden"
             animate="show"
           >
-            <span className="hero__sub-accent">Software su misura + AI integrata.</span>
-          </motion.p>
+            {COSE.map((c) => (
+              <li key={c}>
+                <span>/</span>
+                {c}
+              </li>
+            ))}
+          </motion.ul>
 
           <motion.p
-            className="t-body hero__sub"
+            className="hero__note"
             variants={fadeUp}
-            custom={8}
+            custom={1}
             initial="hidden"
             animate="show"
           >
@@ -99,14 +92,31 @@ export default function Hero() {
             aggiornati da soli, i documenti si registrano da soli, il lavoro ripetitivo esce dalla
             giornata.
           </motion.p>
+        </div>
 
-          <motion.div
-            className="btn-row hero__cta"
-            variants={fadeUp}
-            custom={9}
-            initial="hidden"
-            animate="show"
-          >
+        {/* il titolo, in due registri */}
+        <h1 className="hero__title">
+          <span className="hero__line">
+            {L1.map((w, i) => (
+              <Word key={w} w={w} i={i} />
+            ))}
+          </span>
+          <span className="hero__line hero__line--out">
+            {L2.map((w, i) => (
+              <Word key={w} w={w} i={i + L1.length} />
+            ))}
+          </span>
+        </h1>
+
+        {/* riga bassa: azioni a sinistra, promessa a destra */}
+        <motion.div
+          className="hero__act"
+          variants={fadeUp}
+          custom={8}
+          initial="hidden"
+          animate="show"
+        >
+          <div className="btn-row">
             <a className="btn btn--primary btn--hero" href="#contatti">
               Prenota una call
               <span className="btn__badge">
@@ -119,12 +129,25 @@ export default function Hero() {
                 <ArrowRight size={16} strokeWidth={2.2} />
               </span>
             </a>
-          </motion.div>
-        </div>
+          </div>
 
-        {/* colonna destra: il sistema al lavoro */}
-        <HeroScene />
+          <p className="hero__claim">
+            <span className="hero__sub-accent">Software su misura + AI integrata</span>
+          </p>
+        </motion.div>
       </div>
+
+      {/* il sistema emerge dal fondo della schermata */}
+      <motion.div
+        className="hero__stage"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, ease: EASE_MODAL, delay: 0.45 }}
+      >
+        <div className="wrap hero__stage-in">
+          <HeroScene />
+        </div>
+      </motion.div>
     </section>
   );
 }

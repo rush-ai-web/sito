@@ -1,14 +1,29 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } from 'framer-motion';
-import { Check, Loader, Zap, Timer, FileCheck2 } from 'lucide-react';
+import {
+  Check,
+  Loader,
+  LayoutDashboard,
+  Receipt,
+  Boxes,
+  Clock3,
+  Truck,
+  Zap,
+  FileCheck2,
+} from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
 
-/* il marchio su fondo bianco per il tema chiaro, su fondo nero per lo scuro */
 const logoLight = `${import.meta.env.BASE_URL}rush-logo.png`;
 const logoDark = `${import.meta.env.BASE_URL}rush-logo-dark.png`;
 
-/* Gli stessi conti su tre finestre temporali: cambiando periodo
-   tutto si ricalcola, che è il punto di avere i dati veri. */
+const MENU = [
+  { icon: LayoutDashboard, t: 'Riepilogo', on: true },
+  { icon: Receipt, t: 'Fatture' },
+  { icon: Boxes, t: 'Magazzino' },
+  { icon: Clock3, t: 'Presenze' },
+  { icon: Truck, t: 'Fornitori' },
+];
+
 const PERIODI = [
   {
     k: 'Giorno',
@@ -17,8 +32,8 @@ const PERIODI = [
       { lab: 'Personale', v: 1140, fmt: 'eur', d: '26,6% sui ricavi' },
       { lab: 'Materie prime', v: 28.4, fmt: 'pct', d: '−1,5 pt', tone: 'up' },
     ],
-    bars: [42, 58, 36, 70, 52, 88, 64, 76],
-    top: 5,
+    bars: [42, 58, 36, 70, 52, 88, 64, 76, 60, 82],
+    top: 7,
     alert: 'Le materie prime ti costano il 12% in più',
   },
   {
@@ -28,7 +43,7 @@ const PERIODI = [
       { lab: 'Personale', v: 7980, fmt: 'eur', d: '30,1% sui ricavi' },
       { lab: 'Materie prime', v: 27.9, fmt: 'pct', d: '−0,8 pt', tone: 'up' },
     ],
-    bars: [55, 40, 72, 48, 84, 60, 92, 68],
+    bars: [55, 40, 72, 48, 84, 60, 92, 68, 76, 88],
     top: 6,
     alert: 'Venerdì scadono 3 fatture da pagare',
   },
@@ -39,7 +54,7 @@ const PERIODI = [
       { lab: 'Personale', v: 34200, fmt: 'eur', d: '30,4% sui ricavi' },
       { lab: 'Materie prime', v: 28.1, fmt: 'pct', d: '−2,1 pt', tone: 'up' },
     ],
-    bars: [38, 64, 50, 78, 44, 68, 96, 72],
+    bars: [38, 64, 50, 78, 44, 68, 96, 72, 58, 84],
     top: 6,
     alert: 'Stanno finendo 2 prodotti in magazzino',
   },
@@ -108,31 +123,17 @@ export default function HeroScene() {
     return () => clearInterval(id);
   }, [reduce]);
 
-  const rows = Array.from({ length: 2 }, (_, k) => {
+  const rows = Array.from({ length: 4 }, (_, k) => {
     const i = (feed + k) % LOG.length;
     return { ...LOG[i], id: `${i}-${Math.floor((feed + k) / LOG.length)}` };
   });
 
-  /* le schede che orbitano attorno alla finestra */
-  const sat = (i) => (reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, i % 2 ? 9 : -9, 0] });
-
-  const satT = (i, d) => ({
-    opacity: { duration: 0.7, ease: EASE_MODAL, delay: d },
-    y: { duration: 9 + i * 1.6, ease: 'easeInOut', repeat: Infinity, delay: d },
-  });
+  const float = (up) => (reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: up ? [0, -10, 0] : [0, 10, 0] });
 
   return (
-    <div className="scene" aria-hidden="true">
-      <span className="scene__mesh" />
-      <span className="scene__glow" />
-
-      <motion.div
-        className="win"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: EASE_MODAL, delay: 0.2 }}
-      >
-        {/* la cornice: semaforo, marchio, periodo */}
+    <div className="scene">
+      <div className="win" aria-hidden="true">
+        {/* cornice della finestra */}
         <div className="win__chrome">
           <span className="win__dots">
             <i />
@@ -158,92 +159,108 @@ export default function HeroScene() {
           </span>
         </div>
 
-        {/* lo schermo, dentro alla cornice */}
-        <div className="win__screen">
-          <div className="win__kpis">
-            {p.kpi.map((k) => (
-              <Kpi key={k.lab} {...k} />
+        <div className="win__body">
+          {/* menu laterale */}
+          <div className="win__side">
+            {MENU.map(({ icon: Icon, t, on }) => (
+              <span className={`win__nav ${on ? 'is-on' : ''}`} key={t}>
+                <Icon size={14} strokeWidth={1.9} />
+                {t}
+              </span>
             ))}
-          </div>
-
-          <div className="win__alert">
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={p.alert}
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -5 }}
-                transition={{ duration: 0.3, ease: EASE_MODAL }}
-              >
-                {p.alert}
-              </motion.span>
-            </AnimatePresence>
-          </div>
-
-          <div className="win__sec">
-            <div className="win__hd">
-              <span>Utile per giorno</span>
-            </div>
-            <div className="win__bars">
-              {p.bars.map((h, i) => (
-                <span className={`win__col ${i === p.top ? 'is-top' : ''}`} key={i}>
-                  <motion.i
-                    animate={{ height: `${h}%` }}
-                    transition={{ duration: 0.7, ease: EASE_MODAL, delay: i * 0.04 }}
-                  />
+            <div className="win__side-foot">
+              {FONTI.map((f, i) => (
+                <span key={f} className={`win__src ${i === fonte ? 'is-run' : ''}`}>
+                  {i === fonte ? (
+                    <Loader size={9} strokeWidth={2.6} className="win__spin" />
+                  ) : (
+                    <Check size={9} strokeWidth={3.2} />
+                  )}
+                  {f}
                 </span>
               ))}
             </div>
           </div>
 
-          <div className="win__sec win__sec--rows">
-            <div className="win__rows">
-              <AnimatePresence initial={false} mode="popLayout">
-                {rows.map(({ id, t, s, v, k }) => (
-                  <motion.div
-                    className={`win__row ${k ? `is-${k}` : ''}`}
-                    key={id}
-                    layout
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4, ease: EASE_MODAL }}
-                  >
-                    <span className="win__row-t">
-                      <b>{t}</b>
-                      <em>{s}</em>
-                    </span>
-                    <span className="win__row-v num">{v}</span>
-                  </motion.div>
-                ))}
+          {/* schermata */}
+          <div className="win__main">
+            <div className="win__kpis">
+              {p.kpi.map((k) => (
+                <Kpi key={k.lab} {...k} />
+              ))}
+            </div>
+
+            <div className="win__alert">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={p.alert}
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -5 }}
+                  transition={{ duration: 0.3, ease: EASE_MODAL }}
+                >
+                  {p.alert}
+                </motion.span>
               </AnimatePresence>
             </div>
-          </div>
 
-          <div className="win__foot">
-            {FONTI.map((f, i) => (
-              <span key={f} className={`win__src ${i === fonte ? 'is-run' : ''}`}>
-                {i === fonte ? (
-                  <Loader size={10} strokeWidth={2.4} className="win__spin" />
-                ) : (
-                  <Check size={10} strokeWidth={3} />
-                )}
-                {f}
-              </span>
-            ))}
+            <div className="win__split">
+              <div className="win__sec">
+                <div className="win__hd">Utile per giorno</div>
+                <div className="win__bars">
+                  {p.bars.map((h, i) => (
+                    <span className={`win__col ${i === p.top ? 'is-top' : ''}`} key={i}>
+                      <motion.i
+                        animate={{ height: `${h}%` }}
+                        transition={{ duration: 0.7, ease: EASE_MODAL, delay: i * 0.035 }}
+                      />
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="win__sec win__sec--rows">
+                <div className="win__hd">Ultimi movimenti</div>
+                <div className="win__rows">
+                  <AnimatePresence initial={false} mode="popLayout">
+                    {rows.map(({ id, t, s, v, k }) => (
+                      <motion.div
+                        className={`win__row ${k ? `is-${k}` : ''}`}
+                        key={id}
+                        layout
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.4, ease: EASE_MODAL }}
+                      >
+                        <span className="win__row-t">
+                          <b>{t}</b>
+                          <em>{s}</em>
+                        </span>
+                        <span className="win__row-v num">{v}</span>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </motion.div>
+      </div>
 
-      {/* quello che succede attorno, senza che tu faccia niente */}
+      {/* quello che succede da solo, ai lati della finestra */}
       <motion.div
-        className="sat sat--a"
-        initial={{ opacity: 0, y: 12 }}
-        animate={sat(0)}
-        transition={satT(0, 0.7)}
+        className="sat sat--l"
+        initial={{ opacity: 0, y: 14 }}
+        animate={float(true)}
+        transition={{
+          opacity: { duration: 0.7, ease: EASE_MODAL, delay: 0.9 },
+          y: { duration: 9, ease: 'easeInOut', repeat: Infinity, delay: 0.9 },
+        }}
+        aria-hidden="true"
       >
         <span className="sat__ic is-ok">
-          <FileCheck2 size={14} strokeWidth={2} />
+          <FileCheck2 size={15} strokeWidth={2} />
         </span>
         <span className="sat__t">
           <b>Fattura registrata</b>
@@ -252,32 +269,21 @@ export default function HeroScene() {
       </motion.div>
 
       <motion.div
-        className="sat sat--b"
-        initial={{ opacity: 0, y: 12 }}
-        animate={sat(1)}
-        transition={satT(1, 0.9)}
+        className="sat sat--r"
+        initial={{ opacity: 0, y: 14 }}
+        animate={float(false)}
+        transition={{
+          opacity: { duration: 0.7, ease: EASE_MODAL, delay: 1.1 },
+          y: { duration: 11, ease: 'easeInOut', repeat: Infinity, delay: 1.1 },
+        }}
+        aria-hidden="true"
       >
         <span className="sat__ic is-accent">
-          <Zap size={14} strokeWidth={2} />
+          <Zap size={15} strokeWidth={2} />
         </span>
         <span className="sat__t">
           <b>Ordine al fornitore</b>
           <em>partito da solo</em>
-        </span>
-      </motion.div>
-
-      <motion.div
-        className="sat sat--c"
-        initial={{ opacity: 0, y: 12 }}
-        animate={sat(2)}
-        transition={satT(2, 1.1)}
-      >
-        <span className="sat__ic">
-          <Timer size={14} strokeWidth={2} />
-        </span>
-        <span className="sat__t">
-          <b className="num">12 ore</b>
-          <em>in meno ogni settimana</em>
         </span>
       </motion.div>
     </div>
