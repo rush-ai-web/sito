@@ -616,7 +616,7 @@ h4 {
    ============================================================ */
 .hero {
   position: relative;
-  padding: 132px 0 0;
+  padding: 110px 0 0;
   overflow: hidden;
   isolation: isolate;
 }
@@ -698,7 +698,7 @@ h4 {
 .hero__logo-eyebrow {
   display: flex;
   justify-content: center;
-  margin: 0 0 52px;
+  margin: 0 0 36px;
 }
 
 .hero__logo-img {
@@ -901,11 +901,11 @@ h4 {
 }
 
 .hero__note {
-  margin: 56px 0 0;
+  margin: 36px 0 0;
   max-width: 60ch;
   font-size: clamp(15.5px, 1.2vw, 18px);
   line-height: 1.6;
-  color: var(--text-2);
+  color: var(--text);
 }
 
 .hero__cta {
@@ -913,12 +913,13 @@ h4 {
   margin-top: 48px;
 }
 
+
 /* ---- il palco: la finestra è grande e visibile ---- */
 .hero__stage {
   position: relative;
   z-index: 2;
-  margin-top: 40px;
-  padding-top: 60px;
+  margin-top: 20px;
+  padding-top: 50px;
   padding-bottom: 40px;
 }
 
@@ -1074,7 +1075,7 @@ h4 {
 }
 
 .hero__cta {
-  margin-top: 64px;
+  margin-top: 44px;
 }
 
 /* ---- CTA dell'hero: pastiglia con badge circolare, la freccia
