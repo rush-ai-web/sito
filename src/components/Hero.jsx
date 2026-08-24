@@ -1,8 +1,42 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, Sparkles, Layers, Zap, TrendingUp } from 'lucide-react';
+import { ArrowRight, Sparkles, Layers, Zap, TrendingUp, TrendingDown, Clock, Eye, ShieldCheck, RefreshCw, BarChart2 } from 'lucide-react';
 import HeroScene from './HeroScene';
 import { wordUp, fadeUp, EASE_MODAL } from '../lib/motion';
+
+const AMBIENT_PILLS = [
+  // sinistra
+  { label: '+18% fatturato medio', Icon: TrendingUp,   pos: true,  style: { left: '1%',   top: '22%' }, delay: 0.55, float: 0 },
+  { label: '−40% tempo di gestione', Icon: Clock,      pos: false, style: { left: '3%',   top: '43%' }, delay: 1.05, float: 1 },
+  { label: 'Dati aggiornati in tempo reale', Icon: RefreshCw, pos: true, style: { left: '0.5%', top: '63%' }, delay: 0.80, float: 2 },
+  // destra
+  { label: 'Margini sempre sotto controllo', Icon: BarChart2, pos: true,  style: { right: '1%',  top: '18%' }, delay: 0.70, float: 1 },
+  { label: 'Zero errori manuali',    Icon: ShieldCheck, pos: false, style: { right: '2%',  top: '42%' }, delay: 1.20, float: 2 },
+  { label: 'Tutto visibile, subito', Icon: Eye,         pos: true,  style: { right: '0.5%', top: '62%' }, delay: 0.45, float: 0 },
+];
+
+function AmbientPills() {
+  const reduce = useReducedMotion();
+  return (
+    <div className="hero__ambient" aria-hidden="true">
+      {AMBIENT_PILLS.map(({ label, Icon, pos, style, delay, float }) => (
+        <motion.span
+          key={label}
+          className={`hero__ap hero__ap--float-${float}${pos ? ' hero__ap--pos' : ' hero__ap--neg'}`}
+          style={style}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: EASE_MODAL, delay: reduce ? 0 : delay }}
+        >
+          <span className="hero__ap-ic">
+            <Icon size={13} strokeWidth={2.2} />
+          </span>
+          {label}
+        </motion.span>
+      ))}
+    </div>
+  );
+}
 
 /* prima riga del titolo, fissa */
 const L1 = ['Il', 'tuo', 'gestionale', 'su', 'misura,'];
@@ -136,6 +170,7 @@ export default function Hero() {
   return (
     <section id="home" data-tone="light" className="section hero fx-grain">
       <span className="hero__aurora" aria-hidden="true" />
+      <AmbientPills />
 
       <div className="wrap hero__wrap">
         <motion.div
