@@ -270,8 +270,8 @@ export default function HeroScene() {
           <FileCheck2 size={15} strokeWidth={2} />
         </span>
         <span className="sat__t">
-          <b>Fattura registrata</b>
-          <em>senza toccare niente</em>
+          <b>Pagamento ricevuto</b>
+          <em>fattura saldata in automatico</em>
         </span>
       </motion.div>
 
@@ -289,27 +289,27 @@ export default function HeroScene() {
           <Zap size={15} strokeWidth={2} />
         </span>
         <span className="sat__t">
-          <b>Ordine al fornitore</b>
-          <em>partito da solo</em>
+          <b>Fattura emessa</b>
+          <em>inviata e protocollata</em>
         </span>
       </motion.div>
 
       <motion.div
         className="sat sat--bl"
         initial={{ opacity: 0, y: 14 }}
-        animate={float(true)}
+        animate={float(false)}
         transition={{
           opacity: { duration: 0.7, ease: EASE_MODAL, delay: 1.3 },
           y: { duration: 10, ease: 'easeInOut', repeat: Infinity, delay: 1.3 },
         }}
         aria-hidden="true"
       >
-        <span className="sat__ic is-ok">
+        <span className="sat__ic is-warn">
           <TrendingUp size={15} strokeWidth={2} />
         </span>
         <span className="sat__t">
-          <b>Margine in crescita</b>
-          <em>+14% questo mese</em>
+          <b>Scadenza in arrivo</b>
+          <em>2 fatture entro venerdì</em>
         </span>
       </motion.div>
     </div>

@@ -1599,7 +1599,7 @@ h4 {
 }
 
 .sat--l {
-  left: -74px;
+  left: -120px;
   top: 92px;
 }
 
@@ -1609,8 +1609,8 @@ h4 {
 }
 
 .sat--bl {
-  left: -74px;
-  bottom: 60px;
+  left: -120px;
+  bottom: 110px;
 }
 
 .sat__ic {
@@ -1632,6 +1632,11 @@ h4 {
 .sat__ic.is-accent {
   background: var(--accent-soft);
   color: var(--accent);
+}
+
+.sat__ic.is-warn {
+  background: color-mix(in srgb, var(--warn) 12%, transparent);
+  color: var(--warn);
 }
 
 .sat__t {
