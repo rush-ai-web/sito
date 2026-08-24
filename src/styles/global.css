@@ -618,7 +618,7 @@ h4 {
   position: relative;
   min-height: 100vh;
   min-height: 100svh;
-  padding: 138px 0 0;
+  padding: 130px 0 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -742,45 +742,87 @@ h4 {
   display: block;
 }
 
-/* slot che ospita la parola rotante: altezza fissa, niente salti */
+/* la seconda riga contiene la pill blu che cambia parola */
 .hero__line--slot {
-  height: 1.05em;
-  margin-top: 0.12em;
   display: flex;
-  align-items: center;
   justify-content: center;
+  margin-top: 0.14em;
+}
+
+/* la pill: sfondo blu d'accento con luce che scorre in loop */
+.hero__pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.16em 0.42em 0.20em;
+  border-radius: 0.32em;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #6a8ce8 0%, #5b7fe0 45%, #4a72cc 100%);
+  box-shadow: 0 8px 26px -8px color-mix(in srgb, var(--accent) 65%, transparent);
+  isolation: isolate;
+}
+
+/* la brillantezza che passa: una banda luminosa che attraversa la pill */
+.hero__pill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    100deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 75%
+  );
+  background-size: 220% 100%;
+  animation: pillShine 4.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pillShine {
+  0% {
+    background-position: 220% 0;
+  }
+  100% {
+    background-position: -20% 0;
+  }
+}
+
+/* dentro TextRotate: parola e caratteri restano in linea */
+.tr {
+  display: inline-flex;
+  align-items: center;
+}
+
+.tr__group {
+  display: inline-flex;
+}
+
+.tr__word {
+  display: inline-flex;
+}
+
+.tr__word--wrap {
   overflow: hidden;
 }
 
-.hero__rot {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  height: 1.05em;
-}
-
-.hero__rot-w {
+.tr__c {
   display: inline-block;
 }
 
-/* cursore che pulsa accanto alla parola, stile terminale */
-.hero__caret {
+.tr__c--pill {
   display: inline-block;
-  width: 0.09em;
-  height: 0.82em;
-  background: var(--accent);
-  animation: heroCaret 1.05s steps(1) infinite;
+  line-height: 1;
 }
 
-@keyframes heroCaret {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  51%,
-  100% {
-    opacity: 0;
+.tr__sp {
+  white-space: pre;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__pill::before {
+    animation: none;
   }
 }
 
@@ -840,27 +882,32 @@ h4 {
 .hero__stage {
   position: relative;
   z-index: 2;
-  height: clamp(190px, 24vh, 280px);
-  overflow: hidden;
+  height: clamp(210px, 26vh, 300px);
+  margin-top: 24px;
+  padding-top: 60px; /* respiro sopra la finestra, così l'ombra non taglia */
+}
+
+.hero__stage .wrap {
+  position: relative;
 }
 
 /* illuminazione dietro alla finestra */
 .hero__beam {
   position: absolute;
   left: 50%;
-  top: -10%;
+  top: 0;
   translate: -50% 0;
-  width: min(1100px, 96%);
-  height: 320px;
+  width: min(1200px, 98%);
+  height: 380px;
   pointer-events: none;
   border-radius: 50%;
   background: radial-gradient(
     50% 50% at 50% 50%,
-    color-mix(in srgb, var(--accent) 42%, transparent) 0%,
-    color-mix(in srgb, var(--accent) 16%, transparent) 45%,
+    color-mix(in srgb, var(--accent) 52%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 22%, transparent) 45%,
     transparent 72%
   );
-  filter: blur(50px);
+  filter: blur(58px);
   animation: heroBeam 11s ease-in-out infinite;
 }
 
@@ -1010,21 +1057,26 @@ h4 {
   opacity: 1;
 }
 
-/* ombra soft dietro al bottone in hover, come uno stacco morbido */
+/* ombra ampia dietro al bottone in hover: fa levitare senza muoverlo */
 .btn--hero::after {
   content: '';
   position: absolute;
-  inset: 4px 0 -6px;
+  inset: 6px 8px -14px;
   border-radius: inherit;
   z-index: -1;
-  background: color-mix(in srgb, currentColor 40%, transparent);
-  filter: blur(18px);
+  background: color-mix(in srgb, currentColor 65%, transparent);
+  filter: blur(28px);
   opacity: 0;
   transition: opacity var(--d-lift) var(--e-lift);
 }
 
 .btn--hero:hover::after {
-  opacity: 0.55;
+  opacity: 0.9;
+}
+
+/* il primario in hover prende un alone del colore d'accento */
+.btn--hero.btn--primary::after {
+  background: color-mix(in srgb, var(--accent) 55%, transparent);
 }
 
 .btn__badge {

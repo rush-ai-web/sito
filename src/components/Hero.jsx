@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { LayoutGroup, motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import HeroScene from './HeroScene';
+import TextRotate from './TextRotate';
 import { wordUp, fadeUp, EASE_MODAL } from '../lib/motion';
 
 /* prima riga del titolo, fissa */
@@ -60,36 +60,6 @@ function Word({ w, i }) {
   );
 }
 
-/* la parola in accento che cambia: scivola su, con un cursore che pulsa */
-function Rotator() {
-  const reduce = useReducedMotion();
-  const [i, setI] = useState(0);
-
-  useEffect(() => {
-    if (reduce) return;
-    const id = setInterval(() => setI((v) => (v + 1) % ROTATE.length), 2800);
-    return () => clearInterval(id);
-  }, [reduce]);
-
-  return (
-    <span className="hero__rot">
-      <AnimatePresence mode="wait">
-        <motion.span
-          key={ROTATE[i]}
-          className="hero__rot-w hero__line--accent"
-          initial={{ y: '90%', opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: '-90%', opacity: 0 }}
-          transition={{ duration: 0.55, ease: EASE_MODAL }}
-        >
-          {ROTATE[i]}
-        </motion.span>
-      </AnimatePresence>
-      <span className="hero__caret" aria-hidden="true" />
-    </span>
-  );
-}
-
 export default function Hero() {
   return (
     <section id="home" data-tone="light" className="section hero fx-grain">
@@ -112,14 +82,25 @@ export default function Hero() {
         </motion.p>
 
         <h1 className="hero__title">
-          <span className="hero__line">
-            {L1.map((w, i) => (
-              <Word key={w + i} w={w} i={i} />
-            ))}
-          </span>
-          <span className="hero__line hero__line--slot">
-            <Rotator />
-          </span>
+          <LayoutGroup>
+            <motion.span className="hero__line" layout>
+              {L1.map((w, i) => (
+                <Word key={w + i} w={w} i={i} />
+              ))}
+            </motion.span>
+            <motion.span className="hero__line hero__line--slot" layout>
+              <TextRotate
+                texts={ROTATE}
+                mainClassName="hero__pill"
+                splitLevelClassName="tr__word--wrap"
+                elementLevelClassName="tr__c--pill"
+                rotationInterval={2800}
+                staggerDuration={0.02}
+                staggerFrom="first"
+                transition={{ type: 'spring', damping: 28, stiffness: 340 }}
+              />
+            </motion.span>
+          </LayoutGroup>
         </h1>
 
         <motion.p
