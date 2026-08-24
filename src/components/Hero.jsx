@@ -4,13 +4,13 @@ import { ArrowRight, Sparkles, Layers, Zap, TrendingUp, ShieldCheck, RefreshCw, 
 import HeroScene from './HeroScene';
 import { wordUp, fadeUp, EASE_MODAL } from '../lib/motion';
 
-/* 4 pill ambientali — niente numeri, stile chip--surface, posizionate
-   fuori dall'area testo: lato logo (sopra) e lato bottoni (sotto). */
+/* 4 pill ambientali — pixel-based per non sconfinare nel dashboard.
+   Zone sicure: fianco al logo (~160px) e fianco ai bottoni (~460px). */
 const AMBIENT_PILLS = [
-  { label: 'Dati aggiornati in automatico', Icon: RefreshCw, style: { left: '2%',  top: '13%' }, delay: 0.6, float: 0 },
-  { label: 'Processi attivi H24',           Icon: Zap,        style: { left: '2%',  top: '56%' }, delay: 1.0, float: 2 },
-  { label: 'Margini sempre visibili',       Icon: TrendingUp, style: { right: '2%', top: '10%' }, delay: 0.7, float: 1 },
-  { label: 'Zero errori manuali',           Icon: ShieldCheck, style: { right: '2%', top: '52%' }, delay: 0.9, float: 2 },
+  { label: 'Dati aggiornati in automatico', Icon: RefreshCw,  style: { left: '2%',  top: '155px' }, delay: 0.6, float: 0 },
+  { label: 'Processi attivi H24',           Icon: Zap,         style: { left: '2%',  top: '455px' }, delay: 1.0, float: 2 },
+  { label: 'Margini sempre visibili',       Icon: TrendingUp,  style: { right: '2%', top: '135px' }, delay: 0.7, float: 1 },
+  { label: 'Zero errori manuali',           Icon: ShieldCheck, style: { right: '2%', top: '445px' }, delay: 0.9, float: 2 },
 ];
 
 function AmbientPills() {
