@@ -270,8 +270,8 @@ export default function HeroScene() {
           <FileCheck2 size={15} strokeWidth={2} />
         </span>
         <span className="sat__t">
-          <b>Pagamento ricevuto</b>
-          <em>fattura saldata in automatico</em>
+          <b>Margine netto +14%</b>
+          <em>miglior mese dell'anno</em>
         </span>
       </motion.div>
 
@@ -289,8 +289,8 @@ export default function HeroScene() {
           <Zap size={15} strokeWidth={2} />
         </span>
         <span className="sat__t">
-          <b>Fattura emessa</b>
-          <em>inviata e protocollata</em>
+          <b>Fornitore sincronizzato</b>
+          <em>listino aggiornato in automatico</em>
         </span>
       </motion.div>
 
@@ -308,8 +308,8 @@ export default function HeroScene() {
           <TrendingUp size={15} strokeWidth={2} />
         </span>
         <span className="sat__t">
-          <b>Scadenza in arrivo</b>
-          <em>2 fatture entro venerdì</em>
+          <b>Budget quasi esaurito</b>
+          <em>soglia 90% raggiunta</em>
         </span>
       </motion.div>
     </div>
