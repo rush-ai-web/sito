@@ -1,13 +1,16 @@
-import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import HeroScene from './HeroScene';
 import { wordUp, fadeUp, EASE_MODAL } from '../lib/motion';
 
-/* il titolo: la promessa, al centro di tutto */
-const L1 = ['Software', 'su', 'misura'];
-const L2 = ['+', 'AI', 'integrata'];
+/* prima riga del titolo, fissa */
+const L1 = ['Il', 'tuo', 'gestionale', 'su', 'misura,'];
 
-/* cosa facciamo, in una riga sopra al titolo */
+/* seconda riga che ruota: copre AI + posto unico + automazione + risultato */
+const ROTATE = ['con AI integrata', 'tutto in un posto', 'che lavora da solo', 'che ti fa crescere'];
+
+/* la riga alta di categorie */
 const COSE = ['Gestionali su misura', 'Automazioni end-to-end', 'AI dentro al flusso'];
 
 /* cosa cambia quando il gestionale è tuo: ciò che cala e ciò che cresce. */
@@ -57,13 +60,42 @@ function Word({ w, i }) {
   );
 }
 
+/* la parola in accento che cambia: scivola su, con un cursore che pulsa */
+function Rotator() {
+  const reduce = useReducedMotion();
+  const [i, setI] = useState(0);
+
+  useEffect(() => {
+    if (reduce) return;
+    const id = setInterval(() => setI((v) => (v + 1) % ROTATE.length), 2800);
+    return () => clearInterval(id);
+  }, [reduce]);
+
+  return (
+    <span className="hero__rot">
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={ROTATE[i]}
+          className="hero__rot-w hero__line--accent"
+          initial={{ y: '90%', opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: '-90%', opacity: 0 }}
+          transition={{ duration: 0.55, ease: EASE_MODAL }}
+        >
+          {ROTATE[i]}
+        </motion.span>
+      </AnimatePresence>
+      <span className="hero__caret" aria-hidden="true" />
+    </span>
+  );
+}
+
 export default function Hero() {
   return (
     <section id="home" data-tone="light" className="section hero fx-grain">
       <span className="hero__aurora" aria-hidden="true" />
 
       <div className="wrap hero__wrap">
-        {/* cosa facciamo, secco, sopra al titolo */}
         <motion.p
           className="hero__eyebrow"
           variants={fadeUp}
@@ -79,17 +111,14 @@ export default function Hero() {
           ))}
         </motion.p>
 
-        {/* la promessa, al centro */}
         <h1 className="hero__title">
           <span className="hero__line">
             {L1.map((w, i) => (
-              <Word key={w} w={w} i={i} />
+              <Word key={w + i} w={w} i={i} />
             ))}
           </span>
-          <span className="hero__line hero__line--accent">
-            {L2.map((w, i) => (
-              <Word key={w} w={w} i={i + L1.length} />
-            ))}
+          <span className="hero__line hero__line--slot">
+            <Rotator />
           </span>
         </h1>
 
@@ -100,8 +129,8 @@ export default function Hero() {
           initial="hidden"
           animate="show"
         >
-          Un gestionale costruito attorno alla tua azienda: i dati restano aggiornati da soli, i
-          documenti si registrano da soli, il lavoro ripetitivo esce dalla giornata.
+          Costruito attorno alla tua azienda: i dati restano aggiornati da soli, i documenti si
+          registrano da soli, il lavoro ripetitivo esce dalla giornata.
         </motion.p>
 
         <motion.div
@@ -126,7 +155,6 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* il sistema, che spunta già dal primo colpo d'occhio */}
       <motion.div
         className="hero__stage"
         initial={{ opacity: 0, y: 44 }}

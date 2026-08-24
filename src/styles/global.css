@@ -732,14 +732,56 @@ h4 {
 .hero__title {
   margin: 0;
   font-family: var(--ff-display);
-  font-size: clamp(36px, 6.4vw, 86px);
-  line-height: 0.99;
+  font-size: clamp(30px, 4.6vw, 62px);
+  line-height: 1;
   letter-spacing: -0.012em;
   text-transform: uppercase;
 }
 
 .hero__line {
   display: block;
+}
+
+/* slot che ospita la parola rotante: altezza fissa, niente salti */
+.hero__line--slot {
+  height: 1.05em;
+  margin-top: 0.12em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero__rot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 1.05em;
+}
+
+.hero__rot-w {
+  display: inline-block;
+}
+
+/* cursore che pulsa accanto alla parola, stile terminale */
+.hero__caret {
+  display: inline-block;
+  width: 0.09em;
+  height: 0.82em;
+  background: var(--accent);
+  animation: heroCaret 1.05s steps(1) infinite;
+}
+
+@keyframes heroCaret {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
 }
 
 /* la seconda riga porta l'accento, con la luce che la attraversa */
@@ -961,12 +1003,28 @@ h4 {
   gap: 14px;
   padding: 0 6px 0 26px;
   font-size: 16px;
-  transition: transform var(--d-lift) var(--e-lift), box-shadow var(--d-lift) var(--e-lift);
+  transition: box-shadow var(--d-lift) var(--e-lift);
 }
 
 .btn--hero:hover {
   opacity: 1;
-  transform: translateY(-2px);
+}
+
+/* ombra soft dietro al bottone in hover, come uno stacco morbido */
+.btn--hero::after {
+  content: '';
+  position: absolute;
+  inset: 4px 0 -6px;
+  border-radius: inherit;
+  z-index: -1;
+  background: color-mix(in srgb, currentColor 40%, transparent);
+  filter: blur(18px);
+  opacity: 0;
+  transition: opacity var(--d-lift) var(--e-lift);
+}
+
+.btn--hero:hover::after {
+  opacity: 0.55;
 }
 
 .btn__badge {
@@ -979,15 +1037,15 @@ h4 {
   background: var(--btn-ink);
   color: var(--btn-fill);
   overflow: hidden;
-  transition: transform var(--d-lift) var(--e-lift);
 }
 
 .btn__badge svg {
   transition: transform var(--d-lift) var(--e-lift);
 }
 
+/* la freccia ruota verso l'alto e si inclina in hover */
 .btn--hero:hover .btn__badge svg {
-  transform: translateX(2px);
+  transform: rotate(-45deg);
 }
 
 /* sul bottone d'accento il badge resta bianco con la freccia blu */
@@ -1050,9 +1108,44 @@ h4 {
   background: color-mix(in srgb, var(--text) 6%, var(--bg));
   border: 1px solid var(--hairline-strong);
   border-bottom: 0;
-  box-shadow: var(--sh-3);
+  box-shadow: var(--sh-3), 0 -30px 90px -20px color-mix(in srgb, var(--accent) 45%, transparent),
+    0 -60px 140px -40px color-mix(in srgb, var(--accent) 35%, transparent);
   padding: 0 11px;
-  overflow: hidden;
+  overflow: visible;
+}
+
+/* alone d'accento dietro alla dashboard, come nel riferimento Vetra */
+.win::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -40px;
+  translate: -50% 0;
+  width: 92%;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    color-mix(in srgb, var(--accent) 50%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 20%, transparent) 45%,
+    transparent 72%
+  );
+  filter: blur(48px);
+  z-index: -1;
+  pointer-events: none;
+  animation: winAura 11s ease-in-out infinite;
+}
+
+@keyframes winAura {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: translate3d(-50%, 0, 0) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate3d(-50%, 0, 0) scale(1.06);
+  }
 }
 
 /* ---- cornice: solo il semaforo ---- */
