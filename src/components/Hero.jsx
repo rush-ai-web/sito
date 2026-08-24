@@ -97,15 +97,6 @@ function RotatingSlot() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.32, ease: EASE_MODAL }}
         >
-          <motion.span
-            className="hero__pill-ic"
-            initial={{ rotate: -25, scale: 0.7, opacity: 0 }}
-            animate={{ rotate: 0, scale: 1, opacity: 1 }}
-            exit={{ rotate: 20, scale: 0.7, opacity: 0 }}
-            transition={{ type: 'spring', damping: 22, stiffness: 320 }}
-          >
-            <Icon size={30} strokeWidth={2} />
-          </motion.span>
           <span className="hero__pill-t">
             {chars.map((c, cIdx) => (
               <span key={cIdx} className="hero__pill-c-wrap">
@@ -126,6 +117,15 @@ function RotatingSlot() {
               </span>
             ))}
           </span>
+          <motion.span
+            className="hero__pill-ic"
+            initial={{ rotate: 25, scale: 0.7, opacity: 0 }}
+            animate={{ rotate: 0, scale: 1, opacity: 1 }}
+            exit={{ rotate: -20, scale: 0.7, opacity: 0 }}
+            transition={{ type: 'spring', damping: 22, stiffness: 320 }}
+          >
+            <Icon size={30} strokeWidth={2} />
+          </motion.span>
         </motion.span>
       </AnimatePresence>
     </motion.span>
