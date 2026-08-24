@@ -7,10 +7,10 @@ import { wordUp, fadeUp, EASE_MODAL } from '../lib/motion';
 /* 4 pill ambientali — pixel-based per non sconfinare nel dashboard.
    Zone sicure: fianco al logo (~160px) e fianco ai bottoni (~460px). */
 const AMBIENT_PILLS = [
-  { label: 'Dati aggiornati in automatico', Icon: RefreshCw,  style: { left: '2%',  top: '155px' }, delay: 0.6, float: 0 },
-  { label: 'Processi attivi H24',           Icon: Zap,         style: { left: '2%',  top: '455px' }, delay: 1.0, float: 2 },
-  { label: 'Margini sempre visibili',       Icon: TrendingUp,  style: { right: '2%', top: '135px' }, delay: 0.7, float: 1 },
-  { label: 'Zero errori manuali',           Icon: ShieldCheck, style: { right: '2%', top: '445px' }, delay: 0.9, float: 2 },
+  { label: 'Dati aggiornati in automatico', Icon: RefreshCw,  style: { left: '2%',   top: '210px' }, delay: 0.6, float: 0 },
+  { label: 'Processi attivi H24',           Icon: Zap,         style: { left: '10%',  top: '455px' }, delay: 1.0, float: 2 },
+  { label: 'Margini sempre visibili',       Icon: TrendingUp,  style: { right: '2%',  top: '135px' }, delay: 0.7, float: 1 },
+  { label: 'Zero errori manuali',           Icon: ShieldCheck, style: { right: '10%', top: '445px' }, delay: 0.9, float: 2 },
 ];
 
 function AmbientPills() {
