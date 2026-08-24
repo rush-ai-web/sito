@@ -145,8 +145,8 @@ export default function Hero() {
           initial="hidden"
           animate="show"
         >
-          <img src="./rush-logo-dark.png" alt="Rush" className="hero__logo-img hero__logo-img--l" />
-          <img src="./rush-logo.png" alt="Rush" className="hero__logo-img hero__logo-img--d" />
+          <img src="./rush-logo.png" alt="Rush" className="hero__logo-img hero__logo-img--l" />
+          <img src="./rush-logo-dark.png" alt="Rush" className="hero__logo-img hero__logo-img--d" />
         </motion.div>
 
         <h1 className="hero__title">
