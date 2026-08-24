@@ -3,12 +3,11 @@ import { ArrowRight } from 'lucide-react';
 import HeroScene from './HeroScene';
 import { wordUp, fadeUp, EASE_MODAL } from '../lib/motion';
 
-/* il titolo si compone parola per parola, su due registri:
-   la prima riga piena, la seconda a contorno. */
-const L1 = ['Un', 'gestionale', 'costruito'];
-const L2 = ['attorno', 'alla', 'tua', 'azienda'];
+/* il titolo: la promessa, al centro di tutto */
+const L1 = ['Software', 'su', 'misura'];
+const L2 = ['+', 'AI', 'integrata'];
 
-/* cosa facciamo, elencato secco negli angoli */
+/* cosa facciamo, in una riga sopra al titolo */
 const COSE = ['Gestionali su misura', 'Automazioni end-to-end', 'AI dentro al flusso'];
 
 /* cosa cambia quando il gestionale è tuo: ciò che cala e ciò che cresce. */
@@ -42,9 +41,9 @@ export function OutcomeTicker() {
   );
 }
 
-function Word({ w, i, cls = '' }) {
+function Word({ w, i }) {
   return (
-    <span className={`hero__word ${cls}`}>
+    <span className="hero__word">
       <motion.span
         style={{ display: 'inline-block' }}
         variants={wordUp}
@@ -64,87 +63,78 @@ export default function Hero() {
       <span className="hero__aurora" aria-hidden="true" />
 
       <div className="wrap hero__wrap">
-        {/* riga alta: cosa facciamo a sinistra, cosa significa a destra */}
-        <div className="hero__band">
-          <motion.ul
-            className="hero__list"
-            variants={fadeUp}
-            custom={0}
-            initial="hidden"
-            animate="show"
-          >
-            {COSE.map((c) => (
-              <li key={c}>
-                <span>/</span>
-                {c}
-              </li>
-            ))}
-          </motion.ul>
+        {/* cosa facciamo, secco, sopra al titolo */}
+        <motion.p
+          className="hero__eyebrow"
+          variants={fadeUp}
+          custom={0}
+          initial="hidden"
+          animate="show"
+        >
+          {COSE.map((c, i) => (
+            <span key={c}>
+              {i > 0 && <i>/</i>}
+              {c}
+            </span>
+          ))}
+        </motion.p>
 
-          <motion.p
-            className="hero__note"
-            variants={fadeUp}
-            custom={1}
-            initial="hidden"
-            animate="show"
-          >
-            Progettiamo il sistema attorno ai tuoi processi, non il contrario. I dati restano
-            aggiornati da soli, i documenti si registrano da soli, il lavoro ripetitivo esce dalla
-            giornata.
-          </motion.p>
-        </div>
-
-        {/* il titolo, in due registri */}
+        {/* la promessa, al centro */}
         <h1 className="hero__title">
           <span className="hero__line">
             {L1.map((w, i) => (
               <Word key={w} w={w} i={i} />
             ))}
           </span>
-          <span className="hero__line hero__line--out">
+          <span className="hero__line hero__line--accent">
             {L2.map((w, i) => (
               <Word key={w} w={w} i={i + L1.length} />
             ))}
           </span>
         </h1>
 
-        {/* riga bassa: azioni a sinistra, promessa a destra */}
-        <motion.div
-          className="hero__act"
+        <motion.p
+          className="hero__note"
           variants={fadeUp}
-          custom={8}
+          custom={7}
           initial="hidden"
           animate="show"
         >
-          <div className="btn-row">
-            <a className="btn btn--primary btn--hero" href="#contatti">
-              Prenota una call
-              <span className="btn__badge">
-                <ArrowRight size={16} strokeWidth={2.2} />
-              </span>
-            </a>
-            <a className="btn btn--hero btn--accent" href="#prodotto">
-              Scopri come funziona
-              <span className="btn__badge">
-                <ArrowRight size={16} strokeWidth={2.2} />
-              </span>
-            </a>
-          </div>
+          Un gestionale costruito attorno alla tua azienda: i dati restano aggiornati da soli, i
+          documenti si registrano da soli, il lavoro ripetitivo esce dalla giornata.
+        </motion.p>
 
-          <p className="hero__claim">
-            <span className="hero__sub-accent">Software su misura + AI integrata</span>
-          </p>
+        <motion.div
+          className="btn-row hero__cta"
+          variants={fadeUp}
+          custom={9}
+          initial="hidden"
+          animate="show"
+        >
+          <a className="btn btn--primary btn--hero" href="#contatti">
+            Prenota una call
+            <span className="btn__badge">
+              <ArrowRight size={16} strokeWidth={2.2} />
+            </span>
+          </a>
+          <a className="btn btn--hero btn--accent" href="#prodotto">
+            Scopri come funziona
+            <span className="btn__badge">
+              <ArrowRight size={16} strokeWidth={2.2} />
+            </span>
+          </a>
         </motion.div>
       </div>
 
-      {/* il sistema emerge dal fondo della schermata */}
+      {/* il sistema, che spunta già dal primo colpo d'occhio */}
       <motion.div
         className="hero__stage"
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 44 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: EASE_MODAL, delay: 0.45 }}
+        transition={{ duration: 1, ease: EASE_MODAL, delay: 0.4 }}
       >
-        <div className="wrap hero__stage-in">
+        <span className="hero__beam" aria-hidden="true" />
+        <div className="wrap">
           <HeroScene />
         </div>
       </motion.div>

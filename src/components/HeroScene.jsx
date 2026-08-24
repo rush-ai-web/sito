@@ -133,33 +133,38 @@ export default function HeroScene() {
   return (
     <div className="scene">
       <div className="win" aria-hidden="true">
-        {/* cornice della finestra */}
+        {/* la cornice: solo il semaforo, fuori dall'applicazione */}
         <div className="win__chrome">
           <span className="win__dots">
             <i />
             <i />
             <i />
           </span>
-          <span className="win__brand">
-            <img className="win__logo win__logo--l" src={logoLight} alt="" />
-            <img className="win__logo win__logo--d" src={logoDark} alt="" />
-          </span>
-          <span className="win__tabs">
-            {PERIODI.map((x, i) => (
-              <button
-                key={x.k}
-                className={`win__tab ${i === tab ? 'is-on' : ''}`}
-                onClick={() => setTab(i)}
-                tabIndex={-1}
-              >
-                {i === tab && <motion.span className="win__tab-bg" layoutId="tabbg" />}
-                <span>{x.k}</span>
-              </button>
-            ))}
-          </span>
         </div>
 
-        <div className="win__body">
+        {/* l'applicazione, dentro alla cornice */}
+        <div className="win__app">
+          <div className="win__topbar">
+            <span className="win__brand">
+              <img className="win__logo win__logo--l" src={logoLight} alt="" />
+              <img className="win__logo win__logo--d" src={logoDark} alt="" />
+            </span>
+            <span className="win__tabs">
+              {PERIODI.map((x, i) => (
+                <button
+                  key={x.k}
+                  className={`win__tab ${i === tab ? 'is-on' : ''}`}
+                  onClick={() => setTab(i)}
+                  tabIndex={-1}
+                >
+                  {i === tab && <motion.span className="win__tab-bg" layoutId="tabbg" />}
+                  <span>{x.k}</span>
+                </button>
+              ))}
+            </span>
+          </div>
+
+          <div className="win__body">
           {/* menu laterale */}
           <div className="win__side">
             {MENU.map(({ icon: Icon, t, on }) => (
@@ -243,6 +248,7 @@ export default function HeroScene() {
                   </AnimatePresence>
                 </div>
               </div>
+            </div>
             </div>
           </div>
         </div>
