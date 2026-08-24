@@ -10,6 +10,7 @@ import {
   Truck,
   Zap,
   FileCheck2,
+  TrendingUp,
 } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
 
@@ -290,6 +291,25 @@ export default function HeroScene() {
         <span className="sat__t">
           <b>Ordine al fornitore</b>
           <em>partito da solo</em>
+        </span>
+      </motion.div>
+
+      <motion.div
+        className="sat sat--bl"
+        initial={{ opacity: 0, y: 14 }}
+        animate={float(true)}
+        transition={{
+          opacity: { duration: 0.7, ease: EASE_MODAL, delay: 1.3 },
+          y: { duration: 10, ease: 'easeInOut', repeat: Infinity, delay: 1.3 },
+        }}
+        aria-hidden="true"
+      >
+        <span className="sat__ic is-ok">
+          <TrendingUp size={15} strokeWidth={2} />
+        </span>
+        <span className="sat__t">
+          <b>Margine in crescita</b>
+          <em>+14% questo mese</em>
         </span>
       </motion.div>
     </div>

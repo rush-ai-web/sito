@@ -1,40 +1,8 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, Sparkles, Layers, Zap, TrendingUp, ShieldCheck, RefreshCw, Eye } from 'lucide-react';
+import { ArrowRight, Sparkles, Layers, Zap, TrendingUp } from 'lucide-react';
 import HeroScene from './HeroScene';
 import { wordUp, fadeUp, EASE_MODAL } from '../lib/motion';
-
-/* 4 pill ambientali — pixel-based per non sconfinare nel dashboard.
-   Zone sicure: fianco al logo (~160px) e fianco ai bottoni (~460px). */
-const AMBIENT_PILLS = [
-  { label: 'Dati aggiornati in automatico', Icon: RefreshCw,  style: { left: '2%',   top: '210px' }, delay: 0.6, float: 0 },
-  { label: 'Processi attivi H24',           Icon: Zap,         style: { left: '10%',  top: '455px' }, delay: 1.0, float: 2 },
-  { label: 'Margini sempre visibili',       Icon: TrendingUp,  style: { right: '2%',  top: '135px' }, delay: 0.7, float: 1 },
-  { label: 'Zero errori manuali',           Icon: ShieldCheck, style: { right: '10%', top: '445px' }, delay: 0.9, float: 2 },
-];
-
-function AmbientPills() {
-  const reduce = useReducedMotion();
-  return (
-    <div className="hero__ambient" aria-hidden="true">
-      {AMBIENT_PILLS.map(({ label, Icon, style, delay, float }) => (
-        <motion.span
-          key={label}
-          className={`hero__ap hero__ap--float-${float}`}
-          style={style}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: EASE_MODAL, delay: reduce ? 0 : delay }}
-        >
-          <span className="hero__ap-ic">
-            <Icon size={13} strokeWidth={2.2} />
-          </span>
-          {label}
-        </motion.span>
-      ))}
-    </div>
-  );
-}
 
 /* prima riga del titolo, fissa */
 const L1 = ['Il', 'tuo', 'gestionale', 'su', 'misura,'];
@@ -168,7 +136,6 @@ export default function Hero() {
   return (
     <section id="home" data-tone="light" className="section hero fx-grain">
       <span className="hero__aurora" aria-hidden="true" />
-      <AmbientPills />
 
       <div className="wrap hero__wrap">
         <motion.div
