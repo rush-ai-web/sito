@@ -618,7 +618,7 @@ h4 {
   position: relative;
   min-height: 100vh;
   min-height: 100svh;
-  padding: 130px 0 0;
+  padding: 132px 0 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -708,8 +708,8 @@ h4 {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 12px;
-  margin: 0 0 26px;
+  gap: 14px;
+  margin: 0 0 40px;
   font-size: 11.5px;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -742,24 +742,25 @@ h4 {
   display: block;
 }
 
-/* la seconda riga contiene la pill blu che cambia parola */
+/* la seconda riga: solo respiro sopra */
 .hero__line--slot {
-  display: flex;
-  justify-content: center;
-  margin-top: 0.14em;
+  display: block;
+  margin-top: 0.18em;
 }
 
-/* la pill: sfondo blu d'accento con luce che scorre in loop */
+/* la pill: si adatta al testo, non prende mai tutta la larghezza */
 .hero__pill {
   display: inline-flex;
   align-items: center;
-  padding: 0.16em 0.42em 0.20em;
-  border-radius: 0.32em;
+  vertical-align: middle;
+  padding: 0.08em 0.36em 0.14em;
+  border-radius: 0.22em;
   color: #fff;
   position: relative;
   overflow: hidden;
+  white-space: nowrap;
   background: linear-gradient(135deg, #6a8ce8 0%, #5b7fe0 45%, #4a72cc 100%);
-  box-shadow: 0 8px 26px -8px color-mix(in srgb, var(--accent) 65%, transparent);
+  box-shadow: 0 10px 30px -10px color-mix(in srgb, var(--accent) 70%, transparent);
   isolation: isolate;
 }
 
@@ -789,10 +790,11 @@ h4 {
   }
 }
 
-/* dentro TextRotate: parola e caratteri restano in linea */
+/* dentro TextRotate: tutto in linea, niente flex-wrap */
 .tr {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
+  white-space: nowrap;
 }
 
 .tr__group {
@@ -805,6 +807,7 @@ h4 {
 
 .tr__word--wrap {
   overflow: hidden;
+  padding-bottom: 0.06em;
 }
 
 .tr__c {
@@ -817,7 +820,8 @@ h4 {
 }
 
 .tr__sp {
-  white-space: pre;
+  display: inline-block;
+  width: 0.28em;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -866,8 +870,8 @@ h4 {
 }
 
 .hero__note {
-  margin: 24px 0 0;
-  max-width: 62ch;
+  margin: 42px 0 0;
+  max-width: 60ch;
   font-size: clamp(15.5px, 1.2vw, 18px);
   line-height: 1.6;
   color: var(--text-2);
@@ -875,16 +879,17 @@ h4 {
 
 .hero__cta {
   justify-content: center;
-  margin-top: 34px;
+  margin-top: 40px;
 }
 
-/* ---- il palco: la finestra spunta dal fondo ---- */
+/* ---- il palco: la finestra è grande e visibile ---- */
 .hero__stage {
   position: relative;
   z-index: 2;
-  height: clamp(210px, 26vh, 300px);
-  margin-top: 24px;
-  padding-top: 60px; /* respiro sopra la finestra, così l'ombra non taglia */
+  /* la finestra spunta di ~360px nella prima schermata; sotto continua */
+  height: clamp(300px, 42vh, 460px);
+  margin-top: 44px;
+  padding-top: 70px;
 }
 
 .hero__stage .wrap {
@@ -1312,8 +1317,8 @@ h4 {
 /* ---- corpo: menu + schermata ---- */
 .win__body {
   display: grid;
-  grid-template-columns: 172px minmax(0, 1fr);
-  min-height: 320px;
+  grid-template-columns: 200px minmax(0, 1fr);
+  min-height: 420px;
 }
 
 .win__side {

@@ -1,4 +1,4 @@
-import { LayoutGroup, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import HeroScene from './HeroScene';
 import TextRotate from './TextRotate';
@@ -82,25 +82,23 @@ export default function Hero() {
         </motion.p>
 
         <h1 className="hero__title">
-          <LayoutGroup>
-            <motion.span className="hero__line" layout>
-              {L1.map((w, i) => (
-                <Word key={w + i} w={w} i={i} />
-              ))}
-            </motion.span>
-            <motion.span className="hero__line hero__line--slot" layout>
-              <TextRotate
-                texts={ROTATE}
-                mainClassName="hero__pill"
-                splitLevelClassName="tr__word--wrap"
-                elementLevelClassName="tr__c--pill"
-                rotationInterval={2800}
-                staggerDuration={0.02}
-                staggerFrom="first"
-                transition={{ type: 'spring', damping: 28, stiffness: 340 }}
-              />
-            </motion.span>
-          </LayoutGroup>
+          <span className="hero__line">
+            {L1.map((w, i) => (
+              <Word key={w + i} w={w} i={i} />
+            ))}
+          </span>
+          <span className="hero__line hero__line--slot">
+            <TextRotate
+              texts={ROTATE}
+              mainClassName="hero__pill"
+              splitLevelClassName="tr__word--wrap"
+              elementLevelClassName="tr__c--pill"
+              rotationInterval={2800}
+              staggerDuration={0.02}
+              staggerFrom="first"
+              transition={{ type: 'spring', damping: 28, stiffness: 340 }}
+            />
+          </span>
         </h1>
 
         <motion.p
