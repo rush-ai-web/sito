@@ -1558,7 +1558,7 @@ h4 {
   color: var(--text-2);
   cursor: default;
   border-top: 0.5px solid var(--hairline);
-  margin-bottom: 4px;
+  margin-bottom: 0;
   z-index: 200;
 }
 

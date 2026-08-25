@@ -200,7 +200,7 @@ export default function HeroScene() {
                   <span className="dash__sede-opt"><i className="dash__sedi-dot" />Bistrot Via Roma</span>
                 </div>
                 <MapPin size={12} strokeWidth={2} />
-                <span className="dash__sede-name">Sede principale</span>
+                <span className="dash__sede-name">Sedi</span>
                 <ChevronUp size={11} strokeWidth={2.5} className="dash__sede-chev" />
               </div>
 
