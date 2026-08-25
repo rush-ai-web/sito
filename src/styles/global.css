@@ -2403,19 +2403,20 @@ textarea.input {
     display: none;
   }
 
-  /* ---- titolo: 6vw scala da 22px (375px) a 27px (450px)
-     garantisce "IL TUO GESTIONALE" su riga 1, "SU MISURA," su riga 2 ---- */
+  /* ---- titolo grande: "IL TUO GESTIONALE" riga 1, "SU MISURA," riga 2 ---- */
   .hero__title {
-    font-size: 6vw;
+    font-size: 6.4vw;
   }
 
-  /* ---- pill: contiene il testo senza uscire dai bordi ---- */
-  .hero__pill {
-    max-width: calc(100vw - 36px);
-    box-sizing: border-box;
-  }
+  /* ---- pill un po' più piccola del titolo: la frase più lunga
+     ("CHE TI FA CRESCERE") entra sempre su una riga sola ---- */
   .hero__line--slot {
+    font-size: 0.76em;
     overflow: hidden;
+  }
+  .hero__pill {
+    max-width: calc(100vw - 32px);
+    box-sizing: border-box;
   }
 
   /* ---- note e CTA: spaziatura più stretta ---- */
@@ -2424,16 +2425,18 @@ textarea.input {
     font-size: 15px;
   }
   .hero__cta {
-    margin-top: 28px;
+    margin-top: 26px;
     flex-direction: column;
     align-items: center;
     gap: 12px;
   }
+  /* i due bottoni si adattano al contenuto: larghezze diverse */
   .btn--hero {
-    width: min(260px, 100%);
-    height: 48px;
+    width: auto;
+    height: 46px;
     font-size: 14px;
-    justify-content: space-between;
+    padding: 0 5px 0 20px;
+    gap: 10px;
   }
   .btn--hero .btn__badge {
     width: 34px;
@@ -2445,15 +2448,25 @@ textarea.input {
     height: 18px;
   }
 
-  /* ---- stage: visibile senza clip, glow libero ---- */
+  /* ---- stage: glow libero, niente clip, respiro sotto la card ---- */
   .hero__stage {
-    padding-top: 28px;
+    padding-top: 26px;
+    padding-bottom: 8px;
     overflow: visible;
   }
 
-  /* ---- dashboard mobile semplificata ---- */
+  /* ---- dashboard mobile: card completa e compatta ---- */
 
-  /* nasconde colonna destra (grafico + alert) */
+  /* la finestra diventa una card con tutti gli angoli arrotondati */
+  .win {
+    border-radius: 16px;
+  }
+  .win__app {
+    border-radius: 12px;
+    border-bottom: 0.5px solid var(--hairline);
+  }
+
+  /* nasconde grafico + alert: resta la parte alta con i KPI */
   .dash__grid {
     display: none;
   }
@@ -2476,27 +2489,9 @@ textarea.input {
     display: none;
   }
 
-  /* period tabs: nasconde label voci non attive per risparmiare spazio */
+  /* period tabs: voci non attive più strette */
   .dash__period-tab:not(.is-on) {
     padding-inline: 6px;
-  }
-
-  /* clip dashboard a un'altezza visibile con fade in basso */
-  .win__app {
-    position: relative;
-    max-height: 310px;
-    overflow: hidden;
-  }
-  .win__app::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 90px;
-    background: linear-gradient(to bottom, transparent, var(--bg));
-    z-index: 10;
-    pointer-events: none;
   }
 }
 
