@@ -193,6 +193,15 @@ export default function HeroScene() {
                 ))}
               </nav>
 
+              <div className="dash__sedi">
+                <p className="dash__sedi-title">Sedi</p>
+                <div className="dash__sedi-list">
+                  <span className="dash__sedi-item is-on"><i className="dash__sedi-dot" />Caffè Centrale</span>
+                  <span className="dash__sedi-item"><i className="dash__sedi-dot" />Bistrot Via Roma</span>
+                  <span className="dash__sedi-item"><i className="dash__sedi-dot" />Corner Nord</span>
+                </div>
+              </div>
+
               <div className="dash__user">
                 <span className="dash__ava">M</span>
                 <b>Mario</b>
@@ -223,15 +232,6 @@ export default function HeroScene() {
               </div>
 
               <div className="dash__scroll">
-                <div className="dash__sedi">
-                  <p className="dash__sedi-title">Sedi</p>
-                  <div className="dash__sedi-list">
-                    <span className="dash__sedi-item is-on"><i className="dash__sedi-dot" />Caffè Centrale</span>
-                    <span className="dash__sedi-item"><i className="dash__sedi-dot" />Bistrot Via Roma</span>
-                    <span className="dash__sedi-item"><i className="dash__sedi-dot" />Corner Nord</span>
-                  </div>
-                </div>
-
                 <div className="dash__greet">
                   <h4>Buongiorno, Mario</h4>
                   <p>Maggio 2026 · ecco come va la tua attività in questo momento</p>

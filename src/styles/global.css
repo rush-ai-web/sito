@@ -1523,9 +1523,10 @@ h4 {
 }
 
 .dash__sedi {
-  margin-bottom: 16px;
-  padding-bottom: 16px;
+  padding: 12px 8px 12px;
+  border-top: 0.5px solid var(--hairline);
   border-bottom: 0.5px solid var(--hairline);
+  margin-bottom: 8px;
 }
 
 .dash__sedi-title {
