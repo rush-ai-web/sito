@@ -1315,6 +1315,15 @@ h4 {
   color: var(--text-3);
 }
 
+.dash__brand-label {
+  margin-top: 10px;
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
 .dash__nav {
   display: flex;
   flex-direction: column;
@@ -1511,6 +1520,58 @@ h4 {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.dash__sedi {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 0.5px solid var(--hairline);
+}
+
+.dash__sedi-title {
+  margin: 0 0 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.dash__sedi-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dash__sedi-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-2);
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: default;
+}
+
+.dash__sedi-item.is-on {
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  font-weight: 600;
+}
+
+.dash__sedi-dot {
+  display: block;
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-3);
+}
+
+.dash__sedi-item.is-on .dash__sedi-dot {
+  background: var(--accent);
 }
 
 .dash__greet h4 {

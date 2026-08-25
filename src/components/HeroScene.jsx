@@ -172,6 +172,7 @@ export default function HeroScene() {
               <div className="dash__brand">
                 <img className="dash__brand-logo win__logo--l" src={logoLight} alt="" />
                 <img className="dash__brand-logo win__logo--d" src={logoDark} alt="" />
+                <span className="dash__brand-label">LA TUA ATTIVITÀ</span>
                 <span className="dash__brand-sub">Caffè Centrale</span>
               </div>
 
@@ -222,6 +223,15 @@ export default function HeroScene() {
               </div>
 
               <div className="dash__scroll">
+                <div className="dash__sedi">
+                  <p className="dash__sedi-title">Sedi</p>
+                  <div className="dash__sedi-list">
+                    <span className="dash__sedi-item is-on"><i className="dash__sedi-dot" />Caffè Centrale</span>
+                    <span className="dash__sedi-item"><i className="dash__sedi-dot" />Bistrot Via Roma</span>
+                    <span className="dash__sedi-item"><i className="dash__sedi-dot" />Corner Nord</span>
+                  </div>
+                </div>
+
                 <div className="dash__greet">
                   <h4>Buongiorno, Mario</h4>
                   <p>Maggio 2026 · ecco come va la tua attività in questo momento</p>
