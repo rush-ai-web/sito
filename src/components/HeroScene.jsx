@@ -16,6 +16,8 @@ import {
   TrendingDown,
   FileCheck2,
   Zap,
+  MapPin,
+  ChevronUp,
 } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
 
@@ -192,13 +194,15 @@ export default function HeroScene() {
                 ))}
               </nav>
 
-              <div className="dash__sedi">
-                <p className="dash__sedi-title">Sedi</p>
-                <div className="dash__sedi-list">
-                  <span className="dash__sedi-item is-on"><i className="dash__sedi-dot" />Sede principale</span>
-                  <span className="dash__sedi-item"><i className="dash__sedi-dot" />Bistrot Via Roma</span>
-                  <span className="dash__sedi-item"><i className="dash__sedi-dot" />Corner Nord</span>
+              <div className="dash__sede-sel">
+                <div className="dash__sede-pop">
+                  <span className="dash__sede-opt is-on"><i className="dash__sedi-dot" />Sede principale</span>
+                  <span className="dash__sede-opt"><i className="dash__sedi-dot" />Bistrot Via Roma</span>
+                  <span className="dash__sede-opt"><i className="dash__sedi-dot" />Corner Nord</span>
                 </div>
+                <MapPin size={12} strokeWidth={2} />
+                <span className="dash__sede-name">Sede principale</span>
+                <ChevronUp size={11} strokeWidth={2.5} className="dash__sede-chev" />
               </div>
 
               <div className="dash__user">

@@ -1522,44 +1522,80 @@ h4 {
   gap: 16px;
 }
 
-.dash__sedi {
-  padding: 12px 8px 12px;
-  border-top: 0.5px solid var(--hairline);
-  border-bottom: 0.5px solid var(--hairline);
-  margin-bottom: 8px;
-}
-
-.dash__sedi-title {
-  margin: 0 0 8px;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-3);
-}
-
-.dash__sedi-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.dash__sedi-item {
+/* selettore sede compatto — hover apre il popover verso l'alto */
+.dash__sede-sel {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: 9px;
   font-size: 12px;
   font-weight: 500;
   color: var(--text-2);
-  padding: 4px 8px;
-  border-radius: 6px;
   cursor: default;
+  border-top: 0.5px solid var(--hairline);
+  margin-bottom: 4px;
 }
 
-.dash__sedi-item.is-on {
+.dash__sede-sel:hover {
+  background: color-mix(in srgb, var(--text) 5%, transparent);
   color: var(--text);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.dash__sede-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dash__sede-chev {
+  opacity: 0.45;
+  flex-shrink: 0;
+}
+
+/* popover verso l'alto, visibile solo al hover */
+.dash__sede-pop {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 0.5px solid var(--hairline);
+  border-radius: 10px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  box-shadow: 0 8px 24px -6px rgba(0,0,0,.18);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.dash__sede-sel:hover .dash__sede-pop {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.dash__sede-opt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 7px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+.dash__sede-opt.is-on {
+  color: var(--text);
   font-weight: 600;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
 .dash__sedi-dot {
@@ -1571,7 +1607,7 @@ h4 {
   background: var(--text-3);
 }
 
-.dash__sedi-item.is-on .dash__sedi-dot {
+.dash__sede-opt.is-on .dash__sedi-dot {
   background: var(--accent);
 }
 
