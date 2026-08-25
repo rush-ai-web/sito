@@ -294,11 +294,11 @@ export default function HeroScene() {
                           <motion.div
                             className={`dash__alert is-${k}`}
                             key={id}
-                            layout
-                            initial={{ opacity: 0, y: -18, scale: 0.97 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
-                            transition={{ duration: 0.38, ease: EASE_MODAL }}
+                            layout="position"
+                            initial={{ opacity: 0, y: -14 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, transition: { duration: 0.18 } }}
+                            transition={{ duration: 0.36, ease: EASE_MODAL }}
                           >
                             <span className="dash__alert-dot" />
                             <span className="dash__alert-t">

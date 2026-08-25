@@ -933,7 +933,7 @@ h4 {
   z-index: 2;
   margin-top: 20px;
   padding-top: 50px;
-  padding-bottom: 40px;
+  padding-bottom: 0;
 }
 
 .hero__stage .wrap {
@@ -1721,6 +1721,7 @@ h4 {
   display: flex;
   flex-direction: column;
   gap: 9px;
+  overflow: hidden;
 }
 
 .dash__alert {
@@ -2399,6 +2400,19 @@ textarea.input {
   }
   .hero__logo-eyebrow {
     display: none;
+  }
+  .hero__title {
+    font-size: clamp(18px, 5vw, 28px);
+  }
+  .hero__line--slot {
+    overflow: hidden;
+  }
+  .hero__pill {
+    max-width: 100%;
+  }
+  .hero__stage {
+    height: 260px;
+    overflow: hidden;
   }
 }
 
