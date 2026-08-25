@@ -230,7 +230,10 @@ export default function HeroScene() {
                 </div>
 
 <span className="dash__ticon"><Moon size={16} strokeWidth={1.9} /></span>
-                <span className="dash__ticon"><Bell size={16} strokeWidth={1.9} /></span>
+                <span className="dash__ticon dash__ticon--notif">
+                  <Bell size={16} strokeWidth={1.9} />
+                  <span className="dash__notif-badge">3</span>
+                </span>
               </div>
 
               <div className="dash__scroll">

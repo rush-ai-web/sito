@@ -1471,6 +1471,28 @@ h4 {
   color: var(--text-2);
 }
 
+.dash__ticon--notif {
+  position: relative;
+}
+
+.dash__notif-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 15px;
+  height: 15px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8.5px;
+  font-weight: 700;
+  line-height: 15px;
+  text-align: center;
+  padding: 0 3px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--bg);
+}
+
 /* ---- selettore periodo (Giorno / Settimana / Mese) ---- */
 .dash__period {
   display: flex;
