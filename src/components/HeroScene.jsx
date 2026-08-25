@@ -78,10 +78,22 @@ const PERIODS = [
   },
 ];
 
-const ALERTS = [
-  { k: 'red', t: 'Campari 1L sotto soglia (2 pz)', s: 'Consumo 4 pz/sett · suggerito 6 pz' },
-  { k: 'amber', t: 'Distillerie Rossi: Gin +18% vs media', s: 'Fattura n.245 del 12 mag' },
-  { k: 'blue', t: '2 fatture in scadenza (5 gg)', s: '€1.840 · Caseificio, Forno' },
+const ALERT_SETS = [
+  [
+    { k: 'red', t: 'Campari 1L sotto soglia (2 pz)', s: 'Consumo 4 pz/sett · suggerito 6 pz' },
+    { k: 'amber', t: 'Distillerie Rossi: Gin +18% vs media', s: 'Fattura n.245 del 12 mag' },
+    { k: 'blue', t: '2 fatture in scadenza (5 gg)', s: '€1.840 · Caseificio, Forno' },
+  ],
+  [
+    { k: 'amber', t: 'Food cost +3,2pt rispetto al target', s: 'Settimana 20 · da verificare materie prime' },
+    { k: 'red', t: 'Forno Del Corso: nessuna consegna da 8 gg', s: 'Ultimo ordine: 14 mag · contatta fornitore' },
+    { k: 'blue', t: 'Personale: 2 turni scoperti sabato', s: '18:00–22:00 · nessuna conferma ricevuta' },
+  ],
+  [
+    { k: 'blue', t: 'Incasso medio coperto –12% vs aprile', s: 'Lunedì e martedì le fasce più critiche' },
+    { k: 'amber', t: 'Margine beverage sotto il 20%', s: 'Ultimi 7 gg · verifica prezzi di vendita' },
+    { k: 'red', t: 'Cassa: differenza di €48 rispetto al POS', s: 'Rilevata ieri sera · richiede riconciliazione' },
+  ],
 ];
 
 const QUERIES = [
@@ -123,8 +135,9 @@ function Kpi({ lab, v, fmt: kind, d, dir, tone }) {
 export default function HeroScene() {
   const reduce = useReducedMotion();
   const [period, setPeriod] = useState(0);
-  const [nav, setNav] = useState(0);
+  const [alertSet, setAlertSet] = useState(0);
   const [q, setQ] = useState(0);
+
 
   const p = PERIODS[period];
 
@@ -136,7 +149,7 @@ export default function HeroScene() {
 
   useEffect(() => {
     if (reduce) return;
-    const id = setInterval(() => setNav((v) => (v + 1) % NAV.length), 2400);
+    const id = setInterval(() => setAlertSet((v) => (v + 1) % ALERT_SETS.length), 3800);
     return () => clearInterval(id);
   }, [reduce]);
 
@@ -167,8 +180,8 @@ export default function HeroScene() {
 
               <nav className="dash__nav">
                 {NAV.map(({ icon: Icon, t, badge }, i) => (
-                  <span key={t} className={`dash__navitem ${i === nav ? 'is-on' : ''}`}>
-                    {i === nav && (
+                  <span key={t} className={`dash__navitem ${i === 0 ? 'is-on' : ''}`}>
+                    {i === 0 && (
                       <motion.span
                         className="dash__navhi"
                         layoutId="navhi"
@@ -276,24 +289,35 @@ export default function HeroScene() {
                   {/* alert */}
                   <div className="dash__panel">
                     <div className="dash__panel-hd">
-                      <h5>Alert e anomalie — 5 da gestire</h5>
+                      <h5>Alert e anomalie — da gestire</h5>
                     </div>
                     <div className="dash__alerts">
-                      {ALERTS.map(({ k, t, s: sub }, i) => (
+                      <AnimatePresence mode="wait">
                         <motion.div
-                          className={`dash__alert is-${k}`}
-                          key={t}
-                          initial={{ opacity: 0, x: 8 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.5, ease: EASE_MODAL, delay: 0.3 + i * 0.12 }}
+                          key={alertSet}
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -6 }}
+                          transition={{ duration: 0.38, ease: EASE_MODAL }}
+                          style={{ display: 'contents' }}
                         >
-                          <span className="dash__alert-dot" />
-                          <span className="dash__alert-t">
-                            <b>{t}</b>
-                            <em>{sub}</em>
-                          </span>
+                          {ALERT_SETS[alertSet].map(({ k, t, s: sub }, i) => (
+                            <motion.div
+                              className={`dash__alert is-${k}`}
+                              key={t}
+                              initial={{ opacity: 0, x: 8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ duration: 0.4, ease: EASE_MODAL, delay: i * 0.1 }}
+                            >
+                              <span className="dash__alert-dot" />
+                              <span className="dash__alert-t">
+                                <b>{t}</b>
+                                <em>{sub}</em>
+                              </span>
+                            </motion.div>
+                          ))}
                         </motion.div>
-                      ))}
+                      </AnimatePresence>
                     </div>
                   </div>
                 </div>
