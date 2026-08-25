@@ -2062,10 +2062,20 @@ h4 {
   align-items: center;
 }
 
+/* --lift registrata: cosi' il sollevamento in hover interpola invece di
+   scattare, senza che `translate` (che porta la posizione orbitale) venga
+   messo in transition e finisca per litigare con gli update del RAF. */
+@property --lift {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
 .orbit-card {
   position: absolute;
   z-index: 2;
-  translate: calc(-50% + var(--ox, 0px)) calc(-50% + var(--oy, 0px));
+  --lift: 0px;
+  translate: calc(-50% + var(--ox, 0px)) calc(-50% + var(--oy, 0px) + var(--lift));
   padding: 12px 18px 12px 12px;
   border-radius: var(--r-pill);
   background-image: var(--card-vig);
@@ -2081,7 +2091,8 @@ h4 {
   white-space: nowrap;
   text-align: left;
   font-family: inherit;
-  transition: box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease,
+    color 0.3s ease, opacity 0.3s ease, --lift 0.3s var(--e-lift);
 }
 
 /* posizione = proprietà CSS `translate`; scale d'entrata = `transform`.
@@ -2115,6 +2126,7 @@ h4 {
 }
 
 .orbit-card:hover {
+  --lift: -4px;
   box-shadow: var(--sh-2);
   border-color: color-mix(in srgb, var(--accent) 45%, var(--hairline-strong));
 }
@@ -2912,16 +2924,18 @@ textarea.input {
   }
 }
 
-/* pillole e orbita: stesso sollevamento delle card, sempre in CSS */
+/* pillole e orbita: stesso sollevamento delle card, sempre in CSS.
+   La variante radiale (.orbit-card) e' esclusa: li' `translate` porta la
+   posizione orbitale, quindi il lift si fa con --lift (vedi .orbit-card). */
 .pillcard,
-.orbit__card {
+.orbit__card:not(.orbit-card) {
   background-image: var(--card-vig);
   border: 1px solid var(--hairline-strong);
   transition: box-shadow var(--d-lift) var(--e-lift), translate var(--d-lift) var(--e-lift);
 }
 
 .pillcard:hover,
-.orbit__card:hover {
+.orbit__card:not(.orbit-card):hover {
   translate: 0 -4px;
   box-shadow: var(--sh-2);
 }
