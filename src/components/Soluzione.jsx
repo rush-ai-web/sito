@@ -60,7 +60,7 @@ const ORBIT = [
 
 const RADIUS_X = 480;
 const RADIUS_Y = 300;
-const AUTO_SPEED = 0.015; /* deg per ms */
+const AUTO_SPEED = 0.005; /* deg per ms — un giro ≈ 72s */
 const STEP = 360 / ORBIT.length;
 const FOCUS_DURATION = 1100; /* ms per la corsa di focus */
 
@@ -161,12 +161,13 @@ export default function Soluzione() {
               style={{
                 left: '50%',
                 top: '50%',
-                x,
-                y,
-                translateX: '-50%',
-                translateY: '-50%',
+                '--ox': `${x}px`,
+                '--oy': `${y}px`,
               }}
-              transition={{ type: 'tween', ease: 'linear', duration: 0 }}
+              initial={{ opacity: 0, scale: 0.5 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.55, ease: EASE_MODAL, delay: 0.15 + idx * 0.14 }}
               onClick={(e) => {
                 e.stopPropagation();
                 if (openId === item.id) {
@@ -193,10 +194,10 @@ export default function Soluzione() {
                 {isOpen && (
                   <motion.div
                     className="orbit-card__pop"
-                    initial={{ opacity: 0, y: -6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.28, ease: EASE_MODAL, delay: 0.35 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.28, ease: EASE_MODAL, delay: 0.4 }}
                   >
                     <p>{item.body}</p>
                     <span className="orbit-card__chev">

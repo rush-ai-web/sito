@@ -1,8 +1,7 @@
 import { useTheme } from './lib/hooks';
 import { ThemeCtx } from './components/ui';
 import Nav from './components/Nav';
-import Hero, { OutcomeTicker } from './components/Hero';
-import Settori from './components/Settori';
+import Hero from './components/Hero';
 import Problema from './components/Problema';
 import Soluzione from './components/Soluzione';
 import Prodotto from './components/Prodotto';
@@ -23,8 +22,6 @@ export default function App() {
       <main>
         {/* chiaro */}
         <Hero />
-        <OutcomeTicker />
-        <Settori />
         {/* scuro */}
         <Problema />
         {/* chiaro */}
