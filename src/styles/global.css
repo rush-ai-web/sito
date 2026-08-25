@@ -2027,7 +2027,7 @@ h4 {
 
 /* ---- variante orbita radiale con click-to-expand ---- */
 .orbit--radial {
-  min-height: 640px;
+  min-height: 900px;
   place-items: unset;
   overflow: visible;
 }
@@ -2036,8 +2036,8 @@ h4 {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 520px;
-  height: 520px;
+  width: 760px;
+  height: 760px;
   border-radius: 50%;
   border: 1px dashed color-mix(in srgb, var(--text) 12%, transparent);
   transform: translate(-50%, -50%);
@@ -2046,10 +2046,10 @@ h4 {
 }
 
 .orbit__ring--in {
-  width: 360px;
-  height: 360px;
+  width: 540px;
+  height: 540px;
   border-style: solid;
-  border-color: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
 .orbit__core {
@@ -2057,7 +2057,7 @@ h4 {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: min(340px, 60%);
+  width: min(440px, 65%);
   text-align: center;
   z-index: 1;
   pointer-events: none;
@@ -2105,35 +2105,57 @@ h4 {
 }
 
 .orbit-card.is-dim {
-  opacity: 0.35;
+  opacity: 0.18;
+  filter: grayscale(0.6);
+}
+
+.orbit-card.is-dim:hover {
+  opacity: 0.3;
 }
 
 .orbit-card.is-related {
-  border-color: color-mix(in srgb, var(--accent) 55%, var(--hairline-strong));
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent), var(--sh-1);
+  opacity: 0.6;
 }
 
 .orbit-card.is-open {
   z-index: 20;
+  background: linear-gradient(140deg, #4d70d4 0%, #3f5cb8 50%, #2f4a9e 100%);
+  background-image: linear-gradient(140deg, #4d70d4 0%, #3f5cb8 50%, #2f4a9e 100%);
   border-color: var(--accent);
-  box-shadow: 0 20px 44px -14px color-mix(in srgb, var(--accent) 55%, transparent), var(--sh-2);
+  color: #fff;
+  box-shadow: 0 22px 44px -14px color-mix(in srgb, var(--accent) 60%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.orbit-card.is-open .orbit-card__t {
+  color: #fff;
+}
+
+.orbit-card.is-open .icon-tile {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+
+.orbit-card.is-open .icon-tile svg {
+  color: #fff;
 }
 
 .orbit-card__pop {
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 14px);
   left: 50%;
   transform: translateX(-50%);
-  width: 280px;
-  padding: 14px 16px;
-  border-radius: 14px;
+  width: 340px;
+  padding: 18px 20px;
+  border-radius: 16px;
   background: var(--bg);
   border: 1px solid var(--hairline-strong);
   box-shadow: var(--sh-2);
   white-space: normal;
-  font-size: 13px;
+  font-size: 13.5px;
   color: var(--text-2);
-  line-height: 1.5;
+  line-height: 1.55;
   z-index: 30;
 }
 

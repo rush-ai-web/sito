@@ -61,11 +61,10 @@ const ORBIT = [
   },
 ];
 
-/* raggio dell'orbita in px (viene scalato via CSS variable sui breakpoint). */
-const RADIUS = 260;
-/* velocità di rotazione: 0.15 gradi ogni 50ms ≈ un giro ogni 2 minuti. Lento
-   e non fastidioso, adatto a una hero secondaria. */
+/* raggio dell'orbita in px: abbastanza largo da lasciare respirare il titolo. */
+const RADIUS = 380;
 const SPEED = 0.15;
+const STEP = 360 / ORBIT.length;
 
 export default function Soluzione() {
   const reduce = useReducedMotion();
@@ -82,6 +81,15 @@ export default function Soluzione() {
     rafRef.current = id;
     return () => clearInterval(id);
   }, [autoRotate]);
+
+  const focusNode = (id) => {
+    const idx = ORBIT.findIndex((o) => o.id === id);
+    if (idx < 0) return;
+    /* -90° = alto. Vogliamo idx*STEP + angle ≡ -90 (mod 360) */
+    let target = -90 - idx * STEP;
+    target = ((target % 360) + 360) % 360;
+    setAngle(target);
+  };
 
   const openItem = ORBIT.find((o) => o.id === openId);
   const relatedIds = openItem ? openItem.related : [];
@@ -114,8 +122,7 @@ export default function Soluzione() {
 
         {/* pill orbitanti */}
         {ORBIT.map((item, idx) => {
-          const step = 360 / ORBIT.length;
-          const a = ((idx * step) + angle) % 360;
+          const a = ((idx * STEP) + angle) % 360;
           const rad = (a * Math.PI) / 180;
           const x = Math.cos(rad) * RADIUS;
           const y = Math.sin(rad) * RADIUS;
@@ -137,10 +144,15 @@ export default function Soluzione() {
                 translateX: '-50%',
                 translateY: '-50%',
               }}
-              transition={{ type: 'tween', ease: 'linear', duration: 0.05 }}
+              transition={{ type: 'tween', ease: [0.22, 0.68, 0.28, 1], duration: openId !== null ? 0.7 : 0.05 }}
               onClick={(e) => {
                 e.stopPropagation();
-                setOpenId((v) => (v === item.id ? null : item.id));
+                if (openId === item.id) {
+                  setOpenId(null);
+                } else {
+                  focusNode(item.id);
+                  setOpenId(item.id);
+                }
               }}
               aria-expanded={isOpen}
             >
