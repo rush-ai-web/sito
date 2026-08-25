@@ -62,31 +62,45 @@ const RADIUS_X = 480;
 const RADIUS_Y = 300;
 const AUTO_SPEED = 0.005; /* deg per ms — un giro ≈ 72 s */
 const STEP = 360 / ORBIT.length;
-const FOCUS_DURATION = 1100; /* ms per la corsa di focus */
+const FOCUS_DURATION = 1100;
 
-/* differenza angolare più corta (segnata) tra due angoli in gradi. */
 function shortestDelta(from, to) {
   return ((((to - from) % 360) + 540) % 360) - 180;
 }
-/* ease-in-out cubico: accelera, poi rallenta e si ferma. */
 function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
 export default function Soluzione() {
   const reduce = useReducedMotion();
-  const [angle, setAngle] = useState(0);
   const [openId, setOpenId] = useState(null);
 
   const angleRef = useRef(0);
-  const focusRef = useRef(null); /* {from, to, start} durante la corsa */
+  const focusRef = useRef(null);
   const rafRef = useRef(null);
+  const openIdRef = useRef(null);
+  const cardRefs = useRef({});
 
   useEffect(() => {
-    angleRef.current = angle;
-  }, [angle]);
+    openIdRef.current = openId;
+  }, [openId]);
+
+  const applyPositions = () => {
+    ORBIT.forEach((item, idx) => {
+      const a = ((idx * STEP) + angleRef.current) % 360;
+      const rad = (a * Math.PI) / 180;
+      const x = Math.cos(rad) * RADIUS_X;
+      const y = Math.sin(rad) * RADIUS_Y;
+      const el = cardRefs.current[item.id];
+      if (el) {
+        el.style.setProperty('--ox', `${x}px`);
+        el.style.setProperty('--oy', `${y}px`);
+      }
+    });
+  };
 
   useEffect(() => {
+    applyPositions();
     if (reduce) return;
     let last = performance.now();
     const loop = (now) => {
@@ -98,22 +112,21 @@ export default function Soluzione() {
         const eased = easeInOutCubic(t);
         const next = f.from + f.delta * eased;
         angleRef.current = ((next % 360) + 360) % 360;
-        setAngle(angleRef.current);
+        applyPositions();
         if (t >= 1) focusRef.current = null;
-      } else if (openId === null) {
+      } else if (openIdRef.current === null) {
         angleRef.current = (angleRef.current + AUTO_SPEED * dt) % 360;
-        setAngle(angleRef.current);
+        applyPositions();
       }
       rafRef.current = requestAnimationFrame(loop);
     };
     rafRef.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [reduce, openId]);
+  }, [reduce]);
 
   const focusNode = (id) => {
     const idx = ORBIT.findIndex((o) => o.id === id);
     if (idx < 0) return;
-    /* vogliamo idx*STEP + angle ≡ -90 (mod 360) */
     let target = -90 - idx * STEP;
     target = ((target % 360) + 360) % 360;
     const from = angleRef.current;
@@ -144,10 +157,6 @@ export default function Soluzione() {
         </div>
 
         {ORBIT.map((item, idx) => {
-          const a = ((idx * STEP) + angle) % 360;
-          const rad = (a * Math.PI) / 180;
-          const x = Math.cos(rad) * RADIUS_X;
-          const y = Math.sin(rad) * RADIUS_Y;
           const isOpen = openId === item.id;
           const isRelated = relatedIds.includes(item.id);
           const isDim = openId !== null && !isOpen && !isRelated;
@@ -157,13 +166,11 @@ export default function Soluzione() {
             <motion.button
               type="button"
               key={item.id}
-              className={`orbit__card orbit-card${isOpen ? ' is-open' : ''}${isRelated ? ' is-related' : ''}${isDim ? ' is-dim' : ''}`}
-              style={{
-                left: '50%',
-                top: '50%',
-                '--ox': `${x}px`,
-                '--oy': `${y}px`,
+              ref={(el) => {
+                cardRefs.current[item.id] = el;
               }}
+              className={`orbit__card orbit-card${isOpen ? ' is-open' : ''}${isRelated ? ' is-related' : ''}${isDim ? ' is-dim' : ''}`}
+              style={{ left: '50%', top: '50%' }}
               initial={{ opacity: 0, scale: 0.5 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, amount: 0.15 }}
