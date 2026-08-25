@@ -147,7 +147,6 @@ export default function HeroScene() {
   }, [reduce]);
 
   const maxBar = Math.max(...p.inc, ...p.spe);
-  const float = (up) => (reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: up ? [0, -10, 0] : [0, 10, 0] });
 
   return (
     <div className="scene">
@@ -307,11 +306,11 @@ export default function HeroScene() {
       {/* schede fluttuanti */}
       <motion.div
         className="sat sat--l"
-        initial={{ opacity: 0, y: 14 }}
-        animate={float(true)}
+        initial={{ opacity: 0 }}
+        animate={reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: [-7, 7] }}
         transition={{
           opacity: { duration: 0.7, ease: EASE_MODAL, delay: 0.9 },
-          y: { duration: 9, ease: 'easeInOut', repeat: Infinity, delay: 0.9 },
+          y: { duration: 4.5, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror', delay: 0.9 },
         }}
         aria-hidden="true"
       >
@@ -324,11 +323,11 @@ export default function HeroScene() {
 
       <motion.div
         className="sat sat--r"
-        initial={{ opacity: 0, y: 14 }}
-        animate={float(false)}
+        initial={{ opacity: 0 }}
+        animate={reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: [7, -7] }}
         transition={{
           opacity: { duration: 0.7, ease: EASE_MODAL, delay: 1.1 },
-          y: { duration: 11, ease: 'easeInOut', repeat: Infinity, delay: 1.1 },
+          y: { duration: 5.5, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror', delay: 1.1 },
         }}
         aria-hidden="true"
       >
@@ -341,18 +340,18 @@ export default function HeroScene() {
 
       <motion.div
         className="sat sat--bl"
-        initial={{ opacity: 0, y: 14 }}
-        animate={float(false)}
+        initial={{ opacity: 0 }}
+        animate={reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: [5, -5] }}
         transition={{
           opacity: { duration: 0.7, ease: EASE_MODAL, delay: 1.3 },
-          y: { duration: 10, ease: 'easeInOut', repeat: Infinity, delay: 1.3 },
+          y: { duration: 5, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror', delay: 1.3 },
         }}
         aria-hidden="true"
       >
-        <span className="sat__ic is-warn"><TrendingUp size={15} strokeWidth={2} /></span>
+        <span className="sat__ic is-warn"><TrendingDown size={15} strokeWidth={2} /></span>
         <span className="sat__t">
-          <b>Budget quasi esaurito</b>
-          <em>soglia 90% raggiunta</em>
+          <b>3 referenze in esaurimento</b>
+          <em>riordino suggerito entro oggi</em>
         </span>
       </motion.div>
     </div>

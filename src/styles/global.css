@@ -1768,6 +1768,7 @@ h4 {
   position: absolute;
   z-index: 3;
   display: flex;
+  will-change: transform;
   align-items: center;
   gap: 11px;
   padding: 11px 16px 11px 11px;
