@@ -63,9 +63,9 @@ export default function Nav({ theme, onToggleTheme }) {
           </motion.span>
         </button>
 
-        <a className="nav__cta" href="#contatti">
+        <a className="btn btn--accent btn--hero nav__cta" href="#contatti">
           Parliamone
-          <span className="nav__cta-badge">
+          <span className="btn__badge">
             <ArrowRight size={14} strokeWidth={2.4} />
           </span>
         </a>

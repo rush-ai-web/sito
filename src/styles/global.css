@@ -609,6 +609,19 @@ h4 {
   box-shadow: 0 2px 14px rgba(74, 114, 204, 0.55);
 }
 
+/* nav CTA eredita lo stile hero ma in formato compatto */
+.nav__pill .btn--hero.nav__cta {
+  height: 42px;
+  font-size: 14px;
+  padding: 0 5px 0 18px;
+  gap: 10px;
+}
+
+.nav__pill .btn--hero.nav__cta .btn__badge {
+  width: 30px;
+  height: 30px;
+}
+
 
 /* ============================================================
    Hero — la promessa al centro, e il sistema che spunta già
@@ -1465,6 +1478,51 @@ h4 {
   color: var(--text-2);
 }
 
+/* ---- selettore periodo (Giorno / Settimana / Mese) ---- */
+.dash__period {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--bg-2);
+  border-radius: 999px;
+  padding: 3px;
+  border: 0.5px solid var(--hairline);
+  flex-shrink: 0;
+}
+
+.dash__period-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: default;
+}
+
+.dash__period-hi {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: var(--bg);
+  box-shadow: var(--sh-1);
+  z-index: 0;
+}
+
+.dash__period-l {
+  position: relative;
+  z-index: 1;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-3);
+  transition: color 0.2s;
+}
+
+.dash__period-tab.is-on .dash__period-l {
+  color: var(--text);
+  font-weight: 600;
+}
+
 .dash__scroll {
   padding: 18px;
   display: flex;
@@ -1721,17 +1779,17 @@ h4 {
 }
 
 .sat--l {
-  left: -48px;
+  left: -130px;
   top: 150px;
 }
 
 .sat--r {
-  right: -48px;
+  right: -130px;
   top: 250px;
 }
 
 .sat--bl {
-  left: -24px;
+  left: -100px;
   bottom: 120px;
 }
 
@@ -1778,9 +1836,9 @@ h4 {
   color: var(--text-3);
 }
 
-/* sotto i 1280px non c'è più margine ai lati: le schede sparirebbero
+/* sotto i 1500px non c'è più margine ai lati: le schede sparirebbero
    sopra la finestra, quindi si tolgono */
-@media (max-width: 1280px) {
+@media (max-width: 1500px) {
   .sat {
     display: none;
   }

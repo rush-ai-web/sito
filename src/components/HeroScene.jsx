@@ -22,7 +22,6 @@ import { EASE_MODAL } from '../lib/motion';
 const logoLight = `${import.meta.env.BASE_URL}rush-logo.png`;
 const logoDark = `${import.meta.env.BASE_URL}rush-logo-dark.png`;
 
-/* menu laterale — l'evidenziazione attiva scorre da sola tra le voci */
 const NAV = [
   { icon: LayoutDashboard, t: 'Dashboard' },
   { icon: Boxes, t: 'Magazzino', badge: 3 },
@@ -34,21 +33,38 @@ const NAV = [
   { icon: BarChart3, t: 'Report' },
 ];
 
-/* due istantanee dei numeri: si alternano così le cifre "camminano" */
-const SNAPS = [
+const PERIODS = [
   {
+    label: 'Giorno',
+    xLabels: ['10h', '12h', '14h', '16h', '18h', '20h'],
     kpi: [
-      { lab: 'Incassi · mese', v: 18420, fmt: 'eur', d: '12% vs apr', dir: 'up', tone: 'pos' },
-      { lab: 'Spese · mese', v: 11890, fmt: 'eur', d: '8% vs apr', dir: 'up', tone: 'neg' },
-      { lab: 'Margine lordo', v: 35.5, fmt: 'pct', d: '2,1pt', dir: 'up', tone: 'pos' },
-      { lab: 'Costo personale', v: 4610, fmt: 'eur', d: '25% sui ricavi' },
-      { lab: 'Food cost', v: 28.0, fmt: 'pct', d: '1,5pt', dir: 'down', tone: 'pos' },
-      { lab: 'Beverage cost', v: 22.0, fmt: 'pct', d: '0,8pt', dir: 'up', tone: 'neg' },
+      { lab: 'Incassi · oggi', v: 1240, fmt: 'eur', d: '+18% vs ieri', dir: 'up', tone: 'pos' },
+      { lab: 'Spese · oggi', v: 760, fmt: 'eur', d: '+6% vs ieri', dir: 'up', tone: 'neg' },
+      { lab: 'Margine lordo', v: 38.7, fmt: 'pct', d: '1,4pt', dir: 'up', tone: 'pos' },
+      { lab: 'Costo personale', v: 310, fmt: 'eur', d: '25% sui ricavi' },
+      { lab: 'Food cost', v: 29.2, fmt: 'pct', d: '0,8pt', dir: 'up', tone: 'neg' },
+      { lab: 'Beverage cost', v: 21.1, fmt: 'pct', d: '1,2pt', dir: 'down', tone: 'pos' },
     ],
-    inc: [58, 54, 66, 72, 78, 92],
-    spe: [40, 44, 38, 42, 46, 50],
+    inc: [22, 48, 72, 56, 84, 96],
+    spe: [16, 30, 44, 34, 52, 58],
   },
   {
+    label: 'Settimana',
+    xLabels: ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'],
+    kpi: [
+      { lab: 'Incassi · settimana', v: 8640, fmt: 'eur', d: '+11% vs sett. prec.', dir: 'up', tone: 'pos' },
+      { lab: 'Spese · settimana', v: 5080, fmt: 'eur', d: '+4% vs sett. prec.', dir: 'up', tone: 'neg' },
+      { lab: 'Margine lordo', v: 41.2, fmt: 'pct', d: '3,8pt', dir: 'up', tone: 'pos' },
+      { lab: 'Costo personale', v: 2180, fmt: 'eur', d: '25% sui ricavi' },
+      { lab: 'Food cost', v: 27.8, fmt: 'pct', d: '2,6pt', dir: 'down', tone: 'pos' },
+      { lab: 'Beverage cost', v: 20.6, fmt: 'pct', d: '0,4pt', dir: 'down', tone: 'pos' },
+    ],
+    inc: [62, 74, 56, 68, 88, 96],
+    spe: [40, 48, 36, 44, 54, 60],
+  },
+  {
+    label: 'Mese',
+    xLabels: ['Dic', 'Gen', 'Feb', 'Mar', 'Apr', 'Mag'],
     kpi: [
       { lab: 'Incassi · mese', v: 19240, fmt: 'eur', d: '14% vs apr', dir: 'up', tone: 'pos' },
       { lab: 'Spese · mese', v: 11510, fmt: 'eur', d: '5% vs apr', dir: 'up', tone: 'neg' },
@@ -61,8 +77,6 @@ const SNAPS = [
     spe: [38, 42, 40, 44, 44, 48],
   },
 ];
-
-const MESI = ['Dic', 'Gen', 'Feb', 'Mar', 'Apr', 'Mag'];
 
 const ALERTS = [
   { k: 'red', t: 'Campari 1L sotto soglia (2 pz)', s: 'Consumo 4 pz/sett · suggerito 6 pz' },
@@ -108,15 +122,15 @@ function Kpi({ lab, v, fmt: kind, d, dir, tone }) {
 
 export default function HeroScene() {
   const reduce = useReducedMotion();
-  const [snap, setSnap] = useState(0);
+  const [period, setPeriod] = useState(0);
   const [nav, setNav] = useState(0);
   const [q, setQ] = useState(0);
 
-  const s = SNAPS[snap];
+  const p = PERIODS[period];
 
   useEffect(() => {
     if (reduce) return;
-    const id = setInterval(() => setSnap((v) => (v + 1) % SNAPS.length), 5200);
+    const id = setInterval(() => setPeriod((v) => (v + 1) % PERIODS.length), 4200);
     return () => clearInterval(id);
   }, [reduce]);
 
@@ -132,26 +146,19 @@ export default function HeroScene() {
     return () => clearInterval(id);
   }, [reduce]);
 
-  const maxBar = Math.max(...s.inc, ...s.spe);
-
+  const maxBar = Math.max(...p.inc, ...p.spe);
   const float = (up) => (reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: up ? [0, -10, 0] : [0, 10, 0] });
 
   return (
     <div className="scene">
       <div className="win" aria-hidden="true">
-        {/* cornice: solo il semaforo */}
         <div className="win__chrome">
-          <span className="win__dots">
-            <i />
-            <i />
-            <i />
-          </span>
+          <span className="win__dots"><i /><i /><i /></span>
         </div>
 
-        {/* l'applicazione */}
         <div className="win__app">
           <div className="dash">
-            {/* ---- menu laterale ---- */}
+            {/* menu laterale */}
             <aside className="dash__side">
               <div className="dash__brand">
                 <img className="dash__brand-logo win__logo--l" src={logoLight} alt="" />
@@ -162,7 +169,13 @@ export default function HeroScene() {
               <nav className="dash__nav">
                 {NAV.map(({ icon: Icon, t, badge }, i) => (
                   <span key={t} className={`dash__navitem ${i === nav ? 'is-on' : ''}`}>
-                    {i === nav && <motion.span className="dash__navhi" layoutId="navhi" transition={{ type: 'spring', damping: 30, stiffness: 320 }} />}
+                    {i === nav && (
+                      <motion.span
+                        className="dash__navhi"
+                        layoutId="navhi"
+                        transition={{ type: 'spring', damping: 30, stiffness: 320 }}
+                      />
+                    )}
                     <Icon size={15} strokeWidth={1.9} />
                     <b>{t}</b>
                     {badge && <em className="dash__badge">{badge}</em>}
@@ -176,7 +189,7 @@ export default function HeroScene() {
               </div>
             </aside>
 
-            {/* ---- schermata ---- */}
+            {/* schermata principale */}
             <div className="dash__main">
               <div className="dash__top">
                 <div className="dash__search">
@@ -190,16 +203,29 @@ export default function HeroScene() {
                       exit={{ opacity: 0, y: -4 }}
                       transition={{ duration: 0.3, ease: EASE_MODAL }}
                     >
-                      “{QUERIES[q]}”
+                      "{QUERIES[q]}"
                     </motion.span>
                   </AnimatePresence>
                 </div>
-                <span className="dash__ticon">
-                  <Moon size={16} strokeWidth={1.9} />
-                </span>
-                <span className="dash__ticon">
-                  <Bell size={16} strokeWidth={1.9} />
-                </span>
+
+                {/* selezione periodo */}
+                <div className="dash__period">
+                  {PERIODS.map(({ label }, i) => (
+                    <span key={label} className={`dash__period-tab ${i === period ? 'is-on' : ''}`}>
+                      {i === period && (
+                        <motion.span
+                          className="dash__period-hi"
+                          layoutId="periodhi"
+                          transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+                        />
+                      )}
+                      <span className="dash__period-l">{label}</span>
+                    </span>
+                  ))}
+                </div>
+
+                <span className="dash__ticon"><Moon size={16} strokeWidth={1.9} /></span>
+                <span className="dash__ticon"><Bell size={16} strokeWidth={1.9} /></span>
               </div>
 
               <div className="dash__scroll">
@@ -209,7 +235,7 @@ export default function HeroScene() {
                 </div>
 
                 <div className="dash__kpis">
-                  {s.kpi.map((k) => (
+                  {p.kpi.map((k) => (
                     <Kpi key={k.lab} {...k} />
                   ))}
                 </div>
@@ -218,30 +244,27 @@ export default function HeroScene() {
                   {/* grafico */}
                   <div className="dash__panel">
                     <div className="dash__panel-hd">
-                      <h5>Incassi vs spese — ultimi 6 mesi</h5>
+                      <h5>Incassi vs spese — ultimi 6 periodi</h5>
                       <span className="dash__legend">
-                        <span className="dash__leg is-inc">
-                          <i />
-                          Incassi
-                        </span>
-                        <span className="dash__leg is-spe">
-                          <i />
-                          Spese
-                        </span>
+                        <span className="dash__leg is-inc"><i />Incassi</span>
+                        <span className="dash__leg is-spe"><i />Spese</span>
                       </span>
                     </div>
                     <div className="dash__chart">
-                      {MESI.map((m, i) => (
-                        <div className={`dash__month ${i === MESI.length - 1 ? 'is-on' : ''}`} key={m}>
+                      {p.xLabels.map((m, i) => (
+                        <div
+                          className={`dash__month ${i === p.xLabels.length - 1 ? 'is-on' : ''}`}
+                          key={`${period}-${m}`}
+                        >
                           <div className="dash__pair">
                             <motion.span
                               className="dash__bar is-inc"
-                              animate={{ height: `${(s.inc[i] / maxBar) * 100}%` }}
+                              animate={{ height: `${(p.inc[i] / maxBar) * 100}%` }}
                               transition={{ duration: 0.7, ease: EASE_MODAL, delay: i * 0.04 }}
                             />
                             <motion.span
                               className="dash__bar is-spe"
-                              animate={{ height: `${(s.spe[i] / maxBar) * 100}%` }}
+                              animate={{ height: `${(p.spe[i] / maxBar) * 100}%` }}
                               transition={{ duration: 0.7, ease: EASE_MODAL, delay: i * 0.04 + 0.05 }}
                             />
                           </div>
@@ -281,7 +304,7 @@ export default function HeroScene() {
         </div>
       </div>
 
-      {/* schede che galleggiano ai lati */}
+      {/* schede fluttuanti */}
       <motion.div
         className="sat sat--l"
         initial={{ opacity: 0, y: 14 }}
@@ -292,9 +315,7 @@ export default function HeroScene() {
         }}
         aria-hidden="true"
       >
-        <span className="sat__ic is-ok">
-          <FileCheck2 size={15} strokeWidth={2} />
-        </span>
+        <span className="sat__ic is-ok"><FileCheck2 size={15} strokeWidth={2} /></span>
         <span className="sat__t">
           <b>Margine netto +14%</b>
           <em>miglior mese dell'anno</em>
@@ -311,9 +332,7 @@ export default function HeroScene() {
         }}
         aria-hidden="true"
       >
-        <span className="sat__ic is-accent">
-          <Zap size={15} strokeWidth={2} />
-        </span>
+        <span className="sat__ic is-accent"><Zap size={15} strokeWidth={2} /></span>
         <span className="sat__t">
           <b>Fornitore sincronizzato</b>
           <em>listino aggiornato in automatico</em>
@@ -330,9 +349,7 @@ export default function HeroScene() {
         }}
         aria-hidden="true"
       >
-        <span className="sat__ic is-warn">
-          <TrendingUp size={15} strokeWidth={2} />
-        </span>
+        <span className="sat__ic is-warn"><TrendingUp size={15} strokeWidth={2} /></span>
         <span className="sat__t">
           <b>Budget quasi esaurito</b>
           <em>soglia 90% raggiunta</em>
