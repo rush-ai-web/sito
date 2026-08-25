@@ -748,6 +748,11 @@ h4 {
   display: block;
 }
 
+/* solo la riga statica: più grande della pill */
+.hero__line:not(.hero__line--slot) {
+  font-size: 1.22em;
+}
+
 /* la seconda riga: solo respiro sopra */
 .hero__line--slot {
   display: block;
