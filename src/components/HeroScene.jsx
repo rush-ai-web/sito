@@ -289,16 +289,16 @@ export default function HeroScene() {
                       <h5>Alert e anomalie — da gestire</h5>
                     </div>
                     <div className="dash__alerts">
-                      <AnimatePresence initial={false}>
+                      <AnimatePresence initial={false} mode="popLayout">
                         {alerts.map(({ id, k, t, s: sub }) => (
                           <motion.div
                             className={`dash__alert is-${k}`}
                             key={id}
-                            layout="position"
-                            initial={{ opacity: 0, y: -14 }}
+                            layout
+                            initial={{ opacity: 0, y: -12 }}
                             animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, transition: { duration: 0.18 } }}
-                            transition={{ duration: 0.36, ease: EASE_MODAL }}
+                            exit={{ opacity: 0, transition: { duration: 0.2 } }}
+                            transition={{ duration: 0.34, ease: EASE_MODAL }}
                           >
                             <span className="dash__alert-dot" />
                             <span className="dash__alert-t">

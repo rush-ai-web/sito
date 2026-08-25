@@ -1726,8 +1726,12 @@ h4 {
 
 .dash__alert {
   display: flex;
+  align-items: center;
   gap: 11px;
-  padding: 11px 12px;
+  /* altezza fissa: tutte le card identiche, così il pannello non
+     cambia mai altezza quando gli avvisi si scambiano */
+  height: 52px;
+  padding: 0 12px;
   border-radius: 12px;
   border: 0.5px solid var(--hairline);
   background: color-mix(in srgb, var(--text) 2.5%, transparent);
@@ -1736,9 +1740,13 @@ h4 {
 .dash__alert-dot {
   width: 8px;
   height: 8px;
-  margin-top: 4px;
   flex-shrink: 0;
   border-radius: 50%;
+}
+
+/* testo su una riga con ellissi: garantisce card di altezza uniforme */
+.dash__alert-t {
+  min-width: 0;
 }
 
 .dash__alert.is-red .dash__alert-dot {
@@ -1756,12 +1764,19 @@ h4 {
   font-size: 12px;
   font-weight: 600;
   color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .dash__alert-t em {
+  display: block;
   font-style: normal;
   font-size: 11px;
   color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ---- le schede ai lati della finestra ---- */
