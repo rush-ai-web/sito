@@ -736,10 +736,12 @@ h4 {
 /* ---- il titolo: la promessa ---- */
 .hero__title {
   margin: 0;
-  font-family: var(--ff-display);
+  font-family: var(--ff-body);
+  font-weight: 800;
   font-size: clamp(30px, 3.5vw, 45px);
   line-height: 1;
-  letter-spacing: -0.012em;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
 }
 
 .hero__line {
