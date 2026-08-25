@@ -2484,9 +2484,9 @@ textarea.input {
 
   /* ---- dashboard mobile: card completa e compatta ---- */
 
-  /* la finestra diventa una card con tutti gli angoli arrotondati */
+  /* angoli arrotondati solo in alto: il fondo esce fuori dalla sezione */
   .win {
-    border-radius: 16px;
+    border-radius: 16px 16px 0 0;
   }
   .win__app {
     border-radius: 12px;
