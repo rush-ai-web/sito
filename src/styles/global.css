@@ -785,37 +785,36 @@ h4 {
   padding: 0.28em 0.58em;
 }
 
-/* la banda luminosa che passa in loop */
-.hero__pill::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(
-    100deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.28) 50%,
-    transparent 70%
-  );
-  background-size: 220% 100%;
-  animation: pillShine 5.4s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes pillShine {
-  0% {
-    background-position: 220% 0;
-  }
-  100% {
-    background-position: -20% 0;
-  }
-}
-
-/* wrapper interno: sposta insieme icona + testo, con AnimatePresence */
+/* wrapper interno: sposta insieme icona + testo, con AnimatePresence.
+   Il ::before porta la banda luminosa: rimontando ad ogni cambio frase
+   l'animazione riparte da zero automaticamente, senza JS. */
 .hero__pill-in {
   display: inline-flex;
   align-items: center;
   gap: 0.35em;
+}
+
+.hero__pill-in::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.38) 50%,
+    transparent 80%
+  );
+  background-size: 220% 100%;
+  background-position: 220% 0;
+  animation: pillShine 0.75s ease-out 1 forwards;
+}
+
+@keyframes pillShine {
+  to {
+    background-position: -20% 0;
+  }
 }
 
 /* icona a sinistra della parola, dimensione proporzionata al font */
@@ -853,41 +852,7 @@ h4 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__pill::before {
-    animation: none;
-  }
-}
-
-/* la brillantezza che passa: una banda luminosa che attraversa la pill */
-.hero__pill::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(
-    100deg,
-    transparent 25%,
-    rgba(255, 255, 255, 0.35) 50%,
-    transparent 75%
-  );
-  background-size: 220% 100%;
-  animation: pillShine 4.2s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes pillShine {
-  0% {
-    background-position: 220% 0;
-  }
-  100% {
-    background-position: -20% 0;
-  }
-}
-
-
-
-@media (prefers-reduced-motion: reduce) {
-  .hero__pill::before {
+  .hero__pill-in::before {
     animation: none;
   }
 }
