@@ -61,8 +61,10 @@ const ORBIT = [
   },
 ];
 
-/* raggio dell'orbita in px: abbastanza largo da lasciare respirare il titolo. */
-const RADIUS = 380;
+/* orbita ellittica: più larga che alta, così le pill non si sovrappongono
+   al titolo e c'è spazio per contenuto largo. */
+const RADIUS_X = 560;
+const RADIUS_Y = 320;
 const SPEED = 0.15;
 const STEP = 360 / ORBIT.length;
 
@@ -124,8 +126,8 @@ export default function Soluzione() {
         {ORBIT.map((item, idx) => {
           const a = ((idx * STEP) + angle) % 360;
           const rad = (a * Math.PI) / 180;
-          const x = Math.cos(rad) * RADIUS;
-          const y = Math.sin(rad) * RADIUS;
+          const x = Math.cos(rad) * RADIUS_X;
+          const y = Math.sin(rad) * RADIUS_Y;
           const isOpen = openId === item.id;
           const isRelated = relatedIds.includes(item.id);
           const isDim = openId !== null && !isOpen && !isRelated;

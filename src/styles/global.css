@@ -2025,9 +2025,9 @@ h4 {
   white-space: nowrap;
 }
 
-/* ---- variante orbita radiale con click-to-expand ---- */
+/* ---- variante orbita ellittica con click-to-expand ---- */
 .orbit--radial {
-  min-height: 900px;
+  min-height: 780px;
   place-items: unset;
   overflow: visible;
 }
@@ -2036,8 +2036,8 @@ h4 {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 760px;
-  height: 760px;
+  width: 1120px;
+  height: 640px;
   border-radius: 50%;
   border: 1px dashed color-mix(in srgb, var(--text) 12%, transparent);
   transform: translate(-50%, -50%);
@@ -2046,8 +2046,8 @@ h4 {
 }
 
 .orbit__ring--in {
-  width: 540px;
-  height: 540px;
+  width: 820px;
+  height: 460px;
   border-style: solid;
   border-color: color-mix(in srgb, var(--accent) 10%, transparent);
 }
@@ -2057,7 +2057,7 @@ h4 {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: min(440px, 65%);
+  width: min(720px, 75%);
   text-align: center;
   z-index: 1;
   pointer-events: none;
