@@ -198,7 +198,6 @@ export default function HeroScene() {
                 <div className="dash__sede-pop">
                   <span className="dash__sede-opt is-on"><i className="dash__sedi-dot" />Sede principale</span>
                   <span className="dash__sede-opt"><i className="dash__sedi-dot" />Bistrot Via Roma</span>
-                  <span className="dash__sede-opt"><i className="dash__sedi-dot" />Corner Nord</span>
                 </div>
                 <MapPin size={12} strokeWidth={2} />
                 <span className="dash__sede-name">Sede principale</span>

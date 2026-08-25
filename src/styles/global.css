@@ -1289,6 +1289,7 @@ h4 {
   flex-direction: column;
   gap: 3px;
   padding: 16px 12px;
+  overflow: visible;
   border-right: 0.5px solid var(--hairline);
   background: color-mix(in srgb, var(--text) 2.5%, transparent);
 }
@@ -1536,6 +1537,7 @@ h4 {
   cursor: default;
   border-top: 0.5px solid var(--hairline);
   margin-bottom: 4px;
+  z-index: 200;
 }
 
 .dash__sede-sel:hover {
@@ -1573,6 +1575,7 @@ h4 {
   pointer-events: none;
   transform: translateY(4px);
   transition: opacity 0.15s, transform 0.15s;
+  z-index: 500;
 }
 
 .dash__sede-sel:hover .dash__sede-pop {
