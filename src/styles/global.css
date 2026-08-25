@@ -2025,6 +2025,151 @@ h4 {
   white-space: nowrap;
 }
 
+/* ---- variante orbita radiale con click-to-expand ---- */
+.orbit--radial {
+  min-height: 640px;
+  place-items: unset;
+  overflow: visible;
+}
+
+.orbit__ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  border: 1px dashed color-mix(in srgb, var(--text) 12%, transparent);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orbit__ring--in {
+  width: 360px;
+  height: 360px;
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.orbit__core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(340px, 60%);
+  text-align: center;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.orbit__core .head {
+  margin: 0;
+  align-items: center;
+}
+
+.orbit-card {
+  position: absolute;
+  z-index: 2;
+  padding: 12px 18px 12px 12px;
+  border-radius: var(--r-pill);
+  background-image: var(--card-vig);
+  background-color: var(--bg);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: var(--sh-1);
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  line-height: 1.3;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+  text-align: left;
+  font-family: inherit;
+  transition: opacity 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+.orbit-card__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.orbit-card__t {
+  display: inline-block;
+}
+
+.orbit-card:hover {
+  box-shadow: var(--sh-2);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--hairline-strong));
+}
+
+.orbit-card.is-dim {
+  opacity: 0.35;
+}
+
+.orbit-card.is-related {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--hairline-strong));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent), var(--sh-1);
+}
+
+.orbit-card.is-open {
+  z-index: 20;
+  border-color: var(--accent);
+  box-shadow: 0 20px 44px -14px color-mix(in srgb, var(--accent) 55%, transparent), var(--sh-2);
+}
+
+.orbit-card__pop {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--bg);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: var(--sh-2);
+  white-space: normal;
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.5;
+  z-index: 30;
+}
+
+.orbit-card__pop::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: var(--bg);
+  border-left: 1px solid var(--hairline-strong);
+  border-top: 1px solid var(--hairline-strong);
+}
+
+.orbit-card__pop p {
+  margin: 0;
+}
+
+.orbit-card__chev {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+@media (max-width: 1160px) {
+  .orbit--radial {
+    display: none;
+  }
+}
+
 /* ============================================================
    Cascata KPI — colonne sfalsate con divisori verticali
    ============================================================ */
