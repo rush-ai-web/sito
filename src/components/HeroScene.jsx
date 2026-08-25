@@ -240,7 +240,7 @@ export default function HeroScene() {
               <div className="dash__scroll">
                 <div className="dash__greet">
                   <h4>Buongiorno, Mario</h4>
-                  <p>Maggio 2026 · ecco come va il bar in questo momento</p>
+                  <p>Maggio 2026 · ecco come va la tua attività in questo momento</p>
                 </div>
 
                 <div className="dash__kpis">
