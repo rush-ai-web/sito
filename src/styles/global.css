@@ -2398,21 +2398,105 @@ textarea.input {
   .fab__inner {
     padding-inline: 14px;
   }
+  /* ---- logo eyebrow: nascosto su mobile ---- */
   .hero__logo-eyebrow {
     display: none;
   }
+
+  /* ---- titolo: 6vw scala da 22px (375px) a 27px (450px)
+     garantisce "IL TUO GESTIONALE" su riga 1, "SU MISURA," su riga 2 ---- */
   .hero__title {
-    font-size: clamp(18px, 5vw, 28px);
+    font-size: 6vw;
+  }
+
+  /* ---- pill: contiene il testo senza uscire dai bordi ---- */
+  .hero__pill {
+    max-width: calc(100vw - 36px);
+    box-sizing: border-box;
   }
   .hero__line--slot {
     overflow: hidden;
   }
-  .hero__pill {
-    max-width: 100%;
+
+  /* ---- note e CTA: spaziatura più stretta ---- */
+  .hero__note {
+    margin-top: 18px;
+    font-size: 15px;
   }
+  .hero__cta {
+    margin-top: 28px;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .btn--hero {
+    width: min(260px, 100%);
+    height: 48px;
+    font-size: 14px;
+    justify-content: space-between;
+  }
+  .btn--hero .btn__badge {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* ---- logo nav più piccolo ---- */
+  .nav__logo-img {
+    height: 18px;
+  }
+
+  /* ---- stage: visibile senza clip, glow libero ---- */
   .hero__stage {
-    height: 260px;
+    padding-top: 28px;
+    overflow: visible;
+  }
+
+  /* ---- dashboard mobile semplificata ---- */
+
+  /* nasconde colonna destra (grafico + alert) */
+  .dash__grid {
+    display: none;
+  }
+
+  /* 4 KPI in griglia 2×2 */
+  .dash__kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dash__kpi:nth-child(n+5) {
+    display: none;
+  }
+
+  /* riduce titolo greet */
+  .dash__greet h4 {
+    font-size: 17px;
+  }
+
+  /* nasconde icone luna/campanello nel top bar */
+  .dash__ticon {
+    display: none;
+  }
+
+  /* period tabs: nasconde label voci non attive per risparmiare spazio */
+  .dash__period-tab:not(.is-on) {
+    padding-inline: 6px;
+  }
+
+  /* clip dashboard a un'altezza visibile con fade in basso */
+  .win__app {
+    position: relative;
+    max-height: 310px;
     overflow: hidden;
+  }
+  .win__app::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 90px;
+    background: linear-gradient(to bottom, transparent, var(--bg));
+    z-index: 10;
+    pointer-events: none;
   }
 }
 
