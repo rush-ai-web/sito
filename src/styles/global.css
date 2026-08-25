@@ -2338,6 +2338,9 @@ textarea.input {
   .fab__inner {
     padding-inline: 14px;
   }
+  .hero__logo-eyebrow {
+    display: none;
+  }
 }
 
 /* ============================================================
