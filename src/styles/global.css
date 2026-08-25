@@ -2081,7 +2081,27 @@ h4 {
   white-space: nowrap;
   text-align: left;
   font-family: inherit;
-  transition: opacity 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+/* posizione = proprietà CSS `translate`; scale d'entrata = `transform`.
+   Sono proprietà distinte, quindi non collidono mai. */
+.orbit-card.is-pre {
+  opacity: 0;
+  transform: scale(0.5);
+}
+.orbit-card.is-in {
+  animation: orbitPillIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes orbitPillIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .orbit-card__row {

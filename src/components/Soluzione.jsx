@@ -74,34 +74,60 @@ function easeInOutCubic(t) {
 export default function Soluzione() {
   const reduce = useReducedMotion();
   const [openId, setOpenId] = useState(null);
+  const [entered, setEntered] = useState(false);
 
   const angleRef = useRef(0);
   const focusRef = useRef(null);
   const rafRef = useRef(null);
   const openIdRef = useRef(null);
   const cardRefs = useRef({});
+  const rootRef = useRef(null);
 
   useEffect(() => {
     openIdRef.current = openId;
   }, [openId]);
 
+  /* scrive le posizioni orbitali direttamente sul DOM (proprietà `translate`),
+     senza passare da React state — così non ci sono re-render a 60fps. */
   const applyPositions = () => {
-    ORBIT.forEach((item, idx) => {
-      const a = ((idx * STEP) + angleRef.current) % 360;
+    for (let i = 0; i < ORBIT.length; i += 1) {
+      const item = ORBIT[i];
+      const a = ((i * STEP) + angleRef.current) % 360;
       const rad = (a * Math.PI) / 180;
-      const x = Math.cos(rad) * RADIUS_X;
-      const y = Math.sin(rad) * RADIUS_Y;
       const el = cardRefs.current[item.id];
       if (el) {
-        el.style.setProperty('--ox', `${x}px`);
-        el.style.setProperty('--oy', `${y}px`);
+        el.style.setProperty('--ox', `${Math.cos(rad) * RADIUS_X}px`);
+        el.style.setProperty('--oy', `${Math.sin(rad) * RADIUS_Y}px`);
       }
-    });
+    }
   };
+
+  /* entrata staggerata: appena la sezione entra in viewport. */
+  useEffect(() => {
+    if (reduce) {
+      setEntered(true);
+      return undefined;
+    }
+    const el = rootRef.current;
+    if (!el) return undefined;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            setEntered(true);
+            io.disconnect();
+          }
+        });
+      },
+      { threshold: 0.15 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [reduce]);
 
   useEffect(() => {
     applyPositions();
-    if (reduce) return;
+    if (reduce) return undefined;
     let last = performance.now();
     const loop = (now) => {
       const dt = now - last;
@@ -109,8 +135,7 @@ export default function Soluzione() {
       const f = focusRef.current;
       if (f) {
         const t = Math.min((now - f.start) / FOCUS_DURATION, 1);
-        const eased = easeInOutCubic(t);
-        const next = f.from + f.delta * eased;
+        const next = f.from + f.delta * easeInOutCubic(t);
         angleRef.current = ((next % 360) + 360) % 360;
         applyPositions();
         if (t >= 1) focusRef.current = null;
@@ -130,8 +155,7 @@ export default function Soluzione() {
     let target = -90 - idx * STEP;
     target = ((target % 360) + 360) % 360;
     const from = angleRef.current;
-    const delta = shortestDelta(from, target);
-    focusRef.current = { from, delta, start: performance.now() };
+    focusRef.current = { from, delta: shortestDelta(from, target), start: performance.now() };
   };
 
   const openItem = ORBIT.find((o) => o.id === openId);
@@ -144,7 +168,7 @@ export default function Soluzione() {
 
   return (
     <Section id="soluzione" large spot>
-      <div className="orbit orbit--radial" onClick={onContainerClick}>
+      <div className="orbit orbit--radial" ref={rootRef} onClick={onContainerClick}>
         <span className="orbit__ring" aria-hidden="true" />
 
         <div className="orbit__core">
@@ -161,20 +185,21 @@ export default function Soluzione() {
           const isRelated = relatedIds.includes(item.id);
           const isDim = openId !== null && !isOpen && !isRelated;
           const Icon = item.icon;
+          const enterCls = reduce ? '' : entered ? ' is-in' : ' is-pre';
 
           return (
-            <motion.button
+            <button
               type="button"
               key={item.id}
               ref={(el) => {
                 cardRefs.current[item.id] = el;
               }}
-              className={`orbit__card orbit-card${isOpen ? ' is-open' : ''}${isRelated ? ' is-related' : ''}${isDim ? ' is-dim' : ''}`}
-              style={{ left: '50%', top: '50%' }}
-              initial={{ opacity: 0, scale: 0.5 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.55, ease: EASE_MODAL, delay: 0.15 + idx * 0.14 }}
+              className={`orbit__card orbit-card${enterCls}${isOpen ? ' is-open' : ''}${isRelated ? ' is-related' : ''}${isDim ? ' is-dim' : ''}`}
+              style={{
+                left: '50%',
+                top: '50%',
+                animationDelay: entered && !reduce ? `${0.1 + idx * 0.14}s` : undefined,
+              }}
               onClick={(e) => {
                 e.stopPropagation();
                 if (openId === item.id) {
@@ -213,7 +238,7 @@ export default function Soluzione() {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </motion.button>
+            </button>
           );
         })}
       </div>
