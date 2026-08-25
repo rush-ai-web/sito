@@ -1903,17 +1903,17 @@ h4 {
 }
 
 .sat--l {
-  left: -195px;
+  left: -160px;
   top: 150px;
 }
 
 .sat--r {
-  right: -195px;
+  right: -160px;
   top: 250px;
 }
 
 .sat--bl {
-  left: -165px;
+  left: -135px;
   bottom: 120px;
 }
 
@@ -1960,9 +1960,8 @@ h4 {
   color: var(--text-3);
 }
 
-/* sotto i 1600px non c'è più margine ai lati: le schede sparirebbero
-   sopra la finestra, quindi si tolgono */
-@media (max-width: 1600px) {
+/* sotto i 1200px non c'è più margine ai lati: le schede sparirebbero */
+@media (max-width: 1200px) {
   .sat {
     display: none;
   }
