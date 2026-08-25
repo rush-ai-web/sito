@@ -740,7 +740,6 @@ h4 {
   font-size: clamp(30px, 3.5vw, 45px);
   line-height: 1;
   letter-spacing: -0.012em;
-  text-transform: uppercase;
 }
 
 .hero__line {
