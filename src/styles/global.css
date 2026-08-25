@@ -1279,7 +1279,6 @@ h4 {
 .dash {
   display: grid;
   grid-template-columns: 210px minmax(0, 1fr);
-  min-height: 560px;
   background: var(--bg);
 }
 
