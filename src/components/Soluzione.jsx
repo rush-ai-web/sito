@@ -60,7 +60,7 @@ const ORBIT = [
 
 const RADIUS_X = 480;
 const RADIUS_Y = 300;
-const AUTO_SPEED = 0.005; /* deg per ms — un giro ≈ 72s */
+const AUTO_SPEED = 0.005; /* deg per ms — un giro ≈ 72 s */
 const STEP = 360 / ORBIT.length;
 const FOCUS_DURATION = 1100; /* ms per la corsa di focus */
 
