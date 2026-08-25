@@ -217,23 +217,7 @@ export default function HeroScene() {
                   </AnimatePresence>
                 </div>
 
-                {/* selezione periodo */}
-                <div className="dash__period">
-                  {PERIODS.map(({ label }, i) => (
-                    <span key={label} className={`dash__period-tab ${i === period ? 'is-on' : ''}`}>
-                      {i === period && (
-                        <motion.span
-                          className="dash__period-hi"
-                          layoutId="periodhi"
-                          transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-                        />
-                      )}
-                      <span className="dash__period-l">{label}</span>
-                    </span>
-                  ))}
-                </div>
-
-                <span className="dash__ticon"><Moon size={16} strokeWidth={1.9} /></span>
+<span className="dash__ticon"><Moon size={16} strokeWidth={1.9} /></span>
                 <span className="dash__ticon"><Bell size={16} strokeWidth={1.9} /></span>
               </div>
 

@@ -151,12 +151,9 @@ export default function Hero() {
 
         <h1 className="hero__title">
           <span className="hero__line">
-            {L1.map((w, i) => (
-              <span key={w + i} style={{ display: 'contents' }}>
-                {i === 3 && <span className="hero__br" aria-hidden="true" />}
-                <Word w={w} i={i} />
-              </span>
-            ))}
+            {L1.slice(0, 3).map((w, i) => <Word key={w + i} w={w} i={i} />)}
+            <span className="hero__br" aria-hidden="true" />
+            {L1.slice(3).map((w, i) => <Word key={w + i + 3} w={w} i={i + 3} />)}
           </span>
           <span className="hero__line hero__line--slot">
             <RotatingSlot />

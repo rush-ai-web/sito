@@ -944,7 +944,7 @@ h4 {
 .hero__beam {
   position: absolute;
   left: 50%;
-  top: 0;
+  top: 50px;
   translate: -50% 0;
   width: min(1200px, 98%);
   height: 380px;
@@ -2468,10 +2468,10 @@ textarea.input {
     height: 18px;
   }
 
-  /* ---- stage: glow libero, niente clip, respiro sotto la card ---- */
+  /* ---- stage: glow libero, niente clip, dashboard attaccata al fondo ---- */
   .hero__stage {
     padding-top: 26px;
-    padding-bottom: 8px;
+    padding-bottom: 0;
     overflow: visible;
   }
 
@@ -2509,10 +2509,6 @@ textarea.input {
     display: none;
   }
 
-  /* period tabs: voci non attive più strette */
-  .dash__period-tab:not(.is-on) {
-    padding-inline: 6px;
-  }
 }
 
 /* ============================================================
