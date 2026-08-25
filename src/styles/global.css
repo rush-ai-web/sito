@@ -808,7 +808,7 @@ h4 {
   );
   background-size: 220% 100%;
   background-position: 220% 0;
-  animation: pillShine 0.75s ease-out 1 forwards;
+  animation: pillShine 1.4s ease-in-out 0.35s 1 forwards;
 }
 
 @keyframes pillShine {
