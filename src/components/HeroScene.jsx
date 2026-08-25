@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } from 'framer-motion';
 import {
   LayoutDashboard,
@@ -78,22 +78,15 @@ const PERIODS = [
   },
 ];
 
-const ALERT_SETS = [
-  [
-    { k: 'red', t: 'Campari 1L sotto soglia (2 pz)', s: 'Consumo 4 pz/sett · suggerito 6 pz' },
-    { k: 'amber', t: 'Distillerie Rossi: Gin +18% vs media', s: 'Fattura n.245 del 12 mag' },
-    { k: 'blue', t: '2 fatture in scadenza (5 gg)', s: '€1.840 · Caseificio, Forno' },
-  ],
-  [
-    { k: 'amber', t: 'Food cost +3,2pt rispetto al target', s: 'Settimana 20 · da verificare materie prime' },
-    { k: 'red', t: 'Forno Del Corso: nessuna consegna da 8 gg', s: 'Ultimo ordine: 14 mag · contatta fornitore' },
-    { k: 'blue', t: 'Personale: 2 turni scoperti sabato', s: '18:00–22:00 · nessuna conferma ricevuta' },
-  ],
-  [
-    { k: 'blue', t: 'Incasso medio coperto –12% vs aprile', s: 'Lunedì e martedì le fasce più critiche' },
-    { k: 'amber', t: 'Margine beverage sotto il 20%', s: 'Ultimi 7 gg · verifica prezzi di vendita' },
-    { k: 'red', t: 'Cassa: differenza di €48 rispetto al POS', s: 'Rilevata ieri sera · richiede riconciliazione' },
-  ],
+const ALERT_POOL = [
+  { id: 0, k: 'red',   t: 'Campari 1L: ultime 2 bottiglie',         s: 'Consumo 4 pz/sett · riordina oggi' },
+  { id: 1, k: 'amber', t: 'Gin +18% vs media — Distillerie Rossi',  s: 'Fattura n.245 del 12 mag' },
+  { id: 2, k: 'blue',  t: '2 fatture in scadenza entro 5 giorni',   s: '€1.840 · Caseificio, Forno Antico' },
+  { id: 3, k: 'amber', t: 'Food cost +3,2pt rispetto al target',    s: 'Settimana 20 · verifica materie prime' },
+  { id: 4, k: 'red',   t: 'Forno Del Corso: nessuna consegna da 8 gg', s: 'Ordine sospeso · contatta il fornitore' },
+  { id: 5, k: 'blue',  t: '2 turni scoperti sabato sera',           s: '18:00–22:00 · nessuna conferma ricevuta' },
+  { id: 6, k: 'amber', t: 'Margine beverage sceso sotto il 20%',   s: 'Ultimi 7 gg · controlla i prezzi di vendita' },
+  { id: 7, k: 'red',   t: 'Differenza cassa: −€48 vs POS',          s: 'Rilevata ieri sera · riconciliazione richiesta' },
 ];
 
 const QUERIES = [
@@ -135,9 +128,9 @@ function Kpi({ lab, v, fmt: kind, d, dir, tone }) {
 export default function HeroScene() {
   const reduce = useReducedMotion();
   const [period, setPeriod] = useState(0);
-  const [alertSet, setAlertSet] = useState(0);
+  const [alerts, setAlerts] = useState(ALERT_POOL.slice(0, 3));
+  const alertIdx = useRef(3);
   const [q, setQ] = useState(0);
-
 
   const p = PERIODS[period];
 
@@ -149,7 +142,11 @@ export default function HeroScene() {
 
   useEffect(() => {
     if (reduce) return;
-    const id = setInterval(() => setAlertSet((v) => (v + 1) % ALERT_SETS.length), 3800);
+    const id = setInterval(() => {
+      const next = ALERT_POOL[alertIdx.current % ALERT_POOL.length];
+      alertIdx.current += 1;
+      setAlerts((prev) => [next, ...prev].slice(0, 3));
+    }, 3200);
     return () => clearInterval(id);
   }, [reduce]);
 
@@ -292,31 +289,24 @@ export default function HeroScene() {
                       <h5>Alert e anomalie — da gestire</h5>
                     </div>
                     <div className="dash__alerts">
-                      <AnimatePresence mode="wait">
-                        <motion.div
-                          key={alertSet}
-                          initial={{ opacity: 0, y: 6 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -6 }}
-                          transition={{ duration: 0.38, ease: EASE_MODAL }}
-                          style={{ display: 'contents' }}
-                        >
-                          {ALERT_SETS[alertSet].map(({ k, t, s: sub }, i) => (
-                            <motion.div
-                              className={`dash__alert is-${k}`}
-                              key={t}
-                              initial={{ opacity: 0, x: 8 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ duration: 0.4, ease: EASE_MODAL, delay: i * 0.1 }}
-                            >
-                              <span className="dash__alert-dot" />
-                              <span className="dash__alert-t">
-                                <b>{t}</b>
-                                <em>{sub}</em>
-                              </span>
-                            </motion.div>
-                          ))}
-                        </motion.div>
+                      <AnimatePresence initial={false}>
+                        {alerts.map(({ id, k, t, s: sub }) => (
+                          <motion.div
+                            className={`dash__alert is-${k}`}
+                            key={id}
+                            layout
+                            initial={{ opacity: 0, y: -18, scale: 0.97 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
+                            transition={{ duration: 0.38, ease: EASE_MODAL }}
+                          >
+                            <span className="dash__alert-dot" />
+                            <span className="dash__alert-t">
+                              <b>{t}</b>
+                              <em>{sub}</em>
+                            </span>
+                          </motion.div>
+                        ))}
                       </AnimatePresence>
                     </div>
                   </div>
@@ -374,8 +364,8 @@ export default function HeroScene() {
       >
         <span className="sat__ic is-warn"><TrendingDown size={15} strokeWidth={2} /></span>
         <span className="sat__t">
-          <b>3 referenze in esaurimento</b>
-          <em>riordino suggerito entro oggi</em>
+          <b>Riordino urgente</b>
+          <em>gin, campari e tonic sotto soglia</em>
         </span>
       </motion.div>
     </div>
