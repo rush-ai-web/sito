@@ -773,7 +773,7 @@ h4 {
      uppercase per compensare la minore altezza ottica */
   font-family: var(--ff-body);
   text-transform: lowercase;
-  font-size: 1.14em;
+  font-size: 1.28em;
   font-weight: 700;
   letter-spacing: -0.03em;
   padding: 0.28em 0.58em;
@@ -830,11 +830,15 @@ h4 {
   display: inline-flex;
 }
 
-/* ogni carattere entra dal basso: wrapper con overflow hidden */
+/* ogni carattere entra dal basso: wrapper con overflow hidden.
+   padding-bottom + margin-bottom negativo: lascia spazio ai discendenti
+   (g, p, y…) senza spostare il layout circostante */
 .hero__pill-c-wrap {
   display: inline-block;
   overflow: hidden;
   line-height: 1;
+  padding-bottom: 0.2em;
+  margin-bottom: -0.2em;
 }
 
 .hero__pill-c {
@@ -2436,10 +2440,9 @@ textarea.input {
     height: 0;
   }
 
-  /* ---- pill un po' più piccola del titolo: la frase più lunga
-     ("CHE TI FA CRESCERE") entra sempre su una riga sola ---- */
+  /* ---- pill: leggermente più piccola del titolo ma più leggibile ---- */
   .hero__line--slot {
-    font-size: 0.76em;
+    font-size: 0.88em;
     overflow: hidden;
   }
   .hero__pill {
