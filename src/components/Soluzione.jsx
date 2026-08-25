@@ -13,9 +13,6 @@ import {
 import { Section, Head, IconTile } from './ui';
 import { EASE_MODAL } from '../lib/motion';
 
-/* le sei pill che orbitano attorno al titolo. Cliccando si aprono
-   con una scheda che espone il dettaglio. Sotto i 1160px l'orbita
-   si spegne e diventano una griglia (fallback in CSS). */
 const ORBIT = [
   {
     id: 1,
@@ -42,7 +39,7 @@ const ORBIT = [
     id: 4,
     icon: Sparkles,
     t: 'AI integrata\ndove serve davvero',
-    body: 'Non un chatbot appiccicato: l\'AI legge i tuoi dati e risponde con numeri veri, non con teorie.',
+    body: "Non un chatbot appiccicato: l'AI legge i tuoi dati e risponde con numeri veri, non con teorie.",
     related: [3, 5],
   },
   {
@@ -61,68 +58,91 @@ const ORBIT = [
   },
 ];
 
-/* orbita ellittica: più larga che alta, così le pill non si sovrappongono
-   al titolo e c'è spazio per contenuto largo. */
-const RADIUS_X = 560;
-const RADIUS_Y = 320;
-const SPEED = 0.15;
+const RADIUS_X = 480;
+const RADIUS_Y = 300;
+const AUTO_SPEED = 0.015; /* deg per ms */
 const STEP = 360 / ORBIT.length;
+const FOCUS_DURATION = 1100; /* ms per la corsa di focus */
+
+/* differenza angolare più corta (segnata) tra due angoli in gradi. */
+function shortestDelta(from, to) {
+  return ((((to - from) % 360) + 540) % 360) - 180;
+}
+/* ease-in-out cubico: accelera, poi rallenta e si ferma. */
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
 
 export default function Soluzione() {
   const reduce = useReducedMotion();
   const [angle, setAngle] = useState(0);
   const [openId, setOpenId] = useState(null);
+
+  const angleRef = useRef(0);
+  const focusRef = useRef(null); /* {from, to, start} durante la corsa */
   const rafRef = useRef(null);
-  const autoRotate = openId === null && !reduce;
 
   useEffect(() => {
-    if (!autoRotate) return;
-    const id = setInterval(() => {
-      setAngle((a) => (a + SPEED) % 360);
-    }, 50);
-    rafRef.current = id;
-    return () => clearInterval(id);
-  }, [autoRotate]);
+    angleRef.current = angle;
+  }, [angle]);
+
+  useEffect(() => {
+    if (reduce) return;
+    let last = performance.now();
+    const loop = (now) => {
+      const dt = now - last;
+      last = now;
+      const f = focusRef.current;
+      if (f) {
+        const t = Math.min((now - f.start) / FOCUS_DURATION, 1);
+        const eased = easeInOutCubic(t);
+        const next = f.from + f.delta * eased;
+        angleRef.current = ((next % 360) + 360) % 360;
+        setAngle(angleRef.current);
+        if (t >= 1) focusRef.current = null;
+      } else if (openId === null) {
+        angleRef.current = (angleRef.current + AUTO_SPEED * dt) % 360;
+        setAngle(angleRef.current);
+      }
+      rafRef.current = requestAnimationFrame(loop);
+    };
+    rafRef.current = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [reduce, openId]);
 
   const focusNode = (id) => {
     const idx = ORBIT.findIndex((o) => o.id === id);
     if (idx < 0) return;
-    /* -90° = alto. Vogliamo idx*STEP + angle ≡ -90 (mod 360) */
+    /* vogliamo idx*STEP + angle ≡ -90 (mod 360) */
     let target = -90 - idx * STEP;
     target = ((target % 360) + 360) % 360;
-    setAngle(target);
+    const from = angleRef.current;
+    const delta = shortestDelta(from, target);
+    focusRef.current = { from, delta, start: performance.now() };
   };
 
   const openItem = ORBIT.find((o) => o.id === openId);
   const relatedIds = openItem ? openItem.related : [];
 
   const onContainerClick = (e) => {
-    if (e.target.closest('.orbit__card') || e.target.closest('.orbit-card')) return;
+    if (e.target.closest('.orbit-card')) return;
     setOpenId(null);
   };
 
   return (
     <Section id="soluzione" large spot>
       <div className="orbit orbit--radial" onClick={onContainerClick}>
-        {/* pista orbitale */}
         <span className="orbit__ring" aria-hidden="true" />
-        <span className="orbit__ring orbit__ring--in" aria-hidden="true" />
 
-        {/* nucleo con il titolo */}
         <div className="orbit__core">
           <Head
             icon={Lightbulb}
             label="La soluzione"
-            title={
-              <>
-                Un gestionale disegnato attorno a come lavori già
-              </>
-            }
+            title={<>Un gestionale disegnato attorno a come lavori già</>}
             sub="Partiamo dai tuoi processi, non da un template. Quello che serve c'è, quello che non serve non lo paghi."
           />
         </div>
 
-        {/* pill orbitanti */}
         {ORBIT.map((item, idx) => {
           const a = ((idx * STEP) + angle) % 360;
           const rad = (a * Math.PI) / 180;
@@ -146,7 +166,7 @@ export default function Soluzione() {
                 translateX: '-50%',
                 translateY: '-50%',
               }}
-              transition={{ type: 'tween', ease: [0.22, 0.68, 0.28, 1], duration: openId !== null ? 0.7 : 0.05 }}
+              transition={{ type: 'tween', ease: 'linear', duration: 0 }}
               onClick={(e) => {
                 e.stopPropagation();
                 if (openId === item.id) {
@@ -176,7 +196,7 @@ export default function Soluzione() {
                     initial={{ opacity: 0, y: -6 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.28, ease: EASE_MODAL }}
+                    transition={{ duration: 0.28, ease: EASE_MODAL, delay: 0.35 }}
                   >
                     <p>{item.body}</p>
                     <span className="orbit-card__chev">

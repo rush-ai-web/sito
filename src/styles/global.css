@@ -2036,20 +2036,13 @@ h4 {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 1120px;
-  height: 640px;
+  width: 960px;
+  height: 600px;
   border-radius: 50%;
-  border: 1px dashed color-mix(in srgb, var(--text) 12%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--text) 14%, transparent);
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 0;
-}
-
-.orbit__ring--in {
-  width: 820px;
-  height: 460px;
-  border-style: solid;
-  border-color: color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
 .orbit__core {
