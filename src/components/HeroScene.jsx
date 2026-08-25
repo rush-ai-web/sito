@@ -1,76 +1,80 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } from 'framer-motion';
 import {
-  Check,
-  Loader,
   LayoutDashboard,
-  Receipt,
   Boxes,
-  Clock3,
   Truck,
-  Zap,
-  FileCheck2,
+  Receipt,
+  Users,
+  Wallet,
+  BookOpen,
+  BarChart3,
+  Sparkles,
+  Moon,
+  Bell,
   TrendingUp,
+  TrendingDown,
+  FileCheck2,
+  Zap,
 } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
 
 const logoLight = `${import.meta.env.BASE_URL}rush-logo.png`;
 const logoDark = `${import.meta.env.BASE_URL}rush-logo-dark.png`;
 
-const MENU = [
-  { icon: LayoutDashboard, t: 'Riepilogo', on: true },
-  { icon: Receipt, t: 'Fatture' },
-  { icon: Boxes, t: 'Magazzino' },
-  { icon: Clock3, t: 'Presenze' },
-  { icon: Truck, t: 'Fornitori' },
+/* menu laterale — l'evidenziazione attiva scorre da sola tra le voci */
+const NAV = [
+  { icon: LayoutDashboard, t: 'Dashboard' },
+  { icon: Boxes, t: 'Magazzino', badge: 3 },
+  { icon: Truck, t: 'Fornitori', badge: 3 },
+  { icon: Receipt, t: 'Fatture', badge: 2 },
+  { icon: Users, t: 'Personale' },
+  { icon: Wallet, t: 'Cassa' },
+  { icon: BookOpen, t: 'Ricette' },
+  { icon: BarChart3, t: 'Report' },
 ];
 
-const PERIODI = [
+/* due istantanee dei numeri: si alternano così le cifre "camminano" */
+const SNAPS = [
   {
-    k: 'Giorno',
     kpi: [
-      { lab: 'Utile netto', v: 4280, fmt: 'eur', d: '+12,4%', tone: 'up' },
-      { lab: 'Personale', v: 1140, fmt: 'eur', d: '26,6% sui ricavi' },
-      { lab: 'Materie prime', v: 28.4, fmt: 'pct', d: '−1,5 pt', tone: 'up' },
+      { lab: 'Incassi · mese', v: 18420, fmt: 'eur', d: '12% vs apr', dir: 'up', tone: 'pos' },
+      { lab: 'Spese · mese', v: 11890, fmt: 'eur', d: '8% vs apr', dir: 'up', tone: 'neg' },
+      { lab: 'Margine lordo', v: 35.5, fmt: 'pct', d: '2,1pt', dir: 'up', tone: 'pos' },
+      { lab: 'Costo personale', v: 4610, fmt: 'eur', d: '25% sui ricavi' },
+      { lab: 'Food cost', v: 28.0, fmt: 'pct', d: '1,5pt', dir: 'down', tone: 'pos' },
+      { lab: 'Beverage cost', v: 22.0, fmt: 'pct', d: '0,8pt', dir: 'up', tone: 'neg' },
     ],
-    bars: [42, 58, 36, 70, 52, 88, 64, 76, 60, 82],
-    top: 7,
-    alert: 'Le materie prime ti costano il 12% in più',
+    inc: [58, 54, 66, 72, 78, 92],
+    spe: [40, 44, 38, 42, 46, 50],
   },
   {
-    k: 'Settimana',
     kpi: [
-      { lab: 'Utile netto', v: 26500, fmt: 'eur', d: '+8,1%', tone: 'up' },
-      { lab: 'Personale', v: 7980, fmt: 'eur', d: '30,1% sui ricavi' },
-      { lab: 'Materie prime', v: 27.9, fmt: 'pct', d: '−0,8 pt', tone: 'up' },
+      { lab: 'Incassi · mese', v: 19240, fmt: 'eur', d: '14% vs apr', dir: 'up', tone: 'pos' },
+      { lab: 'Spese · mese', v: 11510, fmt: 'eur', d: '5% vs apr', dir: 'up', tone: 'neg' },
+      { lab: 'Margine lordo', v: 36.8, fmt: 'pct', d: '2,9pt', dir: 'up', tone: 'pos' },
+      { lab: 'Costo personale', v: 4480, fmt: 'eur', d: '24% sui ricavi' },
+      { lab: 'Food cost', v: 27.4, fmt: 'pct', d: '2,1pt', dir: 'down', tone: 'pos' },
+      { lab: 'Beverage cost', v: 21.6, fmt: 'pct', d: '0,3pt', dir: 'up', tone: 'neg' },
     ],
-    bars: [55, 40, 72, 48, 84, 60, 92, 68, 76, 88],
-    top: 6,
-    alert: 'Venerdì scadono 3 fatture da pagare',
-  },
-  {
-    k: 'Mese',
-    kpi: [
-      { lab: 'Utile netto', v: 112400, fmt: 'eur', d: '+14,2%', tone: 'up' },
-      { lab: 'Personale', v: 34200, fmt: 'eur', d: '30,4% sui ricavi' },
-      { lab: 'Materie prime', v: 28.1, fmt: 'pct', d: '−2,1 pt', tone: 'up' },
-    ],
-    bars: [38, 64, 50, 78, 44, 68, 96, 72, 58, 84],
-    top: 6,
-    alert: 'Stanno finendo 2 prodotti in magazzino',
+    inc: [60, 56, 64, 70, 80, 96],
+    spe: [38, 42, 40, 44, 44, 48],
   },
 ];
 
-const LOG = [
-  { t: 'Distillerie Rossi', s: 'Fattura registrata', v: '−€1.240' },
-  { t: 'Turno Marco B.', s: 'Presenze · 8 ore', v: '−€96' },
-  { t: 'Campari 1L', s: 'Riordino creato', v: '24 pz', k: 'auto' },
-  { t: 'Banca', s: 'Accredito riconciliato', v: '+€2.310', k: 'in' },
-  { t: 'Incassi POS', s: 'Chiusura serale', v: '+€3.480', k: 'in' },
-  { t: 'Bianchi & Figli', s: 'Documento letto', v: 'ok', k: 'auto' },
+const MESI = ['Dic', 'Gen', 'Feb', 'Mar', 'Apr', 'Mag'];
+
+const ALERTS = [
+  { k: 'red', t: 'Campari 1L sotto soglia (2 pz)', s: 'Consumo 4 pz/sett · suggerito 6 pz' },
+  { k: 'amber', t: 'Distillerie Rossi: Gin +18% vs media', s: 'Fattura n.245 del 12 mag' },
+  { k: 'blue', t: '2 fatture in scadenza (5 gg)', s: '€1.840 · Caseificio, Forno' },
 ];
 
-const FONTI = ['Cassa', 'Banca', 'Fatture', 'Magazzino'];
+const QUERIES = [
+  'chi mi ha alzato i prezzi?',
+  'quanto ho speso in bevande?',
+  'quali fatture scadono a breve?',
+];
 
 function useNum(target) {
   const mv = useMotionValue(target);
@@ -87,54 +91,55 @@ const fmt = (n, kind) =>
     ? `${n.toFixed(1).replace('.', ',')}%`
     : `€${Math.round(n).toLocaleString('it-IT')}`;
 
-function Kpi({ lab, v, fmt: kind, d, tone }) {
+function Kpi({ lab, v, fmt: kind, d, dir, tone }) {
   const n = useNum(v);
   return (
-    <div className="win__kpi">
-      <p className="win__kpi-lab">{lab}</p>
-      <p className="win__kpi-val num">{fmt(n, kind)}</p>
-      <p className={`win__kpi-d num ${tone === 'up' ? 'is-up' : ''}`}>{d}</p>
+    <div className="dash__kpi">
+      <p className="dash__kpi-lab">{lab}</p>
+      <p className="dash__kpi-val num">{fmt(n, kind)}</p>
+      <span className={`dash__kpi-d ${tone ? `is-${tone}` : 'is-flat'}`}>
+        {dir === 'up' && <TrendingUp size={11} strokeWidth={2.4} />}
+        {dir === 'down' && <TrendingDown size={11} strokeWidth={2.4} />}
+        {d}
+      </span>
     </div>
   );
 }
 
 export default function HeroScene() {
   const reduce = useReducedMotion();
-  const [tab, setTab] = useState(0);
-  const [feed, setFeed] = useState(0);
-  const [fonte, setFonte] = useState(2);
+  const [snap, setSnap] = useState(0);
+  const [nav, setNav] = useState(0);
+  const [q, setQ] = useState(0);
 
-  const p = PERIODI[tab];
+  const s = SNAPS[snap];
 
   useEffect(() => {
     if (reduce) return;
-    const id = setInterval(() => setTab((t) => (t + 1) % PERIODI.length), 5400);
+    const id = setInterval(() => setSnap((v) => (v + 1) % SNAPS.length), 5200);
     return () => clearInterval(id);
   }, [reduce]);
 
   useEffect(() => {
     if (reduce) return;
-    const id = setInterval(() => setFeed((f) => (f + 1) % LOG.length), 2600);
+    const id = setInterval(() => setNav((v) => (v + 1) % NAV.length), 2400);
     return () => clearInterval(id);
   }, [reduce]);
 
   useEffect(() => {
     if (reduce) return;
-    const id = setInterval(() => setFonte((s) => (s + 1) % FONTI.length), 3000);
+    const id = setInterval(() => setQ((v) => (v + 1) % QUERIES.length), 3600);
     return () => clearInterval(id);
   }, [reduce]);
 
-  const rows = Array.from({ length: 4 }, (_, k) => {
-    const i = (feed + k) % LOG.length;
-    return { ...LOG[i], id: `${i}-${Math.floor((feed + k) / LOG.length)}` };
-  });
+  const maxBar = Math.max(...s.inc, ...s.spe);
 
   const float = (up) => (reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: up ? [0, -10, 0] : [0, 10, 0] });
 
   return (
     <div className="scene">
       <div className="win" aria-hidden="true">
-        {/* la cornice: solo il semaforo, fuori dall'applicazione */}
+        {/* cornice: solo il semaforo */}
         <div className="win__chrome">
           <span className="win__dots">
             <i />
@@ -143,119 +148,140 @@ export default function HeroScene() {
           </span>
         </div>
 
-        {/* l'applicazione, dentro alla cornice */}
+        {/* l'applicazione */}
         <div className="win__app">
-          <div className="win__topbar">
-            <span className="win__brand">
-              <img className="win__logo win__logo--l" src={logoLight} alt="" />
-              <img className="win__logo win__logo--d" src={logoDark} alt="" />
-            </span>
-            <span className="win__tabs">
-              {PERIODI.map((x, i) => (
-                <button
-                  key={x.k}
-                  className={`win__tab ${i === tab ? 'is-on' : ''}`}
-                  onClick={() => setTab(i)}
-                  tabIndex={-1}
-                >
-                  {i === tab && <motion.span className="win__tab-bg" layoutId="tabbg" />}
-                  <span>{x.k}</span>
-                </button>
-              ))}
-            </span>
-          </div>
-
-          <div className="win__body">
-          {/* menu laterale */}
-          <div className="win__side">
-            {MENU.map(({ icon: Icon, t, on }) => (
-              <span className={`win__nav ${on ? 'is-on' : ''}`} key={t}>
-                <Icon size={14} strokeWidth={1.9} />
-                {t}
-              </span>
-            ))}
-            <div className="win__side-foot">
-              {FONTI.map((f, i) => (
-                <span key={f} className={`win__src ${i === fonte ? 'is-run' : ''}`}>
-                  {i === fonte ? (
-                    <Loader size={9} strokeWidth={2.6} className="win__spin" />
-                  ) : (
-                    <Check size={9} strokeWidth={3.2} />
-                  )}
-                  {f}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* schermata */}
-          <div className="win__main">
-            <div className="win__kpis">
-              {p.kpi.map((k) => (
-                <Kpi key={k.lab} {...k} />
-              ))}
-            </div>
-
-            <div className="win__alert">
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={p.alert}
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -5 }}
-                  transition={{ duration: 0.3, ease: EASE_MODAL }}
-                >
-                  {p.alert}
-                </motion.span>
-              </AnimatePresence>
-            </div>
-
-            <div className="win__split">
-              <div className="win__sec">
-                <div className="win__hd">Utile per giorno</div>
-                <div className="win__bars">
-                  {p.bars.map((h, i) => (
-                    <span className={`win__col ${i === p.top ? 'is-top' : ''}`} key={i}>
-                      <motion.i
-                        animate={{ height: `${h}%` }}
-                        transition={{ duration: 0.7, ease: EASE_MODAL, delay: i * 0.035 }}
-                      />
-                    </span>
-                  ))}
-                </div>
+          <div className="dash">
+            {/* ---- menu laterale ---- */}
+            <aside className="dash__side">
+              <div className="dash__brand">
+                <img className="dash__brand-logo win__logo--l" src={logoLight} alt="" />
+                <img className="dash__brand-logo win__logo--d" src={logoDark} alt="" />
+                <span className="dash__brand-sub">Caffè Centrale</span>
               </div>
 
-              <div className="win__sec win__sec--rows">
-                <div className="win__hd">Ultimi movimenti</div>
-                <div className="win__rows">
-                  <AnimatePresence initial={false} mode="popLayout">
-                    {rows.map(({ id, t, s, v, k }) => (
-                      <motion.div
-                        className={`win__row ${k ? `is-${k}` : ''}`}
-                        key={id}
-                        layout
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.4, ease: EASE_MODAL }}
-                      >
-                        <span className="win__row-t">
-                          <b>{t}</b>
-                          <em>{s}</em>
-                        </span>
-                        <span className="win__row-v num">{v}</span>
-                      </motion.div>
-                    ))}
+              <nav className="dash__nav">
+                {NAV.map(({ icon: Icon, t, badge }, i) => (
+                  <span key={t} className={`dash__navitem ${i === nav ? 'is-on' : ''}`}>
+                    {i === nav && <motion.span className="dash__navhi" layoutId="navhi" transition={{ type: 'spring', damping: 30, stiffness: 320 }} />}
+                    <Icon size={15} strokeWidth={1.9} />
+                    <b>{t}</b>
+                    {badge && <em className="dash__badge">{badge}</em>}
+                  </span>
+                ))}
+              </nav>
+
+              <div className="dash__user">
+                <span className="dash__ava">M</span>
+                <b>Mario</b>
+              </div>
+            </aside>
+
+            {/* ---- schermata ---- */}
+            <div className="dash__main">
+              <div className="dash__top">
+                <div className="dash__search">
+                  <Sparkles size={14} strokeWidth={2} />
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={q}
+                      className="dash__search-q"
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.3, ease: EASE_MODAL }}
+                    >
+                      “{QUERIES[q]}”
+                    </motion.span>
                   </AnimatePresence>
                 </div>
+                <span className="dash__ticon">
+                  <Moon size={16} strokeWidth={1.9} />
+                </span>
+                <span className="dash__ticon">
+                  <Bell size={16} strokeWidth={1.9} />
+                </span>
               </div>
-            </div>
+
+              <div className="dash__scroll">
+                <div className="dash__greet">
+                  <h4>Buongiorno, Mario</h4>
+                  <p>Maggio 2026 · ecco come va il bar in questo momento</p>
+                </div>
+
+                <div className="dash__kpis">
+                  {s.kpi.map((k) => (
+                    <Kpi key={k.lab} {...k} />
+                  ))}
+                </div>
+
+                <div className="dash__grid">
+                  {/* grafico */}
+                  <div className="dash__panel">
+                    <div className="dash__panel-hd">
+                      <h5>Incassi vs spese — ultimi 6 mesi</h5>
+                      <span className="dash__legend">
+                        <span className="dash__leg is-inc">
+                          <i />
+                          Incassi
+                        </span>
+                        <span className="dash__leg is-spe">
+                          <i />
+                          Spese
+                        </span>
+                      </span>
+                    </div>
+                    <div className="dash__chart">
+                      {MESI.map((m, i) => (
+                        <div className={`dash__month ${i === MESI.length - 1 ? 'is-on' : ''}`} key={m}>
+                          <div className="dash__pair">
+                            <motion.span
+                              className="dash__bar is-inc"
+                              animate={{ height: `${(s.inc[i] / maxBar) * 100}%` }}
+                              transition={{ duration: 0.7, ease: EASE_MODAL, delay: i * 0.04 }}
+                            />
+                            <motion.span
+                              className="dash__bar is-spe"
+                              animate={{ height: `${(s.spe[i] / maxBar) * 100}%` }}
+                              transition={{ duration: 0.7, ease: EASE_MODAL, delay: i * 0.04 + 0.05 }}
+                            />
+                          </div>
+                          <span className="dash__month-l">{m}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* alert */}
+                  <div className="dash__panel">
+                    <div className="dash__panel-hd">
+                      <h5>Alert e anomalie — 5 da gestire</h5>
+                    </div>
+                    <div className="dash__alerts">
+                      {ALERTS.map(({ k, t, s: sub }, i) => (
+                        <motion.div
+                          className={`dash__alert is-${k}`}
+                          key={t}
+                          initial={{ opacity: 0, x: 8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.5, ease: EASE_MODAL, delay: 0.3 + i * 0.12 }}
+                        >
+                          <span className="dash__alert-dot" />
+                          <span className="dash__alert-t">
+                            <b>{t}</b>
+                            <em>{sub}</em>
+                          </span>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* quello che succede da solo, ai lati della finestra */}
+      {/* schede che galleggiano ai lati */}
       <motion.div
         className="sat sat--l"
         initial={{ opacity: 0, y: 14 }}
