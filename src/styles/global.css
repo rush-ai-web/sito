@@ -349,11 +349,29 @@ h4 {
   transition: opacity var(--d-lift) var(--e-lift);
 }
 
+/* cerchio pieno piccolo dietro l'icona (davanti alla griglia accento):
+   isola l'icona sulla maglia e le dà un basamento coerente col resto
+   delle card del sito. */
+.card-deco::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--surface-top);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: 0 6px 18px -10px color-mix(in srgb, var(--accent) 55%, transparent);
+  z-index: 0;
+}
+
 .card-deco__ic {
   position: relative;
   z-index: 1;
   color: var(--accent);
-  filter: drop-shadow(0 6px 14px color-mix(in srgb, var(--accent) 55%, transparent));
+  filter: drop-shadow(0 4px 10px color-mix(in srgb, var(--accent) 45%, transparent));
 }
 
 /* taglie card allineate al resto del sito (compact card style, non hero) */

@@ -154,7 +154,7 @@ export function DecoratorCard({ icon: Icon, title, children, className = '' }) {
     <LiftCard className={`card card--deco ${className}`}>
       <div className="card-deco" aria-hidden="true">
         <div className="card-deco__grid" />
-        {Icon ? <Icon className="card-deco__ic" size={30} strokeWidth={1.8} /> : null}
+        {Icon ? <Icon className="card-deco__ic" size={22} strokeWidth={1.9} /> : null}
       </div>
       <h3 className="t-card card-deco__t">{title}</h3>
       <p className="t-body card-deco__d">{children}</p>
