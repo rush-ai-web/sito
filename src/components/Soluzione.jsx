@@ -45,8 +45,8 @@ const ORBIT = [
   {
     id: 5,
     icon: ShieldCheck,
-    t: 'Il software resta\ntuo, non in affitto',
-    body: 'Nessuna licenza mensile che sale ogni anno. Il gestionale è tuo, per sempre, con supporto continuo.',
+    t: 'Costo fisso,\nnessuna sorpresa',
+    body: 'Canone mensile chiaro e invariabile. Nessun extra nascosto, nessun rincaro: sai sempre quanto paghi.',
     related: [4, 6],
   },
   {
