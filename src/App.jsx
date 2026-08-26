@@ -13,6 +13,7 @@ import Faq from './components/Faq';
 import Cta from './components/Cta';
 import Footer from './components/Footer';
 import Fab from './components/Fab';
+import ThemeSwitch from './components/ThemeSwitch';
 
 export default function App() {
   const [theme, toggleTheme] = useTheme();
@@ -20,7 +21,7 @@ export default function App() {
 
   return (
     <ThemeCtx.Provider value={theme}>
-      <Nav theme={theme} onToggleTheme={toggleTheme} />
+      <Nav />
       <main>
         {/* chiaro */}
         <Hero />
@@ -43,6 +44,7 @@ export default function App() {
       </main>
       <Footer />
       <Fab />
+      <ThemeSwitch theme={theme} onToggle={toggleTheme} />
     </ThemeCtx.Provider>
   );
 }

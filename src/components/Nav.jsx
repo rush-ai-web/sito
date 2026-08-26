@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Moon, Sun, ArrowRight } from 'lucide-react';
-import { DUR, EASE_MODAL } from '../lib/motion';
+import { ArrowRight } from 'lucide-react';
+import { EASE_MODAL } from '../lib/motion';
 
 function LogoMark() {
   return (
@@ -18,7 +18,7 @@ const LINKS = [
   ['FAQ', '#faq'],
 ];
 
-export default function Nav({ theme, onToggleTheme }) {
+export default function Nav() {
   const { scrollY } = useScroll();
   /* wide at the top (almost full screen), shrinks to a compact pill on scroll */
   const navW = useTransform(scrollY, [0, 220], [1160, 740]);
@@ -43,26 +43,6 @@ export default function Nav({ theme, onToggleTheme }) {
             </a>
           ))}
         </nav>
-
-        <button
-          className="nav__icon"
-          onClick={onToggleTheme}
-          aria-label={theme === 'dark' ? 'Passa al tema chiaro' : 'Passa al tema scuro'}
-        >
-          <motion.span
-            key={theme}
-            initial={{ rotate: -35, opacity: 0 }}
-            animate={{ rotate: 0, opacity: 1 }}
-            transition={{ duration: DUR.pop, ease: EASE_MODAL }}
-            style={{ display: 'grid' }}
-          >
-            {theme === 'dark' ? (
-              <Sun size={18} strokeWidth={1.75} />
-            ) : (
-              <Moon size={18} strokeWidth={1.75} />
-            )}
-          </motion.span>
-        </button>
 
         <a className="btn btn--accent btn--hero nav__cta" href="#contatti">
           Parliamone
