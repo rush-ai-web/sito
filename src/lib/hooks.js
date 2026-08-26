@@ -3,6 +3,21 @@ import { animate, useInView, useMotionValue, useReducedMotion } from 'framer-mot
 import Lenis from 'lenis';
 import { EASE_MODAL } from './motion';
 
+/* ---------- Viewport: mobile vs desktop ---------- */
+export function useIsMobile(query = '(max-width: 760px)') {
+  const [is, setIs] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(query).matches,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const on = () => setIs(mq.matches);
+    on();
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, [query]);
+  return is;
+}
+
 /* ---------- Smooth scroll stile Framer (Lenis) ---------- */
 export function useSmoothScroll() {
   const reduce = useReducedMotion();

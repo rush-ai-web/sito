@@ -2280,6 +2280,88 @@ h4 {
 }
 
 /* ============================================================
+   Soluzione — carosello mobile (sostituisce l'orbita ≤760px)
+   ============================================================ */
+.sol-track {
+  display: flex;
+  gap: 14px;
+  margin-top: 28px;
+  padding: 4px 18px 20px;
+  /* margini negativi = padding di .wrap su mobile: il carosello deborda a
+     tutta larghezza mentre le card interne restano allineate al contenuto */
+  margin-left: -18px;
+  margin-right: -18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.sol-track::-webkit-scrollbar {
+  display: none;
+}
+
+.sol-card {
+  flex: 0 0 78%;
+  max-width: 320px;
+  scroll-snap-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 20px;
+  background-color: var(--bg);
+  background-image: var(--card-vig);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: var(--sh-1);
+  text-align: left;
+  font-family: inherit;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.sol-card.is-open {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--hairline-strong));
+  box-shadow: var(--sh-2);
+}
+
+.sol-card__top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sol-card__t {
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+}
+
+.sol-card__body {
+  display: block;
+  overflow: hidden;
+  align-self: stretch;
+}
+.sol-card__body-in {
+  display: block;
+  padding-top: 4px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+
+.sol-card__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: auto;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ============================================================
    Cascata KPI — colonne sfalsate con divisori verticali
    ============================================================ */
 .cascade {

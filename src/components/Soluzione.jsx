@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Section, Head, IconTile } from './ui';
 import { EASE_MODAL } from '../lib/motion';
+import { useIsMobile } from '../lib/hooks';
 
 const ORBIT = [
   {
@@ -71,7 +72,74 @@ function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
-export default function Soluzione() {
+/* ---- Mobile: carosello orizzontale con card tap-to-expand ---- */
+function SoluzioneMobile() {
+  const [openId, setOpenId] = useState(null);
+
+  return (
+    <Section id="soluzione" large spot>
+      <Head
+        icon={Lightbulb}
+        label="La soluzione"
+        title={<>Un gestionale disegnato attorno a come lavori già</>}
+        sub="Partiamo dai tuoi processi, non da un template. Quello che serve c'è, quello che non serve non lo paghi."
+      />
+
+      <div className="sol-track" role="list">
+        {ORBIT.map((item, idx) => {
+          const isOpen = openId === item.id;
+          const Icon = item.icon;
+          return (
+            <motion.button
+              type="button"
+              role="listitem"
+              key={item.id}
+              className={`sol-card${isOpen ? ' is-open' : ''}`}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.5, ease: EASE_MODAL, delay: (idx % 2) * 0.08 }}
+              onClick={() => setOpenId(isOpen ? null : item.id)}
+              aria-expanded={isOpen}
+            >
+              <span className="sol-card__top">
+                <IconTile icon={Icon} size="sm" />
+                <span className="sol-card__t">
+                  {item.t.split('\n').map((line, k) => (
+                    <span key={k} style={{ display: 'block' }}>
+                      {line}
+                    </span>
+                  ))}
+                </span>
+              </span>
+
+              <AnimatePresence initial={false}>
+                {isOpen && (
+                  <motion.span
+                    className="sol-card__body"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3, ease: EASE_MODAL }}
+                  >
+                    <span className="sol-card__body-in">{item.body}</span>
+                  </motion.span>
+                )}
+              </AnimatePresence>
+
+              <span className="sol-card__hint">
+                {isOpen ? 'Tocca per chiudere' : 'Tocca per aprire'}
+                <ArrowRight size={13} strokeWidth={2.2} />
+              </span>
+            </motion.button>
+          );
+        })}
+      </div>
+    </Section>
+  );
+}
+
+function SoluzioneDesktop() {
   const reduce = useReducedMotion();
   const [openId, setOpenId] = useState(null);
   const [entered, setEntered] = useState(false);
@@ -244,4 +312,9 @@ export default function Soluzione() {
       </div>
     </Section>
   );
+}
+
+export default function Soluzione() {
+  const isMobile = useIsMobile();
+  return isMobile ? <SoluzioneMobile /> : <SoluzioneDesktop />;
 }
