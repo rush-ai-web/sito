@@ -151,31 +151,28 @@ h4 {
   line-height: 1.06;
 }
 
-/* Titolo hero — Horizon: letter-spacing riaperto perché la
-   proporzione geometrica del font non ama il -3.5% di Inter */
+/* Titolo hero — Inter uppercase bold, come la testata hero */
 .t-hero {
-  font-family: var(--ff-display);
+  font-family: var(--ff-body);
+  font-weight: 800;
   font-size: clamp(38px, 6.2vw, 78px);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.03em;
   line-height: 1;
   text-transform: uppercase;
 }
 
-/* Titolo di sezione — Horizon con proporzioni Apple.
-   Le sezioni "head" centrate ridichiarano la larghezza massima
-   più stretta perché Horizon è più largo di Inter e trascinerebbe
-   il titolo su troppe righe. */
+/* Titolo di sezione — Inter uppercase bold, stesso trattamento dell'hero */
 .t-sec {
-  font-family: var(--ff-display);
+  font-family: var(--ff-body);
+  font-weight: 800;
   font-size: clamp(26px, 3.2vw, 40px);
-  letter-spacing: 0;
-  line-height: 1.1;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
   text-transform: uppercase;
 }
 
-/* con Horizon la testata respira di più */
 .head .t-sec {
-  max-width: 18ch;
+  max-width: 20ch;
 }
 
 .t-card {
