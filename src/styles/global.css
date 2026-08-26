@@ -356,13 +356,21 @@ h4 {
   filter: drop-shadow(0 6px 14px color-mix(in srgb, var(--accent) 55%, transparent));
 }
 
+/* taglie card allineate al resto del sito (compact card style, non hero) */
 .card-deco__t {
   margin: 6px 0 10px;
+  font-size: 17.5px;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  font-weight: 600;
 }
 
 .card-deco__d {
   margin: 0 auto;
   max-width: 34ch;
+  font-size: 14.5px;
+  line-height: 1.55;
+  letter-spacing: -0.003em;
 }
 
 /* hover: la maglia in accento si accende un po' */

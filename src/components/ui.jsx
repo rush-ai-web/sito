@@ -1,4 +1,4 @@
-import { createContext, forwardRef, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, forwardRef, useContext } from 'react';
 import { motion } from 'framer-motion';
 import { fadeUp, inView, stagger } from '../lib/motion';
 
@@ -33,39 +33,10 @@ export function Section({
     .filter(Boolean)
     .join(' ');
 
-  /* variante shine: aggiunge .in-view quando la sezione entra in viewport,
-     così il keyframe della banda diagonale parte una sola volta. */
-  const ref = useRef(null);
-  const [inViewShine, setInViewShine] = useState(false);
   const wantsShine = className.includes('section--shine');
-  useEffect(() => {
-    if (!wantsShine || inViewShine) return undefined;
-    const el = ref.current;
-    if (!el) return undefined;
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            setInViewShine(true);
-            io.disconnect();
-          }
-        });
-      },
-      { threshold: 0.15 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [wantsShine, inViewShine]);
-
-  const inViewCls = wantsShine && inViewShine ? ' in-view' : '';
 
   return (
-    <section
-      id={id}
-      ref={ref}
-      data-tone={dark ? 'dark' : 'light'}
-      className={`section ${fx} ${className}${inViewCls}`}
-    >
+    <section id={id} data-tone={dark ? 'dark' : 'light'} className={`section ${fx} ${className}`}>
       {wantsShine ? <span className="section-shine" aria-hidden="true" /> : null}
       <div className="wrap">{children}</div>
     </section>

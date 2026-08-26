@@ -80,21 +80,25 @@
     color-mix(in srgb, var(--text) 6%, transparent) 70%,
     transparent 100%
   );
-  transform: translate(-140%, 40%) rotate(-18deg);
   filter: blur(24px);
   will-change: transform, opacity;
-  opacity: 0;
-}
-.section--shine.in-view .section-shine {
-  animation: sectionShine 2.4s cubic-bezier(0.22, 1, 0.36, 1) 0.15s 1 both;
+  /* loop lento in diagonale, dal basso-sinistra verso alto-destra.
+     Fade morbido a inizio e fine ciclo perché non ci sia mai un salto. */
+  animation: sectionShine 14s ease-in-out infinite;
 }
 @keyframes sectionShine {
   0% {
     transform: translate(-140%, 40%) rotate(-18deg);
     opacity: 0;
   }
-  20% {
+  15% {
     opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 0;
   }
   100% {
     transform: translate(340%, -40%) rotate(-18deg);
@@ -606,39 +610,9 @@
   }
 }
 
-/* 3. Una lama di luce scende lungo la maglia di sfondo */
-.fx-grid::after {
-  content: '';
-  position: absolute;
-  inset-inline: 0;
-  top: 0;
-  height: 34%;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    color-mix(in srgb, var(--text) 4%, transparent) 50%,
-    transparent 100%
-  );
-  animation: gridScan 11s var(--e-lift) infinite;
-}
-
-@keyframes gridScan {
-  0% {
-    transform: translateY(-120%);
-    opacity: 0;
-  }
-  18% {
-    opacity: 1;
-  }
-  72% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(320%);
-    opacity: 0;
-  }
-}
+/* NB: la vecchia scan verticale (gridScan sulla maglia di sfondo) è stata
+   rimossa. Sulle sezioni con .section--shine c'è un'unica banda diagonale
+   in loop lento — vedi .section-shine più sopra. */
 
 /* 4. Hairline che si accende: un riflesso che scorre sui divisori
    della scalinata e dei passi */
