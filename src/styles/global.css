@@ -2370,6 +2370,12 @@ h4 {
   }
 }
 
+/* la sezione Soluzione (con orbita) respira meno: l'orbita stessa ha
+   il suo min-height che le dà aria; il padding sezione era eccessivo. */
+#soluzione.section--lg {
+  padding-block: 48px;
+}
+
 /* ============================================================
    Soluzione — carosello mobile (sostituisce l'orbita ≤760px)
    ============================================================ */
