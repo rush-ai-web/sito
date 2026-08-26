@@ -1,4 +1,4 @@
-import { createContext, forwardRef, useContext } from 'react';
+import { createContext, forwardRef, useContext, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { fadeUp, inView, stagger } from '../lib/motion';
 
@@ -33,8 +33,39 @@ export function Section({
     .filter(Boolean)
     .join(' ');
 
+  /* variante shine: aggiunge .in-view quando la sezione entra in viewport,
+     così il keyframe della banda diagonale parte una sola volta. */
+  const ref = useRef(null);
+  const [inViewShine, setInViewShine] = useState(false);
+  const wantsShine = className.includes('section--shine');
+  useEffect(() => {
+    if (!wantsShine || inViewShine) return undefined;
+    const el = ref.current;
+    if (!el) return undefined;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            setInViewShine(true);
+            io.disconnect();
+          }
+        });
+      },
+      { threshold: 0.15 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [wantsShine, inViewShine]);
+
+  const inViewCls = wantsShine && inViewShine ? ' in-view' : '';
+
   return (
-    <section id={id} data-tone={dark ? 'dark' : 'light'} className={`section ${fx} ${className}`}>
+    <section
+      id={id}
+      ref={ref}
+      data-tone={dark ? 'dark' : 'light'}
+      className={`section ${fx} ${className}${inViewCls}`}
+    >
       <div className="wrap">{children}</div>
     </section>
   );
@@ -136,6 +167,27 @@ export function GlowCard({ icon, title, children, accent = false, className = ''
         {title}
       </h3>
       <p className="t-body">{children}</p>
+    </LiftCard>
+  );
+}
+
+/* ------------------------------------------------------------
+   DecoratorCard — card centrata con decorator a griglia dietro
+   all'icona (mask radiale che sfuma ai bordi), l'icona sta in un
+   piccolo riquadro con bordo top+left in accento. Titolo + testo
+   sotto, centrati.
+   ------------------------------------------------------------ */
+export function DecoratorCard({ icon: Icon, title, children, className = '' }) {
+  return (
+    <LiftCard className={`card card--deco ${className}`}>
+      <div className="card-deco" aria-hidden="true">
+        <div className="card-deco__grid" />
+        <div className="card-deco__box">
+          {Icon ? <Icon size={22} strokeWidth={1.85} /> : null}
+        </div>
+      </div>
+      <h3 className="t-card card-deco__t">{title}</h3>
+      <p className="t-body card-deco__d">{children}</p>
     </LiftCard>
   );
 }

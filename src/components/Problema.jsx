@@ -1,5 +1,5 @@
 import { CircleSlash, Boxes, FileWarning, Clock } from 'lucide-react';
-import { Section, Head, Group, GlowCard } from './ui';
+import { Section, Head, Group, DecoratorCard } from './ui';
 
 const PUNTI = [
   {
@@ -21,7 +21,7 @@ const PUNTI = [
 
 export default function Problema() {
   return (
-    <Section id="problema" invert grid>
+    <Section id="problema" invert grid className="section--shine">
       <Head
         icon={CircleSlash}
         label="Il problema"
@@ -33,11 +33,11 @@ export default function Problema() {
         sub="Dovrebbe essere il contrario. Un sistema che non segue i tuoi processi diventa una tassa quotidiana su chi ci lavora."
       />
 
-      <Group className="grid grid-3" each={0.09}>
+      <Group className="grid grid-3 grid--deco" each={0.09}>
         {PUNTI.map(({ icon, t, d }) => (
-          <GlowCard key={t} icon={icon} title={t}>
+          <DecoratorCard key={t} icon={icon} title={t}>
             {d}
-          </GlowCard>
+          </DecoratorCard>
         ))}
       </Group>
     </Section>

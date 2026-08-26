@@ -42,6 +42,56 @@
   opacity: 0.9;
 }
 
+/* shimmer diagonale a livello di sezione: banda di luce che attraversa
+   il fondo dal basso-sinistra verso alto-destra al primo scorrimento in
+   viewport. Segue lo stile della pill hero — transform, GPU. */
+.section--shine {
+  position: relative;
+  overflow: hidden;
+}
+.section--shine::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  bottom: -30%;
+  left: 0;
+  width: 40%;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    color-mix(in srgb, var(--text) 6%, transparent) 30%,
+    color-mix(in srgb, var(--text) 12%, transparent) 50%,
+    color-mix(in srgb, var(--text) 6%, transparent) 70%,
+    transparent 100%
+  );
+  transform: translate(-140%, 40%) rotate(-18deg);
+  filter: blur(24px);
+  will-change: transform, opacity;
+}
+.section--shine.in-view::before {
+  animation: sectionShine 2.4s cubic-bezier(0.22, 1, 0.36, 1) 0.15s 1 both;
+}
+@keyframes sectionShine {
+  0% {
+    transform: translate(-140%, 40%) rotate(-18deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(340%, -40%) rotate(-18deg);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .section--shine::before {
+    display: none;
+  }
+}
+
 /* il faro: un cono di luce che scende dall'alto, dietro al titolo */
 .fx-spot::after {
   content: '';

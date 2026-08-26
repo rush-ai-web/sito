@@ -172,7 +172,7 @@ h4 {
 }
 
 .head .t-sec {
-  max-width: 20ch;
+  max-width: 30ch;
 }
 
 .t-card {
@@ -307,6 +307,74 @@ h4 {
 
 .card--lg {
   border-radius: var(--r-lg);
+}
+
+/* ------------------------------------------------------------
+   DecoratorCard — decorator a griglia dietro all'icona (mask
+   radiale che sfuma ai bordi), icona in un box con bordo top+left
+   in accento. Testo centrato.
+   ------------------------------------------------------------ */
+.card--deco {
+  border-radius: var(--r-lg);
+  padding: 34px 26px 30px;
+  text-align: center;
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--surface) 55%, transparent) 0%, transparent 60%);
+}
+
+.card-deco {
+  position: relative;
+  margin: 4px auto 8px;
+  width: 148px;
+  height: 148px;
+  -webkit-mask-image: radial-gradient(ellipse 55% 55% at 50% 50%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(ellipse 55% 55% at 50% 50%, #000 55%, transparent 100%);
+}
+
+.card-deco__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--text) 22%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--text) 22%, transparent) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.55;
+}
+
+.card-deco__box {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  border-top: 1px solid var(--accent);
+  border-left: 1px solid var(--accent);
+  color: var(--accent);
+  box-shadow: 0 8px 22px -12px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.card-deco__t {
+  margin: 6px 0 10px;
+}
+
+.card-deco__d {
+  margin: 0 auto;
+  max-width: 34ch;
+}
+
+/* variante hover per card--deco: il grid dietro l'icona si accende */
+.card--deco:hover .card-deco__grid {
+  opacity: 0.75;
+}
+
+/* la Group con questa variante toglie i bordi/sfondi extra e centra */
+.grid--deco {
+  gap: 22px;
+  position: relative;
+  z-index: 1;
 }
 
 .card--flush {
