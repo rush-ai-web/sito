@@ -2036,9 +2036,9 @@ h4 {
 .orbit__ring {
   position: absolute;
   left: 50%;
-  top: 54%;
+  top: 50%;
   width: 1060px;
-  height: 640px;
+  height: 540px;
   border-radius: 50%;
   border: 1px dashed color-mix(in srgb, var(--text) 14%, transparent);
   transform: translate(-50%, -50%);
@@ -2049,7 +2049,7 @@ h4 {
 .orbit__core {
   position: absolute;
   left: 50%;
-  top: 54%;
+  top: 50%;
   transform: translate(-50%, -50%);
   width: min(720px, 75%);
   text-align: center;

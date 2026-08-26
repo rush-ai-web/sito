@@ -59,7 +59,7 @@ const ORBIT = [
 ];
 
 const RADIUS_X = 530;
-const RADIUS_Y = 320;
+const RADIUS_Y = 270;
 const AUTO_SPEED = 0.005; /* deg per ms — un giro ≈ 72 s */
 const STEP = 360 / ORBIT.length;
 const FOCUS_DURATION = 1100;
@@ -197,7 +197,7 @@ export default function Soluzione() {
               className={`orbit__card orbit-card${enterCls}${isOpen ? ' is-open' : ''}${isRelated ? ' is-related' : ''}${isDim ? ' is-dim' : ''}`}
               style={{
                 left: '50%',
-                top: '54%',
+                top: '50%',
                 animationDelay: entered && !reduce ? `${0.1 + idx * 0.14}s` : undefined,
               }}
               onClick={(e) => {
