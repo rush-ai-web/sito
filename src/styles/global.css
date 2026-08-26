@@ -2630,38 +2630,39 @@ h4 {
   position: relative;
   display: flex;
   align-items: center;
-  width: 64px;
-  height: 32px;
+  width: 84px;
+  height: 44px;
   border-radius: 999px;
   border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  /* card style: same vignette + deep shadow as the dashboard cards */
+  background: var(--card-vig);
+  box-shadow: var(--sh-2);
   cursor: pointer;
   padding: 0;
   appearance: none;
-  transition: border-color 0.22s ease, box-shadow 0.22s ease;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
   overflow: hidden;
 }
 
 .tsw:hover {
-  border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+  box-shadow: var(--sh-3);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
 }
 
 .tsw:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent);
+  box-shadow: var(--sh-2), 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
+/* Icons always above the thumb */
 .tsw__icon {
   position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  z-index: 1;
+  width: 42px;
+  height: 44px;
+  z-index: 2;
   pointer-events: none;
   transition: color 0.3s ease, opacity 0.3s ease;
 }
@@ -2669,30 +2670,27 @@ h4 {
 .tsw__icon--sun  { left: 0; }
 .tsw__icon--moon { right: 0; }
 
-/* Light mode: sun is accent, moon is dim */
+/* Light mode: sun accent + full, moon dim */
 .tsw:not(.is-dark) .tsw__icon--sun  { color: var(--accent); opacity: 1; }
-.tsw:not(.is-dark) .tsw__icon--moon { color: var(--fg-2);   opacity: 0.35; }
+.tsw:not(.is-dark) .tsw__icon--moon { color: var(--fg-2);   opacity: 0.32; }
 
-/* Dark mode: moon is accent, sun is dim */
+/* Dark mode: moon accent + full, sun dim */
 .tsw.is-dark .tsw__icon--moon { color: var(--accent); opacity: 1; }
-.tsw.is-dark .tsw__icon--sun  { color: var(--fg-2);   opacity: 0.35; }
+.tsw.is-dark .tsw__icon--sun  { color: var(--fg-2);   opacity: 0.32; }
 
+/* Thumb floats above track — Framer Motion animates position via layout */
 .tsw__thumb {
   position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 24px;
-  height: 24px;
+  top: 6px;
+  left: 6px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background: var(--fg);
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.22);
-  z-index: 2;
+  background: var(--surface-top);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14), 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1;
   pointer-events: none;
-}
-
-/* Dark mode: thumb shifts right. Framer Motion handles the layout animation. */
-.tsw.is-dark .tsw__thumb {
-  left: calc(100% - 27px);  /* fallback (Framer overrides this) */
 }
 
 /* ============================================================
