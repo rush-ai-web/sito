@@ -3214,18 +3214,19 @@ textarea.input {
 .faq-sec::before {
   content: '';
   position: absolute;
-  top: -220px;
+  top: -200px;
   left: 50%;
   translate: -50% 0;
-  width: 620px;
-  height: 520px;
+  width: 780px;
+  height: 620px;
   border-radius: 50%;
   background: radial-gradient(
     50% 50% at 50% 50%,
-    color-mix(in srgb, var(--accent) 18%, transparent) 0%,
-    transparent 70%
+    color-mix(in srgb, var(--accent) 34%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 14%, transparent) 45%,
+    transparent 78%
   );
-  filter: blur(48px);
+  filter: blur(40px);
   pointer-events: none;
   z-index: 0;
 }
