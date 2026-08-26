@@ -71,10 +71,13 @@ function Word({ w, i }) {
 function RotatingSlot() {
   const reduce = useReducedMotion();
   const [i, setI] = useState(0);
+  /* al primo mount evitiamo la spring per carattere (pesa 15+ animazioni
+     simultanee): letters entrano in blocco con la pill. Alle rotazioni
+     successive torna la spring per lettera. */
+  const isFirst = i === 0;
 
   useEffect(() => {
     if (reduce) return;
-    /* 4.6s: lento e leggibile, non un ticker */
     const id = setInterval(() => setI((v) => (v + 1) % ROTATE.length), 4600);
     return () => clearInterval(id);
   }, [reduce]);
@@ -86,11 +89,12 @@ function RotatingSlot() {
     <motion.span
       className="hero__pill"
       layout
-      initial={reduce ? false : { clipPath: 'inset(0 100% 0 0 round 0.24em)', opacity: 0 }}
-      animate={reduce ? {} : { clipPath: 'inset(0 0% 0 0 round 0.24em)', opacity: 1 }}
+      initial={reduce ? false : { opacity: 0, y: 8, scale: 0.94 }}
+      animate={reduce ? {} : { opacity: 1, y: 0, scale: 1 }}
       transition={{
-        clipPath: { duration: 0.85, ease: EASE_MODAL, delay: 0.45 },
-        opacity: { duration: 0.35, ease: EASE_MODAL, delay: 0.45 },
+        opacity: { duration: 0.7, ease: EASE_MODAL, delay: 0.35 },
+        y: { duration: 0.75, ease: EASE_MODAL, delay: 0.35 },
+        scale: { duration: 0.75, ease: EASE_MODAL, delay: 0.35 },
         layout: { type: 'spring', damping: 30, stiffness: 260 },
       }}
     >
@@ -104,34 +108,46 @@ function RotatingSlot() {
           transition={{ duration: 0.32, ease: EASE_MODAL }}
         >
           <span className="hero__pill-t">
-            {chars.map((c, cIdx) => (
-              <span key={cIdx} className="hero__pill-c-wrap">
-                <motion.span
-                  className="hero__pill-c"
-                  initial={{ y: '100%', opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: '-120%', opacity: 0 }}
-                  transition={{
-                    type: 'spring',
-                    damping: 26,
-                    stiffness: 340,
-                    delay: cIdx * 0.028,
-                  }}
-                >
-                  {c === ' ' ? ' ' : c}
-                </motion.span>
-              </span>
-            ))}
+            {isFirst || reduce
+              ? chars.map((c, cIdx) => (
+                  <span key={cIdx} className="hero__pill-c-wrap">
+                    <span className="hero__pill-c">{c === ' ' ? ' ' : c}</span>
+                  </span>
+                ))
+              : chars.map((c, cIdx) => (
+                  <span key={cIdx} className="hero__pill-c-wrap">
+                    <motion.span
+                      className="hero__pill-c"
+                      initial={{ y: '100%', opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: '-120%', opacity: 0 }}
+                      transition={{
+                        type: 'spring',
+                        damping: 26,
+                        stiffness: 340,
+                        delay: cIdx * 0.028,
+                      }}
+                    >
+                      {c === ' ' ? ' ' : c}
+                    </motion.span>
+                  </span>
+                ))}
           </span>
-          <motion.span
-            className="hero__pill-ic"
-            initial={{ rotate: 25, scale: 0.7, opacity: 0 }}
-            animate={{ rotate: 0, scale: 1, opacity: 1 }}
-            exit={{ rotate: -20, scale: 0.7, opacity: 0 }}
-            transition={{ type: 'spring', damping: 22, stiffness: 320 }}
-          >
-            <Icon size={30} strokeWidth={2} />
-          </motion.span>
+          {isFirst || reduce ? (
+            <span className="hero__pill-ic">
+              <Icon size={30} strokeWidth={2} />
+            </span>
+          ) : (
+            <motion.span
+              className="hero__pill-ic"
+              initial={{ rotate: 25, scale: 0.7, opacity: 0 }}
+              animate={{ rotate: 0, scale: 1, opacity: 1 }}
+              exit={{ rotate: -20, scale: 0.7, opacity: 0 }}
+              transition={{ type: 'spring', damping: 22, stiffness: 320 }}
+            >
+              <Icon size={30} strokeWidth={2} />
+            </motion.span>
+          )}
         </motion.span>
       </AnimatePresence>
     </motion.span>

@@ -57,6 +57,34 @@ html.lenis body {
   pointer-events: none;
 }
 
+/* hint compositor per elementi animati: forza layer GPU e stabilizza
+   il subpixel snap durante translate/scale/opacity. */
+.hero__word > span,
+.hero__pill,
+.hero__pill-in,
+.hero__pill-c,
+.hero__pill-ic,
+.hero__stage,
+.orbit-card {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* sezioni sotto la fold: il browser salta layout/paint finché non stanno
+   per entrare in viewport. Zero effetto visivo, molta meno CPU al load. */
+#problema,
+#soluzione,
+#prodotto,
+#numeri,
+#metodo,
+#ristorazione,
+#principi,
+#contatti {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 900px;
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -829,9 +857,7 @@ h4 {
   );
   background-size: 220% 100%;
   background-position: 220% 0;
-  /* delay allineato al wipe reveal della pill: parte quando lo sfondo
-     accento è appena finito di rivelarsi, non prima */
-  animation: pillShine 1.4s ease-in-out 1.15s 1 forwards;
+  animation: pillShine 1.4s ease-in-out 0.9s 1 forwards;
 }
 
 @keyframes pillShine {
