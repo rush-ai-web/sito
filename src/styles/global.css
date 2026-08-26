@@ -12,7 +12,10 @@
   src: url('../fonts/Horizon.woff2') format('woff2');
   font-weight: 400 700;
   font-style: normal;
-  font-display: swap;
+  /* block: niente FOUT né reflow a metà animazione d'entrata. Il titolo
+     parte a opacity 0, quindi l'attesa (pochi ms, font locale) è invisibile
+     e il testo appare già in Horizon, senza ridisporsi. */
+  font-display: block;
 }
 
 @font-face {
@@ -20,7 +23,7 @@
   src: url('../fonts/Horizon-Outlined.woff2') format('woff2');
   font-weight: 400;
   font-style: italic; /* variante contorno riconoscibile via italic */
-  font-display: swap;
+  font-display: block;
 }
 
 /* ============================================================
@@ -57,18 +60,12 @@ html.lenis body {
   pointer-events: none;
 }
 
-/* hint compositor per elementi animati: forza layer GPU e stabilizza
-   il subpixel snap durante translate/scale/opacity. */
-.hero__word > span,
-.hero__pill,
-.hero__pill-in,
-.hero__pill-c,
-.hero__pill-ic,
+/* hint compositor solo sui contenitori grandi che si muovono davvero in
+   continuo (lo stage all'entrata, le card orbitali via RAF). NON sui
+   singoli caratteri: promuoverli tutti creava decine di layer = più jank. */
 .hero__stage,
 .orbit-card {
-  will-change: transform, opacity;
-  transform: translateZ(0);
-  backface-visibility: hidden;
+  will-change: transform;
 }
 
 /* sezioni sotto la fold: il browser salta layout/paint finché non stanno
@@ -843,26 +840,34 @@ h4 {
   gap: 0.35em;
 }
 
-.hero__pill-in::before {
-  content: '';
+/* riflesso premium: banda di luce diagonale che scorre su tutta la pill.
+   È un elemento dedicato dentro .hero__pill (overflow:hidden la ritaglia),
+   animato in transform → composited su GPU, nessun repaint per frame. */
+.hero__pill-shine {
   position: absolute;
-  inset: 0;
-  z-index: 1;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 45%;
+  z-index: 4;
   pointer-events: none;
   background: linear-gradient(
     100deg,
-    transparent 20%,
-    rgba(255, 255, 255, 0.38) 50%,
-    transparent 80%
+    transparent 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 100%
   );
-  background-size: 220% 100%;
-  background-position: 220% 0;
-  animation: pillShine 1.4s ease-in-out 0.9s 1 forwards;
+  filter: blur(2px);
+  transform: translateX(-160%) skewX(-14deg);
+  animation: pillShine 1.9s cubic-bezier(0.22, 1, 0.36, 1) 0.6s 1 forwards;
 }
 
 @keyframes pillShine {
+  from {
+    transform: translateX(-160%) skewX(-14deg);
+  }
   to {
-    background-position: -20% 0;
+    transform: translateX(360%) skewX(-14deg);
   }
 }
 
@@ -901,8 +906,8 @@ h4 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__pill-in::before {
-    animation: none;
+  .hero__pill-shine {
+    display: none;
   }
 }
 

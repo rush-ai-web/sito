@@ -150,6 +150,11 @@ function RotatingSlot() {
           )}
         </motion.span>
       </AnimatePresence>
+
+      {/* riflesso premium: banda diagonale che attraversa TUTTA l'area
+         accento. Keyed su i → rimonta e riparte ad ogni cambio frase.
+         Animato in transform (GPU), non in background-position. */}
+      {!reduce && <span className="hero__pill-shine" key={`shine-${i}`} aria-hidden="true" />}
     </motion.span>
   );
 }
