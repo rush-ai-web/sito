@@ -2302,7 +2302,7 @@ h4 {
 }
 
 .sol-card {
-  flex: 0 0 78%;
+  flex: 0 0 76%;
   max-width: 320px;
   scroll-snap-align: center;
   display: flex;
@@ -2359,6 +2359,28 @@ h4 {
   font-size: 12px;
   font-weight: 600;
   color: var(--accent);
+}
+
+/* dot indicatori: segnalano che il carosello scorre e a che punto sei */
+.sol-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+.sol-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 22%, transparent);
+  cursor: pointer;
+  transition: width 0.28s var(--e-lift), background 0.28s ease;
+}
+.sol-dot.is-active {
+  width: 22px;
+  background: var(--accent);
 }
 
 /* ============================================================

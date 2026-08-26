@@ -75,6 +75,35 @@ function easeInOutCubic(t) {
 /* ---- Mobile: carosello orizzontale con card tap-to-expand ---- */
 function SoluzioneMobile() {
   const [openId, setOpenId] = useState(null);
+  const [active, setActive] = useState(0);
+  const trackRef = useRef(null);
+
+  /* indice attivo dalla posizione di scroll: primo elemento il cui centro
+     è più vicino al centro del viewport del track. */
+  const onScroll = () => {
+    const t = trackRef.current;
+    if (!t) return;
+    const mid = t.scrollLeft + t.clientWidth / 2;
+    let best = 0;
+    let bestD = Infinity;
+    for (let k = 0; k < t.children.length; k += 1) {
+      const c = t.children[k];
+      const cMid = c.offsetLeft + c.offsetWidth / 2;
+      const d = Math.abs(cMid - mid);
+      if (d < bestD) {
+        bestD = d;
+        best = k;
+      }
+    }
+    setActive(best);
+  };
+
+  const goTo = (k) => {
+    const t = trackRef.current;
+    if (!t || !t.children[k]) return;
+    const c = t.children[k];
+    t.scrollTo({ left: c.offsetLeft - (t.clientWidth - c.offsetWidth) / 2, behavior: 'smooth' });
+  };
 
   return (
     <Section id="soluzione" large spot>
@@ -85,7 +114,7 @@ function SoluzioneMobile() {
         sub="Partiamo dai tuoi processi, non da un template. Quello che serve c'è, quello che non serve non lo paghi."
       />
 
-      <div className="sol-track" role="list">
+      <div className="sol-track" role="list" ref={trackRef} onScroll={onScroll}>
         {ORBIT.map((item, idx) => {
           const isOpen = openId === item.id;
           const Icon = item.icon;
@@ -134,6 +163,19 @@ function SoluzioneMobile() {
             </motion.button>
           );
         })}
+      </div>
+
+      <div className="sol-dots" role="tablist" aria-label="Scorri le voci">
+        {ORBIT.map((item, k) => (
+          <button
+            type="button"
+            key={item.id}
+            className={`sol-dot${k === active ? ' is-active' : ''}`}
+            aria-label={`Vai alla voce ${k + 1}`}
+            aria-selected={k === active}
+            onClick={() => goTo(k)}
+          />
+        ))}
       </div>
     </Section>
   );
