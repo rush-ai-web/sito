@@ -323,37 +323,34 @@ h4 {
 
 .card-deco {
   position: relative;
-  margin: 4px auto 8px;
-  width: 148px;
-  height: 148px;
-  -webkit-mask-image: radial-gradient(ellipse 55% 55% at 50% 50%, #000 55%, transparent 100%);
-  mask-image: radial-gradient(ellipse 55% 55% at 50% 50%, #000 55%, transparent 100%);
+  margin: 4px auto 14px;
+  width: 132px;
+  height: 132px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* quadrettini in accento dietro l'icona: mask radiale morbida che li
+   sfuma verso i bordi, così restano contenuti nell'aria dietro l'icona. */
 .card-deco__grid {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(to right, color-mix(in srgb, var(--text) 22%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in srgb, var(--text) 22%, transparent) 1px, transparent 1px);
-  background-size: 22px 22px;
-  opacity: 0.55;
+    linear-gradient(to right, color-mix(in srgb, var(--accent) 55%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--accent) 55%, transparent) 1px, transparent 1px);
+  background-size: 18px 18px;
+  -webkit-mask-image: radial-gradient(ellipse 55% 55% at 50% 50%, #000 25%, transparent 90%);
+  mask-image: radial-gradient(ellipse 55% 55% at 50% 50%, #000 25%, transparent 90%);
+  opacity: 0.6;
+  transition: opacity var(--d-lift) var(--e-lift);
 }
 
-.card-deco__box {
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 52px;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg);
-  border-top: 1px solid var(--accent);
-  border-left: 1px solid var(--accent);
+.card-deco__ic {
+  position: relative;
+  z-index: 1;
   color: var(--accent);
-  box-shadow: 0 8px 22px -12px color-mix(in srgb, var(--accent) 50%, transparent);
+  filter: drop-shadow(0 6px 14px color-mix(in srgb, var(--accent) 55%, transparent));
 }
 
 .card-deco__t {
@@ -365,9 +362,9 @@ h4 {
   max-width: 34ch;
 }
 
-/* variante hover per card--deco: il grid dietro l'icona si accende */
+/* hover: la maglia in accento si accende un po' */
 .card--deco:hover .card-deco__grid {
-  opacity: 0.75;
+  opacity: 0.9;
 }
 
 /* la Group con questa variante toglie i bordi/sfondi extra e centra */

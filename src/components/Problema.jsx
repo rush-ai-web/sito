@@ -1,9 +1,9 @@
-import { CircleSlash, Boxes, FileWarning, Clock } from 'lucide-react';
+import { CircleSlash, Unplug, FileWarning, Clock } from 'lucide-react';
 import { Section, Head, Group, DecoratorCard } from './ui';
 
 const PUNTI = [
   {
-    icon: Boxes,
+    icon: Unplug,
     t: 'Software che non parlano tra loro',
     d: 'Gestionale, magazzino, fatturazione, presenze: quattro sistemi, quattro anagrafiche, nessuna che coincide. Ogni riconciliazione è manuale.',
   },

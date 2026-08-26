@@ -42,14 +42,29 @@
   opacity: 0.9;
 }
 
+/* fondi scuri: rendo la maglia visibilmente più marcata + mask più ampia
+   così i quadratini si leggono su tutta la fascia della sezione, come nel
+   design di riferimento (stile "cosa costruiamo") */
+.fx-grid[data-tone='dark']::before,
+[data-tone='dark'].fx-grid::before {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.16) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(120% 110% at 50% 30%, #000 30%, transparent 95%);
+  mask-image: radial-gradient(120% 110% at 50% 30%, #000 30%, transparent 95%);
+  opacity: 1;
+}
+
 /* shimmer diagonale a livello di sezione: banda di luce che attraversa
    il fondo dal basso-sinistra verso alto-destra al primo scorrimento in
-   viewport. Segue lo stile della pill hero — transform, GPU. */
+   viewport. Elemento DOM dedicato (.section-shine) — non usa ::before,
+   così non entra in conflitto con .fx-grid o .fx-spot che lo occupano. */
 .section--shine {
   position: relative;
   overflow: hidden;
 }
-.section--shine::before {
+.section-shine {
   content: '';
   position: absolute;
   top: -30%;
@@ -69,8 +84,9 @@
   transform: translate(-140%, 40%) rotate(-18deg);
   filter: blur(24px);
   will-change: transform, opacity;
+  opacity: 0;
 }
-.section--shine.in-view::before {
+.section--shine.in-view .section-shine {
   animation: sectionShine 2.4s cubic-bezier(0.22, 1, 0.36, 1) 0.15s 1 both;
 }
 @keyframes sectionShine {
@@ -87,7 +103,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .section--shine::before {
+  .section-shine {
     display: none;
   }
 }
