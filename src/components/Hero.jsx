@@ -76,10 +76,21 @@ function RotatingSlot() {
      successive torna la spring per lettera. */
   const isFirst = i === 0;
 
+  /* layout OFF durante l'entrata: al mount il font Horizon (font-display
+     block) non ha ancora disposto il titolo, così `layout` misurerebbe la
+     pill nel posto sbagliato e la farebbe slittare sopra il titolo. Lo
+     accendiamo solo dopo l'assestamento, per animare la larghezza ai cambi
+     frase. */
+  const [layoutReady, setLayoutReady] = useState(false);
+
   useEffect(() => {
-    if (reduce) return;
+    if (reduce) return undefined;
+    const settle = setTimeout(() => setLayoutReady(true), 1300);
     const id = setInterval(() => setI((v) => (v + 1) % ROTATE.length), 4600);
-    return () => clearInterval(id);
+    return () => {
+      clearTimeout(settle);
+      clearInterval(id);
+    };
   }, [reduce]);
 
   const { t, Icon } = ROTATE[i];
@@ -88,14 +99,13 @@ function RotatingSlot() {
   return (
     <motion.span
       className="hero__pill"
-      layout
-      initial={reduce ? false : { opacity: 0, y: 8, scale: 0.94 }}
-      animate={reduce ? {} : { opacity: 1, y: 0, scale: 1 }}
+      layout={layoutReady}
+      initial={reduce ? false : { opacity: 0, y: 10 }}
+      animate={reduce ? {} : { opacity: 1, y: 0 }}
       transition={{
         opacity: { duration: 0.7, ease: EASE_MODAL, delay: 0.35 },
         y: { duration: 0.75, ease: EASE_MODAL, delay: 0.35 },
-        scale: { duration: 0.75, ease: EASE_MODAL, delay: 0.35 },
-        layout: { type: 'spring', damping: 30, stiffness: 260 },
+        layout: { type: 'spring', damping: 32, stiffness: 240 },
       }}
     >
       <AnimatePresence mode="wait">
