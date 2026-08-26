@@ -77,6 +77,7 @@ html.lenis body {
 #metodo,
 #ristorazione,
 #principi,
+#faq,
 #contatti {
   content-visibility: auto;
   contain-intrinsic-size: 1px 900px;
@@ -3199,4 +3200,175 @@ textarea.input {
 .frame,
 .chip--surface {
   background-image: var(--card-vig);
+}
+
+/* ============================================================
+   FAQ — tabs a categoria + accordion col + animato
+   ============================================================ */
+.faq-sec {
+  position: relative;
+  overflow: hidden;
+}
+
+/* alone radiale morbido in accento sopra i tabs (feel premium) */
+.faq-sec::before {
+  content: '';
+  position: absolute;
+  top: -220px;
+  left: 50%;
+  translate: -50% 0;
+  width: 620px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    color-mix(in srgb, var(--accent) 18%, transparent) 0%,
+    transparent 70%
+  );
+  filter: blur(48px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.faq-tabs {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto 40px;
+  max-width: 780px;
+}
+
+.faq-tab {
+  position: relative;
+  overflow: hidden;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--hairline-strong);
+  background: var(--bg);
+  color: var(--text-2);
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: color 0.28s ease, border-color 0.28s ease;
+}
+.faq-tab:hover {
+  color: var(--text);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--hairline-strong));
+}
+.faq-tab.is-sel {
+  color: #fff;
+  border-color: var(--accent);
+}
+.faq-tab__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(140deg, #4d70d4 0%, #3f5cb8 55%, #2f4a9e 100%);
+}
+.faq-tab__t {
+  position: relative;
+  z-index: 1;
+}
+
+.faq-list {
+  position: relative;
+  z-index: 1;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.faq-list__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faq-item {
+  border: 1px solid var(--hairline-strong);
+  border-radius: 16px;
+  background-color: var(--surface);
+  background-image: linear-gradient(180deg, var(--surface-top) 0%, var(--surface) 100%);
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.faq-item.is-open {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--hairline-strong));
+  box-shadow: 0 12px 30px -18px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.faq-item__head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  color: var(--text);
+}
+
+.faq-item__q {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.35;
+  color: var(--text-2);
+  transition: color 0.25s ease;
+}
+.faq-item.is-open .faq-item__q {
+  color: var(--text);
+}
+
+.faq-item__ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-2);
+  flex-shrink: 0;
+  transition: color 0.25s ease;
+}
+.faq-item.is-open .faq-item__ic {
+  color: var(--accent);
+}
+
+.faq-item__body {
+  overflow: hidden;
+}
+.faq-item__a {
+  margin: 0;
+  padding: 0 22px 20px;
+  color: var(--text-2);
+  font-size: 15px;
+  line-height: 1.6;
+  letter-spacing: -0.003em;
+}
+
+@media (max-width: 720px) {
+  .faq-tabs {
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .faq-tab {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+  .faq-item__head {
+    padding: 16px 18px;
+  }
+  .faq-item__q {
+    font-size: 15px;
+  }
+  .faq-item__a {
+    padding: 0 18px 18px;
+    font-size: 14.5px;
+  }
 }

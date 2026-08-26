@@ -15,6 +15,7 @@ const LINKS = [
   ['Come lavoriamo', '#metodo'],
   ['Perché Rush', '#principi'],
   ['Ristorazione', '#ristorazione'],
+  ['FAQ', '#faq'],
 ];
 
 export default function Nav({ theme, onToggleTheme }) {
