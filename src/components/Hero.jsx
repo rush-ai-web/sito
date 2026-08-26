@@ -86,7 +86,13 @@ function RotatingSlot() {
     <motion.span
       className="hero__pill"
       layout
-      transition={{ type: 'spring', damping: 30, stiffness: 260 }}
+      initial={reduce ? false : { clipPath: 'inset(0 100% 0 0 round 0.24em)', opacity: 0 }}
+      animate={reduce ? {} : { clipPath: 'inset(0 0% 0 0 round 0.24em)', opacity: 1 }}
+      transition={{
+        clipPath: { duration: 0.85, ease: EASE_MODAL, delay: 0.45 },
+        opacity: { duration: 0.35, ease: EASE_MODAL, delay: 0.45 },
+        layout: { type: 'spring', damping: 30, stiffness: 260 },
+      }}
     >
       <AnimatePresence mode="wait">
         <motion.span

@@ -829,7 +829,9 @@ h4 {
   );
   background-size: 220% 100%;
   background-position: 220% 0;
-  animation: pillShine 1.4s ease-in-out 0.35s 1 forwards;
+  /* delay allineato al wipe reveal della pill: parte quando lo sfondo
+     accento è appena finito di rivelarsi, non prima */
+  animation: pillShine 1.4s ease-in-out 1.15s 1 forwards;
 }
 
 @keyframes pillShine {
