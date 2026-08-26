@@ -69,22 +69,21 @@
   top: -30%;
   bottom: -30%;
   left: 0;
-  width: 40%;
+  width: 18%;
   z-index: 0;
   pointer-events: none;
   background: linear-gradient(
     100deg,
     transparent 0%,
-    color-mix(in srgb, var(--text) 6%, transparent) 30%,
-    color-mix(in srgb, var(--text) 12%, transparent) 50%,
-    color-mix(in srgb, var(--text) 6%, transparent) 70%,
+    color-mix(in srgb, var(--text) 8%, transparent) 40%,
+    color-mix(in srgb, var(--text) 14%, transparent) 50%,
+    color-mix(in srgb, var(--text) 8%, transparent) 60%,
     transparent 100%
   );
-  filter: blur(24px);
+  filter: blur(16px);
   will-change: transform, opacity;
-  /* loop lento in diagonale, dal basso-sinistra verso alto-destra.
-     Fade morbido a inizio e fine ciclo perché non ci sia mai un salto. */
-  animation: sectionShine 14s ease-in-out infinite;
+  /* loop in diagonale bottom-left → top-right; piu' snella e piu' rapida */
+  animation: sectionShine 8.5s ease-in-out infinite;
 }
 @keyframes sectionShine {
   0% {
