@@ -1,6 +1,57 @@
 import { useEffect, useRef, useState } from 'react';
 import { animate, useInView, useMotionValue, useReducedMotion } from 'framer-motion';
+import Lenis from 'lenis';
 import { EASE_MODAL } from './motion';
+
+/* ---------- Smooth scroll stile Framer (Lenis) ---------- */
+export function useSmoothScroll() {
+  const reduce = useReducedMotion();
+
+  useEffect(() => {
+    if (reduce) return undefined;
+    /* niente smooth su touch: sui telefoni lo scroll nativo è già ottimo
+       e Lenis sul wheel non serve. */
+    const coarse = window.matchMedia('(pointer: coarse)').matches;
+
+    const lenis = new Lenis({
+      duration: 1.15,
+      /* expo-out: parte veloce e si adagia — il feeling dei siti Framer */
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      smoothTouch: false,
+      touchMultiplier: coarse ? 1 : 1.5,
+      wheelMultiplier: 1,
+    });
+
+    let rafId;
+    const raf = (time) => {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    };
+    rafId = requestAnimationFrame(raf);
+
+    /* le ancore (#home, #prodotto, #contatti…) passano da Lenis con un
+       offset per la nav flottante, invece del salto nativo. */
+    const onClick = (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      const id = a.getAttribute('href');
+      if (!id || id === '#') return;
+      const target = document.querySelector(id);
+      if (!target) return;
+      e.preventDefault();
+      lenis.scrollTo(target, { offset: -96 });
+      if (history.replaceState) history.replaceState(null, '', id);
+    };
+    document.addEventListener('click', onClick);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      document.removeEventListener('click', onClick);
+      lenis.destroy();
+    };
+  }, [reduce]);
+}
 
 /* ---------- Tema: light di default, dark alla pari ---------- */
 export function useTheme() {

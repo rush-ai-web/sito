@@ -1,4 +1,4 @@
-import { useTheme } from './lib/hooks';
+import { useTheme, useSmoothScroll } from './lib/hooks';
 import { ThemeCtx } from './components/ui';
 import Nav from './components/Nav';
 import Hero from './components/Hero';
@@ -15,6 +15,7 @@ import Fab from './components/Fab';
 
 export default function App() {
   const [theme, toggleTheme] = useTheme();
+  useSmoothScroll();
 
   return (
     <ThemeCtx.Provider value={theme}>

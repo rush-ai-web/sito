@@ -37,6 +37,26 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ---- Lenis: smooth scroll stile Framer ----
+   quando Lenis è attivo aggiunge .lenis/.lenis-smooth su <html>; qui
+   neutralizziamo lo scroll nativo così non litiga con il lerp di Lenis. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
 body {
   margin: 0;
   background: var(--bg);
