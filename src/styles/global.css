@@ -2203,7 +2203,7 @@ h4 {
   width: 1060px;
   height: 540px;
   border-radius: 50%;
-  border: 1px dashed color-mix(in srgb, var(--text) 14%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--text) 28%, transparent);
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 0;
