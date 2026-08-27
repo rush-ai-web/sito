@@ -289,27 +289,21 @@ main {
   position: absolute;
   inset: 0;
   z-index: 0;
-  /* clip solo in orizzontale: i bulb non escono ai lati della pagina ma
-     possono debordare in verticale tra una sezione e l'altra senza tagli netti */
+  /* clip solo in orizzontale: i bulb non escono ai lati della pagina */
   overflow-x: clip;
   overflow-y: visible;
   pointer-events: none;
-  /* intensità dei tre toni */
   --a-accent: 46%;
   --a-black: 0.22;
-  /* il bulb "neutro" cambia con il tema: bianco scuro su chiaro, bianco su scuro */
-  --glow-neutral: rgba(0, 0, 0, 0.13);
 }
 :root[data-theme='dark'] .aurora {
   --a-accent: 58%;
   --a-black: 0.2;
-  --glow-neutral: rgba(255, 255, 255, 0.28);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) .aurora {
     --a-accent: 58%;
     --a-black: 0.2;
-    --glow-neutral: rgba(255, 255, 255, 0.28);
   }
 }
 
@@ -358,10 +352,11 @@ main {
     transparent 78%
   );
 }
+/* "white" bulb: usa var(--text) così in dark è bianco chiaro, in light è nero — si adatta automaticamente */
 .glow.white {
   background: radial-gradient(
     closest-side,
-    var(--glow-neutral),
+    color-mix(in srgb, var(--text) 22%, transparent),
     transparent 78%
   );
 }

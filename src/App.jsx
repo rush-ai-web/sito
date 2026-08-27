@@ -35,8 +35,6 @@ export default function App() {
           <span className="glow bulb big accent r" style={{ top: '48%' }} />
           {/* Principi: bulb accento grande a destra */}
           <span className="glow bulb big accent r" style={{ top: '73%' }} />
-          {/* Faq: bulb accento grande a sinistra */}
-          <span className="glow bulb big accent l" style={{ top: '84%' }} />
           {/* CTA (grid): due bulb grandi negli angoli in basso — accento sx, bianco dx */}
           <span className="glow bulb big accent l" style={{ top: '93%' }} />
           <span className="glow bulb big white r" style={{ top: '93%' }} />
