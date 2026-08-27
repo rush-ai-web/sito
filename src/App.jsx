@@ -31,19 +31,20 @@ export default function App() {
           {/* Soluzione (no-grid): due bulb grandi e rotondi, uno per lato */}
           <span className="glow bulb big accent l" style={{ top: '22%' }} />
           <span className="glow bulb white r" style={{ top: '19%' }} />
-          {/* Prodotto (grid): un raggio bianco morbido da sinistra */}
-          <span className="glow beam white l" style={{ top: '40%' }} />
+          {/* Prodotto (grid): bulb bianco morbido da sinistra */}
+          <span className="glow bulb white l" style={{ top: '40%' }} />
           {/* Numeri (no-grid): un bulb accento grande e rotondo a destra */}
           <span className="glow bulb big accent r" style={{ top: '48%' }} />
-          {/* Metodo (grid): un raggio accento da destra */}
-          <span className="glow beam accent r" style={{ top: '57%' }} />
+          {/* Metodo (grid): bulb accento da destra */}
+          <span className="glow bulb accent r" style={{ top: '57%' }} />
           {/* Ristorazione/Principi (no-grid): bulb nero a sx + accento a dx */}
           <span className="glow bulb black l" style={{ top: '69%' }} />
           <span className="glow bulb big accent r" style={{ top: '73%' }} />
           {/* Faq (no-grid): un bulb accento grande e rotondo a sinistra */}
           <span className="glow bulb big accent l" style={{ top: '84%' }} />
-          {/* CTA (grid): raggio accento finale */}
-          <span className="glow beam accent r" style={{ top: '93%' }} />
+          {/* CTA (grid): due bulb grandi negli angoli in basso — accento sx, bianco dx */}
+          <span className="glow bulb big accent l" style={{ top: '93%' }} />
+          <span className="glow bulb big white r" style={{ top: '93%' }} />
         </div>
         {/* chiaro */}
         <Hero />
