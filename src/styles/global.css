@@ -292,14 +292,14 @@ main {
   overflow: hidden;
   pointer-events: none;
   /* intensità dei tre toni — un filo di spinta sul tema scuro */
-  --a-accent: 40%;
-  --a-white: 0.22;
-  --a-black: 0.2;
+  --a-accent: 46%;
+  --a-white: 0.24;
+  --a-black: 0.22;
 }
 :root[data-theme='dark'] .aurora {
-  --a-accent: 52%;
-  --a-white: 0.28;
-  --a-black: 0.18;
+  --a-accent: 58%;
+  --a-white: 0.3;
+  --a-black: 0.2;
 }
 
 .glow {
@@ -309,23 +309,22 @@ main {
 }
 
 /* --- forme --- */
-/* bulb: macchia morbida, tondeggiante */
+/* bulb: macchia morbida e ROTONDA (aspect-ratio 1), grande ed evidente */
 .glow.bulb {
-  width: 52vw;
-  height: 42vh;
+  width: 48vw;
+  aspect-ratio: 1;
+  height: auto;
 }
-/* beam: fascio lungo e sottile, un vero raggio di luce diagonale */
+.glow.bulb.big {
+  width: 64vw;
+}
+.glow.bulb.sm {
+  width: 34vw;
+}
+/* beam: fascio lungo, un raggio di luce diagonale dai bordi morbidi */
 .glow.beam {
   width: 124vw;
-  height: 34vh;
-}
-.glow.big {
-  width: 68vw;
-  height: 58vh;
-}
-.glow.sm {
-  width: 38vw;
-  height: 32vh;
+  height: 50vh;
 }
 
 /* --- lato di ancoraggio (i beam prendono anche l'inclinazione) --- */
@@ -368,17 +367,17 @@ main {
 .glow.beam.accent {
   background: radial-gradient(
     closest-side,
-    rgba(255, 255, 255, 0.14),
-    color-mix(in srgb, var(--accent) var(--a-accent), transparent) 42%,
-    transparent 76%
+    rgba(255, 255, 255, 0.1),
+    color-mix(in srgb, var(--accent) var(--a-accent), transparent) 38%,
+    transparent 88%
   );
 }
 .glow.beam.white {
   background: radial-gradient(
     closest-side,
-    rgba(255, 255, 255, calc(var(--a-white) + 0.06)),
-    rgba(255, 255, 255, var(--a-white)) 40%,
-    transparent 75%
+    rgba(255, 255, 255, calc(var(--a-white) + 0.04)),
+    rgba(255, 255, 255, var(--a-white)) 38%,
+    transparent 88%
   );
 }
 

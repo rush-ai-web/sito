@@ -26,21 +26,24 @@ export default function App() {
         {/* aurora curata: composizione variata per regione, mai fasci in fila
             fissa. Vive dentro <main> così scorre col contenuto. */}
         <div className="aurora" aria-hidden="true">
-          {/* Problema (sotto la dashboard): SOLO un fascio di luce bianco */}
-          <span className="glow beam white r" style={{ top: '15%' }} />
-          {/* Soluzione: due bulb, uno per lato — accento a sx, bianco a dx */}
-          <span className="glow bulb accent l" style={{ top: '30%' }} />
-          <span className="glow bulb sm white r" style={{ top: '26%' }} />
-          {/* Prodotto/Numeri: streak bianco morbido da sinistra */}
-          <span className="glow beam white l" style={{ top: '47%' }} />
-          {/* Metodo/Ristorazione: bulb accento a dx + profondità nera a sx */}
-          <span className="glow bulb black l" style={{ top: '61%' }} />
-          <span className="glow bulb accent r" style={{ top: '64%' }} />
-          {/* Faq: streak accento diagonale da sinistra */}
-          <span className="glow beam accent l" style={{ top: '82%' }} />
-          {/* CTA/footer: split — accento grande a sx, bianco a dx */}
-          <span className="glow bulb big accent l" style={{ top: '93%' }} />
-          <span className="glow bulb white r" style={{ top: '91%' }} />
+          {/* Problema (grid): nessun glow qui — la sua unica animazione è la
+              fascia di luce bianca (.section--shine) che sweepa lo sfondo. */}
+          {/* Soluzione (no-grid): due bulb grandi e rotondi, uno per lato */}
+          <span className="glow bulb big accent l" style={{ top: '22%' }} />
+          <span className="glow bulb white r" style={{ top: '19%' }} />
+          {/* Prodotto (grid): un raggio bianco morbido da sinistra */}
+          <span className="glow beam white l" style={{ top: '40%' }} />
+          {/* Numeri (no-grid): un bulb accento grande e rotondo a destra */}
+          <span className="glow bulb big accent r" style={{ top: '48%' }} />
+          {/* Metodo (grid): un raggio accento da destra */}
+          <span className="glow beam accent r" style={{ top: '57%' }} />
+          {/* Ristorazione/Principi (no-grid): bulb nero a sx + accento a dx */}
+          <span className="glow bulb black l" style={{ top: '69%' }} />
+          <span className="glow bulb big accent r" style={{ top: '73%' }} />
+          {/* Faq (no-grid): un bulb accento grande e rotondo a sinistra */}
+          <span className="glow bulb big accent l" style={{ top: '84%' }} />
+          {/* CTA (grid): raggio accento finale */}
+          <span className="glow beam accent r" style={{ top: '93%' }} />
         </div>
         {/* chiaro */}
         <Hero />

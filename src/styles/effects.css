@@ -36,16 +36,15 @@
   background-image: linear-gradient(to right, var(--hairline) 0.5px, transparent 0.5px),
     linear-gradient(to bottom, var(--hairline) 0.5px, transparent 0.5px);
   background-size: 72px 72px;
-  /* la maglia entra dall'alto e SFUMA scendendo, dissolvendosi prima del
-     bordo inferiore: così non c'è mai un taglio netto verso la sezione
-     successiva — le sezioni sembrano un continuo unico. Un secondo mask
-     orizzontale la ammorbidisce anche ai lati. */
+  /* la maglia SFUMA sia entrando dall'alto sia uscendo in basso (e ai lati):
+     non parte mai netta e non si taglia mai netta — è una banda morbida al
+     centro della sezione, così le sezioni restano un continuo unico. */
   -webkit-mask-image:
-    linear-gradient(to bottom, #000 0%, #000 34%, transparent 82%),
-    radial-gradient(120% 100% at 50% 0%, #000 40%, transparent 100%);
+    linear-gradient(to bottom, transparent 0%, #000 22%, #000 58%, transparent 94%),
+    linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
   mask-image:
-    linear-gradient(to bottom, #000 0%, #000 34%, transparent 82%),
-    radial-gradient(120% 100% at 50% 0%, #000 40%, transparent 100%);
+    linear-gradient(to bottom, transparent 0%, #000 22%, #000 58%, transparent 94%),
+    linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
   opacity: 0.9;
