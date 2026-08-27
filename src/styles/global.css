@@ -432,28 +432,30 @@ main {
    ============================================================ */
 .cta-bulb {
   position: absolute;
-  width: 72vw;
+  width: 56vw;
   aspect-ratio: 1;
   border-radius: 50%;
-  bottom: -25%;
+  /* nucleo del bulb ancorato all'angolo basso: metà altezza sotto il bordo
+     inferiore → la luce pool esattamente nell'angolo, come nel riferimento */
+  bottom: -28vw;
   pointer-events: none;
   z-index: 0;
   animation: bulbDrift 56s ease-in-out infinite;
 }
 .cta-bulb--l {
-  left: -18vw;
+  left: -20vw;
   background: radial-gradient(
     closest-side,
-    color-mix(in srgb, var(--accent) 60%, transparent),
-    transparent 78%
+    color-mix(in srgb, var(--accent) 62%, transparent),
+    transparent 76%
   );
 }
 .cta-bulb--r {
-  right: -18vw;
+  right: -20vw;
   background: radial-gradient(
     closest-side,
-    color-mix(in srgb, var(--text) 32%, transparent),
-    transparent 78%
+    color-mix(in srgb, var(--text) 34%, transparent),
+    transparent 76%
   );
 }
 @media (prefers-reduced-motion: reduce) {
