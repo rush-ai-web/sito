@@ -23,19 +23,24 @@ export default function App() {
     <ThemeCtx.Provider value={theme}>
       <Nav />
       <main>
-        {/* aurora strutturata: fasci diagonali alternati sinistra/destra che
-            scendono lungo la pagina ciclando blu accento → bianco → nero,
-            con lo stesso peso. Vive dentro <main> così scorre col contenuto. */}
+        {/* aurora curata: composizione variata per regione, mai fasci in fila
+            fissa. Vive dentro <main> così scorre col contenuto. */}
         <div className="aurora" aria-hidden="true">
-          <span className="aurora__beam b-accent s-r" style={{ top: '2%' }} />
-          <span className="aurora__beam b-white s-l" style={{ top: '13%' }} />
-          <span className="aurora__beam b-black s-r" style={{ top: '24%' }} />
-          <span className="aurora__beam b-accent s-l" style={{ top: '35%' }} />
-          <span className="aurora__beam b-white s-r" style={{ top: '46%' }} />
-          <span className="aurora__beam b-black s-l" style={{ top: '57%' }} />
-          <span className="aurora__beam b-accent s-r" style={{ top: '68%' }} />
-          <span className="aurora__beam b-white s-l" style={{ top: '79%' }} />
-          <span className="aurora__beam b-black s-r" style={{ top: '90%' }} />
+          {/* Problema (sotto la dashboard): UN solo fascio diagonale accento */}
+          <span className="glow beam accent r" style={{ top: '15%' }} />
+          {/* Soluzione: due bulb, uno per lato — accento a sx, bianco a dx */}
+          <span className="glow bulb accent l" style={{ top: '30%' }} />
+          <span className="glow bulb sm white r" style={{ top: '26%' }} />
+          {/* Prodotto/Numeri: streak bianco morbido da sinistra */}
+          <span className="glow beam white l" style={{ top: '47%' }} />
+          {/* Metodo/Ristorazione: bulb accento a dx + profondità nera a sx */}
+          <span className="glow bulb black l" style={{ top: '61%' }} />
+          <span className="glow bulb accent r" style={{ top: '64%' }} />
+          {/* Faq: streak accento diagonale da sinistra */}
+          <span className="glow beam accent l" style={{ top: '82%' }} />
+          {/* CTA/footer: split — accento grande a sx, bianco a dx */}
+          <span className="glow bulb big accent l" style={{ top: '93%' }} />
+          <span className="glow bulb white r" style={{ top: '91%' }} />
         </div>
         {/* chiaro */}
         <Hero />

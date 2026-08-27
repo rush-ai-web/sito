@@ -36,9 +36,18 @@
   background-image: linear-gradient(to right, var(--hairline) 0.5px, transparent 0.5px),
     linear-gradient(to bottom, var(--hairline) 0.5px, transparent 0.5px);
   background-size: 72px 72px;
-  /* la maglia sfuma ai bordi, non taglia mai netto */
-  -webkit-mask-image: radial-gradient(115% 80% at 50% 0%, #000 0%, transparent 72%);
-  mask-image: radial-gradient(115% 80% at 50% 0%, #000 0%, transparent 72%);
+  /* la maglia entra dall'alto e SFUMA scendendo, dissolvendosi prima del
+     bordo inferiore: così non c'è mai un taglio netto verso la sezione
+     successiva — le sezioni sembrano un continuo unico. Un secondo mask
+     orizzontale la ammorbidisce anche ai lati. */
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 0%, #000 34%, transparent 82%),
+    radial-gradient(120% 100% at 50% 0%, #000 40%, transparent 100%);
+  mask-image:
+    linear-gradient(to bottom, #000 0%, #000 34%, transparent 82%),
+    radial-gradient(120% 100% at 50% 0%, #000 40%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
   opacity: 0.9;
 }
 
@@ -50,8 +59,6 @@
     linear-gradient(to right, rgba(255, 255, 255, 0.08) 0.5px, transparent 0.5px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 0.5px, transparent 0.5px);
   background-size: 72px 72px;
-  -webkit-mask-image: radial-gradient(115% 90% at 50% 20%, #000 10%, transparent 85%);
-  mask-image: radial-gradient(115% 90% at 50% 20%, #000 10%, transparent 85%);
   opacity: 0.85;
 }
 

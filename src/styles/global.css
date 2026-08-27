@@ -254,17 +254,16 @@ h4 {
 .section {
   position: relative;
   padding-block: var(--s-hero);
-  /* trasparente: dietro traspare il layer aurora fisso (.aurora-bg).
-     Il fondo pieno vive su <body>; qui restano solo le vignette
-     radiali semi-trasparenti che danno profondità sopra l'aurora. */
+  /* trasparente e SENZA vignetta per-sezione: il fondo pieno vive su
+     <body> e l'unica variazione arriva dall'aurora dietro. Così non
+     esistono più "stacchi" tra una sezione e l'altra (niente nero su
+     un nero leggermente diverso): la pagina è un continuo unico. */
   background-color: transparent;
   color: var(--text);
   /* faro e maglia debordano di proposito: vanno tagliati qui,
      altrimenti la pagina scrolla in orizzontale sui telefoni */
   overflow: hidden;
-  /* sfondo pagina con vignetta radiale, mai un flat fill */
-  background-image: var(--vignette), var(--vignette-2);
-  transition: background-color var(--d-pop) var(--e-lift), color var(--d-pop) var(--e-lift);
+  transition: color var(--d-pop) var(--e-lift);
 }
 
 .section--lg {
@@ -272,14 +271,12 @@ h4 {
 }
 
 /* ============================================================
-   Aurora strutturata — fasci di luce diagonali dietro la pagina.
-   Nove fasci ancorati alternativamente ai bordi sinistro/destro
-   scendono lungo la pagina ciclando tre toni con LO STESSO peso:
-   blu accento → bianco → nero. Bianco e nero restano fissi (non
-   legati al tema) così l'alternanza dei tre colori si legge sempre:
-   su fondo scuro il bianco è luce e il nero è profondità, su fondo
-   chiaro il bianco è highlight e il nero è ombra.
-   Vive dentro <main> (position: relative) quindi scorre col
+   Aurora curata — sfumature disposte a mano, mai in fila fissa.
+   Ogni regione della pagina ha la sua composizione: a volte un solo
+   fascio diagonale, a volte due bulb (uno per lato), a volte uno
+   streak che passa dietro alle card. Tre toni con peso comparabile —
+   blu accento, bianco, nero — così l'atmosfera cambia scendendo.
+   Vive dentro <main> (position: relative), quindi scorre col
    contenuto; le sezioni trasparenti ci passano sopra, l'hero opaco
    lo copre e conserva la sua aurora dedicata.
    ============================================================ */
@@ -294,62 +291,77 @@ main {
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  /* intensità dei tre toni — pesi comparabili, con un filo di spinta
-     sul tema scuro dove serve più luce */
-  --a-accent: 44%;
-  --a-white: 0.24;
-  --a-black: 0.18;
+  /* intensità dei tre toni — un filo di spinta sul tema scuro */
+  --a-accent: 40%;
+  --a-white: 0.22;
+  --a-black: 0.2;
 }
 :root[data-theme='dark'] .aurora {
-  --a-accent: 54%;
-  --a-white: 0.3;
-  --a-black: 0.16;
+  --a-accent: 52%;
+  --a-white: 0.28;
+  --a-black: 0.18;
 }
 
-.aurora__beam {
+.glow {
   position: absolute;
-  width: 96vw;
-  height: 60vh;
   border-radius: 50%;
   will-change: transform;
 }
 
-/* lato di ancoraggio + inclinazione diagonale del fascio */
-.aurora__beam.s-l {
-  left: -22vw;
-  animation: beamDriftL 44s ease-in-out infinite;
+/* --- forme --- */
+/* bulb: macchia morbida, tondeggiante */
+.glow.bulb {
+  width: 52vw;
+  height: 42vh;
 }
-.aurora__beam.s-r {
-  right: -22vw;
-  animation: beamDriftR 52s ease-in-out infinite;
+/* beam: fascio allungato e inclinato, come un raggio di luce */
+.glow.beam {
+  width: 96vw;
+  height: 42vh;
+}
+.glow.big {
+  width: 68vw;
+  height: 58vh;
+}
+.glow.sm {
+  width: 38vw;
+  height: 32vh;
 }
 
-/* i tre toni, stesso peso */
-.aurora__beam.b-accent {
+/* --- lato di ancoraggio (i beam prendono anche l'inclinazione) --- */
+.glow.l { left: -16vw; }
+.glow.r { right: -16vw; }
+.glow.beam.l { transform: rotate(-16deg); animation: glowDriftL 46s ease-in-out infinite; }
+.glow.beam.r { transform: rotate(16deg); animation: glowDriftR 52s ease-in-out infinite; }
+.glow.bulb.l,
+.glow.bulb.big.l,
+.glow.bulb.sm.l { animation: glowDriftL 50s ease-in-out infinite; }
+.glow.bulb.r,
+.glow.bulb.big.r,
+.glow.bulb.sm.r { animation: glowDriftR 56s ease-in-out infinite; }
+
+/* --- toni --- */
+.glow.accent {
   background: radial-gradient(
     closest-side,
     color-mix(in srgb, var(--accent) var(--a-accent), transparent),
     transparent 78%
   );
 }
-.aurora__beam.b-white {
+.glow.white {
   background: radial-gradient(
     closest-side,
     rgba(255, 255, 255, var(--a-white)),
     transparent 78%
   );
 }
-.aurora__beam.b-black {
+.glow.black {
   background: radial-gradient(
     closest-side,
     rgba(0, 0, 0, var(--a-black)),
     transparent 78%
   );
 }
-
-/* durate sfalsate così i fasci non pulsano all'unisono */
-.aurora__beam:nth-child(3n + 2) { animation-duration: 58s; }
-.aurora__beam:nth-child(3n + 3) { animation-duration: 48s; }
 
 /* grain sottile sopra le sfumature — in overlay funziona su entrambi i temi */
 .aurora::after {
@@ -366,32 +378,30 @@ main {
   opacity: 0.09;
 }
 
-@keyframes beamDriftL {
-  0%,
-  100% {
-    transform: rotate(-15deg) translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: rotate(-15deg) translate3d(4%, 2.5%, 0) scale(1.08);
-  }
+/* i beam driftano conservando l'inclinazione */
+@keyframes glowDriftL {
+  0%, 100% { transform: rotate(-16deg) translate3d(0, 0, 0) scale(1); }
+  50% { transform: rotate(-16deg) translate3d(3%, 2%, 0) scale(1.08); }
 }
-@keyframes beamDriftR {
-  0%,
-  100% {
-    transform: rotate(15deg) translate3d(0, 0, 0) scale(1.04);
-  }
-  50% {
-    transform: rotate(15deg) translate3d(-4%, -2.5%, 0) scale(1);
-  }
+@keyframes glowDriftR {
+  0%, 100% { transform: rotate(16deg) translate3d(0, 0, 0) scale(1.04); }
+  50% { transform: rotate(16deg) translate3d(-3%, -2%, 0) scale(1); }
+}
+/* i bulb non sono inclinati: drift senza rotazione */
+.glow.bulb.l, .glow.bulb.r,
+.glow.bulb.big.l, .glow.bulb.big.r,
+.glow.bulb.sm.l, .glow.bulb.sm.r {
+  animation-name: bulbDrift;
+}
+@keyframes bulbDrift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(0, 2.5%, 0) scale(1.06); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .aurora__beam {
-    animation: none !important;
-  }
-  /* senza animazione restano comunque inclinati */
-  .aurora__beam.s-l { transform: rotate(-15deg); }
-  .aurora__beam.s-r { transform: rotate(15deg); }
+  .glow { animation: none !important; }
+  .glow.beam.l { transform: rotate(-16deg); }
+  .glow.beam.r { transform: rotate(16deg); }
 }
 
 .section__head {
