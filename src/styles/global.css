@@ -324,17 +324,23 @@ main {
 .glow.bulb.sm {
   width: 34vw;
 }
-/* beam: fascio lungo, un raggio di luce diagonale dai bordi morbidi */
+/* beam: un vero RAGGIO di luce — banda stretta, nucleo bianco luminoso,
+   sfocata e inclinata come nella reference (screenshot: light ray). */
 .glow.beam {
-  width: 124vw;
-  height: 50vh;
+  width: 170vw;
+  height: 300px;
+  border-radius: 0;
+  filter: blur(38px);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 26%, #000 74%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 26%, #000 74%, transparent 100%);
 }
 
-/* --- lato di ancoraggio (i beam prendono anche l'inclinazione) --- */
+/* --- lato di ancoraggio --- */
 .glow.l { left: -16vw; }
 .glow.r { right: -16vw; }
-.glow.beam.l { transform: rotate(-16deg); animation: glowDriftL 46s ease-in-out infinite; }
-.glow.beam.r { transform: rotate(16deg); animation: glowDriftR 52s ease-in-out infinite; }
+/* i raggi sono statici, inclinati con un angolo deciso e diagonale */
+.glow.beam.l { transform: rotate(-24deg); }
+.glow.beam.r { transform: rotate(24deg); }
 .glow.bulb.l,
 .glow.bulb.big.l,
 .glow.bulb.sm.l { animation: glowDriftL 50s ease-in-out infinite; }
@@ -366,22 +372,27 @@ main {
   );
 }
 
-/* i beam sono raggi luminosi: nucleo bianco-caldo che degrada nel tono,
-   come nella reference — più "definiti" dei bulb, che restano morbidi */
+/* i raggi hanno un NUCLEO bianco luminoso al centro dello spessore, con i
+   fianchi nel tono: è la sezione di un fascio di luce, brillante al centro
+   e sfumato ai bordi — come nella reference. */
 .glow.beam.accent {
-  background: radial-gradient(
-    closest-side,
-    rgba(255, 255, 255, 0.1),
-    color-mix(in srgb, var(--accent) var(--a-accent), transparent) 38%,
-    transparent 88%
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in srgb, var(--accent) 62%, transparent) 34%,
+    rgba(255, 255, 255, 0.42) 50%,
+    color-mix(in srgb, var(--accent) 62%, transparent) 66%,
+    transparent 100%
   );
 }
 .glow.beam.white {
-  background: radial-gradient(
-    closest-side,
-    rgba(255, 255, 255, calc(var(--a-white) + 0.04)),
-    rgba(255, 255, 255, var(--a-white)) 38%,
-    transparent 88%
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.16) 34%,
+    rgba(255, 255, 255, 0.46) 50%,
+    rgba(255, 255, 255, 0.16) 66%,
+    transparent 100%
   );
 }
 
@@ -422,8 +433,8 @@ main {
 
 @media (prefers-reduced-motion: reduce) {
   .glow { animation: none !important; }
-  .glow.beam.l { transform: rotate(-16deg); }
-  .glow.beam.r { transform: rotate(16deg); }
+  .glow.beam.l { transform: rotate(-24deg); }
+  .glow.beam.r { transform: rotate(24deg); }
 }
 
 /* ============================================================

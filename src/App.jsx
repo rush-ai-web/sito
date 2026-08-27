@@ -31,13 +31,13 @@ export default function App() {
           {/* Soluzione: bulb accento a sx + neutro a dx */}
           <span className="glow bulb big accent l" style={{ top: '22%' }} />
           <span className="glow bulb white r" style={{ top: '19%' }} />
-          {/* Prodotto: bulb neutro a sinistra */}
-          <span className="glow bulb white l" style={{ top: '36%' }} />
+          {/* Prodotto (grid): un raggio di luce diagonale accento */}
+          <span className="glow beam accent l" style={{ top: '38%' }} />
           {/* Numeri: bulb accento a dx + neutro a sx */}
           <span className="glow bulb big accent r" style={{ top: '48%' }} />
           <span className="glow bulb black l" style={{ top: '52%' }} />
-          {/* Metodo: bulb neutro a destra */}
-          <span className="glow bulb white r" style={{ top: '62%' }} />
+          {/* Metodo (grid): un raggio di luce diagonale accento */}
+          <span className="glow beam accent r" style={{ top: '60%' }} />
           {/* Principi: bulb accento a dx + neutro a sx */}
           <span className="glow bulb big accent r" style={{ top: '73%' }} />
           <span className="glow bulb white l" style={{ top: '78%' }} />
