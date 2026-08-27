@@ -21,15 +21,22 @@ export default function App() {
 
   return (
     <ThemeCtx.Provider value={theme}>
-      {/* aurora di sfondo: layer fisso, sfumature accento + neutro dietro tutta la pagina */}
-      <div className="aurora-bg" aria-hidden="true">
-        <span className="aurora-bg__b b1" />
-        <span className="aurora-bg__b b2" />
-        <span className="aurora-bg__b b3" />
-        <span className="aurora-bg__b b4" />
-      </div>
       <Nav />
       <main>
+        {/* aurora strutturata: fasci diagonali alternati sinistra/destra che
+            scendono lungo la pagina ciclando blu accento → bianco → nero,
+            con lo stesso peso. Vive dentro <main> così scorre col contenuto. */}
+        <div className="aurora" aria-hidden="true">
+          <span className="aurora__beam b-accent s-r" style={{ top: '2%' }} />
+          <span className="aurora__beam b-white s-l" style={{ top: '13%' }} />
+          <span className="aurora__beam b-black s-r" style={{ top: '24%' }} />
+          <span className="aurora__beam b-accent s-l" style={{ top: '35%' }} />
+          <span className="aurora__beam b-white s-r" style={{ top: '46%' }} />
+          <span className="aurora__beam b-black s-l" style={{ top: '57%' }} />
+          <span className="aurora__beam b-accent s-r" style={{ top: '68%' }} />
+          <span className="aurora__beam b-white s-l" style={{ top: '79%' }} />
+          <span className="aurora__beam b-black s-r" style={{ top: '90%' }} />
+        </div>
         {/* chiaro */}
         <Hero />
         {/* scuro */}

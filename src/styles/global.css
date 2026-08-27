@@ -272,99 +272,87 @@ h4 {
 }
 
 /* ============================================================
-   Aurora di sfondo — layer FISSO dietro tutte le sezioni.
-   Blob morbidi in accento + neutro che lavano lo sfondo con
-   sfumature stile reference (fusionai). Il neutro usa --text,
-   quindi è bianco nel tema dark e nero nel tema light: accento +
-   bianco su scuro, accento + nero su chiaro, come richiesto.
-   Le sezioni sono trasparenti e ci scorrono sopra; l'hero è opaco
-   e conserva la sua aurora dedicata.
+   Aurora strutturata — fasci di luce diagonali dietro la pagina.
+   Nove fasci ancorati alternativamente ai bordi sinistro/destro
+   scendono lungo la pagina ciclando tre toni con LO STESSO peso:
+   blu accento → bianco → nero. Bianco e nero restano fissi (non
+   legati al tema) così l'alternanza dei tre colori si legge sempre:
+   su fondo scuro il bianco è luce e il nero è profondità, su fondo
+   chiaro il bianco è highlight e il nero è ombra.
+   Vive dentro <main> (position: relative) quindi scorre col
+   contenuto; le sezioni trasparenti ci passano sopra, l'hero opaco
+   lo copre e conserva la sua aurora dedicata.
    ============================================================ */
-.aurora-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  overflow: hidden;
-  contain: strict;
+main {
+  position: relative;
+  z-index: 0;
 }
 
-.aurora-bg__b {
+.aurora {
   position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* intensità dei tre toni — pesi comparabili, con un filo di spinta
+     sul tema scuro dove serve più luce */
+  --a-accent: 44%;
+  --a-white: 0.24;
+  --a-black: 0.18;
+}
+:root[data-theme='dark'] .aurora {
+  --a-accent: 54%;
+  --a-white: 0.3;
+  --a-black: 0.16;
+}
+
+.aurora__beam {
+  position: absolute;
+  width: 96vw;
+  height: 60vh;
   border-radius: 50%;
   will-change: transform;
 }
 
-/* macchie di colore del brand */
-.aurora-bg .b1 {
-  width: 52vw;
-  aspect-ratio: 1;
-  right: -10%;
-  top: -12%;
-  background: radial-gradient(
-    50% 50% at 50% 50%,
-    color-mix(in srgb, var(--accent) 26%, transparent),
-    transparent 68%
-  );
-  animation: auroraDriftA 34s ease-in-out infinite;
+/* lato di ancoraggio + inclinazione diagonale del fascio */
+.aurora__beam.s-l {
+  left: -22vw;
+  animation: beamDriftL 44s ease-in-out infinite;
 }
-.aurora-bg .b3 {
-  width: 50vw;
-  aspect-ratio: 1;
-  right: -14%;
-  top: 44%;
-  background: radial-gradient(
-    50% 50% at 50% 50%,
-    color-mix(in srgb, var(--accent) 22%, transparent),
-    transparent 68%
-  );
-  animation: auroraDriftB 42s ease-in-out infinite;
-}
-.aurora-bg .b4 {
-  width: 48vw;
-  aspect-ratio: 1;
-  left: -14%;
-  bottom: -14%;
-  background: radial-gradient(
-    50% 50% at 50% 50%,
-    color-mix(in srgb, var(--accent) 24%, transparent),
-    transparent 68%
-  );
-  animation: auroraDriftA 38s ease-in-out infinite reverse;
-}
-/* macchia neutra: bianca su dark, nera su light — profondità senza colore */
-.aurora-bg .b2 {
-  width: 44vw;
-  aspect-ratio: 1;
-  left: -10%;
-  top: 20%;
-  background: radial-gradient(
-    50% 50% at 50% 50%,
-    color-mix(in srgb, var(--text) 7%, transparent),
-    transparent 66%
-  );
-  animation: auroraDriftB 48s ease-in-out infinite;
+.aurora__beam.s-r {
+  right: -22vw;
+  animation: beamDriftR 52s ease-in-out infinite;
 }
 
-/* nel tema scuro l'accento è meno "pieno": lo spingo un filo di più */
-:root[data-theme='dark'] .aurora-bg .b1 {
+/* i tre toni, stesso peso */
+.aurora__beam.b-accent {
   background: radial-gradient(
-    50% 50% at 50% 50%,
-    color-mix(in srgb, var(--accent) 34%, transparent),
-    transparent 70%
+    closest-side,
+    color-mix(in srgb, var(--accent) var(--a-accent), transparent),
+    transparent 78%
   );
 }
-:root[data-theme='dark'] .aurora-bg .b3,
-:root[data-theme='dark'] .aurora-bg .b4 {
+.aurora__beam.b-white {
   background: radial-gradient(
-    50% 50% at 50% 50%,
-    color-mix(in srgb, var(--accent) 30%, transparent),
-    transparent 70%
+    closest-side,
+    rgba(255, 255, 255, var(--a-white)),
+    transparent 78%
   );
 }
+.aurora__beam.b-black {
+  background: radial-gradient(
+    closest-side,
+    rgba(0, 0, 0, var(--a-black)),
+    transparent 78%
+  );
+}
+
+/* durate sfalsate così i fasci non pulsano all'unisono */
+.aurora__beam:nth-child(3n + 2) { animation-duration: 58s; }
+.aurora__beam:nth-child(3n + 3) { animation-duration: 48s; }
 
 /* grain sottile sopra le sfumature — in overlay funziona su entrambi i temi */
-.aurora-bg::after {
+.aurora::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -374,33 +362,36 @@ h4 {
   opacity: 0.05;
   mix-blend-mode: overlay;
 }
-:root[data-theme='dark'] .aurora-bg::after {
+:root[data-theme='dark'] .aurora::after {
   opacity: 0.09;
 }
 
-@keyframes auroraDriftA {
+@keyframes beamDriftL {
   0%,
   100% {
-    transform: translate3d(0, 0, 0) scale(1);
+    transform: rotate(-15deg) translate3d(0, 0, 0) scale(1);
   }
   50% {
-    transform: translate3d(-4%, 3%, 0) scale(1.12);
+    transform: rotate(-15deg) translate3d(4%, 2.5%, 0) scale(1.08);
   }
 }
-@keyframes auroraDriftB {
+@keyframes beamDriftR {
   0%,
   100% {
-    transform: translate3d(0, 0, 0) scale(1.04);
+    transform: rotate(15deg) translate3d(0, 0, 0) scale(1.04);
   }
   50% {
-    transform: translate3d(5%, -3%, 0) scale(1);
+    transform: rotate(15deg) translate3d(-4%, -2.5%, 0) scale(1);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .aurora-bg__b {
+  .aurora__beam {
     animation: none !important;
   }
+  /* senza animazione restano comunque inclinati */
+  .aurora__beam.s-l { transform: rotate(-15deg); }
+  .aurora__beam.s-r { transform: rotate(15deg); }
 }
 
 .section__head {
