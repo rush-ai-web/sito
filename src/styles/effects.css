@@ -72,30 +72,38 @@
 .section-shine {
   content: '';
   position: absolute;
-  top: -20%;
-  bottom: -20%;
+  /* banda centrata verticalmente, alta ~54% della sezione: non tocca mai
+     i bordi alto/basso, così non si vede nessuna "spaccatura" con le sezioni
+     adiacenti. La maschera verticale la sfuma ulteriormente sopra e sotto. */
+  top: 23%;
+  bottom: 23%;
   left: 0;
-  width: 18%;
+  width: 22%;
   z-index: 0;
   pointer-events: none;
+  /* nucleo più luminoso al centro, come il riflesso premium della pill hero */
   background: linear-gradient(
     100deg,
     transparent 0%,
-    color-mix(in srgb, var(--text) 8%, transparent) 40%,
-    color-mix(in srgb, var(--text) 14%, transparent) 50%,
-    color-mix(in srgb, var(--text) 8%, transparent) 60%,
+    color-mix(in srgb, var(--text) 7%, transparent) 35%,
+    color-mix(in srgb, var(--text) 18%, transparent) 50%,
+    color-mix(in srgb, var(--text) 7%, transparent) 65%,
     transparent 100%
   );
-  /* sfuma solo al fondo: evita il taglio netto senza dissolvenza orizzontale */
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 65%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 0%, black 65%, transparent 100%);
-  filter: blur(16px);
-  will-change: transform;
-  animation: sectionShine 8.5s linear infinite;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
+  filter: blur(14px);
+  will-change: transform, opacity;
+  /* sweep smooth con l'easing della pill hero (ease-out cubico), poi pausa:
+     la banda scorre veloce e decelera, sparisce e riparte — non un loop lineare */
+  animation: sectionShine 7s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 @keyframes sectionShine {
-  0%   { transform: translate(-140%, 30%) rotate(-18deg); }
-  100% { transform: translate(340%, -30%) rotate(-18deg); }
+  0%   { transform: translate(-170%, 0) skewX(-14deg); opacity: 0; }
+  8%   { opacity: 1; }
+  55%  { opacity: 1; }
+  70%  { transform: translate(430%, 0) skewX(-14deg); opacity: 0; }
+  100% { transform: translate(430%, 0) skewX(-14deg); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .section-shine {

@@ -28,13 +28,21 @@ export default function App() {
         <div className="aurora" aria-hidden="true">
           {/* Problema (grid): nessun glow qui — la sua unica animazione è la
               fascia di luce bianca (.section--shine) che sweepa lo sfondo. */}
-          {/* Soluzione (no-grid): due bulb grandi e rotondi, uno per lato */}
+          {/* Soluzione: bulb accento a sx + neutro a dx */}
           <span className="glow bulb big accent l" style={{ top: '22%' }} />
           <span className="glow bulb white r" style={{ top: '19%' }} />
-          {/* Numeri (no-grid): bulb accento grande a destra */}
+          {/* Prodotto: bulb neutro a sinistra */}
+          <span className="glow bulb white l" style={{ top: '36%' }} />
+          {/* Numeri: bulb accento a dx + neutro a sx */}
           <span className="glow bulb big accent r" style={{ top: '48%' }} />
-          {/* Principi: bulb accento grande a destra */}
+          <span className="glow bulb black l" style={{ top: '52%' }} />
+          {/* Metodo: bulb neutro a destra */}
+          <span className="glow bulb white r" style={{ top: '62%' }} />
+          {/* Principi: bulb accento a dx + neutro a sx */}
           <span className="glow bulb big accent r" style={{ top: '73%' }} />
+          <span className="glow bulb white l" style={{ top: '78%' }} />
+          {/* FAQ: bulb neutro a destra */}
+          <span className="glow bulb black r" style={{ top: '86%' }} />
           {/* CTA: i bulb sono direttamente in Cta.jsx, clippati dalla sezione */}
         </div>
         {/* chiaro */}
