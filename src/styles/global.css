@@ -410,9 +410,16 @@ h4 {
   letter-spacing: -0.003em;
 }
 
-/* hover: la maglia in accento si accende un po' */
+/* hover: la maglia in accento si accende + ombra colore accento */
 .card--deco:hover .card-deco__grid {
   opacity: 0.9;
+}
+
+.card--deco:hover {
+  box-shadow:
+    var(--sh-2),
+    0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent),
+    0 8px 32px -6px color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
 /* la Group con questa variante toglie i bordi/sfondi extra e centra */

@@ -1,4 +1,4 @@
-import { CircleSlash, Unplug, FileWarning, Clock } from 'lucide-react';
+import { TriangleAlert, Unplug, FileWarning, Clock } from 'lucide-react';
 import { Section, Head, Group, DecoratorCard } from './ui';
 
 const PUNTI = [
@@ -23,7 +23,7 @@ export default function Problema() {
   return (
     <Section id="problema" invert grid className="section--shine">
       <Head
-        icon={CircleSlash}
+        icon={TriangleAlert}
         label="Il problema"
         title={
           <>
