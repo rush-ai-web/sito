@@ -22,12 +22,15 @@ export function Section({
   children,
 }) {
   const theme = useContext(ThemeCtx);
-  const dark = invert ? theme !== 'dark' : theme === 'dark';
+  /* niente più alternanza chiaro/scuro: ogni sezione segue il tema.
+     `invert` resta accettato come prop per non rompere i call-site, ma
+     non cambia più tono né sfondo — lo stravolgimento aurora vive su un
+     layer fisso dietro le sezioni, ora trasparenti. */
+  const dark = theme === 'dark';
   const fx = [
     grid && 'fx-grid',
     spot && 'fx-spot',
     spot && accentSpot && 'fx-accent-glow',
-    invert && 'invert',
     large && 'section--lg',
   ]
     .filter(Boolean)

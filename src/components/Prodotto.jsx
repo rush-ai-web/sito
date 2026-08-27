@@ -133,7 +133,7 @@ function Anteprima() {
 
 export default function Prodotto() {
   return (
-    <Section id="prodotto" invert grid large>
+    <Section id="prodotto" grid large>
       <Head
         icon={Layers}
         label="Cosa costruiamo"

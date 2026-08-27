@@ -21,6 +21,13 @@ export default function App() {
 
   return (
     <ThemeCtx.Provider value={theme}>
+      {/* aurora di sfondo: layer fisso, sfumature accento + neutro dietro tutta la pagina */}
+      <div className="aurora-bg" aria-hidden="true">
+        <span className="aurora-bg__b b1" />
+        <span className="aurora-bg__b b2" />
+        <span className="aurora-bg__b b3" />
+        <span className="aurora-bg__b b4" />
+      </div>
       <Nav />
       <main>
         {/* chiaro */}

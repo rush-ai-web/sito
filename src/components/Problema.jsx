@@ -21,7 +21,7 @@ const PUNTI = [
 
 export default function Problema() {
   return (
-    <Section id="problema" invert grid className="section--shine">
+    <Section id="problema" grid className="section--shine">
       <Head
         icon={TriangleAlert}
         label="Il problema"

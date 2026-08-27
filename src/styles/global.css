@@ -254,7 +254,10 @@ h4 {
 .section {
   position: relative;
   padding-block: var(--s-hero);
-  background: var(--bg);
+  /* trasparente: dietro traspare il layer aurora fisso (.aurora-bg).
+     Il fondo pieno vive su <body>; qui restano solo le vignette
+     radiali semi-trasparenti che danno profondità sopra l'aurora. */
+  background-color: transparent;
   color: var(--text);
   /* faro e maglia debordano di proposito: vanno tagliati qui,
      altrimenti la pagina scrolla in orizzontale sui telefoni */
@@ -266,6 +269,138 @@ h4 {
 
 .section--lg {
   padding-block: var(--s-hero-lg);
+}
+
+/* ============================================================
+   Aurora di sfondo — layer FISSO dietro tutte le sezioni.
+   Blob morbidi in accento + neutro che lavano lo sfondo con
+   sfumature stile reference (fusionai). Il neutro usa --text,
+   quindi è bianco nel tema dark e nero nel tema light: accento +
+   bianco su scuro, accento + nero su chiaro, come richiesto.
+   Le sezioni sono trasparenti e ci scorrono sopra; l'hero è opaco
+   e conserva la sua aurora dedicata.
+   ============================================================ */
+.aurora-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+
+.aurora-bg__b {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+/* macchie di colore del brand */
+.aurora-bg .b1 {
+  width: 52vw;
+  aspect-ratio: 1;
+  right: -10%;
+  top: -12%;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    color-mix(in srgb, var(--accent) 26%, transparent),
+    transparent 68%
+  );
+  animation: auroraDriftA 34s ease-in-out infinite;
+}
+.aurora-bg .b3 {
+  width: 50vw;
+  aspect-ratio: 1;
+  right: -14%;
+  top: 44%;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    color-mix(in srgb, var(--accent) 22%, transparent),
+    transparent 68%
+  );
+  animation: auroraDriftB 42s ease-in-out infinite;
+}
+.aurora-bg .b4 {
+  width: 48vw;
+  aspect-ratio: 1;
+  left: -14%;
+  bottom: -14%;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    color-mix(in srgb, var(--accent) 24%, transparent),
+    transparent 68%
+  );
+  animation: auroraDriftA 38s ease-in-out infinite reverse;
+}
+/* macchia neutra: bianca su dark, nera su light — profondità senza colore */
+.aurora-bg .b2 {
+  width: 44vw;
+  aspect-ratio: 1;
+  left: -10%;
+  top: 20%;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    color-mix(in srgb, var(--text) 7%, transparent),
+    transparent 66%
+  );
+  animation: auroraDriftB 48s ease-in-out infinite;
+}
+
+/* nel tema scuro l'accento è meno "pieno": lo spingo un filo di più */
+:root[data-theme='dark'] .aurora-bg .b1 {
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    color-mix(in srgb, var(--accent) 34%, transparent),
+    transparent 70%
+  );
+}
+:root[data-theme='dark'] .aurora-bg .b3,
+:root[data-theme='dark'] .aurora-bg .b4 {
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    color-mix(in srgb, var(--accent) 30%, transparent),
+    transparent 70%
+  );
+}
+
+/* grain sottile sopra le sfumature — in overlay funziona su entrambi i temi */
+.aurora-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.95 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: 220px 220px;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+}
+:root[data-theme='dark'] .aurora-bg::after {
+  opacity: 0.09;
+}
+
+@keyframes auroraDriftA {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-4%, 3%, 0) scale(1.12);
+  }
+}
+@keyframes auroraDriftB {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.04);
+  }
+  50% {
+    transform: translate3d(5%, -3%, 0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-bg__b {
+    animation: none !important;
+  }
 }
 
 .section__head {
@@ -795,6 +930,10 @@ h4 {
   padding: 110px 0 0;
   overflow: hidden;
   isolation: isolate;
+  /* l'hero resta invariato: fondo pieno del tema + vignette, così il
+     layer aurora fisso non traspare qui e conserva la sua aurora dedicata. */
+  background-color: var(--bg);
+  background-image: var(--vignette), var(--vignette-2);
 }
 
 .hero__aurora {

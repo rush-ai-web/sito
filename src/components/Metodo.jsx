@@ -30,7 +30,7 @@ const PASSI = [
 
 export default function Metodo() {
   return (
-    <Section id="metodo" invert grid>
+    <Section id="metodo" grid>
       <Head
         icon={GitBranch}
         label="Come lavoriamo"
