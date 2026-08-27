@@ -289,20 +289,18 @@ main {
   position: absolute;
   inset: 0;
   z-index: 0;
-  /* clip solo in orizzontale: i bulb non escono ai lati della pagina */
-  overflow-x: clip;
-  overflow-y: visible;
+  overflow: hidden;
   pointer-events: none;
-  --a-accent: 46%;
+  --a-accent: 54%;
   --a-black: 0.22;
 }
 :root[data-theme='dark'] .aurora {
-  --a-accent: 58%;
+  --a-accent: 62%;
   --a-black: 0.2;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) .aurora {
-    --a-accent: 58%;
+    --a-accent: 62%;
     --a-black: 0.2;
   }
 }
@@ -356,7 +354,7 @@ main {
 .glow.white {
   background: radial-gradient(
     closest-side,
-    color-mix(in srgb, var(--text) 22%, transparent),
+    color-mix(in srgb, var(--text) 32%, transparent),
     transparent 78%
   );
 }
@@ -426,6 +424,40 @@ main {
   .glow { animation: none !important; }
   .glow.beam.l { transform: rotate(-16deg); }
   .glow.beam.r { transform: rotate(16deg); }
+}
+
+/* ============================================================
+   CTA corner bulbs — locali alla sezione, clippati in basso
+   dall'overflow:hidden della sezione → stacco netto col footer.
+   ============================================================ */
+.cta-bulb {
+  position: absolute;
+  width: 72vw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  bottom: -25%;
+  pointer-events: none;
+  z-index: 0;
+  animation: bulbDrift 56s ease-in-out infinite;
+}
+.cta-bulb--l {
+  left: -18vw;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--accent) 60%, transparent),
+    transparent 78%
+  );
+}
+.cta-bulb--r {
+  right: -18vw;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--text) 32%, transparent),
+    transparent 78%
+  );
+}
+@media (prefers-reduced-motion: reduce) {
+  .cta-bulb { animation: none; }
 }
 
 .section__head {
@@ -519,12 +551,12 @@ main {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(to right, color-mix(in srgb, var(--accent) 55%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in srgb, var(--accent) 55%, transparent) 1px, transparent 1px);
+    linear-gradient(to right, color-mix(in srgb, var(--accent) 75%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--accent) 75%, transparent) 1px, transparent 1px);
   background-size: 18px 18px;
   -webkit-mask-image: radial-gradient(ellipse 55% 55% at 50% 50%, #000 25%, transparent 90%);
   mask-image: radial-gradient(ellipse 55% 55% at 50% 50%, #000 25%, transparent 90%);
-  opacity: 0.6;
+  opacity: 0.85;
   transition: opacity var(--d-lift) var(--e-lift);
 }
 

@@ -21,6 +21,9 @@ export default function Cta() {
 
   return (
     <Section id="contatti" large grid>
+      {/* corner bulbs — clippati dalla section overflow:hidden → stacco netto col footer */}
+      <span aria-hidden="true" className="cta-bulb cta-bulb--l" />
+      <span aria-hidden="true" className="cta-bulb cta-bulb--r" />
       <div className="row2" style={{ alignItems: 'start' }}>
         <Group className="row2__text stack" each={0.08}>
           <Item>

@@ -72,9 +72,8 @@
 .section-shine {
   content: '';
   position: absolute;
-  /* non deborda in basso: la sezione successiva non taglia il fondo */
   top: -20%;
-  bottom: 0;
+  bottom: -20%;
   left: 0;
   width: 18%;
   z-index: 0;
@@ -87,9 +86,11 @@
     color-mix(in srgb, var(--text) 8%, transparent) 60%,
     transparent 100%
   );
+  /* sfuma solo al fondo: evita il taglio netto senza dissolvenza orizzontale */
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 65%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 65%, transparent 100%);
   filter: blur(16px);
   will-change: transform;
-  /* loop lineare: entra da sinistra ed esce a destra senza dissolvenza */
   animation: sectionShine 8.5s linear infinite;
 }
 @keyframes sectionShine {
