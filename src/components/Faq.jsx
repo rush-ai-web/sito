@@ -92,7 +92,7 @@ export default function Faq() {
   const [sel, setSel] = useState(cats[0]);
 
   return (
-    <Section id="faq" spot large className="faq-sec">
+    <Section id="faq" large className="faq-sec">
       <Head
         icon={HelpCircle}
         label="Domande frequenti"

@@ -20,7 +20,7 @@ export default function Cta() {
   };
 
   return (
-    <Section id="contatti" large grid spot accentSpot>
+    <Section id="contatti" large grid>
       <div className="row2" style={{ alignItems: 'start' }}>
         <Group className="row2__text stack" each={0.08}>
           <Item>

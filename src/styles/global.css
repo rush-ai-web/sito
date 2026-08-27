@@ -314,10 +314,10 @@ main {
   width: 52vw;
   height: 42vh;
 }
-/* beam: fascio allungato e inclinato, come un raggio di luce */
+/* beam: fascio lungo e sottile, un vero raggio di luce diagonale */
 .glow.beam {
-  width: 96vw;
-  height: 42vh;
+  width: 124vw;
+  height: 34vh;
 }
 .glow.big {
   width: 68vw;
@@ -360,6 +360,25 @@ main {
     closest-side,
     rgba(0, 0, 0, var(--a-black)),
     transparent 78%
+  );
+}
+
+/* i beam sono raggi luminosi: nucleo bianco-caldo che degrada nel tono,
+   come nella reference — più "definiti" dei bulb, che restano morbidi */
+.glow.beam.accent {
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 255, 255, 0.14),
+    color-mix(in srgb, var(--accent) var(--a-accent), transparent) 42%,
+    transparent 76%
+  );
+}
+.glow.beam.white {
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 255, 255, calc(var(--a-white) + 0.06)),
+    rgba(255, 255, 255, var(--a-white)) 40%,
+    transparent 75%
   );
 }
 

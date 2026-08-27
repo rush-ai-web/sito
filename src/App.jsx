@@ -26,8 +26,8 @@ export default function App() {
         {/* aurora curata: composizione variata per regione, mai fasci in fila
             fissa. Vive dentro <main> così scorre col contenuto. */}
         <div className="aurora" aria-hidden="true">
-          {/* Problema (sotto la dashboard): UN solo fascio diagonale accento */}
-          <span className="glow beam accent r" style={{ top: '15%' }} />
+          {/* Problema (sotto la dashboard): SOLO un fascio di luce bianco */}
+          <span className="glow beam white r" style={{ top: '15%' }} />
           {/* Soluzione: due bulb, uno per lato — accento a sx, bianco a dx */}
           <span className="glow bulb accent l" style={{ top: '30%' }} />
           <span className="glow bulb sm white r" style={{ top: '26%' }} />

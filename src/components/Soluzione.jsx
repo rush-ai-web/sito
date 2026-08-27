@@ -106,7 +106,7 @@ function SoluzioneMobile() {
   };
 
   return (
-    <Section id="soluzione" large spot>
+    <Section id="soluzione" large>
       <Head
         icon={Lightbulb}
         label="La soluzione"
@@ -277,7 +277,7 @@ function SoluzioneDesktop() {
   };
 
   return (
-    <Section id="soluzione" large spot>
+    <Section id="soluzione" large>
       <div className="orbit orbit--radial" ref={rootRef} onClick={onContainerClick}>
         <span className="orbit__ring" aria-hidden="true" />
 
