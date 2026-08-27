@@ -72,8 +72,9 @@
 .section-shine {
   content: '';
   position: absolute;
-  top: -30%;
-  bottom: -30%;
+  /* non deborda in basso: la sezione successiva non taglia il fondo */
+  top: -20%;
+  bottom: 0;
   left: 0;
   width: 18%;
   z-index: 0;
@@ -87,28 +88,13 @@
     transparent 100%
   );
   filter: blur(16px);
-  will-change: transform, opacity;
-  /* loop in diagonale bottom-left → top-right; piu' snella e piu' rapida */
-  animation: sectionShine 8.5s ease-in-out infinite;
+  will-change: transform;
+  /* loop lineare: entra da sinistra ed esce a destra senza dissolvenza */
+  animation: sectionShine 8.5s linear infinite;
 }
 @keyframes sectionShine {
-  0% {
-    transform: translate(-140%, 40%) rotate(-18deg);
-    opacity: 0;
-  }
-  15% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 1;
-  }
-  85% {
-    opacity: 0;
-  }
-  100% {
-    transform: translate(340%, -40%) rotate(-18deg);
-    opacity: 0;
-  }
+  0%   { transform: translate(-140%, 30%) rotate(-18deg); }
+  100% { transform: translate(340%, -30%) rotate(-18deg); }
 }
 @media (prefers-reduced-motion: reduce) {
   .section-shine {
