@@ -3,6 +3,7 @@ import { ThemeCtx } from './components/ui';
 import Nav from './components/Nav';
 import Hero from './components/Hero';
 import Problema from './components/Problema';
+import Ecosistema from './components/Ecosistema';
 import Soluzione from './components/Soluzione';
 import Prodotto from './components/Prodotto';
 import Numeri from './components/Numeri';
@@ -49,6 +50,8 @@ export default function App() {
         <Hero />
         {/* scuro */}
         <Problema />
+        {/* tutto in un unico posto — diagramma di convergenza */}
+        <Ecosistema />
         {/* chiaro */}
         <Soluzione />
         {/* scuro */}

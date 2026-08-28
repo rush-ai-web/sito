@@ -883,3 +883,258 @@
     opacity: 0;
   }
 }
+
+/* ============================================================
+   Ecosistema — diagramma "tutto in un unico posto".
+   Canvas ad aspect-ratio fisso (1160×520): SVG e card HTML
+   condividono lo stesso sistema di coordinate, così le linee
+   toccano sempre le card a qualunque scala.
+   ============================================================ */
+.eco {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1120px;
+  margin: 8px auto 0;
+}
+
+.eco__stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1160 / 520;
+}
+
+/* alone d'accento morbido dietro al nodo — sfondo smooth, non invadente */
+.eco__halo {
+  position: absolute;
+  left: 50%;
+  top: 47%;
+  width: 46%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    color-mix(in srgb, var(--accent) 24%, transparent) 0%,
+    transparent 70%
+  );
+  filter: blur(46px);
+  animation: ecoHalo 9s ease-in-out infinite;
+}
+@keyframes ecoHalo {
+  0%, 100% { opacity: 0.65; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+.eco__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  z-index: 1;
+}
+
+/* card modulo (sinistra) */
+.eco__mod {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 0 14px;
+  border-radius: 14px;
+  background-image: var(--card-vig);
+  background-color: var(--bg);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: var(--sh-1);
+}
+
+.eco__mod-t {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+.eco__mod-t b {
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+.eco__mod-t em {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* nodo centrale Rush AI */
+.eco__core {
+  position: absolute;
+  z-index: 3;
+  translate: -50% -50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+.eco__core-ring {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  color: var(--accent);
+  background:
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent) 16%, var(--bg)) 0%, var(--bg) 70%);
+  border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  box-shadow:
+    0 0 0 6px color-mix(in srgb, var(--accent) 8%, transparent),
+    0 10px 30px -8px color-mix(in srgb, var(--accent) 45%, transparent),
+    inset 0 0 22px -6px color-mix(in srgb, var(--accent) 40%, transparent);
+  animation: ecoCorePulse 4.5s ease-in-out infinite;
+}
+@keyframes ecoCorePulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 6px color-mix(in srgb, var(--accent) 8%, transparent),
+      0 10px 30px -8px color-mix(in srgb, var(--accent) 45%, transparent),
+      inset 0 0 22px -6px color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 10px color-mix(in srgb, var(--accent) 12%, transparent),
+      0 14px 40px -6px color-mix(in srgb, var(--accent) 60%, transparent),
+      inset 0 0 26px -4px color-mix(in srgb, var(--accent) 52%, transparent);
+  }
+}
+.eco__core-l {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* card destinazione: il gestionale unico */
+.eco__dest {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 18px;
+  background-image: var(--card-vig);
+  background-color: var(--bg);
+  border: 1.5px solid color-mix(in srgb, var(--accent) 45%, var(--hairline-strong));
+  box-shadow:
+    var(--sh-2),
+    0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent),
+    0 18px 48px -18px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.eco__dest-logo {
+  height: 34px;
+  width: auto;
+  object-fit: contain;
+}
+.eco__dest-logo--d { display: none; }
+:root[data-theme='dark'] .eco__dest-logo--l { display: none; }
+:root[data-theme='dark'] .eco__dest-logo--d { display: block; }
+.eco__dest-sub {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eco__halo, .eco__core-ring { animation: none; }
+}
+
+/* ---- Mobile: stack verticale ---- */
+.eco-m {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-top: 8px;
+}
+.eco-m__mods {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  max-width: 360px;
+}
+.eco-m__mod {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background-image: var(--card-vig);
+  background-color: var(--bg);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: var(--sh-1);
+}
+/* connettore verticale con puntino che scende */
+.eco-m__flow {
+  position: relative;
+  width: 2px;
+  height: 46px;
+  margin: 6px 0;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--accent) 12%, transparent),
+    color-mix(in srgb, var(--accent) 55%, transparent)
+  );
+  overflow: visible;
+}
+.eco-m__flow::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  translate: -50% 0;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 70%, transparent);
+  animation: ecoDrop 1.8s ease-in-out infinite;
+}
+@keyframes ecoDrop {
+  0% { top: 0; opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.eco-m__core {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.eco-m__dest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  padding: 22px 34px;
+  border-radius: 18px;
+  background-image: var(--card-vig);
+  background-color: var(--bg);
+  border: 1.5px solid color-mix(in srgb, var(--accent) 45%, var(--hairline-strong));
+  box-shadow: var(--sh-2), 0 18px 48px -18px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .eco-m__flow::after { animation: none; }
+}
