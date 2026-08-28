@@ -12,7 +12,7 @@
   --surface: #fcfcfc;
   --surface-top: #ffffff; /* le superfici sono un gradiente, mai flat */
   --text: #1d1d1f;
-  --text-2: #6e6e73;
+  --text-2: #3b3b3d;
   --text-3: #86868b;
   --hairline: rgba(0, 0, 0, 0.06);
   --hairline-strong: rgba(0, 0, 0, 0.12);
@@ -98,7 +98,7 @@
   --surface: #1b1b1d;
   --surface-top: #212124;
   --text: #f5f5f7;
-  --text-2: #a1a1a6;
+  --text-2: #6e6e73;
   --text-3: #8e8e93;
   --hairline: rgba(255, 255, 255, 0.08);
   --hairline-strong: rgba(255, 255, 255, 0.14);
@@ -147,7 +147,7 @@
   --surface: #1b1b1d;
   --surface-top: #212124;
   --text: #f5f5f7;
-  --text-2: #a1a1a6;
+  --text-2: #6e6e73;
   --text-3: #8e8e93;
   --hairline: rgba(255, 255, 255, 0.08);
   --hairline-strong: rgba(255, 255, 255, 0.14);
@@ -185,7 +185,7 @@
   --surface: #fcfcfc;
   --surface-top: #ffffff;
   --text: #1d1d1f;
-  --text-2: #6e6e73;
+  --text-2: #3b3b3d;
   --text-3: #86868b;
   --hairline: rgba(0, 0, 0, 0.06);
   --hairline-strong: rgba(0, 0, 0, 0.12);

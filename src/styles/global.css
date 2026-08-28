@@ -464,30 +464,30 @@ main {
    ============================================================ */
 .cta-bulb {
   position: absolute;
-  width: 56vw;
+  width: 82vw;
   aspect-ratio: 1;
   border-radius: 50%;
-  /* nucleo del bulb ancorato all'angolo basso: metà altezza sotto il bordo
-     inferiore → la luce pool esattamente nell'angolo, come nel riferimento */
-  bottom: -28vw;
+  /* nucleo ancorato PROPRIO all'angolo basso-laterale della sezione:
+     il centro del bulb cade sul vertice, la luce riempie l'angolo. */
+  bottom: -41vw;
   pointer-events: none;
   z-index: 0;
   animation: bulbDrift 56s ease-in-out infinite;
 }
 .cta-bulb--l {
-  left: -20vw;
+  left: -41vw;
   background: radial-gradient(
     closest-side,
-    color-mix(in srgb, var(--accent) 62%, transparent),
-    transparent 76%
+    color-mix(in srgb, var(--accent) 78%, transparent),
+    transparent 74%
   );
 }
 .cta-bulb--r {
-  right: -20vw;
+  right: -41vw;
   background: radial-gradient(
     closest-side,
-    color-mix(in srgb, var(--text) 34%, transparent),
-    transparent 76%
+    color-mix(in srgb, var(--text) 54%, transparent),
+    transparent 74%
   );
 }
 @media (prefers-reduced-motion: reduce) {
@@ -566,6 +566,9 @@ main {
   /* fondo pieno + leggero vignetting: la card copre la texture sotto */
   background-color: var(--surface);
   background-image: linear-gradient(180deg, var(--surface-top) 0%, var(--surface) 100%);
+  /* bordo più marcato delle altre card: color-mix su --text → più scuro nel
+     tema chiaro, più chiaro nel tema scuro, senza definirlo due volte */
+  border-color: color-mix(in srgb, var(--text) 22%, transparent);
   z-index: 1;
 }
 
