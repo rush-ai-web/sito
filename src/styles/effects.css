@@ -1013,15 +1013,17 @@
       inset 0 0 26px -4px color-mix(in srgb, var(--accent) 52%, transparent);
   }
 }
-.eco__core-l {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
+/* il logotipo Rush dentro al nodo centrale */
+.eco__core-logo {
+  height: 26px;
+  width: auto;
+  object-fit: contain;
 }
+.eco__core-logo--d { display: none; }
+:root[data-theme='dark'] .eco__core-logo--l { display: none; }
+:root[data-theme='dark'] .eco__core-logo--d { display: block; }
 
-/* card destinazione: il gestionale unico */
+/* card destinazione: la dashboard che ne esce */
 .eco__dest {
   position: absolute;
   z-index: 2;
@@ -1029,7 +1031,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 9px;
+  padding: 0 22px;
+  text-align: center;
   border-radius: 18px;
   background-image: var(--card-vig);
   background-color: var(--bg);
@@ -1039,19 +1043,19 @@
     0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent),
     0 18px 48px -18px color-mix(in srgb, var(--accent) 40%, transparent);
 }
-.eco__dest-logo {
-  height: 34px;
-  width: auto;
-  object-fit: contain;
+.eco__dest-t {
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--text);
 }
-.eco__dest-logo--d { display: none; }
-:root[data-theme='dark'] .eco__dest-logo--l { display: none; }
-:root[data-theme='dark'] .eco__dest-logo--d { display: block; }
 .eco__dest-sub {
-  font-size: 13px;
+  max-width: 22ch;
+  font-size: 12.5px;
   font-weight: 500;
-  letter-spacing: -0.01em;
-  color: var(--accent);
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  color: var(--text-3);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1127,8 +1131,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   gap: 9px;
-  padding: 22px 34px;
+  padding: 22px 30px;
   border-radius: 18px;
   background-image: var(--card-vig);
   background-color: var(--bg);

@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import { CreditCard, Users, Layers, ClipboardList, FileText, Sparkles, Boxes } from 'lucide-react';
+import { CreditCard, Users, Layers, ClipboardList, FileText, LayoutDashboard, Boxes } from 'lucide-react';
 import { Section, Head, IconTile } from './ui';
 import { EASE_MODAL } from '../lib/motion';
 import { useIsMobile } from '../lib/hooks';
@@ -72,10 +72,20 @@ function EcosistemaDesktop() {
             preserveAspectRatio="xMidYMid meet"
           >
             <defs>
-              <linearGradient id="ecoLine" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.15" />
+              {/* userSpaceOnUse: i tracciati orizzontali hanno bounding box di
+                  altezza 0 → un gradiente in objectBoundingBox non si calcola e
+                  la linea sparisce. In userSpace il gradiente è sempre valido. */}
+              <linearGradient
+                id="ecoLine"
+                gradientUnits="userSpaceOnUse"
+                x1={ANCHOR_X}
+                y1={NODE_CY}
+                x2={NODE_CX + NODE_R}
+                y2={NODE_CY}
+              >
+                <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.18" />
                 <stop offset="55%" stopColor="var(--accent)" stopOpacity="0.5" />
-                <stop offset="100%" stopColor="var(--accent)" stopOpacity="0.7" />
+                <stop offset="100%" stopColor="var(--accent)" stopOpacity="0.72" />
               </linearGradient>
             </defs>
 
@@ -161,7 +171,7 @@ function EcosistemaDesktop() {
             );
           })}
 
-          {/* nodo centrale Rush AI */}
+          {/* nodo centrale: il logotipo Rush al cuore del sistema */}
           <motion.div
             className="eco__core"
             style={{ left: pct(NODE_CX, VB_W), top: pct(NODE_CY, VB_H) }}
@@ -171,12 +181,16 @@ function EcosistemaDesktop() {
             transition={{ duration: 0.6, ease: EASE_MODAL, delay: 0.5 }}
           >
             <span className="eco__core-ring">
-              <Sparkles size={26} strokeWidth={1.75} />
+              <img src="./rush-logo.png" alt="Rush" className="eco__core-logo eco__core-logo--l" />
+              <img
+                src="./rush-logo-dark.png"
+                alt="Rush"
+                className="eco__core-logo eco__core-logo--d"
+              />
             </span>
-            <span className="eco__core-l">Rush AI</span>
           </motion.div>
 
-          {/* card destinazione: il gestionale unico */}
+          {/* card destinazione: la dashboard che ne esce */}
           <motion.div
             className="eco__dest"
             style={{
@@ -190,13 +204,9 @@ function EcosistemaDesktop() {
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.6, ease: EASE_MODAL, delay: 0.95 }}
           >
-            <img src="./rush-logo.png" alt="Rush" className="eco__dest-logo eco__dest-logo--l" />
-            <img
-              src="./rush-logo-dark.png"
-              alt="Rush"
-              className="eco__dest-logo eco__dest-logo--d"
-            />
-            <span className="eco__dest-sub">Gestionale su misura</span>
+            <IconTile icon={LayoutDashboard} accent />
+            <b className="eco__dest-t">La tua dashboard</b>
+            <span className="eco__dest-sub">Precompilata, aggiornata al secondo, sempre in ordine.</span>
           </motion.div>
         </div>
       </div>
@@ -243,17 +253,17 @@ function EcosistemaMobile() {
 
         <div className="eco-m__core">
           <span className="eco__core-ring">
-            <Sparkles size={24} strokeWidth={1.75} />
+            <img src="./rush-logo.png" alt="Rush" className="eco__core-logo eco__core-logo--l" />
+            <img src="./rush-logo-dark.png" alt="Rush" className="eco__core-logo eco__core-logo--d" />
           </span>
-          <span className="eco__core-l">Rush AI</span>
         </div>
 
         <span className="eco-m__flow" aria-hidden="true" />
 
         <div className="eco-m__dest">
-          <img src="./rush-logo.png" alt="Rush" className="eco__dest-logo eco__dest-logo--l" />
-          <img src="./rush-logo-dark.png" alt="Rush" className="eco__dest-logo eco__dest-logo--d" />
-          <span className="eco__dest-sub">Gestionale su misura</span>
+          <IconTile icon={LayoutDashboard} accent />
+          <b className="eco__dest-t">La tua dashboard</b>
+          <span className="eco__dest-sub">Precompilata, aggiornata al secondo, sempre in ordine.</span>
         </div>
       </div>
     </Section>
