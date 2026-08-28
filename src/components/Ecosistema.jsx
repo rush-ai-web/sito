@@ -191,9 +191,9 @@ function EcosistemaDesktop() {
           >
             <span className="eco__core-ring">
               <span className="eco__core-mark">
-                <img src="./rush-mark.png" alt="Rush" className="eco__core-logo eco__core-logo--l" />
+                <img src="./rush-logo.png" alt="Rush" className="eco__core-logo eco__core-logo--l" />
                 <img
-                  src="./rush-mark-on-dark.png"
+                  src="./rush-logo-dark.png"
                   alt="Rush"
                   className="eco__core-logo eco__core-logo--d"
                 />

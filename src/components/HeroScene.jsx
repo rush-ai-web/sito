@@ -7,7 +7,7 @@ import {
   Receipt,
   Users,
   Wallet,
-  BookOpen,
+  ClipboardList,
   BarChart3,
   Sparkles,
   Moon,
@@ -31,7 +31,7 @@ const NAV = [
   { icon: Receipt, t: 'Fatture', badge: 2 },
   { icon: Users, t: 'Personale' },
   { icon: Wallet, t: 'Cassa' },
-  { icon: BookOpen, t: 'Ricette' },
+  { icon: ClipboardList, t: 'Ordini' },
   { icon: BarChart3, t: 'Report' },
 ];
 
@@ -44,8 +44,8 @@ const PERIODS = [
       { lab: 'Spese · oggi', v: 760, fmt: 'eur', d: '+6% vs ieri', dir: 'up', tone: 'neg' },
       { lab: 'Margine lordo', v: 38.7, fmt: 'pct', d: '1,4pt', dir: 'up', tone: 'pos' },
       { lab: 'Costo personale', v: 310, fmt: 'eur', d: '25% sui ricavi' },
-      { lab: 'Food cost', v: 29.2, fmt: 'pct', d: '0,8pt', dir: 'up', tone: 'neg' },
-      { lab: 'Beverage cost', v: 21.1, fmt: 'pct', d: '1,2pt', dir: 'down', tone: 'pos' },
+      { lab: 'Costo acquisti', v: 29.2, fmt: 'pct', d: '0,8pt', dir: 'up', tone: 'neg' },
+      { lab: 'Valore magazzino', v: 24800, fmt: 'eur', d: '−3% vs ieri', dir: 'down', tone: 'pos' },
     ],
     inc: [22, 48, 72, 56, 84, 96],
     spe: [16, 30, 44, 34, 52, 58],
@@ -58,8 +58,8 @@ const PERIODS = [
       { lab: 'Spese · settimana', v: 5080, fmt: 'eur', d: '+4% vs sett. prec.', dir: 'up', tone: 'neg' },
       { lab: 'Margine lordo', v: 41.2, fmt: 'pct', d: '3,8pt', dir: 'up', tone: 'pos' },
       { lab: 'Costo personale', v: 2180, fmt: 'eur', d: '25% sui ricavi' },
-      { lab: 'Food cost', v: 27.8, fmt: 'pct', d: '2,6pt', dir: 'down', tone: 'pos' },
-      { lab: 'Beverage cost', v: 20.6, fmt: 'pct', d: '0,4pt', dir: 'down', tone: 'pos' },
+      { lab: 'Costo acquisti', v: 27.8, fmt: 'pct', d: '2,6pt', dir: 'down', tone: 'pos' },
+      { lab: 'Valore magazzino', v: 26200, fmt: 'eur', d: '+2% vs sett. prec.', dir: 'up', tone: 'neg' },
     ],
     inc: [62, 74, 56, 68, 88, 96],
     spe: [40, 48, 36, 44, 54, 60],
@@ -72,8 +72,8 @@ const PERIODS = [
       { lab: 'Spese · mese', v: 11510, fmt: 'eur', d: '5% vs apr', dir: 'up', tone: 'neg' },
       { lab: 'Margine lordo', v: 36.8, fmt: 'pct', d: '2,9pt', dir: 'up', tone: 'pos' },
       { lab: 'Costo personale', v: 4480, fmt: 'eur', d: '24% sui ricavi' },
-      { lab: 'Food cost', v: 27.4, fmt: 'pct', d: '2,1pt', dir: 'down', tone: 'pos' },
-      { lab: 'Beverage cost', v: 21.6, fmt: 'pct', d: '0,3pt', dir: 'up', tone: 'neg' },
+      { lab: 'Costo acquisti', v: 27.4, fmt: 'pct', d: '2,1pt', dir: 'down', tone: 'pos' },
+      { lab: 'Valore magazzino', v: 25400, fmt: 'eur', d: '−1% vs apr', dir: 'down', tone: 'pos' },
     ],
     inc: [60, 56, 64, 70, 80, 96],
     spe: [38, 42, 40, 44, 44, 48],
@@ -81,19 +81,19 @@ const PERIODS = [
 ];
 
 const ALERT_POOL = [
-  { id: 0, k: 'red',   t: 'Campari 1L: ultime 2 bottiglie',         s: 'Consumo 4 pz/sett · riordina oggi' },
-  { id: 1, k: 'amber', t: 'Gin +18% vs media — Distillerie Rossi',  s: 'Fattura n.245 del 12 mag' },
-  { id: 2, k: 'blue',  t: '2 fatture in scadenza entro 5 giorni',   s: '€1.840 · Caseificio, Forno Antico' },
-  { id: 3, k: 'amber', t: 'Food cost +3,2pt rispetto al target',    s: 'Settimana 20 · verifica materie prime' },
-  { id: 4, k: 'red',   t: 'Forno Del Corso: nessuna consegna da 8 gg', s: 'Ordine sospeso · contatta il fornitore' },
-  { id: 5, k: 'blue',  t: '2 turni scoperti sabato sera',           s: '18:00–22:00 · nessuna conferma ricevuta' },
-  { id: 6, k: 'amber', t: 'Margine beverage sceso sotto il 20%',   s: 'Ultimi 7 gg · controlla i prezzi di vendita' },
-  { id: 7, k: 'red',   t: 'Differenza cassa: −€48 vs POS',          s: 'Rilevata ieri sera · riconciliazione richiesta' },
+  { id: 0, k: 'red',   t: 'Codice A-238: ultime 2 unità a scorta',   s: 'Consumo 4 pz/sett · riordina oggi' },
+  { id: 1, k: 'amber', t: 'Prezzo acquisto +18% — Fornitore Rossi',  s: 'Fattura n.245 del 12 mag' },
+  { id: 2, k: 'blue',  t: '2 fatture in scadenza entro 5 giorni',    s: '€1.840 · 2 fornitori' },
+  { id: 3, k: 'amber', t: 'Costo acquisti +3,2pt rispetto al target', s: 'Mese in corso · verifica i fornitori' },
+  { id: 4, k: 'red',   t: 'Fornitore Bianchi: nessuna consegna da 8 gg', s: 'Ordine sospeso · contatta il fornitore' },
+  { id: 5, k: 'blue',  t: '2 turni scoperti nel weekend',            s: 'Sabato · nessuna conferma ricevuta' },
+  { id: 6, k: 'amber', t: 'Margine su una linea sotto il 20%',       s: 'Ultimi 7 gg · controlla i prezzi di vendita' },
+  { id: 7, k: 'red',   t: 'Differenza cassa: −€48 vs POS',           s: 'Rilevata ieri sera · riconciliazione richiesta' },
 ];
 
 const QUERIES = [
   'chi mi ha alzato i prezzi?',
-  'quanto ho speso in bevande?',
+  'quanto ho speso in fornitori questo mese?',
   'quali fatture scadono a breve?',
 ];
 
@@ -197,7 +197,7 @@ export default function HeroScene() {
               <div className="dash__sede-sel">
                 <div className="dash__sede-pop">
                   <span className="dash__sede-opt is-on"><i className="dash__sedi-dot" />Sede principale</span>
-                  <span className="dash__sede-opt"><i className="dash__sedi-dot" />Bistrot Via Roma</span>
+                  <span className="dash__sede-opt"><i className="dash__sedi-dot" />Filiale Via Roma</span>
                 </div>
                 <MapPin size={12} strokeWidth={2} />
                 <span className="dash__sede-name">Sedi</span>
@@ -364,7 +364,7 @@ export default function HeroScene() {
         <span className="sat__ic is-warn"><TrendingDown size={15} strokeWidth={2} /></span>
         <span className="sat__t">
           <b>Riordino urgente</b>
-          <em>gin, campari e tonic sotto soglia</em>
+          <em>3 articoli sotto soglia minima</em>
         </span>
       </motion.div>
     </div>

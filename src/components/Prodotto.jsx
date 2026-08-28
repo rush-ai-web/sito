@@ -1,16 +1,6 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import {
-  Layers,
-  Blocks,
-  BarChart3,
-  Workflow,
-  Sparkles,
-  Plug,
-  ArrowUpRight,
-} from 'lucide-react';
-import { Section, Head, Group, Item, GlowCard, IconTile, LiveDot } from './ui';
-import { useClock, useCountUp, useLiveFeed } from '../lib/hooks';
-import { DUR, EASE_MODAL } from '../lib/motion';
+import { motion } from 'framer-motion';
+import { Layers, Blocks, BarChart3, Workflow, Sparkles, Plug } from 'lucide-react';
+import { Section, Head, Group, Item, GlowCard, IconTile } from './ui';
 
 const CARDS = [
   {
@@ -35,101 +25,6 @@ const CARDS = [
     accent: true,
   },
 ];
-
-/* La finestra di prodotto: un estratto di dashboard con i quattro
-   dettagli riconoscibili — conteggio animato, orologio, dot live,
-   e un flusso di documenti che continua a scorrere da solo. */
-function Anteprima() {
-  const { time, date } = useClock();
-  const [rIncassi, incassi] = useCountUp(184200, { dec: 0 });
-  const [rOre, ore] = useCountUp(142, { dec: 0 });
-  const [rCosto, costo] = useCountUp(28, { dec: 1 });
-  const feed = useLiveFeed();
-
-  return (
-    <div className="frame">
-      <div className="frame__bar">
-        <div className="frame__dots">
-          <i />
-          <i />
-          <i />
-        </div>
-        <span className="t-small num" style={{ marginLeft: 'auto' }}>
-          {time}
-        </span>
-      </div>
-
-      <div className="frame__body">
-        <p className="t-small" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-          <span className="pulse-ring">
-            <LiveDot />
-          </span>
-          In diretta · {date}
-        </p>
-
-        <div className="kpi-row">
-          <div ref={rIncassi}>
-            <p className="t-label">Fatturato · mese</p>
-            <p className="t-kpi num">€{incassi}</p>
-            <p className="delta delta--pos">+12% vs mese prec.</p>
-          </div>
-          <div ref={rCosto}>
-            <p className="t-label">Costo materie</p>
-            <p className="t-kpi num">{costo}%</p>
-            <p className="delta delta--pos">−1,5pt</p>
-          </div>
-          <div ref={rOre}>
-            <p className="t-label">Ore lavorate</p>
-            <p className="t-kpi num">{ore}h</p>
-            <p className="delta delta--warn">3 da approvare</p>
-          </div>
-        </div>
-
-        <div className="frame__split">
-          {/* grafico che continua a muoversi */}
-          <div>
-            <p className="t-label" style={{ marginBottom: 14 }}>
-              Incassi · ultime settimane
-            </p>
-            <div className="bars" aria-hidden="true">
-              <i />
-              <i />
-              <i />
-              <i />
-              <i />
-            </div>
-          </div>
-
-          {/* documenti che entrano da soli, uno dopo l'altro */}
-          <div>
-            <p className="t-label" style={{ marginBottom: 10 }}>
-              Documenti registrati ora
-            </p>
-            <div className="feed">
-              <AnimatePresence initial={false} mode="popLayout">
-                {feed.map((r) => (
-                  <motion.div
-                    className="feed__row"
-                    key={r.id}
-                    layout
-                    initial={{ opacity: 0, y: -14 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 14 }}
-                    transition={{ duration: DUR.pop, ease: EASE_MODAL }}
-                  >
-                    <span className="feed__k">{r.chi}</span>
-                    <span className="chip">{r.tipo}</span>
-                    <span className="num feed__v">€{r.importo}</span>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function Prodotto() {
   return (
@@ -189,15 +84,6 @@ export default function Prodotto() {
         ))}
       </div>
 
-      <Group className="stack" style={{ marginTop: 'var(--s-block)' }}>
-        <Item>
-          <Anteprima />
-        </Item>
-        <Item as="p" className="t-small" style={{ textAlign: 'center' }}>
-          Estratto di una dashboard Rush · i numeri sono di esempio
-          <ArrowUpRight size={14} strokeWidth={1.75} style={{ display: 'inline', marginLeft: 4, verticalAlign: -2 }} />
-        </Item>
-      </Group>
     </Section>
   );
 }
