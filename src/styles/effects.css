@@ -984,44 +984,60 @@
   pointer-events: none;
 }
 .eco__core-ring {
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
   width: 112px;
   height: 112px;
   border-radius: 50%;
-  color: var(--accent);
-  background:
-    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent) 16%, var(--bg)) 0%, var(--bg) 70%);
+  /* fondo pieno del tema: nessuna tinta/overlay blu SOPRA il mark.
+     Il blu resta solo nell'effetto INTORNO (bordo + glow esterno). */
+  background: var(--bg);
   border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent);
   box-shadow:
     0 0 0 6px color-mix(in srgb, var(--accent) 8%, transparent),
-    0 10px 30px -8px color-mix(in srgb, var(--accent) 45%, transparent),
-    inset 0 0 22px -6px color-mix(in srgb, var(--accent) 40%, transparent);
+    0 10px 30px -8px color-mix(in srgb, var(--accent) 45%, transparent);
   animation: ecoCorePulse 4.5s ease-in-out infinite;
 }
 @keyframes ecoCorePulse {
   0%, 100% {
     box-shadow:
       0 0 0 6px color-mix(in srgb, var(--accent) 8%, transparent),
-      0 10px 30px -8px color-mix(in srgb, var(--accent) 45%, transparent),
-      inset 0 0 22px -6px color-mix(in srgb, var(--accent) 40%, transparent);
+      0 10px 30px -8px color-mix(in srgb, var(--accent) 45%, transparent);
   }
   50% {
     box-shadow:
       0 0 0 10px color-mix(in srgb, var(--accent) 12%, transparent),
-      0 14px 40px -6px color-mix(in srgb, var(--accent) 60%, transparent),
-      inset 0 0 26px -4px color-mix(in srgb, var(--accent) 52%, transparent);
+      0 14px 40px -6px color-mix(in srgb, var(--accent) 60%, transparent);
   }
 }
 /* il mark Rush (simbolo "R") dentro al nodo centrale */
+.eco__core-mark {
+  display: inline-flex;
+}
 .eco__core-logo {
-  height: 44px;
+  height: 34px;
   width: auto;
   object-fit: contain;
 }
 .eco__core-logo--d { display: none; }
 :root[data-theme='dark'] .eco__core-logo--l { display: none; }
 :root[data-theme='dark'] .eco__core-logo--d { display: block; }
+
+/* riga AI sotto al mark: icona + scritta, in accento */
+.eco__core-ai {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  line-height: 1;
+}
 
 /* card destinazione: la dashboard che ne esce */
 .eco__dest {

@@ -1,5 +1,14 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import { CreditCard, Users, Layers, ClipboardList, FileText, LayoutDashboard, Boxes } from 'lucide-react';
+import {
+  CreditCard,
+  Users,
+  Layers,
+  ClipboardList,
+  FileText,
+  LayoutDashboard,
+  Sparkles,
+  Boxes,
+} from 'lucide-react';
 import { Section, Head, IconTile } from './ui';
 import { EASE_MODAL } from '../lib/motion';
 import { useIsMobile } from '../lib/hooks';
@@ -181,12 +190,18 @@ function EcosistemaDesktop() {
             transition={{ duration: 0.6, ease: EASE_MODAL, delay: 0.5 }}
           >
             <span className="eco__core-ring">
-              <img src="./rush-mark.png" alt="Rush" className="eco__core-logo eco__core-logo--l" />
-              <img
-                src="./rush-mark-on-dark.png"
-                alt="Rush"
-                className="eco__core-logo eco__core-logo--d"
-              />
+              <span className="eco__core-mark">
+                <img src="./rush-mark.png" alt="Rush" className="eco__core-logo eco__core-logo--l" />
+                <img
+                  src="./rush-mark-on-dark.png"
+                  alt="Rush"
+                  className="eco__core-logo eco__core-logo--d"
+                />
+              </span>
+              <span className="eco__core-ai">
+                <Sparkles size={12} strokeWidth={2} />
+                AI
+              </span>
             </span>
           </motion.div>
 
