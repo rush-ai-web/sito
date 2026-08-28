@@ -171,7 +171,7 @@ function RotatingSlot() {
 
 export default function Hero() {
   return (
-    <section id="home" data-tone="light" className="section hero fx-grain">
+    <section id="home" data-tone="light" className="section hero">
       <span className="hero__aurora" aria-hidden="true" />
 
       <div className="wrap hero__wrap">
