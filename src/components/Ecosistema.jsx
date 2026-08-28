@@ -181,9 +181,9 @@ function EcosistemaDesktop() {
             transition={{ duration: 0.6, ease: EASE_MODAL, delay: 0.5 }}
           >
             <span className="eco__core-ring">
-              <img src="./rush-logo.png" alt="Rush" className="eco__core-logo eco__core-logo--l" />
+              <img src="./rush-mark.png" alt="Rush" className="eco__core-logo eco__core-logo--l" />
               <img
-                src="./rush-logo-dark.png"
+                src="./rush-mark-on-dark.png"
                 alt="Rush"
                 className="eco__core-logo eco__core-logo--d"
               />
@@ -195,9 +195,9 @@ function EcosistemaDesktop() {
             className="eco__dest"
             style={{
               left: pct(DEST_L, VB_W),
-              top: pct(NODE_CY - 70, VB_H),
+              top: pct(NODE_CY - 86, VB_H),
               width: pct(VB_W - DEST_L - 12, VB_W),
-              height: pct(140, VB_H),
+              height: pct(172, VB_H),
             }}
             initial={reduce ? false : { opacity: 0, x: 22 }}
             whileInView={reduce ? undefined : { opacity: 1, x: 0 }}

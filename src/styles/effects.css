@@ -1013,9 +1013,9 @@
       inset 0 0 26px -4px color-mix(in srgb, var(--accent) 52%, transparent);
   }
 }
-/* il logotipo Rush dentro al nodo centrale */
+/* il mark Rush (simbolo "R") dentro al nodo centrale */
 .eco__core-logo {
-  height: 26px;
+  height: 44px;
   width: auto;
   object-fit: contain;
 }
@@ -1032,7 +1032,7 @@
   align-items: center;
   justify-content: center;
   gap: 9px;
-  padding: 0 22px;
+  padding: 26px 22px;
   text-align: center;
   border-radius: 18px;
   background-image: var(--card-vig);
