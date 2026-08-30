@@ -1,80 +1,79 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { Gauge, ShieldCheck, Sparkles, CalendarClock, Boxes, Receipt, TrendingUp, ArrowDownRight } from 'lucide-react';
+import { Gauge, ShieldCheck, Sparkles, CalendarClock, Boxes, Receipt, TrendingDown, Lightbulb } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
 
-const ROTATE_MS = 5000;
+const ROTATE_MS = 5200;
 
 /* ============================================================
    Esiti — showcase interattivo.
    A sinistra tre esiti selezionabili (auto-avanzano con una barra
-   di avanzamento); a destra un palco che mostra una scena SVG viva
-   per l'esito attivo. Tutto sui token del sito, coerente light/dark,
-   fermo in prefers-reduced-motion.
+   di avanzamento); a destra un palco che mostra una scena viva per
+   l'esito attivo. Le scene sono costruite in HTML + un piccolo SVG
+   per i grafici, così restano allineate al pixel e nei bordi.
+   Tutto sui token del sito, coerente light/dark, fermo in
+   prefers-reduced-motion.
    ============================================================ */
 
 /* ── scena 1 · L'azienda a colpo d'occhio (mini dashboard live) ── */
 function SceneDash({ reduce }) {
   const line =
-    'M30,150 C58,144 74,120 104,124 C136,128 150,150 182,142 C214,134 226,104 262,96 C292,89 304,100 318,92';
-  const area = `${line} L318,182 L30,182 Z`;
+    'M8,74 C44,68 60,46 96,50 C134,54 148,74 186,66 C222,58 236,30 276,24 C286,22 290,26 292,24';
+  const area = `${line} L292,92 L8,92 Z`;
   return (
-    <svg className="scene" viewBox="0 0 348 224" fill="none">
-      <defs>
-        <linearGradient id="dashFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.2" />
-          <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      {/* due stat tile */}
-      <rect x="6" y="6" width="164" height="64" rx="13" fill="var(--surface-top)" stroke="var(--hairline-strong)" />
-      <foreignObject x="6" y="6" width="164" height="64">
-        <div className="sc-tile">
-          <span className="sc-tile__k">Margine</span>
-          <span className="sc-tile__v sc-accent">+18%</span>
-          <span className="sc-tile__s">vs mese scorso</span>
+    <div className="sc-dash">
+      <div className="sc-dash__tiles">
+        <div className="sc-stat">
+          <span className="sc-stat__k">Margine</span>
+          <span className="sc-stat__v sc-accent">+18%</span>
+          <span className="sc-stat__s">vs mese scorso</span>
         </div>
-      </foreignObject>
-      <rect x="178" y="6" width="164" height="64" rx="13" fill="var(--surface-top)" stroke="var(--hairline-strong)" />
-      <foreignObject x="178" y="6" width="164" height="64">
-        <div className="sc-tile">
-          <span className="sc-tile__k">Incassi mese</span>
-          <span className="sc-tile__v">€ 42,8k</span>
-          <span className="sc-tile__s">aggiornato ora</span>
+        <div className="sc-stat">
+          <span className="sc-stat__k">Incassi mese</span>
+          <span className="sc-stat__v">€ 42,8k</span>
+          <span className="sc-stat__s">aggiornato ora</span>
         </div>
-      </foreignObject>
-
-      {/* card grafico */}
-      <rect x="6" y="80" width="336" height="138" rx="13" fill="var(--surface-top)" stroke="var(--hairline-strong)" />
-      {[112, 148, 184].map((y) => (
-        <line key={y} x1="30" y1={y} x2="318" y2={y} stroke="var(--hairline)" strokeWidth="1" strokeDasharray="3 5" />
-      ))}
-      <motion.path
-        d={area}
-        fill="url(#dashFill)"
-        initial={reduce ? false : { opacity: 0 }}
-        animate={reduce ? {} : { opacity: 1 }}
-        transition={{ duration: 0.7, ease: EASE_MODAL, delay: 0.4 }}
-      />
-      <motion.path
-        id="dashLine"
-        d={line}
-        fill="none"
-        stroke="var(--accent)"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-        initial={reduce ? false : { pathLength: 0 }}
-        animate={reduce ? {} : { pathLength: 1 }}
-        transition={{ duration: 1, ease: EASE_MODAL, delay: 0.1 }}
-      />
-      {!reduce && (
-        <circle r="4" fill="var(--accent)" stroke="var(--surface-top)" strokeWidth="1.5">
-          <animateMotion dur="3.4s" begin="1s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
-            <mpath href="#dashLine" />
-          </animateMotion>
-        </circle>
-      )}
-    </svg>
+      </div>
+      <div className="sc-dash__chart">
+        <svg viewBox="0 0 300 100" fill="none" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="dashFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          {[30, 52, 74].map((y) => (
+            <line key={y} x1="8" y1={y} x2="292" y2={y} stroke="var(--hairline)" strokeWidth="1" strokeDasharray="3 5" vectorEffect="non-scaling-stroke" />
+          ))}
+          <motion.path
+            d={area}
+            fill="url(#dashFill)"
+            initial={reduce ? false : { opacity: 0 }}
+            animate={reduce ? {} : { opacity: 1 }}
+            transition={{ duration: 0.7, ease: EASE_MODAL, delay: 0.4 }}
+          />
+          <motion.path
+            id="dashLine"
+            d={line}
+            fill="none"
+            stroke="var(--accent)"
+            strokeWidth="2.4"
+            strokeLinecap="round"
+            vectorEffect="non-scaling-stroke"
+            initial={reduce ? false : { pathLength: 0 }}
+            animate={reduce ? {} : { pathLength: 1 }}
+            transition={{ duration: 1, ease: EASE_MODAL, delay: 0.1 }}
+          />
+          {!reduce && (
+            <circle r="3.4" fill="var(--accent)" stroke="var(--surface-top)" strokeWidth="1.4" vectorEffect="non-scaling-stroke">
+              <animateMotion dur="3.4s" begin="1s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+                <mpath href="#dashLine" />
+              </animateMotion>
+            </circle>
+          )}
+        </svg>
+      </div>
+    </div>
   );
 }
 
@@ -117,61 +116,54 @@ function SceneWatch({ reduce }) {
   );
 }
 
-/* ── scena 3 · Testa solo al business (l'AI ti indica dove guardare) ── */
+/* ── scena 3 · Testa solo al business (l'AI trova e suggerisce) ── */
 function SceneAI({ reduce }) {
-  const ax = 70;
-  const ay = 118;
-  const px = 244;
-  const py = 96;
-  const link = `M ${ax + 28} ${ay} C 150 ${ay} 168 ${py} ${px - 6} ${py}`;
+  const drop = 'M8,12 C34,16 46,22 66,28 C88,34 102,40 128,46 C150,51 168,54 192,58';
   return (
-    <svg className="scene" viewBox="0 0 348 224" fill="none">
-      {/* punti dato sparsi */}
-      {[[190, 150], [214, 176], [286, 150], [300, 108], [240, 128]].map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r="3" fill="var(--text-3)" opacity="0.5" />
-      ))}
+    <div className="sc-ai">
+      <div className="sc-ai__head">
+        <span className="sc-ai__badge">
+          <Sparkles size={14} strokeWidth={2} />
+          Rush AI
+        </span>
+        <span className="sc-ai__status">
+          {!reduce && <span className="sc-ai__ping" />}
+          ha analizzato i tuoi numeri
+        </span>
+      </div>
 
-      {/* collegamento AI → punto evidenziato */}
-      <path d={link} stroke="color-mix(in srgb, var(--accent) 45%, transparent)" strokeWidth="1.5" strokeDasharray="4 4" fill="none" />
-      {!reduce && (
-        <circle r="3.5" fill="var(--accent)">
-          <animateMotion dur="2.4s" begin="0.6s" repeatCount="indefinite" path={link} keyPoints="0;1" keyTimes="0;1" calcMode="linear" />
-        </circle>
-      )}
-
-      {/* anelli attorno al nodo AI */}
-      {[30, 46].map((r, i) =>
-        reduce ? (
-          <circle key={r} cx={ax} cy={ay} r={r} fill="none" stroke="color-mix(in srgb, var(--accent) 30%, transparent)" strokeWidth="1" />
-        ) : (
-          <circle key={r} cx={ax} cy={ay} r={r} fill="none" stroke="color-mix(in srgb, var(--accent) 40%, transparent)" strokeWidth="1">
-            <animate attributeName="r" values={`${r};${r + 7};${r}`} dur="4s" begin={`${i * 0.6}s`} repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.5;0.1;0.5" dur="4s" begin={`${i * 0.6}s`} repeatCount="indefinite" />
-          </circle>
-        )
-      )}
-      {/* nodo AI */}
-      <circle cx={ax} cy={ay} r="26" fill="var(--accent-soft)" />
-      <circle cx={ax} cy={ay} r="22" fill="var(--surface-top)" stroke="color-mix(in srgb, var(--accent) 45%, transparent)" strokeWidth="1.5" />
-      <foreignObject x={ax - 14} y={ay - 14} width="28" height="28">
-        <div className="sc-ai__ic"><Sparkles size={19} strokeWidth={1.8} /></div>
-      </foreignObject>
-
-      {/* punto evidenziato + callout */}
-      {!reduce && (
-        <circle cx={px} cy={py} r="8" fill="none" stroke="var(--accent)" strokeWidth="1.5">
-          <animate attributeName="r" values="7;13;7" dur="2.2s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.9;0.15;0.9" dur="2.2s" repeatCount="indefinite" />
-        </circle>
-      )}
-      <circle cx={px} cy={py} r="4.5" fill="var(--accent)" />
-      <foreignObject x={px - 156} y={py - 52} width="176" height="44">
-        <div className="sc-callout">
-          <ArrowDownRight size={13} strokeWidth={2.2} />
-          Qui il margine cala
+      <div className="sc-ai__insight">
+        <div className="sc-ai__insight-tx">
+          <span className="sc-ai__insight-k">Margine · Reparto bar</span>
+          <span className="sc-ai__insight-v">
+            <TrendingDown size={15} strokeWidth={2.2} />
+            −6% questo mese
+          </span>
         </div>
-      </foreignObject>
-    </svg>
+        <svg className="sc-ai__spark" viewBox="0 0 200 70" fill="none" preserveAspectRatio="none">
+          <motion.path
+            d={drop}
+            stroke="var(--neg)"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            vectorEffect="non-scaling-stroke"
+            initial={reduce ? false : { pathLength: 0 }}
+            animate={reduce ? {} : { pathLength: 1 }}
+            transition={{ duration: 0.9, ease: EASE_MODAL, delay: 0.25 }}
+          />
+          <circle cx="192" cy="58" r="3.4" fill="var(--neg)" vectorEffect="non-scaling-stroke" />
+        </svg>
+      </div>
+
+      <div className="sc-ai__suggest">
+        <span className="sc-ai__suggest-ic">
+          <Lightbulb size={15} strokeWidth={2} />
+        </span>
+        <span>
+          <b>Guarda qui:</b> i costi del bar salgono più dei ricavi. Rivedi i prezzi o i fornitori.
+        </span>
+      </div>
+    </div>
   );
 }
 
@@ -191,7 +183,7 @@ const ESITI = [
   {
     icon: Sparkles,
     t: 'Testa solo al business',
-    d: 'Prendi le decisioni che contano con l’AI che analizza i numeri insieme a te e ti segnala esattamente dove guardare.',
+    d: 'Prendi le decisioni che contano con l’AI che analizza i numeri insieme a te e ti dice, in chiaro, dove intervenire.',
     Scene: SceneAI,
     accent: true,
   },
@@ -226,7 +218,7 @@ export default function EsitiShowcase() {
               type="button"
               role="tab"
               aria-selected={on}
-              className={`esiti__item ${on ? 'is-active' : ''} ${e.accent ? 'esiti__item--accent' : ''}`}
+              className={`esiti__item ${on ? 'is-active' : ''}`}
               onClick={() => setActive(i)}
             >
               <span className="esiti__ic">

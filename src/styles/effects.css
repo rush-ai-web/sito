@@ -449,55 +449,165 @@
   pointer-events: none;
 }
 
-/* ---- elementi interni delle scene ---- */
-.sc-tile {
+/* ---- scena "dash": due tile + grafico ---- */
+.sc-dash {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  height: 100%;
-  padding: 0 16px;
+  gap: 14px;
+  width: 100%;
 }
-.sc-tile__k {
-  font-size: 11.5px;
+.sc-dash__tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.sc-stat {
+  display: flex;
+  flex-direction: column;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--surface-top);
+  border: 1px solid var(--hairline-strong);
+}
+.sc-stat__k {
+  font-size: 12px;
   color: var(--text-3);
   letter-spacing: 0.01em;
 }
-.sc-tile__v {
-  font-size: 21px;
+.sc-stat__v {
+  font-size: 24px;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   color: var(--text);
-  margin: 3px 0 1px;
+  margin: 5px 0 2px;
 }
 .sc-accent {
   color: var(--accent);
 }
-.sc-tile__s {
-  font-size: 10.5px;
+.sc-stat__s {
+  font-size: 11px;
   color: var(--text-3);
 }
-
-.sc-ai__ic {
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  color: var(--accent);
+.sc-dash__chart {
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--surface-top);
+  border: 1px solid var(--hairline-strong);
+}
+.sc-dash__chart svg {
+  display: block;
+  width: 100%;
+  height: 116px;
 }
 
-.sc-callout {
+/* ---- scena "ai": card di insight ---- */
+.sc-ai {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--surface-top);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: var(--sh-1);
+}
+.sc-ai__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--hairline);
+}
+.sc-ai__badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 10px;
+  gap: 7px;
+  padding: 6px 12px;
   border-radius: 999px;
   background: var(--accent-soft);
-  border: 0.5px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border: 0.5px solid color-mix(in srgb, var(--accent) 28%, transparent);
   color: var(--accent);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  white-space: nowrap;
-  width: max-content;
+}
+.sc-ai__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.sc-ai__ping {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent);
+  animation: scPing 1.8s var(--e-lift) infinite;
+}
+@keyframes scPing {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+  70%, 100% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent) 0%, transparent); }
+}
+.sc-ai__insight {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 16px;
+}
+.sc-ai__insight-tx {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.sc-ai__insight-k {
+  font-size: 13px;
+  color: var(--text-2);
+  letter-spacing: -0.01em;
+}
+.sc-ai__insight-v {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--neg);
+}
+.sc-ai__spark {
+  width: 116px;
+  height: 46px;
+  flex: 0 0 auto;
+}
+.sc-ai__suggest {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 13px 14px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  border: 0.5px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+.sc-ai__suggest b {
+  color: var(--text);
+}
+.sc-ai__suggest-ic {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--surface-top);
+  border: 0.5px solid color-mix(in srgb, var(--accent) 26%, transparent);
+  color: var(--accent);
 }
 
 /* scena "watch": righe con stato */
