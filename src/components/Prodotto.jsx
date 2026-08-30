@@ -1,6 +1,6 @@
-import { useRef } from 'react';
+import { Fragment, useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Layers, Blocks, BarChart3, Workflow, Sparkles, Plug, FileText, Bell, Check } from 'lucide-react';
+import { Layers, Blocks, BarChart3, CalendarClock, Sparkles, Plug, Wallet, Boxes, Users, Receipt } from 'lucide-react';
 import { Section, Head, IconTile } from './ui';
 import { EASE_MODAL } from '../lib/motion';
 
@@ -75,37 +75,36 @@ function DrawPath({ d, delay = 0, width = 1.5, dash, reduce, ...rest }) {
   );
 }
 
-/* ── A · Gestionale su misura: moduli che si accendono in griglia ── */
+/* ── A · Gestionale su misura: i moduli che accendi tu ── */
+const CFG = [
+  { Icon: Wallet, name: 'Cassa' },
+  { Icon: Boxes, name: 'Magazzino' },
+  { Icon: Users, name: 'Personale' },
+  { Icon: Receipt, name: 'Fatturazione' },
+];
+
 function VizModuli({ reduce }) {
-  const TILES = [
-    { x: 14, y: 14 }, { x: 106, y: 14 }, { x: 198, y: 14 },
-    { x: 14, y: 92 }, { x: 106, y: 92 }, { x: 198, y: 92 },
-  ];
-  const W = 74, H = 62;
   return (
-    <svg className="viz" viewBox="0 0 286 168" fill="none">
-      {TILES.map((t, i) => (
-        <g key={i}>
-          <rect
-            x={t.x} y={t.y} width={W} height={H} rx="12"
-            fill="var(--surface-top)" stroke="var(--hairline-strong)" strokeWidth="1"
-          />
-          {/* quadratino icona */}
-          <rect x={t.x + 12} y={t.y + 12} width="18" height="18" rx="6"
-            fill="var(--accent-soft)" stroke="color-mix(in srgb, var(--accent) 30%, transparent)" strokeWidth="1" />
-          {/* due barrette testo */}
-          <rect x={t.x + 12} y={t.y + 38} width="46" height="5" rx="2.5" fill="var(--hairline-strong)" />
-          <rect x={t.x + 12} y={t.y + 48} width="30" height="5" rx="2.5" fill="var(--hairline)" />
-          {/* filo d'accento che pulsa in sequenza: i moduli "si attivano" */}
-          <rect x={t.x} y={t.y + H - 3} width={W} height="3" rx="1.5" fill="var(--accent)" opacity="0">
-            {!reduce && (
-              <animate attributeName="opacity" values="0;0.9;0" dur="4.2s"
-                begin={`${i * 0.5}s`} repeatCount="indefinite" />
-            )}
-          </rect>
-        </g>
+    <div className="viz-cfg">
+      {CFG.map(({ Icon, name }, i) => (
+        <div className="viz-cfg__row" key={name}>
+          <span className="viz-cfg__ic">
+            <Icon size={15} strokeWidth={1.9} />
+          </span>
+          <span className="viz-cfg__name">{name}</span>
+          <span className={`viz-cfg__tg ${reduce ? 'is-on' : ''}`}>
+            <span
+              className="viz-cfg__track"
+              style={reduce ? undefined : { animationDelay: `${0.4 + i * 0.7}s` }}
+            />
+            <span
+              className="viz-cfg__knob"
+              style={reduce ? undefined : { animationDelay: `${0.4 + i * 0.7}s` }}
+            />
+          </span>
+        </div>
       ))}
-    </svg>
+    </div>
   );
 }
 
@@ -182,53 +181,111 @@ function VizAI({ reduce }) {
   );
 }
 
-/* ── D · Automazioni end-to-end: pipeline orizzontale con dot ── */
-function VizFlusso({ reduce }) {
-  const cy = 62;
-  const NODES = [
-    { x: 40, Icon: Sparkles, tone: 'accent' },
-    { x: 190, Icon: FileText },
-    { x: 340, Icon: Bell },
-    { x: 490, Icon: Check, tone: 'done' },
-  ];
-  const seg = (a, b) => `M ${a + 26} ${cy} L ${b - 26} ${cy}`;
+/* ── D · Automazioni end-to-end: l'AI programma i turni della
+   settimana prossima. Griglia giorni × persone: i turni si posano
+   da soli, giorno per giorno, in loop perpetuo. ── */
+const TURNI_DAYS = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+const TURNI_ROWS = [
+  { who: 'Sara', cells: [1, 0, 2, 0, 1, 0, 0] },
+  { who: 'Luca', cells: [0, 2, 0, 1, 0, 2, 0] },
+  { who: 'Emma', cells: [0, 1, 0, 2, 0, 1, 2] },
+];
+
+/* geometria della griglia (viewBox 520×150) */
+const T = {
+  gx: 66, // inizio colonne giorni
+  colW: 63,
+  headY: 20,
+  rowY: 42, // primo centro riga
+  rowH: 34,
+  chipH: 20,
+};
+
+function VizTurni({ reduce }) {
   return (
-    <svg className="viz viz--flow" viewBox="0 0 530 124" fill="none">
-      {NODES.slice(0, -1).map((n, i) => (
-        <g key={i}>
-          <DrawPath d={seg(n.x, NODES[i + 1].x)} stroke="var(--hairline-strong)" width={1.5} delay={0.2 + i * 0.15} reduce={reduce} />
-          {!reduce && (
-            <circle r="3.5" fill="var(--accent)">
-              <animateMotion dur="2.4s" begin={`${0.8 + i * 0.3}s`} repeatCount="indefinite"
-                path={seg(n.x, NODES[i + 1].x)} keyPoints="0;1" keyTimes="0;1" calcMode="linear" />
-            </circle>
-          )}
-        </g>
+    <svg className="viz viz--turni" viewBox="0 0 520 150" fill="none">
+      {/* intestazione giorni */}
+      {TURNI_DAYS.map((d, i) => (
+        <text
+          key={d + i}
+          x={T.gx + i * T.colW + T.colW / 2}
+          y={T.headY}
+          className="viz-turni__day"
+          textAnchor="middle"
+        >
+          {d}
+        </text>
       ))}
-      {NODES.map((n, i) => {
-        const isAccent = n.tone === 'accent';
-        const isDone = n.tone === 'done';
-        const ring = isAccent
-          ? 'color-mix(in srgb, var(--accent) 50%, transparent)'
-          : isDone
-          ? 'color-mix(in srgb, var(--pos) 55%, transparent)'
-          : 'var(--hairline-strong)';
-        const fill = isAccent ? 'var(--accent-soft)' : 'var(--surface-top)';
+
+      {TURNI_ROWS.map((r, ri) => {
+        const cy = T.rowY + ri * T.rowH;
         return (
-          <g key={`n${i}`}>
-            <circle cx={n.x} cy={cy} r="26" fill={fill} stroke={ring} strokeWidth="1.5" />
-            {isDone && !reduce && (
-              <circle cx={n.x} cy={cy} r="26" fill="none" stroke="var(--pos)" strokeWidth="1.5" opacity="0">
-                <animate attributeName="r" values="26;33;26" dur="2.6s" begin="1.6s" repeatCount="indefinite" />
-                <animate attributeName="opacity" values="0.6;0;0.6" dur="2.6s" begin="1.6s" repeatCount="indefinite" />
-              </circle>
-            )}
-            <foreignObject x={n.x - 15} y={cy - 15} width="30" height="30">
-              <div className={`viz-node ${isAccent ? 'viz-node--accent' : ''} ${isDone ? 'viz-node--done' : ''}`}>
-                <n.Icon size={19} strokeWidth={1.9} />
-              </div>
-            </foreignObject>
-          </g>
+          <Fragment key={r.who}>
+            {/* nome persona */}
+            <text x={0} y={cy + 4} className="viz-turni__who">
+              {r.who}
+            </text>
+            {/* slot vuoti (binario) */}
+            {r.cells.map((c, ci) => (
+              <rect
+                key={`s${ci}`}
+                x={T.gx + ci * T.colW + 5}
+                y={cy - T.chipH / 2}
+                width={T.colW - 10}
+                height={T.chipH}
+                rx="6"
+                fill="none"
+                stroke="var(--hairline)"
+                strokeWidth="1"
+                strokeDasharray="3 4"
+              />
+            ))}
+            {/* turni che l'AI posa, in sequenza (giorno per giorno) */}
+            {r.cells.map((c, ci) => {
+              if (c === 0) return null;
+              const begin = 0.3 + ci * 0.32 + ri * 0.1;
+              const isEve = c === 2;
+              return (
+                <rect
+                  key={`c${ci}`}
+                  x={T.gx + ci * T.colW + 5}
+                  y={cy - T.chipH / 2}
+                  width={T.colW - 10}
+                  height={T.chipH}
+                  rx="6"
+                  fill={isEve ? 'var(--accent)' : 'var(--accent-soft)'}
+                  fillOpacity={isEve ? 0.9 : 1}
+                  stroke="color-mix(in srgb, var(--accent) 45%, transparent)"
+                  strokeWidth="1"
+                  opacity={reduce ? 1 : 0}
+                  style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
+                >
+                  {!reduce && (
+                    <>
+                      <animate
+                        attributeName="opacity"
+                        values="0;0;1;1;0"
+                        keyTimes="0;0.04;0.12;0.82;1"
+                        dur="7s"
+                        begin={`${begin}s`}
+                        repeatCount="indefinite"
+                      />
+                      <animateTransform
+                        attributeName="transform"
+                        type="scale"
+                        values="0.7;1;1;1"
+                        keyTimes="0;0.12;0.82;1"
+                        dur="7s"
+                        begin={`${begin}s`}
+                        repeatCount="indefinite"
+                        additive="sum"
+                      />
+                    </>
+                  )}
+                </rect>
+              );
+            })}
+          </Fragment>
         );
       })}
     </svg>
@@ -298,12 +355,12 @@ export default function Prodotto() {
         </BuildCard>
 
         <BuildCard
-          icon={Workflow}
+          icon={CalendarClock}
           title="Automazioni end-to-end"
-          desc="Documenti che si registrano da soli, soglie che avvisano prima del problema, attività che si assegnano da sole. Il lavoro ripetitivo esce dalla giornata."
+          desc="I turni della settimana prossima programmati da soli, documenti che si registrano, soglie che avvisano prima del problema. Il lavoro ripetitivo esce dalla giornata."
           wide
         >
-          <VizFlusso reduce={reduce} />
+          <VizTurni reduce={reduce} />
         </BuildCard>
 
         <BuildCard

@@ -32,13 +32,15 @@ export default function App() {
           {/* Soluzione: bulb accento a sx + neutro a dx */}
           <span className="glow bulb big accent l" style={{ top: '22%' }} />
           <span className="glow bulb white r" style={{ top: '19%' }} />
-          {/* Prodotto (grid): un raggio di luce diagonale accento */}
-          <span className="glow beam accent l" style={{ top: '38%' }} />
+          {/* Prodotto (grid): non più un raggio diagonale, ma un lavaggio
+              d'accento morbido e diffuso — luce d'ambiente, non una banda */}
+          <span className="glow haze accent l" style={{ top: '34%' }} />
           {/* Numeri: bulb accento a dx + neutro a sx */}
           <span className="glow bulb big accent r" style={{ top: '48%' }} />
           <span className="glow bulb black l" style={{ top: '52%' }} />
-          {/* Metodo (grid): un raggio di luce diagonale accento */}
-          <span className="glow beam accent r" style={{ top: '60%' }} />
+          {/* Metodo (grid): onde concentriche d'accento molto tenui — un
+              motivo diverso dai bulb, che richiama la connessione */}
+          <span className="glow rings accent r" style={{ top: '58%' }} />
           {/* Principi: bulb accento a dx + neutro a sx */}
           <span className="glow bulb big accent r" style={{ top: '73%' }} />
           <span className="glow bulb white l" style={{ top: '78%' }} />

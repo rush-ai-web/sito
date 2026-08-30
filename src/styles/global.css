@@ -355,9 +355,47 @@ main {
   mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.4) 22%, #000 50%, rgba(0,0,0,0.4) 78%, transparent 100%);
 }
 
+/* haze: un lavaggio d'accento largo, ellittico e molto sfocato — luce
+   d'ambiente diffusa, l'opposto della banda diagonale netta del beam. */
+.glow.haze {
+  width: 92vw;
+  height: 42vh;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: 0.85;
+}
+.glow.haze.accent {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--accent) 30%, transparent),
+    transparent 70%
+  );
+}
+
+/* rings: onde concentriche tenui — motivo diverso dai bulb, richiama la
+   connessione e gli anelli della scena AI. Nessuna banda, nessun blob pieno. */
+.glow.rings {
+  width: 60vw;
+  aspect-ratio: 1;
+  height: auto;
+  border-radius: 50%;
+  background-image: repeating-radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 22%, transparent) 0 1.5px,
+    transparent 1.5px 52px
+  );
+  -webkit-mask-image: radial-gradient(closest-side, #000 8%, transparent 66%);
+  mask-image: radial-gradient(closest-side, #000 8%, transparent 66%);
+  opacity: 0.5;
+  filter: blur(1.5px);
+}
+
 /* --- lato di ancoraggio --- */
 .glow.l { left: -16vw; }
 .glow.r { right: -16vw; }
+/* haze e rings driftano lentamente come i bulb (nessuna inclinazione) */
+.glow.haze.l, .glow.haze.r { animation: bulbDrift 60s ease-in-out infinite; }
+.glow.rings.l, .glow.rings.r { animation: bulbDrift 66s ease-in-out infinite; }
 /* i raggi sono statici, inclinati con un angolo deciso e diagonale */
 .glow.beam.l { transform: rotate(-24deg); }
 .glow.beam.r { transform: rotate(24deg); }
@@ -3788,21 +3826,46 @@ textarea.input {
   );
 }
 
-/* bordo che si illumina in accento vicino al cursore */
+/* bordo che si illumina in accento intorno al cursore: un anello di
+   luce che segue il puntatore sul perimetro della card. Due strati —
+   il filo netto + un alito più largo e sfocato — così il bordo vicino
+   al cursore è chiaramente in accento. */
 .buildcard__edge {
   position: absolute;
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
   z-index: 3;
-  padding: 1px;
+  padding: 2px;
   opacity: 0;
   transition: opacity var(--d-modal) var(--e-lift);
   background: radial-gradient(
-    220px circle at var(--gx, 50%) var(--gy, 50%),
-    var(--accent),
-    transparent 62%
+    260px circle at var(--gx, 50%) var(--gy, 50%),
+    var(--accent) 0%,
+    var(--accent) 24%,
+    color-mix(in srgb, var(--accent) 55%, transparent) 46%,
+    transparent 66%
   );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+/* alito largo del bordo: un bagliore sfocato appena dentro il perimetro,
+   sempre agganciato al cursore. Rende l'accento "diffuso" attorno al filo. */
+.buildcard__edge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 8px;
+  background: radial-gradient(
+    280px circle at var(--gx, 50%) var(--gy, 50%),
+    color-mix(in srgb, var(--accent) 60%, transparent) 0%,
+    transparent 58%
+  );
+  filter: blur(6px);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -3819,7 +3882,7 @@ textarea.input {
 }
 
 .buildcard:hover .buildcard__edge {
-  opacity: 0.7;
+  opacity: 1;
 }
 
 .buildcard {
@@ -3835,25 +3898,107 @@ textarea.input {
   color: var(--accent);
 }
 
-/* nodi della pipeline (icone lucide dentro i cerchi) */
-.viz-node {
+/* ── Card A · configuratore moduli (interruttori che si accendono) ── */
+.viz-cfg {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 26px;
+}
+
+.viz-cfg__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.viz-cfg__ic {
   display: grid;
   place-items: center;
   width: 30px;
   height: 30px;
-  color: var(--text-2);
-}
-.viz-node--accent {
-  color: var(--accent);
-}
-.viz-node--done {
-  color: var(--pos);
+  flex: 0 0 30px;
+  border-radius: 9px;
+  background: var(--chip-bg);
+  color: var(--text);
+  border: 0.5px solid var(--hairline);
 }
 
-/* la scena flusso è più bassa e larga */
-.viz--flow {
-  max-width: 560px;
-  margin: 0 auto;
+.viz-cfg__name {
+  flex: 1;
+  min-width: 0;
+  font-size: 14.5px;
+  color: var(--text);
+  letter-spacing: -0.005em;
+}
+
+/* interruttore */
+.viz-cfg__tg {
+  position: relative;
+  width: 34px;
+  height: 20px;
+  flex: 0 0 34px;
+}
+
+.viz-cfg__track {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: var(--hairline-strong);
+  animation: cfgTrack 5.6s var(--e-lift) infinite;
+}
+
+.viz-cfg__knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  animation: cfgKnob 5.6s var(--e-lift) infinite;
+}
+
+.viz-cfg__tg.is-on .viz-cfg__track {
+  background: var(--accent);
+  animation: none;
+}
+.viz-cfg__tg.is-on .viz-cfg__knob {
+  transform: translateX(14px);
+  animation: none;
+}
+
+@keyframes cfgTrack {
+  0%, 8% { background: var(--hairline-strong); }
+  18%, 86% { background: var(--accent); }
+  96%, 100% { background: var(--hairline-strong); }
+}
+@keyframes cfgKnob {
+  0%, 8% { transform: translateX(0); }
+  18%, 86% { transform: translateX(14px); }
+  96%, 100% { transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viz-cfg__track { background: var(--accent); animation: none; }
+  .viz-cfg__knob { transform: translateX(14px); animation: none; }
+}
+
+/* ── Card D · griglia turni (testo SVG sui token del sito) ── */
+.viz--turni text {
+  font-family: var(--ff-body);
+}
+.viz-turni__day {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  fill: var(--text-3);
+}
+.viz-turni__who {
+  font-size: 12.5px;
+  font-weight: 600;
+  fill: var(--text-2);
 }
 
 /* Card E — righe di integrazione */
