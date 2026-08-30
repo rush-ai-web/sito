@@ -1,44 +1,39 @@
-import { TrendingUp, Clock, ShieldCheck, Gauge, Rocket, Sparkles } from 'lucide-react';
-import { Section, Head, Group, Item } from './ui';
+import { TrendingUp, Gauge, ShieldCheck, Sparkles } from 'lucide-react';
+import { Section, Head, Group, Item, Pill } from './ui';
 import { useCountUp } from '../lib/hooks';
 
 /* ------------------------------------------------------------
    Risultati — i numeri prima di tutto.
-   Riga di KPI allineati (stesso bordo alto/basso, divisori interni
-   regolari: niente più scalinata sbilanciata), poi tre esiti che
-   raccontano cosa cambia per chi guida l'azienda.
+   La scalinata di KPI (le quattro colonne a gradino), poi tre esiti
+   che raccontano cosa cambia per chi guida l'azienda.
    ------------------------------------------------------------ */
 
 const KPI = [
   {
-    icon: Clock,
+    label: 'Tempo',
     to: 600,
     prefix: '~',
     suffix: ' ore',
-    label: 'restituite ogni anno',
-    d: 'In media 12 ore di lavoro manuale a settimana in meno: circa 600 ore l’anno che tornano al business, non ai fogli di calcolo.',
+    d: 'Ore di lavoro manuale che tornano ogni anno a una PMI: in media 12 a settimana, circa 600 l’anno, tolte dai fogli di calcolo.',
   },
   {
-    icon: ShieldCheck,
+    label: 'Consegna',
+    to: 8,
+    suffix: ' sett.',
+    d: 'Dal primo incontro alla prima versione in produzione, con i tuoi dati veri dentro e i primi numeri che iniziano a girare.',
+  },
+  {
+    label: 'Errori',
     to: 92,
     suffix: '%',
-    label: 'inserimenti manuali in meno',
-    d: 'La lettura automatica registra i documenti in ingresso da sola: meno errori di battitura, meno correzioni, meno sviste da rincorrere.',
+    d: 'Inserimenti manuali eliminati sui documenti in ingresso grazie alla lettura automatica: meno sviste, meno correzioni.',
   },
   {
-    icon: Gauge,
+    label: 'Visibilità',
     to: 1,
     prefix: '<',
     suffix: ' min',
-    label: 'e il dato è in dashboard',
-    d: 'Dal momento in cui un dato entra a quando lo vedi aggiornato. L’azienda a colpo d’occhio, in tempo reale, senza aspettare nessuno.',
-  },
-  {
-    icon: Rocket,
-    to: 8,
-    suffix: ' sett.',
-    label: 'dal via alla produzione',
-    d: 'Dal primo incontro al gestionale in uso, con i tuoi dati veri dentro e i primi numeri che iniziano a girare.',
+    d: 'Ritardo con cui un dato entra nel sistema e diventa leggibile in dashboard. L’azienda a colpo d’occhio, in tempo reale.',
   },
 ];
 
@@ -62,20 +57,17 @@ const ESITI = [
   },
 ];
 
-function Kpi({ icon: Icon, to, prefix = '', suffix = '', label, d, dec = 0 }) {
+function Kpi({ label, to, prefix = '', suffix = '', d, dec = 0 }) {
   const [ref, val] = useCountUp(to, { dec });
   return (
-    <Item className="kstat">
-      <span className="kstat__ic">
-        <Icon size={18} strokeWidth={1.9} />
-      </span>
-      <p className="t-kpi num kstat__val" ref={ref}>
+    <Item className="stair__col">
+      <Pill>{label}</Pill>
+      <p className="t-kpi num stair__val" ref={ref}>
         {prefix}
         {val}
         {suffix}
       </p>
-      <p className="kstat__label">{label}</p>
-      <p className="t-small kstat__d">{d}</p>
+      <p className="t-small">{d}</p>
     </Item>
   );
 }
@@ -90,7 +82,7 @@ export default function Numeri() {
         sub="Ore restituite ogni anno, inserimenti manuali quasi azzerati, dati in dashboard in tempo reale: gli effetti concreti quando un sistema Rush entra in produzione."
       />
 
-      <Group className="kstat-row shimmer-top" each={0.1}>
+      <Group className="stair shimmer-top" each={0.1}>
         {KPI.map((k) => (
           <Kpi key={k.label} {...k} />
         ))}
