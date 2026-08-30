@@ -3708,3 +3708,238 @@ textarea.input {
     font-size: 14.5px;
   }
 }
+
+/* ============================================================
+   Cosa costruiamo — bento animato.
+   Tessere feature-grid con scena SVG in loop + bordo che
+   traccia il cursore in accento. Tutto sui token del sito.
+   ============================================================ */
+.build {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.buildcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 26px 26px 0;
+  min-height: 300px;
+}
+
+.buildcard--wide {
+  grid-column: span 2;
+}
+
+/* corpo testuale in alto, la scena occupa il fondo */
+.buildcard__body {
+  position: relative;
+  z-index: 2;
+}
+
+.buildcard__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.buildcard__head .t-card {
+  margin: 0;
+  font-size: clamp(17px, 1.3vw, 19.5px);
+}
+
+.buildcard__desc {
+  font-size: 14.5px;
+  line-height: 1.55;
+  margin: 0;
+  max-width: 44ch;
+}
+
+/* la scena SVG/HTML: spinta al fondo della card */
+.buildcard__viz {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  padding-top: 22px;
+}
+
+.buildcard__viz .viz {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* alone morbido che segue il puntatore (dietro al contenuto) */
+.buildcard__wash {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity var(--d-modal) var(--e-lift);
+  background: radial-gradient(
+    260px circle at var(--gx, 50%) var(--gy, 120%),
+    color-mix(in srgb, var(--accent) 14%, transparent),
+    transparent 62%
+  );
+}
+
+/* bordo che si illumina in accento vicino al cursore */
+.buildcard__edge {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 3;
+  padding: 1px;
+  opacity: 0;
+  transition: opacity var(--d-modal) var(--e-lift);
+  background: radial-gradient(
+    220px circle at var(--gx, 50%) var(--gy, 50%),
+    var(--accent),
+    transparent 62%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.buildcard:hover {
+  translate: 0 -4px;
+  box-shadow: var(--sh-2);
+}
+
+.buildcard:hover .buildcard__wash {
+  opacity: 1;
+}
+
+.buildcard:hover .buildcard__edge {
+  opacity: 0.7;
+}
+
+.buildcard {
+  transition: box-shadow var(--d-lift) var(--e-lift), translate var(--d-lift) var(--e-lift);
+}
+
+/* icona centrale della scena AI */
+.viz-ai__ic {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  color: var(--accent);
+}
+
+/* nodi della pipeline (icone lucide dentro i cerchi) */
+.viz-node {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: var(--text-2);
+}
+.viz-node--accent {
+  color: var(--accent);
+}
+.viz-node--done {
+  color: var(--pos);
+}
+
+/* la scena flusso è più bassa e larga */
+.viz--flow {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* Card E — righe di integrazione */
+.viz-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 26px;
+}
+
+.viz-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.viz-link__dot {
+  position: relative;
+  display: inline-flex;
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+}
+
+.viz-link__dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.viz-link__pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.5;
+  animation: linkPulse 3s var(--e-lift) infinite;
+}
+
+@keyframes linkPulse {
+  0% { transform: scale(1); opacity: 0.5; }
+  70%, 100% { transform: scale(3); opacity: 0; }
+}
+
+.viz-link__k {
+  flex: 1;
+  min-width: 0;
+  font-size: 14.5px;
+  color: var(--text-2);
+  letter-spacing: -0.005em;
+}
+
+.viz-link__v {
+  flex: 0 0 auto;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viz-link__pulse {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+@media (max-width: 980px) {
+  .build {
+    grid-template-columns: 1fr 1fr;
+  }
+  .buildcard--wide {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 620px) {
+  .build {
+    grid-template-columns: 1fr;
+  }
+  .buildcard--wide {
+    grid-column: auto;
+  }
+  .buildcard {
+    padding: 22px 22px 0;
+    min-height: 0;
+  }
+}
