@@ -1,54 +1,81 @@
-import { TrendingUp, Timer, Boxes, Receipt } from 'lucide-react';
-import { Section, Head, Group, Item, Pill, PillCard } from './ui';
+import { TrendingUp, Clock, ShieldCheck, Gauge, Rocket, Sparkles } from 'lucide-react';
+import { Section, Head, Group, Item } from './ui';
 import { useCountUp } from '../lib/hooks';
 
-/* La scalinata del tema: quattro colonne divise da hairline,
-   ognuna un gradino più in basso della precedente. */
+/* ------------------------------------------------------------
+   Risultati — i numeri prima di tutto.
+   Riga di KPI allineati (stesso bordo alto/basso, divisori interni
+   regolari: niente più scalinata sbilanciata), poi tre esiti che
+   raccontano cosa cambia per chi guida l'azienda.
+   ------------------------------------------------------------ */
+
 const KPI = [
   {
-    label: 'Tempo',
-    to: 12,
+    icon: Clock,
+    to: 600,
+    prefix: '~',
     suffix: ' ore',
-    d: 'Ore di lavoro manuale tolte ogni settimana da una PMI dopo il passaggio a un gestionale su misura.',
+    label: 'restituite ogni anno',
+    d: 'In media 12 ore di lavoro manuale a settimana in meno: circa 600 ore l’anno che tornano al business, non ai fogli di calcolo.',
   },
   {
-    label: 'Consegna',
-    to: 8,
-    suffix: ' sett.',
-    d: 'Dal primo incontro alla prima versione in produzione, con i tuoi dati veri dentro.',
-  },
-  {
-    label: 'Errori',
+    icon: ShieldCheck,
     to: 92,
     suffix: '%',
-    d: 'Inserimenti manuali eliminati sui documenti in ingresso grazie alla lettura automatica.',
+    label: 'inserimenti manuali in meno',
+    d: 'La lettura automatica registra i documenti in ingresso da sola: meno errori di battitura, meno correzioni, meno sviste da rincorrere.',
   },
   {
-    label: 'Visibilità',
+    icon: Gauge,
     to: 1,
     prefix: '<',
     suffix: ' min',
-    d: 'Ritardo con cui un dato entra nel sistema e diventa leggibile in dashboard.',
+    label: 'e il dato è in dashboard',
+    d: 'Dal momento in cui un dato entra a quando lo vedi aggiornato. L’azienda a colpo d’occhio, in tempo reale, senza aspettare nessuno.',
+  },
+  {
+    icon: Rocket,
+    to: 8,
+    suffix: ' sett.',
+    label: 'dal via alla produzione',
+    d: 'Dal primo incontro al gestionale in uso, con i tuoi dati veri dentro e i primi numeri che iniziano a girare.',
   },
 ];
 
+/* cosa cambia per chi guida l'azienda */
 const ESITI = [
-  { icon: Receipt, t: 'Fatture registrate da sole, in tempo reale' },
-  { icon: Boxes, t: 'Scorte sotto soglia segnalate prima della rottura' },
-  { icon: Timer, t: 'Chiusura mensile da giorni a minuti' },
+  {
+    icon: Gauge,
+    t: 'L’azienda a colpo d’occhio',
+    d: 'Margini, incassi e scorte sempre aggiornati: capisci come sta andando quando vuoi, senza aspettare la chiamata del commercialista.',
+  },
+  {
+    icon: ShieldCheck,
+    t: 'Niente più cose che sfuggono',
+    d: 'Scadenze, errori e anomalie li nota il sistema prima di te. Meno stress da dimenticanze, più notti tranquille.',
+  },
+  {
+    icon: Sparkles,
+    t: 'Testa solo al business',
+    d: 'Consulti i margini e prendi le decisioni che contano, con l’AI che analizza i numeri insieme a te e ti segnala dove guardare.',
+    accent: true,
+  },
 ];
 
-function Kpi({ label, to, prefix = '', suffix = '', d, dec = 0 }) {
+function Kpi({ icon: Icon, to, prefix = '', suffix = '', label, d, dec = 0 }) {
   const [ref, val] = useCountUp(to, { dec });
   return (
-    <Item className="stair__col">
-      <Pill>{label}</Pill>
-      <p className="t-kpi num stair__val" ref={ref}>
+    <Item className="kstat">
+      <span className="kstat__ic">
+        <Icon size={18} strokeWidth={1.9} />
+      </span>
+      <p className="t-kpi num kstat__val" ref={ref}>
         {prefix}
         {val}
         {suffix}
       </p>
-      <p className="t-small">{d}</p>
+      <p className="kstat__label">{label}</p>
+      <p className="t-small kstat__d">{d}</p>
     </Item>
   );
 }
@@ -59,24 +86,24 @@ export default function Numeri() {
       <Head
         icon={TrendingUp}
         label="Risultati"
-        title={
-          <>
-            Un gestionale si giudica da quanto lavoro ti toglie
-          </>
-        }
-        sub="Non da quante funzioni ha nel listino. Questi sono gli effetti che misuriamo quando un sistema Rush entra in produzione."
+        title={<>Quanto lavoro ti toglie, misurato in numeri</>}
+        sub="Ore restituite ogni anno, inserimenti manuali quasi azzerati, dati in dashboard in tempo reale: gli effetti concreti quando un sistema Rush entra in produzione."
       />
 
-      <Group className="stair shimmer-top" each={0.1}>
+      <Group className="kstat-row shimmer-top" each={0.1}>
         {KPI.map((k) => (
           <Kpi key={k.label} {...k} />
         ))}
       </Group>
 
-      <Group className="grid grid-3" each={0.08} style={{ marginTop: 'var(--s-block)' }}>
-        {ESITI.map(({ icon, t }) => (
-          <Item key={t}>
-            <PillCard icon={icon}>{t}</PillCard>
+      <Group className="kbenefit" each={0.09} style={{ marginTop: 'var(--s-block)' }}>
+        {ESITI.map(({ icon: Icon, t, d, accent }) => (
+          <Item key={t} className={`kbenefit__card card card--lg card--glow ${accent ? 'card--glow-accent' : ''}`}>
+            <span className={`kstat__ic ${accent ? 'kstat__ic--accent' : ''}`}>
+              <Icon size={18} strokeWidth={1.9} />
+            </span>
+            <h3 className="t-card kbenefit__t">{t}</h3>
+            <p className="t-body kbenefit__d">{d}</p>
           </Item>
         ))}
       </Group>
