@@ -1,6 +1,7 @@
-import { TrendingUp, Gauge, ShieldCheck, Sparkles } from 'lucide-react';
+import { TrendingUp } from 'lucide-react';
 import { Section, Head, Group, Item, Pill } from './ui';
 import { useCountUp } from '../lib/hooks';
+import EsitiShowcase from './EsitiShowcase';
 
 /* ------------------------------------------------------------
    Risultati — i numeri prima di tutto.
@@ -37,26 +38,6 @@ const KPI = [
   },
 ];
 
-/* cosa cambia per chi guida l'azienda */
-const ESITI = [
-  {
-    icon: Gauge,
-    t: 'L’azienda a colpo d’occhio',
-    d: 'Margini, incassi e scorte sempre aggiornati: capisci come sta andando quando vuoi, senza aspettare la chiamata del commercialista.',
-  },
-  {
-    icon: ShieldCheck,
-    t: 'Niente più cose che sfuggono',
-    d: 'Scadenze, errori e anomalie li nota il sistema prima di te. Meno stress da dimenticanze, più notti tranquille.',
-  },
-  {
-    icon: Sparkles,
-    t: 'Testa solo al business',
-    d: 'Consulti i margini e prendi le decisioni che contano, con l’AI che analizza i numeri insieme a te e ti segnala dove guardare.',
-    accent: true,
-  },
-];
-
 function Kpi({ label, to, prefix = '', suffix = '', d, dec = 0 }) {
   const [ref, val] = useCountUp(to, { dec });
   return (
@@ -88,17 +69,9 @@ export default function Numeri() {
         ))}
       </Group>
 
-      <Group className="kbenefit" each={0.09} style={{ marginTop: 'var(--s-block)' }}>
-        {ESITI.map(({ icon: Icon, t, d, accent }) => (
-          <Item key={t} className={`kbenefit__card card card--lg card--glow ${accent ? 'card--glow-accent' : ''}`}>
-            <span className={`kstat__ic ${accent ? 'kstat__ic--accent' : ''}`}>
-              <Icon size={18} strokeWidth={1.9} />
-            </span>
-            <h3 className="t-card kbenefit__t">{t}</h3>
-            <p className="t-body kbenefit__d">{d}</p>
-          </Item>
-        ))}
-      </Group>
+      <div style={{ marginTop: 'var(--s-block)' }}>
+        <EsitiShowcase />
+      </div>
     </Section>
   );
 }

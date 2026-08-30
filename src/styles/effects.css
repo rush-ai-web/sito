@@ -312,9 +312,50 @@
 }
 
 /* ------------------------------------------------------------
-   5b. Esiti — tre card che raccontano cosa cambia per chi guida.
+   5b. Esiti — showcase interattivo: lista a sinistra, palco a destra.
    ------------------------------------------------------------ */
-.kstat__ic {
+.esiti {
+  display: grid;
+  grid-template-columns: 0.92fr 1.08fr;
+  gap: 26px;
+  align-items: stretch;
+}
+
+.esiti__list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+
+.esiti__item {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 15px;
+  text-align: left;
+  padding: 18px 20px;
+  border-radius: var(--r-card);
+  border: 1px solid var(--hairline);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background var(--d-pop) var(--e-lift), border-color var(--d-pop) var(--e-lift),
+    box-shadow var(--d-pop) var(--e-lift);
+}
+
+.esiti__item:hover {
+  border-color: var(--hairline-strong);
+}
+
+.esiti__item.is-active {
+  background-image: var(--card-vig);
+  border-color: var(--hairline-strong);
+  box-shadow: var(--sh-1);
+}
+
+.esiti__ic {
   display: grid;
   place-items: center;
   width: 38px;
@@ -323,33 +364,237 @@
   background: var(--chip-bg);
   color: var(--text);
   border: 0.5px solid var(--hairline);
-  margin-bottom: 22px;
+  transition: background var(--d-pop) var(--e-lift), color var(--d-pop) var(--e-lift),
+    border-color var(--d-pop) var(--e-lift);
 }
-.kstat__ic--accent {
+
+.esiti__item.is-active .esiti__ic {
   background: var(--accent-soft);
   color: var(--accent);
   border-color: color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
-.kbenefit {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+.esiti__tx {
+  min-width: 0;
+}
+.esiti__tx b {
+  display: block;
+  font-size: 16px;
+  letter-spacing: -0.015em;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.esiti__tx em {
+  display: block;
+  font-style: normal;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-2);
+  /* la descrizione compare piena solo sull'attiva, le altre sfumano */
+  opacity: 0.55;
+  transition: opacity var(--d-pop) var(--e-lift);
+}
+.esiti__item.is-active .esiti__tx em {
+  opacity: 1;
 }
 
-.kbenefit__card {
+/* barra di avanzamento in basso all'esito attivo */
+.esiti__prog {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  transform-origin: left center;
+  background: var(--accent);
+}
+
+/* palco a destra */
+.esiti__stage {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  min-height: 320px;
+  padding: 26px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline-strong);
+  background-image: var(--card-vig-tl);
+  box-shadow: var(--sh-1);
+}
+
+.esiti__scene {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 460px;
+}
+.esiti__scene .scene {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* alone d'accento tenue nell'angolo del palco */
+.esiti__stage-glow {
+  position: absolute;
+  z-index: 0;
+  top: -30%;
+  right: -20%;
+  width: 60%;
+  height: 80%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 20%, transparent), transparent 72%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+/* ---- elementi interni delle scene ---- */
+.sc-tile {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  justify-content: center;
+  height: 100%;
+  padding: 0 16px;
+}
+.sc-tile__k {
+  font-size: 11.5px;
+  color: var(--text-3);
+  letter-spacing: 0.01em;
+}
+.sc-tile__v {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 3px 0 1px;
+}
+.sc-accent {
+  color: var(--accent);
+}
+.sc-tile__s {
+  font-size: 10.5px;
+  color: var(--text-3);
 }
 
-.kbenefit__t {
-  margin: 0 0 12px;
+.sc-ai__ic {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  color: var(--accent);
 }
 
-.kbenefit__d {
-  font-size: 15px;
-  line-height: 1.55;
+.sc-callout {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  border: 0.5px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  width: max-content;
+}
+
+/* scena "watch": righe con stato */
+.sc-watch {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 380px;
+}
+.sc-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 15px;
+  border-radius: 13px;
+  background: var(--surface-top);
+  border: 1px solid var(--hairline-strong);
+}
+.sc-row--alert {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background-image: linear-gradient(0deg, var(--accent-soft), var(--accent-soft));
+}
+.sc-row__ic {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--chip-bg);
+  color: var(--text);
+  border: 0.5px solid var(--hairline);
+}
+.sc-row--alert .sc-row__ic {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.sc-row__tx {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.sc-row__tx b {
+  font-size: 14px;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.sc-row__tx em {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.sc-row__ok {
+  color: var(--pos);
+  display: grid;
+  place-items: center;
+}
+.sc-row__flag {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px 5px 20px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.sc-row__pulse {
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6);
+  animation: scFlagPulse 1.8s var(--e-lift) infinite;
+}
+
+@keyframes scFlagPulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.55); }
+  70%, 100% { box-shadow: 0 0 0 7px rgba(255, 255, 255, 0); }
+}
+
+@keyframes scRowIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-row__pulse { animation: none; }
 }
 
 /* ------------------------------------------------------------
@@ -575,8 +820,13 @@
   .stair__col:nth-child(4) {
     padding-top: 74px;
   }
-  .kbenefit {
+  .esiti {
     grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .esiti__stage {
+    order: -1;
+    min-height: 260px;
   }
 }
 
