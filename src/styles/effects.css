@@ -491,6 +491,7 @@
 .sc-dash__chart {
   padding: 14px 0 10px;
   border-radius: 14px;
+  overflow: hidden;
   background: var(--surface-top);
   border: 1px solid var(--hairline-strong);
 }
