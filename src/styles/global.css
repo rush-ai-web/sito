@@ -513,7 +513,7 @@ main {
   animation: bulbDrift 56s ease-in-out infinite;
 }
 .cta-bulb--l {
-  left: -41vw;
+  left: -54vw;
   background: radial-gradient(
     closest-side,
     color-mix(in srgb, var(--accent) 78%, transparent),
@@ -521,7 +521,7 @@ main {
   );
 }
 .cta-bulb--r {
-  right: -41vw;
+  right: -54vw;
   background: radial-gradient(
     closest-side,
     color-mix(in srgb, var(--text) 54%, transparent),
