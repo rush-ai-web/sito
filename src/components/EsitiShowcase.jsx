@@ -60,9 +60,9 @@ function SceneDash({ reduce }) {
             strokeWidth="2.4"
             strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
-            initial={reduce ? false : { pathLength: 0 }}
-            animate={reduce ? {} : { pathLength: 1 }}
-            transition={{ duration: 1, ease: EASE_MODAL, delay: 0.1 }}
+            initial={reduce ? false : { opacity: 0 }}
+            animate={reduce ? {} : { opacity: 1 }}
+            transition={{ duration: 0.8, ease: EASE_MODAL, delay: 0.15 }}
           />
           {!reduce && (
             <circle r="3.4" fill="var(--accent)" stroke="var(--surface-top)" strokeWidth="1.4" vectorEffect="non-scaling-stroke">
@@ -147,9 +147,9 @@ function SceneAI({ reduce }) {
             strokeWidth="2.2"
             strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
-            initial={reduce ? false : { pathLength: 0 }}
-            animate={reduce ? {} : { pathLength: 1 }}
-            transition={{ duration: 0.9, ease: EASE_MODAL, delay: 0.25 }}
+            initial={reduce ? false : { opacity: 0 }}
+            animate={reduce ? {} : { opacity: 1 }}
+            transition={{ duration: 0.8, ease: EASE_MODAL, delay: 0.25 }}
           />
           <circle cx="192" cy="58" r="3.4" fill="var(--neg)" vectorEffect="non-scaling-stroke" />
         </svg>
