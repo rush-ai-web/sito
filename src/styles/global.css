@@ -508,7 +508,7 @@ main {
   /* ancorato al TOP della section (non al bottom) così non si sposta
      quando il form cambia altezza; il gradiente è trasparente in cima
      quindi nessun taglio visibile al bordo superiore. */
-  top: 280px;
+  top: 460px;
   bottom: auto;
   pointer-events: none;
   z-index: 0;
