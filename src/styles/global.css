@@ -502,7 +502,7 @@ main {
    ============================================================ */
 .cta-bulb {
   position: absolute;
-  width: 82vw;
+  width: 100vw;
   aspect-ratio: 1;
   border-radius: 50%;
   /* nucleo ancorato PROPRIO all'angolo basso-laterale della sezione:
