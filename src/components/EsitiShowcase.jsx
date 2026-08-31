@@ -18,8 +18,8 @@ const ROTATE_MS = 6000;
 /* ── scena 1 · L'azienda a colpo d'occhio (mini dashboard live) ── */
 function SceneDash({ reduce }) {
   const line =
-    'M4,74 C44,68 60,46 96,50 C134,54 148,74 186,66 C222,58 236,30 276,24 C286,22 292,26 296,24';
-  const area = `${line} L296,92 L4,92 Z`;
+    'M0,74 C44,68 60,46 96,50 C134,54 148,74 186,66 C222,58 236,30 276,24 C288,20 296,24 300,22';
+  const area = `${line} L300,92 L0,92 Z`;
   return (
     <div className="sc-dash">
       <div className="sc-dash__tiles">
@@ -43,7 +43,7 @@ function SceneDash({ reduce }) {
             </linearGradient>
           </defs>
           {[30, 52, 74].map((y) => (
-            <line key={y} x1="4" y1={y} x2="296" y2={y} stroke="var(--hairline)" strokeWidth="1" strokeDasharray="3 5" vectorEffect="non-scaling-stroke" />
+            <line key={y} x1="0" y1={y} x2="300" y2={y} stroke="var(--hairline)" strokeWidth="1" strokeDasharray="3 5" vectorEffect="non-scaling-stroke" />
           ))}
           <motion.path
             d={area}
