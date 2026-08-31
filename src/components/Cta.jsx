@@ -24,7 +24,7 @@ export default function Cta() {
       {/* corner bulbs — clippati dalla section overflow:hidden → stacco netto col footer */}
       <span aria-hidden="true" className="cta-bulb cta-bulb--l" />
       <span aria-hidden="true" className="cta-bulb cta-bulb--r" />
-      <div className="row2" style={{ alignItems: 'start' }}>
+      <div className="row2" style={{ alignItems: 'start', position: 'relative', zIndex: 1 }}>
         <Group className="row2__text stack" each={0.08}>
           <Item>
             <Pill icon={Mail}>Contatti</Pill>
