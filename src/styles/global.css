@@ -3608,6 +3608,34 @@ textarea.input {
   }
 }
 
+/* bulb sinistra nella sezione Come lavoriamo */
+.metodo-bulb {
+  position: absolute;
+  width: 70vw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  left: -38vw;
+  top: 50%;
+  transform: translateY(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--text) 22%, transparent),
+    transparent 72%
+  );
+}
+
+/* griglia estesa fino in fondo nella sezione metodo */
+#metodo.fx-grid::before {
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 18%, #000 78%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 18%, #000 78%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
+}
+
 /* un passo del metodo (vecchio stile — mantenuto per retrocompatibilità) */
 .step {
   display: flex;

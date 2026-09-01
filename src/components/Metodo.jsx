@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { motion, useInView, useReducedMotion } from 'framer-motion';
+import { motion, useScroll, useTransform, useInView, useReducedMotion } from 'framer-motion';
 import { GitBranch, Search, PenTool, Rocket, RefreshCw } from 'lucide-react';
 import { Section, Head } from './ui';
 import { inView } from '../lib/motion';
@@ -47,10 +47,10 @@ const NODES = [
   { cx: 180, cy: 980 },
 ];
 
-/* ritardi proporzionali alla posizione sul path (durata totale 2.4s) */
+/* ritardi per i dot basati sulla posizione approssimativa sul path */
 const DOT_DELAYS = [0.3, 0.9, 1.5, 2.0];
 
-/* ── StepCard — whileInView, nessun binding allo scroll ── */
+/* ── StepCard ── */
 function StepCard({ passo, idx }) {
   const isLeft = passo.side === 'left';
   const { icon: Icon, t, d } = passo;
@@ -80,17 +80,27 @@ export default function Metodo() {
   const measureRef = useRef(null);
   const reduce = useReducedMotion();
 
-  /* lunghezza reale misurata dopo il mount */
+  /* lunghezza reale del path */
   const [totalLen, setTotalLen] = useState(1500);
   useEffect(() => {
     if (measureRef.current) setTotalLen(measureRef.current.getTotalLength());
   }, []);
 
-  /* si attiva una volta sola quando la sezione entra nel viewport */
-  const visible = useInView(trackRef, { once: true, amount: 0.08 });
+  /* scroll-driven: solo 1 motion value per il path — nessun overhead sullo scroll */
+  const { scrollYProgress } = useScroll({
+    target: trackRef,
+    offset: ['start 0.95', 'end 0.55'],
+  });
+  const dashOffset = useTransform(scrollYProgress, [0, 1], [totalLen, 0]);
+
+  /* dot: appaiono con useInView, senza binding allo scroll */
+  const dotsRef = useRef(null);
+  const dotsVisible = useInView(dotsRef, { once: true, amount: 0.05 });
 
   return (
     <Section id="metodo" grid>
+      <span aria-hidden="true" className="metodo-bulb" />
+
       <Head
         icon={GitBranch}
         label="Come lavoriamo"
@@ -100,8 +110,7 @@ export default function Metodo() {
 
       <div className="tl" ref={trackRef}>
         <div className="tl__track" aria-hidden="true">
-          <svg viewBox="0 0 200 1120" fill="none" className="tl__svg">
-            {/* path invisibile per misurare getTotalLength */}
+          <svg viewBox="0 0 200 1120" fill="none" className="tl__svg" ref={dotsRef}>
             <path ref={measureRef} d={PATH_D} stroke="none" />
 
             {/* ghost grigio statico */}
@@ -112,31 +121,27 @@ export default function Metodo() {
               strokeLinecap="round"
             />
 
-            {/* accent — si disegna una volta sola all'entrata nel viewport */}
+            {/* accent — fill scroll-driven, solo 1 motion value */}
             <motion.path
               d={PATH_D}
               stroke="var(--accent)"
               strokeWidth="2.5"
               strokeLinecap="round"
-              initial={false}
-              animate={reduce ? {} : {
-                strokeDasharray: totalLen,
-                strokeDashoffset: visible ? 0 : totalLen,
-              }}
-              transition={{ duration: 2.4, ease: [0.2, 0.6, 0.4, 1] }}
+              strokeDasharray={totalLen}
+              style={reduce ? undefined : { strokeDashoffset: dashOffset }}
             />
 
-            {/* pallini ai nodi — appaiono a tempo con la linea */}
+            {/* dot — useInView, temporizzati con la durata della linea */}
             {NODES.map((node, i) => (
               <motion.circle
                 key={i}
-                cx={node.cx} cy={node.cy} r="5"
+                cx={node.cx} cy={node.cy} r="8"
                 fill="var(--accent)"
                 stroke="var(--bg)"
                 strokeWidth="3"
                 initial={false}
-                animate={reduce ? {} : { opacity: visible ? 1 : 0 }}
-                transition={{ duration: 0.3, delay: DOT_DELAYS[i] }}
+                animate={reduce ? {} : { opacity: dotsVisible ? 1 : 0 }}
+                transition={{ duration: 0.35, delay: DOT_DELAYS[i] }}
               />
             ))}
           </svg>
