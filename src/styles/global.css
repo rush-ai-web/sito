@@ -3560,10 +3560,20 @@ textarea.input {
   padding-left: 48px;
 }
 
-.tl-item__emoji {
-  font-size: 28px;
-  line-height: 1;
+.tl-item__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-card);
+  background: var(--accent-soft);
+  color: var(--accent);
   margin-bottom: 4px;
+  flex-shrink: 0;
+}
+.tl-item--left .tl-item__icon {
+  margin-left: auto;
 }
 
 .tl-item__n {

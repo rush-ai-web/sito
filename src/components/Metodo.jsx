@@ -6,28 +6,28 @@ import { Section, Head } from './ui';
 const PASSI = [
   {
     n: '01',
-    emoji: '🔍',
+    icon: Search,
     t: 'Analisi sul campo',
     d: 'Veniamo a vedere come lavori davvero: chi fa cosa, dove si perde tempo, quali dati esistono già e dove sono fermi.',
     side: 'left',
   },
   {
     n: '02',
-    emoji: '✏️',
+    icon: PenTool,
     t: 'Progetto e prototipo',
     d: 'Disegniamo il sistema e ti mostriamo le schermate vere prima di scrivere il codice definitivo. Si corregge lì, non dopo.',
     side: 'right',
   },
   {
     n: '03',
-    emoji: '🚀',
+    icon: Rocket,
     t: 'Sviluppo e messa in linea',
     d: 'Costruiamo, importiamo i tuoi dati storici, colleghiamo i sistemi esistenti e formiamo chi lo userà ogni giorno.',
     side: 'left',
   },
   {
     n: '04',
-    emoji: '🔄',
+    icon: RefreshCw,
     t: 'Evoluzione continua',
     d: "L'azienda cambia e il gestionale la segue: nuovi moduli, nuove automazioni, nuove integrazioni quando servono.",
     side: 'right',
@@ -90,13 +90,13 @@ function StepCard({ passo, idx, progress, threshold, reduce }) {
     [Math.max(0, threshold - 0.04), Math.min(1, threshold + 0.12)],
     [isLeft ? -22 : 22, 0]
   );
-  const { n, emoji, t, d } = passo;
+  const { n, icon: Icon, t, d } = passo;
   return (
     <motion.div
       className={`tl-item tl-item--${passo.side}`}
       style={{ gridRow: idx + 1, ...(reduce ? {} : { opacity, x }) }}
     >
-      <span className="tl-item__emoji" role="img">{emoji}</span>
+      <span className="tl-item__icon"><Icon size={20} strokeWidth={1.75} /></span>
       <span className="tl-item__n">{n}</span>
       <h3 className="tl-item__t">{t}</h3>
       <p className="tl-item__d">{d}</p>
