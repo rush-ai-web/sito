@@ -3522,7 +3522,7 @@ textarea.input {
    ============================================================ */
 .tl {
   display: grid;
-  grid-template-columns: 1fr 100px 1fr;
+  grid-template-columns: 1fr 160px 1fr;
   position: relative;
 }
 
@@ -3560,6 +3560,12 @@ textarea.input {
   padding-left: 48px;
 }
 
+.tl-item__emoji {
+  font-size: 28px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
 .tl-item__n {
   font-family: var(--ff-body);
   font-size: 11px;
@@ -3593,7 +3599,7 @@ textarea.input {
 /* mobile: percorso a sinistra, tutto il testo a destra */
 @media (max-width: 680px) {
   .tl {
-    grid-template-columns: 56px 1fr;
+    grid-template-columns: 60px 1fr;
   }
   .tl__track {
     grid-column: 1;

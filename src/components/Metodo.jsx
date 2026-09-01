@@ -6,28 +6,28 @@ import { Section, Head } from './ui';
 const PASSI = [
   {
     n: '01',
-    icon: Search,
+    emoji: '🔍',
     t: 'Analisi sul campo',
     d: 'Veniamo a vedere come lavori davvero: chi fa cosa, dove si perde tempo, quali dati esistono già e dove sono fermi.',
     side: 'left',
   },
   {
     n: '02',
-    icon: PenTool,
+    emoji: '✏️',
     t: 'Progetto e prototipo',
     d: 'Disegniamo il sistema e ti mostriamo le schermate vere prima di scrivere il codice definitivo. Si corregge lì, non dopo.',
     side: 'right',
   },
   {
     n: '03',
-    icon: Rocket,
+    emoji: '🚀',
     t: 'Sviluppo e messa in linea',
     d: 'Costruiamo, importiamo i tuoi dati storici, colleghiamo i sistemi esistenti e formiamo chi lo userà ogni giorno.',
     side: 'left',
   },
   {
     n: '04',
-    icon: RefreshCw,
+    emoji: '🔄',
     t: 'Evoluzione continua',
     d: "L'azienda cambia e il gestionale la segue: nuovi moduli, nuove automazioni, nuove integrazioni quando servono.",
     side: 'right',
@@ -35,27 +35,25 @@ const PASSI = [
 ];
 
 /* ── SVG path ─────────────────────────────────────────────────────
-   ViewBox 100 × 960, righe fisse da 240px.
-   Nodi a x=10 (sinistra) e x=90 (destra) — swing di 80px su 100.
-   Curve asimmetriche per aspetto organico.
+   ViewBox 200 × 960, righe fisse da 240px.
+   Nodi a x=20 (sx) e x=180 (dx) — swing di 160px su 200.
+   I control point dei segmenti di cross vanno fino a x=4 e x=196,
+   creando curve molto pronunciate a S tra un nodo e l'altro.
    ──────────────────────────────────────────────────────────────── */
 const PATH_D = [
-  'M 50 0',
-  'C 50 40 10 85 10 120',     // → nodo 1  sx  y=120
-  'C 10 155 50 195 50 240',   // cross
-  'C 50 285 90 315 90 360',   // → nodo 2  dx  y=360
-  'C 90 405 50 445 50 480',   // cross
-  'C 50 515 10 555 10 600',   // → nodo 3  sx  y=600
-  'C 10 645 50 685 50 720',   // cross
-  'C 50 755 90 795 90 840',   // → nodo 4  dx  y=840
-  'C 90 885 50 940 50 960',   // fine
+  'M 100 0',
+  'C 100 30 20 75 20 120',      // → nodo 1  sx  y=120
+  'C 4 210 196 290 180 360',    // S molto ampia → nodo 2  dx  y=360
+  'C 196 450 4 530 20 600',     // S molto ampia → nodo 3  sx  y=600
+  'C 4 690 196 770 180 840',    // S molto ampia → nodo 4  dx  y=840
+  'C 196 910 100 940 100 960',  // fine
 ].join(' ');
 
 const NODES = [
-  { cx: 10, cy: 120 },
-  { cx: 90, cy: 360 },
-  { cx: 10, cy: 600 },
-  { cx: 90, cy: 840 },
+  { cx: 20,  cy: 120 },
+  { cx: 180, cy: 360 },
+  { cx: 20,  cy: 600 },
+  { cx: 180, cy: 840 },
 ];
 
 /* step 4 compare al 68% dello scroll */
@@ -92,12 +90,13 @@ function StepCard({ passo, idx, progress, threshold, reduce }) {
     [Math.max(0, threshold - 0.04), Math.min(1, threshold + 0.12)],
     [isLeft ? -22 : 22, 0]
   );
-  const { n, t, d } = passo;
+  const { n, emoji, t, d } = passo;
   return (
     <motion.div
       className={`tl-item tl-item--${passo.side}`}
       style={{ gridRow: idx + 1, ...(reduce ? {} : { opacity, x }) }}
     >
+      <span className="tl-item__emoji" role="img">{emoji}</span>
       <span className="tl-item__n">{n}</span>
       <h3 className="tl-item__t">{t}</h3>
       <p className="tl-item__d">{d}</p>
@@ -137,7 +136,7 @@ export default function Metodo() {
       <div className="tl" ref={trackRef}>
         {/* colonna centrale con il tracciato */}
         <div className="tl__track" aria-hidden="true">
-          <svg viewBox="0 0 100 960" fill="none" className="tl__svg">
+          <svg viewBox="0 0 200 960" fill="none" className="tl__svg">
             {/* path invisibile solo per misurare la lunghezza */}
             <path ref={measureRef} d={PATH_D} stroke="none" />
 
