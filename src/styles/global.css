@@ -3617,7 +3617,7 @@ textarea.input {
   pointer-events: none;
   z-index: 0;
   left: -38vw;
-  top: 50%;
+  top: 68%;
   transform: translateY(-50%);
   background: radial-gradient(
     closest-side,

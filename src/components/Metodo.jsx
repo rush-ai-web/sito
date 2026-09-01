@@ -2,7 +2,6 @@ import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useInView, useReducedMotion } from 'framer-motion';
 import { GitBranch, Search, PenTool, Rocket, RefreshCw } from 'lucide-react';
 import { Section, Head } from './ui';
-import { inView } from '../lib/motion';
 
 const PASSI = [
   {
@@ -47,10 +46,7 @@ const NODES = [
   { cx: 180, cy: 980 },
 ];
 
-/* ritardi per i dot basati sulla posizione approssimativa sul path */
-const DOT_DELAYS = [0.3, 0.9, 1.5, 2.0];
-
-/* ── StepCard ── */
+/* ── StepCard — comparsa e scomparsa bidirezionale con lo scroll ── */
 function StepCard({ passo, idx }) {
   const isLeft = passo.side === 'left';
   const { icon: Icon, t, d } = passo;
@@ -58,10 +54,10 @@ function StepCard({ passo, idx }) {
     <motion.div
       className={`tl-item tl-item--${passo.side}`}
       style={{ gridRow: idx + 1 }}
-      initial={{ opacity: 0, x: isLeft ? -20 : 20 }}
+      initial={{ opacity: 0, x: isLeft ? -24 : 24 }}
       whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ ...inView, margin: '0px 0px -60px 0px' }}
-      transition={{ duration: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
+      viewport={{ once: false, amount: 0.25 }}
+      transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
     >
       <div className="tl-item__header">
         <span className="icon-tile icon-tile--sm">
@@ -76,80 +72,88 @@ function StepCard({ passo, idx }) {
 
 /* ── Metodo ── */
 export default function Metodo() {
-  const trackRef = useRef(null);
+  const sectionRef = useRef(null);   // track sull'intera sezione
+  const tlRef     = useRef(null);    // ref per i dot
   const measureRef = useRef(null);
   const reduce = useReducedMotion();
 
-  /* lunghezza reale del path */
   const [totalLen, setTotalLen] = useState(1500);
   useEffect(() => {
     if (measureRef.current) setTotalLen(measureRef.current.getTotalLength());
   }, []);
 
-  /* scroll-driven: solo 1 motion value per il path — nessun overhead sullo scroll */
+  /* scroll tracciato sull'intera sezione, compresi heading e padding */
   const { scrollYProgress } = useScroll({
-    target: trackRef,
-    offset: ['start 0.95', 'end 0.55'],
+    target: sectionRef,
+    offset: ['start 0.9', 'end 0.6'],
   });
-  const dashOffset = useTransform(scrollYProgress, [0, 1], [totalLen, 0]);
 
-  /* dot: appaiono con useInView, senza binding allo scroll */
-  const dotsRef = useRef(null);
-  const dotsVisible = useInView(dotsRef, { once: true, amount: 0.05 });
+  /* la linea parte DOPO che lo heading è passato (~20% di scroll della sezione),
+     così quando il primo step entra in vista la linea è ancora a 0 */
+  const dashOffset = useTransform(
+    scrollYProgress,
+    [0, 0.18, 0.92, 1],
+    [totalLen, totalLen, 0, 0],
+  );
+
+  /* dot: appaiono/scompaiono con l'SVG stesso */
+  const dotsVisible = useInView(tlRef, { once: false, amount: 0.05 });
+
+  /* ritardi proporzionali alla posizione del nodo sul path */
+  const dotDelays = [0.25, 0.8, 1.4, 1.95];
 
   return (
     <Section id="metodo" grid>
       <span aria-hidden="true" className="metodo-bulb" />
 
-      <Head
-        icon={GitBranch}
-        label="Come lavoriamo"
-        title="Dal primo incontro alla produzione in otto settimane"
-        sub="Niente capitolati da trecento pagine. Si parte da un modulo che risolve il problema più caro, e da lì si cresce."
-      />
+      <div ref={sectionRef}>
+        <Head
+          icon={GitBranch}
+          label="Come lavoriamo"
+          title="Dal primo incontro alla produzione in otto settimane"
+          sub="Niente capitolati da trecento pagine. Si parte da un modulo che risolve il problema più caro, e da lì si cresce."
+        />
 
-      <div className="tl" ref={trackRef}>
-        <div className="tl__track" aria-hidden="true">
-          <svg viewBox="0 0 200 1120" fill="none" className="tl__svg" ref={dotsRef}>
-            <path ref={measureRef} d={PATH_D} stroke="none" />
+        <div className="tl" ref={tlRef}>
+          <div className="tl__track" aria-hidden="true">
+            <svg viewBox="0 0 200 1120" fill="none" className="tl__svg">
+              <path ref={measureRef} d={PATH_D} stroke="none" />
 
-            {/* ghost grigio statico */}
-            <path
-              d={PATH_D}
-              stroke="var(--hairline-strong)"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-
-            {/* accent — fill scroll-driven, solo 1 motion value */}
-            <motion.path
-              d={PATH_D}
-              stroke="var(--accent)"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeDasharray={totalLen}
-              style={reduce ? undefined : { strokeDashoffset: dashOffset }}
-            />
-
-            {/* dot — useInView, temporizzati con la durata della linea */}
-            {NODES.map((node, i) => (
-              <motion.circle
-                key={i}
-                cx={node.cx} cy={node.cy} r="8"
-                fill="var(--accent)"
-                stroke="var(--bg)"
-                strokeWidth="3"
-                initial={false}
-                animate={reduce ? {} : { opacity: dotsVisible ? 1 : 0 }}
-                transition={{ duration: 0.35, delay: DOT_DELAYS[i] }}
+              <path
+                d={PATH_D}
+                stroke="var(--hairline-strong)"
+                strokeWidth="2"
+                strokeLinecap="round"
               />
-            ))}
-          </svg>
-        </div>
 
-        {PASSI.map((passo, i) => (
-          <StepCard key={i} passo={passo} idx={i} />
-        ))}
+              <motion.path
+                d={PATH_D}
+                stroke="var(--accent)"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeDasharray={totalLen}
+                style={reduce ? undefined : { strokeDashoffset: dashOffset }}
+              />
+
+              {NODES.map((node, i) => (
+                <motion.circle
+                  key={i}
+                  cx={node.cx} cy={node.cy} r="8"
+                  fill="var(--accent)"
+                  stroke="var(--bg)"
+                  strokeWidth="3"
+                  initial={false}
+                  animate={reduce ? {} : { opacity: dotsVisible ? 1 : 0 }}
+                  transition={{ duration: 0.3, delay: dotDelays[i] }}
+                />
+              ))}
+            </svg>
+          </div>
+
+          {PASSI.map((passo, i) => (
+            <StepCard key={i} passo={passo} idx={i} />
+          ))}
+        </div>
       </div>
     </Section>
   );
