@@ -40,23 +40,43 @@ const PATH_D = [
 ].join(' ');
 
 const NODES = [
-  { cx: 20,  cy: 140 },
-  { cx: 180, cy: 420 },
-  { cx: 20,  cy: 700 },
-  { cx: 180, cy: 980 },
+  { cx: 20,  cy: 140, frac: 0.125 },
+  { cx: 180, cy: 420, frac: 0.375 },
+  { cx: 20,  cy: 700, frac: 0.625 },
+  { cx: 180, cy: 980, frac: 0.875 },
 ];
 
-/* ── StepCard — comparsa e scomparsa bidirezionale con lo scroll ── */
-function StepCard({ passo, idx }) {
+/* ── NodeDot — opacity agganciata al progresso della linea (bidirezionale) ── */
+function NodeDot({ cx, cy, frac, progress, reduce }) {
+  const opacity = useTransform(progress, [frac - 0.02, frac + 0.04], [0, 1]);
+  return (
+    <motion.circle
+      cx={cx} cy={cy} r="8"
+      fill="var(--accent)"
+      stroke="var(--bg)"
+      strokeWidth="3"
+      style={reduce ? undefined : { opacity }}
+    />
+  );
+}
+
+/* ── StepCard — useInView per-card, compare e scompare con lo scroll ── */
+function StepCard({ passo, idx, reduce }) {
+  const ref = useRef(null);
+  const visible = useInView(ref, { amount: 0.4 }); // once: false di default
   const isLeft = passo.side === 'left';
   const { icon: Icon, t, d } = passo;
   return (
     <motion.div
+      ref={ref}
       className={`tl-item tl-item--${passo.side}`}
       style={{ gridRow: idx + 1 }}
-      initial={{ opacity: 0, x: isLeft ? -24 : 24 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: false, amount: 0.25 }}
+      initial={false}
+      animate={
+        reduce
+          ? {}
+          : { opacity: visible ? 1 : 0, x: visible ? 0 : isLeft ? -24 : 24 }
+      }
       transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
     >
       <div className="tl-item__header">
@@ -72,8 +92,7 @@ function StepCard({ passo, idx }) {
 
 /* ── Metodo ── */
 export default function Metodo() {
-  const sectionRef = useRef(null);   // track sull'intera sezione
-  const tlRef     = useRef(null);    // ref per i dot
+  const tlRef = useRef(null);
   const measureRef = useRef(null);
   const reduce = useReducedMotion();
 
@@ -82,78 +101,60 @@ export default function Metodo() {
     if (measureRef.current) setTotalLen(measureRef.current.getTotalLength());
   }, []);
 
-  /* scroll tracciato sull'intera sezione, compresi heading e padding */
+  /* la linea si riempie mentre .tl attraversa il centro dello schermo:
+     progress 0 = prima card al centro (linea vuota), progress 1 = ultima card al centro */
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start 0.9', 'end 0.6'],
+    target: tlRef,
+    offset: ['start center', 'end center'],
   });
-
-  /* la linea parte DOPO che lo heading è passato (~20% di scroll della sezione),
-     così quando il primo step entra in vista la linea è ancora a 0 */
-  const dashOffset = useTransform(
-    scrollYProgress,
-    [0, 0.18, 0.92, 1],
-    [totalLen, totalLen, 0, 0],
-  );
-
-  /* dot: appaiono/scompaiono con l'SVG stesso */
-  const dotsVisible = useInView(tlRef, { once: false, amount: 0.05 });
-
-  /* ritardi proporzionali alla posizione del nodo sul path */
-  const dotDelays = [0.25, 0.8, 1.4, 1.95];
+  const dashOffset = useTransform(scrollYProgress, [0, 1], [totalLen, 0]);
 
   return (
     <Section id="metodo" grid>
       <span aria-hidden="true" className="metodo-bulb" />
 
-      <div ref={sectionRef}>
-        <Head
-          icon={GitBranch}
-          label="Come lavoriamo"
-          title="Dal primo incontro alla produzione in otto settimane"
-          sub="Niente capitolati da trecento pagine. Si parte da un modulo che risolve il problema più caro, e da lì si cresce."
-        />
+      <Head
+        icon={GitBranch}
+        label="Come lavoriamo"
+        title="Dal primo incontro alla produzione in otto settimane"
+        sub="Niente capitolati da trecento pagine. Si parte da un modulo che risolve il problema più caro, e da lì si cresce."
+      />
 
-        <div className="tl" ref={tlRef}>
-          <div className="tl__track" aria-hidden="true">
-            <svg viewBox="0 0 200 1120" fill="none" className="tl__svg">
-              <path ref={measureRef} d={PATH_D} stroke="none" />
+      <div className="tl" ref={tlRef}>
+        <div className="tl__track" aria-hidden="true">
+          <svg viewBox="0 0 200 1120" fill="none" className="tl__svg">
+            <path ref={measureRef} d={PATH_D} stroke="none" />
 
-              <path
-                d={PATH_D}
-                stroke="var(--hairline-strong)"
-                strokeWidth="2"
-                strokeLinecap="round"
+            <path
+              d={PATH_D}
+              stroke="var(--hairline-strong)"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+
+            <motion.path
+              d={PATH_D}
+              stroke="var(--accent)"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeDasharray={totalLen}
+              style={reduce ? undefined : { strokeDashoffset: dashOffset }}
+            />
+
+            {NODES.map((node, i) => (
+              <NodeDot
+                key={i}
+                {...node}
+                progress={scrollYProgress}
+                reduce={reduce}
               />
-
-              <motion.path
-                d={PATH_D}
-                stroke="var(--accent)"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeDasharray={totalLen}
-                style={reduce ? undefined : { strokeDashoffset: dashOffset }}
-              />
-
-              {NODES.map((node, i) => (
-                <motion.circle
-                  key={i}
-                  cx={node.cx} cy={node.cy} r="8"
-                  fill="var(--accent)"
-                  stroke="var(--bg)"
-                  strokeWidth="3"
-                  initial={false}
-                  animate={reduce ? {} : { opacity: dotsVisible ? 1 : 0 }}
-                  transition={{ duration: 0.3, delay: dotDelays[i] }}
-                />
-              ))}
-            </svg>
-          </div>
-
-          {PASSI.map((passo, i) => (
-            <StepCard key={i} passo={passo} idx={i} />
-          ))}
+            ))}
+          </svg>
         </div>
+
+        {PASSI.map((passo, i) => (
+          <StepCard key={i} passo={passo} idx={i} reduce={reduce} />
+        ))}
       </div>
     </Section>
   );
