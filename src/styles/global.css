@@ -3522,7 +3522,7 @@ textarea.input {
    ============================================================ */
 .tl {
   display: grid;
-  grid-template-columns: 1fr 60px 1fr;
+  grid-template-columns: 1fr 100px 1fr;
   position: relative;
 }
 
@@ -3560,10 +3560,10 @@ textarea.input {
 }
 
 .tl-item__n {
-  font-family: var(--ff-display);
+  font-family: var(--ff-body);
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent);
   line-height: 1;
@@ -3592,7 +3592,7 @@ textarea.input {
 /* mobile: percorso a sinistra, tutto il testo a destra */
 @media (max-width: 680px) {
   .tl {
-    grid-template-columns: 44px 1fr;
+    grid-template-columns: 56px 1fr;
   }
   .tl__track {
     grid-column: 1;

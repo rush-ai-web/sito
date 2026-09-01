@@ -35,33 +35,31 @@ const PASSI = [
 ];
 
 /* ─── SVG path ─────────────────────────────────────────────────
-   ViewBox 60 × 960 — 4 righe da 240px.
-   Nodi alternati: sinistra x=14, destra x=46, centrati y=120/360/600/840.
-   Le curve sono deliberatamente irregolari (i punti di controllo
-   non sono simmetrici) per dare carattere organico.
+   ViewBox 100 × 960 — 4 righe da 240px.
+   Nodi: sinistra x=12, destra x=88 — swing ampio e organico.
    ─────────────────────────────────────────────────────────────── */
 const PATH_D = [
-  'M 30 0',
-  'C 30 55 14 78 14 120',      // → nodo 1  sinistra  y=120
-  'C 14 162 38 195 30 240',    // cross centre
-  'C 22 285 46 308 46 360',    // → nodo 2  destra    y=360
-  'C 46 412 20 445 30 480',    // cross centre
-  'C 40 515 14 538 14 600',    // → nodo 3  sinistra  y=600
-  'C 14 642 44 675 30 720',    // cross centre
-  'C 16 765 46 788 46 840',    // → nodo 4  destra    y=840
-  'C 46 882 30 940 30 960',    // fine
+  'M 50 0',
+  'C 50 50 12 72 12 120',      // → nodo 1  sinistra  y=120
+  'C 12 168 60 200 50 240',    // cross
+  'C 40 280 88 312 88 360',    // → nodo 2  destra    y=360
+  'C 88 408 38 440 50 480',    // cross
+  'C 62 520 12 552 12 600',    // → nodo 3  sinistra  y=600
+  'C 12 648 62 680 50 720',    // cross
+  'C 38 760 88 792 88 840',    // → nodo 4  destra    y=840
+  'C 88 888 50 940 50 960',    // fine
 ].join(' ');
 
 /* coordinate dei nodi nel viewBox */
 const NODES = [
-  { cx: 14, cy: 120 },
-  { cx: 46, cy: 360 },
-  { cx: 14, cy: 600 },
-  { cx: 46, cy: 840 },
+  { cx: 12, cy: 120 },
+  { cx: 88, cy: 360 },
+  { cx: 12, cy: 600 },
+  { cx: 88, cy: 840 },
 ];
 
-/* a che fraction dello scroll appare ogni nodo */
-const THRESHOLDS = [0.11, 0.36, 0.61, 0.86];
+/* threshold abbassati: step 4 compare al 68% dello scroll, non all'86% */
+const THRESHOLDS = [0.08, 0.28, 0.48, 0.68];
 
 /* ─── NodeDot ─── */
 function NodeDot({ cx, cy, pathProgress, threshold, reduce }) {
@@ -119,7 +117,7 @@ export default function Metodo() {
 
   const { scrollYProgress } = useScroll({
     target: trackRef,
-    offset: ['start 0.82', 'end 0.18'],
+    offset: ['start 0.9', 'end 0.6'],
   });
 
   return (
