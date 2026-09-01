@@ -3539,12 +3539,13 @@ textarea.input {
 }
 
 .tl-item {
-  min-height: 240px;
+  height: 240px;        /* fisso: fa coincidere i nodi SVG con i contenuti */
   padding-block: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 10px;
+  overflow: hidden;     /* evita che testo lungo sfori la cella */
 }
 
 .tl-item--left {

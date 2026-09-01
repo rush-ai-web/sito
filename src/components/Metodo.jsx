@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { GitBranch, Search, PenTool, Rocket, RefreshCw } from 'lucide-react';
 import { Section, Head } from './ui';
@@ -34,70 +34,65 @@ const PASSI = [
   },
 ];
 
-/* ─── SVG path ─────────────────────────────────────────────────
-   ViewBox 100 × 960 — 4 righe da 240px.
-   Nodi: sinistra x=12, destra x=88 — swing ampio e organico.
-   ─────────────────────────────────────────────────────────────── */
+/* ── SVG path ─────────────────────────────────────────────────────
+   ViewBox 100 × 960, righe fisse da 240px.
+   Nodi a x=10 (sinistra) e x=90 (destra) — swing di 80px su 100.
+   Curve asimmetriche per aspetto organico.
+   ──────────────────────────────────────────────────────────────── */
 const PATH_D = [
   'M 50 0',
-  'C 50 50 12 72 12 120',      // → nodo 1  sinistra  y=120
-  'C 12 168 60 200 50 240',    // cross
-  'C 40 280 88 312 88 360',    // → nodo 2  destra    y=360
-  'C 88 408 38 440 50 480',    // cross
-  'C 62 520 12 552 12 600',    // → nodo 3  sinistra  y=600
-  'C 12 648 62 680 50 720',    // cross
-  'C 38 760 88 792 88 840',    // → nodo 4  destra    y=840
-  'C 88 888 50 940 50 960',    // fine
+  'C 50 40 10 85 10 120',     // → nodo 1  sx  y=120
+  'C 10 155 50 195 50 240',   // cross
+  'C 50 285 90 315 90 360',   // → nodo 2  dx  y=360
+  'C 90 405 50 445 50 480',   // cross
+  'C 50 515 10 555 10 600',   // → nodo 3  sx  y=600
+  'C 10 645 50 685 50 720',   // cross
+  'C 50 755 90 795 90 840',   // → nodo 4  dx  y=840
+  'C 90 885 50 940 50 960',   // fine
 ].join(' ');
 
-/* coordinate dei nodi nel viewBox */
 const NODES = [
-  { cx: 12, cy: 120 },
-  { cx: 88, cy: 360 },
-  { cx: 12, cy: 600 },
-  { cx: 88, cy: 840 },
+  { cx: 10, cy: 120 },
+  { cx: 90, cy: 360 },
+  { cx: 10, cy: 600 },
+  { cx: 90, cy: 840 },
 ];
 
-/* threshold abbassati: step 4 compare al 68% dello scroll, non all'86% */
+/* step 4 compare al 68% dello scroll */
 const THRESHOLDS = [0.08, 0.28, 0.48, 0.68];
 
-/* ─── NodeDot ─── */
-function NodeDot({ cx, cy, pathProgress, threshold, reduce }) {
+/* ── NodeDot ── */
+function NodeDot({ cx, cy, progress, threshold, reduce }) {
   const opacity = useTransform(
-    pathProgress,
+    progress,
     [Math.max(0, threshold - 0.02), Math.min(1, threshold + 0.06)],
     [0, 1]
   );
   return (
     <motion.circle
-      cx={cx}
-      cy={cy}
-      r="5"
+      cx={cx} cy={cy} r="5"
       fill="var(--accent)"
       stroke="var(--bg)"
       strokeWidth="3"
-      vectorEffect="non-scaling-stroke"
       style={reduce ? undefined : { opacity }}
     />
   );
 }
 
-/* ─── StepCard ─── */
-function StepCard({ passo, idx, pathProgress, threshold, reduce }) {
+/* ── StepCard ── */
+function StepCard({ passo, idx, progress, threshold, reduce }) {
   const isLeft = passo.side === 'left';
   const opacity = useTransform(
-    pathProgress,
+    progress,
     [Math.max(0, threshold - 0.04), Math.min(1, threshold + 0.12)],
     [0, 1]
   );
   const x = useTransform(
-    pathProgress,
+    progress,
     [Math.max(0, threshold - 0.04), Math.min(1, threshold + 0.12)],
     [isLeft ? -22 : 22, 0]
   );
-
-  const { icon: Icon, n, t, d } = passo;
-
+  const { n, t, d } = passo;
   return (
     <motion.div
       className={`tl-item tl-item--${passo.side}`}
@@ -110,15 +105,25 @@ function StepCard({ passo, idx, pathProgress, threshold, reduce }) {
   );
 }
 
-/* ─── Metodo ─── */
+/* ── Metodo ── */
 export default function Metodo() {
   const trackRef = useRef(null);
+  const measureRef = useRef(null);
   const reduce = useReducedMotion();
+
+  /* lunghezza reale del path — evita il bug pathLength+vectorEffect */
+  const [totalLen, setTotalLen] = useState(1200);
+  useEffect(() => {
+    if (measureRef.current) setTotalLen(measureRef.current.getTotalLength());
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: trackRef,
     offset: ['start 0.9', 'end 0.6'],
   });
+
+  /* dashOffset da totalLen (nascosta) a 0 (piena) */
+  const dashOffset = useTransform(scrollYProgress, [0, 1], [totalLen, 0]);
 
   return (
     <Section id="metodo" grid>
@@ -130,32 +135,36 @@ export default function Metodo() {
       />
 
       <div className="tl" ref={trackRef}>
-        {/* colonna centrale con il tracciato SVG */}
+        {/* colonna centrale con il tracciato */}
         <div className="tl__track" aria-hidden="true">
-          <svg viewBox="0 0 60 960" fill="none" className="tl__svg">
-            {/* ghost path di sfondo */}
+          <svg viewBox="0 0 100 960" fill="none" className="tl__svg">
+            {/* path invisibile solo per misurare la lunghezza */}
+            <path ref={measureRef} d={PATH_D} stroke="none" />
+
+            {/* ghost path grigio */}
             <path
               d={PATH_D}
               stroke="var(--hairline-strong)"
               strokeWidth="2"
               strokeLinecap="round"
-              vectorEffect="non-scaling-stroke"
             />
-            {/* tracciato animato con il fill d'accento */}
+
+            {/* path accent animato con dashOffset */}
             <motion.path
               d={PATH_D}
               stroke="var(--accent)"
               strokeWidth="2.5"
               strokeLinecap="round"
-              vectorEffect="non-scaling-stroke"
-              style={{ pathLength: reduce ? 1 : scrollYProgress }}
+              strokeDasharray={totalLen}
+              style={reduce ? undefined : { strokeDashoffset: dashOffset }}
             />
-            {/* puntini ai nodi */}
+
+            {/* pallini ai nodi */}
             {NODES.map((node, i) => (
               <NodeDot
                 key={i}
                 {...node}
-                pathProgress={scrollYProgress}
+                progress={scrollYProgress}
                 threshold={THRESHOLDS[i]}
                 reduce={reduce}
               />
@@ -163,13 +172,13 @@ export default function Metodo() {
           </svg>
         </div>
 
-        {/* card destra/sinistra alternati */}
+        {/* card sinistra/destra alternati */}
         {PASSI.map((passo, i) => (
           <StepCard
             key={passo.n}
             passo={passo}
             idx={i}
-            pathProgress={scrollYProgress}
+            progress={scrollYProgress}
             threshold={THRESHOLDS[i]}
             reduce={reduce}
           />
