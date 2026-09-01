@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { GitBranch, Search, PenTool, Rocket, RefreshCw } from 'lucide-react';
 import { Section, Head } from './ui';
 import { inView } from '../lib/motion';
@@ -31,10 +31,6 @@ const PASSI = [
   },
 ];
 
-/* ── SVG path ─────────────────────────────────────────────────────
-   ViewBox 200 × 1120, righe fisse da 280px.
-   Nodi a x=20 (sx) e x=180 (dx) — swing di 160px su 200.
-   ──────────────────────────────────────────────────────────────── */
 const PATH_D = [
   'M 100 0',
   'C 100 45 20 95 20 140',
@@ -51,27 +47,10 @@ const NODES = [
   { cx: 180, cy: 980 },
 ];
 
-const THRESHOLDS = [0.06, 0.28, 0.50, 0.72];
+/* ritardi proporzionali alla posizione sul path (durata totale 2.4s) */
+const DOT_DELAYS = [0.3, 0.9, 1.5, 2.0];
 
-/* ── NodeDot — scroll-driven opacity (solo 4 motion values) ── */
-function NodeDot({ cx, cy, progress, threshold, reduce }) {
-  const opacity = useTransform(
-    progress,
-    [Math.max(0, threshold - 0.02), Math.min(1, threshold + 0.06)],
-    [0, 1]
-  );
-  return (
-    <motion.circle
-      cx={cx} cy={cy} r="5"
-      fill="var(--accent)"
-      stroke="var(--bg)"
-      strokeWidth="3"
-      style={reduce ? undefined : { opacity }}
-    />
-  );
-}
-
-/* ── StepCard — whileInView come il resto del sito, zero jank ── */
+/* ── StepCard — whileInView, nessun binding allo scroll ── */
 function StepCard({ passo, idx }) {
   const isLeft = passo.side === 'left';
   const { icon: Icon, t, d } = passo;
@@ -101,17 +80,14 @@ export default function Metodo() {
   const measureRef = useRef(null);
   const reduce = useReducedMotion();
 
-  const [totalLen, setTotalLen] = useState(1200);
+  /* lunghezza reale misurata dopo il mount */
+  const [totalLen, setTotalLen] = useState(1500);
   useEffect(() => {
     if (measureRef.current) setTotalLen(measureRef.current.getTotalLength());
   }, []);
 
-  const { scrollYProgress } = useScroll({
-    target: trackRef,
-    offset: ['start 1.0', 'end 0.5'],
-  });
-
-  const dashOffset = useTransform(scrollYProgress, [0, 1], [totalLen, 0]);
+  /* si attiva una volta sola quando la sezione entra nel viewport */
+  const visible = useInView(trackRef, { once: true, amount: 0.08 });
 
   return (
     <Section id="metodo" grid>
@@ -125,8 +101,10 @@ export default function Metodo() {
       <div className="tl" ref={trackRef}>
         <div className="tl__track" aria-hidden="true">
           <svg viewBox="0 0 200 1120" fill="none" className="tl__svg">
+            {/* path invisibile per misurare getTotalLength */}
             <path ref={measureRef} d={PATH_D} stroke="none" />
 
+            {/* ghost grigio statico */}
             <path
               d={PATH_D}
               stroke="var(--hairline-strong)"
@@ -134,22 +112,31 @@ export default function Metodo() {
               strokeLinecap="round"
             />
 
+            {/* accent — si disegna una volta sola all'entrata nel viewport */}
             <motion.path
               d={PATH_D}
               stroke="var(--accent)"
               strokeWidth="2.5"
               strokeLinecap="round"
-              strokeDasharray={totalLen}
-              style={reduce ? undefined : { strokeDashoffset: dashOffset }}
+              initial={false}
+              animate={reduce ? {} : {
+                strokeDasharray: totalLen,
+                strokeDashoffset: visible ? 0 : totalLen,
+              }}
+              transition={{ duration: 2.4, ease: [0.2, 0.6, 0.4, 1] }}
             />
 
+            {/* pallini ai nodi — appaiono a tempo con la linea */}
             {NODES.map((node, i) => (
-              <NodeDot
+              <motion.circle
                 key={i}
-                {...node}
-                progress={scrollYProgress}
-                threshold={THRESHOLDS[i]}
-                reduce={reduce}
+                cx={node.cx} cy={node.cy} r="5"
+                fill="var(--accent)"
+                stroke="var(--bg)"
+                strokeWidth="3"
+                initial={false}
+                animate={reduce ? {} : { opacity: visible ? 1 : 0 }}
+                transition={{ duration: 0.3, delay: DOT_DELAYS[i] }}
               />
             ))}
           </svg>
