@@ -9,6 +9,8 @@ import Prodotto from './components/Prodotto';
 import Numeri from './components/Numeri';
 import Metodo from './components/Metodo';
 import Ristorazione from './components/Ristorazione';
+import Confronto from './components/Confronto';
+import Prezzi from './components/Prezzi';
 import Principi from './components/Principi';
 import Faq from './components/Faq';
 import Cta from './components/Cta';
@@ -64,6 +66,8 @@ export default function App() {
         <Metodo />
         {/* chiaro */}
         <Ristorazione />
+        <Confronto />
+        <Prezzi />
         <Principi />
         <Faq />
         {/* scuro */}

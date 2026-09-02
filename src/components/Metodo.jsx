@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 import { motion, useScroll, useTransform, useInView, useReducedMotion } from 'framer-motion';
 import { GitBranch, Search, PenTool, Rocket, RefreshCw } from 'lucide-react';
 import { Section, Head } from './ui';
@@ -40,18 +40,18 @@ const PATH_D = [
 ].join(' ');
 
 const NODES = [
-  { cx: 20,  cy: 140, frac: 0.125 },
-  { cx: 180, cy: 420, frac: 0.375 },
-  { cx: 20,  cy: 700, frac: 0.625 },
-  { cx: 180, cy: 980, frac: 0.875 },
+  { cx: 20,  cy: 140,  frac: 0.125 },
+  { cx: 180, cy: 420,  frac: 0.375 },
+  { cx: 20,  cy: 700,  frac: 0.625 },
+  { cx: 180, cy: 980,  frac: 0.875 },
 ];
 
-/* ── NodeDot — opacity agganciata al progresso della linea (bidirezionale) ── */
+/* NodeDot — opacity agganciata al progresso dello scroll (composited) */
 function NodeDot({ cx, cy, frac, progress, reduce }) {
   const opacity = useTransform(progress, [frac - 0.02, frac + 0.04], [0, 1]);
   return (
     <motion.circle
-      cx={cx} cy={cy} r="8"
+      cx={cx} cy={cy} r="11"
       fill="var(--accent)"
       stroke="var(--bg)"
       strokeWidth="3"
@@ -60,10 +60,10 @@ function NodeDot({ cx, cy, frac, progress, reduce }) {
   );
 }
 
-/* ── StepCard — useInView per-card, compare e scompare con lo scroll ── */
+/* StepCard — compare e scompare bidirezionalmente con lo scroll */
 function StepCard({ passo, idx, reduce }) {
   const ref = useRef(null);
-  const visible = useInView(ref, { amount: 0.4 }); // once: false di default
+  const visible = useInView(ref, { amount: 0.4 });
   const isLeft = passo.side === 'left';
   const { icon: Icon, t, d } = passo;
   return (
@@ -90,24 +90,16 @@ function StepCard({ passo, idx, reduce }) {
   );
 }
 
-/* ── Metodo ── */
+/* Metodo */
 export default function Metodo() {
   const tlRef = useRef(null);
-  const measureRef = useRef(null);
   const reduce = useReducedMotion();
 
-  const [totalLen, setTotalLen] = useState(1500);
-  useEffect(() => {
-    if (measureRef.current) setTotalLen(measureRef.current.getTotalLength());
-  }, []);
-
-  /* la linea si riempie mentre .tl attraversa il centro dello schermo:
-     progress 0 = prima card al centro (linea vuota), progress 1 = ultima card al centro */
+  /* progress 0 = prima card al centro, 1 = ultima card al centro */
   const { scrollYProgress } = useScroll({
     target: tlRef,
     offset: ['start center', 'end center'],
   });
-  const dashOffset = useTransform(scrollYProgress, [0, 1], [totalLen, 0]);
 
   return (
     <Section id="metodo" grid>
@@ -122,9 +114,24 @@ export default function Metodo() {
 
       <div className="tl" ref={tlRef}>
         <div className="tl__track" aria-hidden="true">
-          <svg viewBox="0 0 200 1120" fill="none" className="tl__svg">
-            <path ref={measureRef} d={PATH_D} stroke="none" />
+          <svg viewBox="0 0 200 1120" fill="none" preserveAspectRatio="none" className="tl__svg">
+            <defs>
+              {/*
+                clipPath con rect animato via scaleY (CSS transform, GPU-composited).
+                transform-box:fill-box + transform-origin:top rivela il tracciato
+                dall'alto verso il basso man mano che si scrolla.
+                Nessun stroke-dashoffset: zero ricalcoli di lunghezza path.
+              */}
+              <clipPath id="metodo-line-clip">
+                <motion.rect
+                  x="0" y="0" width="200" height="1120"
+                  className="tl__clip-rect"
+                  style={reduce ? undefined : { scaleY: scrollYProgress }}
+                />
+              </clipPath>
+            </defs>
 
+            {/* traccia di sfondo sempre visibile */}
             <path
               d={PATH_D}
               stroke="var(--hairline-strong)"
@@ -132,13 +139,13 @@ export default function Metodo() {
               strokeLinecap="round"
             />
 
-            <motion.path
+            {/* traccia colorata rivelata dal clipPath */}
+            <path
               d={PATH_D}
               stroke="var(--accent)"
               strokeWidth="2.5"
               strokeLinecap="round"
-              strokeDasharray={totalLen}
-              style={reduce ? undefined : { strokeDashoffset: dashOffset }}
+              clipPath="url(#metodo-line-clip)"
             />
 
             {NODES.map((node, i) => (
