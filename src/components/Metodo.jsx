@@ -51,7 +51,7 @@ function NodeDot({ cx, cy, frac, progress, reduce }) {
   const opacity = useTransform(progress, [frac - 0.02, frac + 0.04], [0, 1]);
   return (
     <motion.circle
-      cx={cx} cy={cy} r="8"
+      cx={cx} cy={cy} r="11"
       fill="var(--accent)"
       stroke="var(--bg)"
       strokeWidth="3"
@@ -114,7 +114,7 @@ export default function Metodo() {
 
       <div className="tl" ref={tlRef}>
         <div className="tl__track" aria-hidden="true">
-          <svg viewBox="0 0 200 1120" fill="none" className="tl__svg">
+          <svg viewBox="0 0 200 1120" fill="none" preserveAspectRatio="none" className="tl__svg">
             <defs>
               {/*
                 clipPath con rect animato via scaleY (CSS transform, GPU-composited).
