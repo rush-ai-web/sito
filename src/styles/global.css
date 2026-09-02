@@ -464,7 +464,7 @@ main {
    ============================================================ */
 .cta-bulb {
   position: absolute;
-  width: clamp(280px, 50vw, 640px);
+  width: 90vw;
   aspect-ratio: 1;
   border-radius: 50%;
   bottom: clamp(-260px, -16vw, -60px);
