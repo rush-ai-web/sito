@@ -52,32 +52,28 @@ export default function Prezzi() {
           <span className="prezzi__edge" aria-hidden="true" />
 
           {/* toggle */}
-          <div className="prezzi-toggle-group">
-            <div className="prezzi-toggle">
-              {[
-                { id: false, label: 'Trimestrale' },
-                { id: true,  label: 'Annuale' },
-              ].map(({ id, label }) => (
-                <button
-                  key={String(id)}
-                  type="button"
-                  className={`prezzi-toggle__btn${yearly === id ? ' is-active' : ''}`}
-                  onClick={() => setYearly(id)}
-                >
-                  {yearly === id && (
-                    <motion.span
-                      layoutId="prezzi-pill"
-                      className="prezzi-toggle__pill"
-                      transition={{ type: 'spring', stiffness: 420, damping: 32 }}
-                    />
-                  )}
-                  <span className="prezzi-toggle__label">{label}</span>
-                </button>
-              ))}
-            </div>
-            <span className="prezzi-annual-hint">
-              Scegli annuale e risparmi il 13%
-            </span>
+          <div className="prezzi-toggle">
+            {[
+              { id: false, label: 'Trimestrale' },
+              { id: true,  label: 'Annuale', tag: '13% di sconto' },
+            ].map(({ id, label, tag }) => (
+              <button
+                key={String(id)}
+                type="button"
+                className={`prezzi-toggle__btn${yearly === id ? ' is-active' : ''}`}
+                onClick={() => setYearly(id)}
+              >
+                {tag && <span className="prezzi-toggle__tag">{tag}</span>}
+                {yearly === id && (
+                  <motion.span
+                    layoutId="prezzi-pill"
+                    className="prezzi-toggle__pill"
+                    transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                  />
+                )}
+                <span className="prezzi-toggle__label">{label}</span>
+              </button>
+            ))}
           </div>
 
           {/* prezzo */}

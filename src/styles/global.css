@@ -4640,8 +4640,8 @@ textarea.input {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 20px 22px !important;
+  gap: 8px !important;
+  padding: 16px 20px !important;
   /* sfondo invertito rispetto al tema */
   background: #1d1d1f !important;
   color: #f5f5f7;
@@ -4703,25 +4703,29 @@ textarea.input {
   color: var(--accent);
 }
 
-/* toggle group wrapper */
-.prezzi-toggle-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.prezzi-annual-hint {
-  font-size: 11px;
-  color: var(--accent);
-  margin: 0;
-  padding-left: 4px;
-  opacity: 0.85;
+/* pill tag above Annuale button */
+.prezzi-toggle__tag {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 5;
 }
 
 /* toggle inside inverted card */
 .prezzi2__card .prezzi-toggle {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.12);
+  margin-top: 14px; /* room for the floating .prezzi-toggle__tag */
 }
 
 :root[data-theme='dark'] .prezzi2__card .prezzi-toggle {
@@ -4795,6 +4799,11 @@ textarea.input {
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
   animation: prezziSpin 3.5s linear infinite;
+  /* glow visibile intorno all'arco */
+  filter:
+    drop-shadow(0 0 4px var(--accent))
+    drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 70%, transparent))
+    drop-shadow(0 0 20px color-mix(in srgb, var(--accent) 35%, transparent));
 }
 
 @keyframes prezziSpin {
