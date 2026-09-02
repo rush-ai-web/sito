@@ -11,7 +11,6 @@ import Metodo from './components/Metodo';
 import Ristorazione from './components/Ristorazione';
 import Confronto from './components/Confronto';
 import Prezzi from './components/Prezzi';
-import Principi from './components/Principi';
 import Faq from './components/Faq';
 import Cta from './components/Cta';
 import Footer from './components/Footer';
@@ -40,10 +39,9 @@ export default function App() {
           {/* Numeri: bulb accento a dx + neutro a sx */}
           <span className="glow bulb big accent r" style={{ top: '48%' }} />
           <span className="glow bulb black l" style={{ top: '52%' }} />
-          {/* Metodo (grid): onde concentriche d'accento molto tenui — un
-              motivo diverso dai bulb, che richiama la connessione */}
+          {/* Metodo (grid): onde concentriche d'accento molto tenui */}
           <span className="glow rings accent r" style={{ top: '58%' }} />
-          {/* Principi: bulb accento a dx + neutro a sx */}
+          {/* Confronto/Prezzi: bulb accento a dx + neutro a sx */}
           <span className="glow bulb big accent r" style={{ top: '73%' }} />
           <span className="glow bulb white l" style={{ top: '78%' }} />
           {/* FAQ: bulb neutro a destra */}
@@ -68,7 +66,6 @@ export default function App() {
         <Ristorazione />
         <Confronto />
         <Prezzi />
-        <Principi />
         <Faq />
         {/* scuro */}
         <Cta />
