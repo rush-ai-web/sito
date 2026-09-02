@@ -4506,17 +4506,19 @@ textarea.input {
   position: relative;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 9px 20px;
+  padding: 8px 16px;
   border: none;
   background: transparent;
   border-radius: 999px;
   cursor: pointer;
   color: var(--text-2);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: -0.01em;
   transition: color 0.18s;
+  min-width: 110px;
 }
 
 .prezzi-toggle__btn.is-active {
@@ -4626,16 +4628,149 @@ textarea.input {
 .prezzi2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 32px;
+  gap: 40px;
   align-items: start;
   max-width: 860px;
   margin: 0 auto;
 }
 
+/* Card invertita: sfondo bianco in dark, nero in light */
 .prezzi2__card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  /* sfondo invertito rispetto al tema */
+  background: #1d1d1f !important;
+  color: #f5f5f7;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  overflow: hidden;
+}
+
+:root[data-theme='dark'] .prezzi2__card {
+  background: #ffffff !important;
+  color: #1d1d1f;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* sovrascrive colori interni per il tema invertito */
+.prezzi2__card .prezzi-price__from,
+.prezzi2__card .prezzi-sub,
+.prezzi2__card .prezzi-price__unit,
+.prezzi2__card .prezzi2__variabile {
+  color: rgba(245, 245, 247, 0.55);
+}
+
+:root[data-theme='dark'] .prezzi2__card .prezzi-price__from,
+:root[data-theme='dark'] .prezzi2__card .prezzi-sub,
+:root[data-theme='dark'] .prezzi2__card .prezzi-price__unit,
+:root[data-theme='dark'] .prezzi2__card .prezzi2__variabile {
+  color: rgba(29, 29, 31, 0.5);
+}
+
+.prezzi2__card .prezzi-price__num {
+  color: #f5f5f7;
+}
+
+:root[data-theme='dark'] .prezzi2__card .prezzi-price__num {
+  color: #1d1d1f;
+}
+
+.prezzi2__card .prezzi-features li {
+  color: #f5f5f7;
+}
+
+:root[data-theme='dark'] .prezzi2__card .prezzi-features li {
+  color: #1d1d1f;
+}
+
+.prezzi2__card .prezzi-check {
+  background: rgba(91, 127, 224, 0.2);
+  color: #7a9ae8;
+}
+
+/* toggle inside inverted card */
+.prezzi2__card .prezzi-toggle {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+:root[data-theme='dark'] .prezzi2__card .prezzi-toggle {
+  background: rgba(0, 0, 0, 0.07);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.prezzi2__card .prezzi-toggle__btn {
+  color: rgba(245, 245, 247, 0.5);
+  flex: 1;
+  justify-content: center;
+}
+
+:root[data-theme='dark'] .prezzi2__card .prezzi-toggle__btn {
+  color: rgba(29, 29, 31, 0.45);
+}
+
+.prezzi2__card .prezzi-toggle__btn.is-active {
+  color: #f5f5f7;
+}
+
+:root[data-theme='dark'] .prezzi2__card .prezzi-toggle__btn.is-active {
+  color: #1d1d1f;
+}
+
+.prezzi2__card .prezzi-toggle__pill {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: none;
+}
+
+:root[data-theme='dark'] .prezzi2__card .prezzi-toggle__pill {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.prezzi2__card .prezzi-toggle__badge {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: #7a9ae8;
+}
+
+/* cursor-glow border — stessa logica di .buildcard__edge */
+.prezzi__edge {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 3;
+  padding: 1px;
+  opacity: 0;
+  transition: opacity var(--d-modal) var(--e-lift);
+  background: radial-gradient(
+    240px circle at var(--gx, 50%) var(--gy, 50%),
+    var(--accent) 0%,
+    color-mix(in srgb, var(--accent) 55%, transparent) 40%,
+    transparent 65%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.prezzi2__card:hover .prezzi__edge {
+  opacity: 1;
+}
+
+/* CTA button inside dark card */
+.prezzi2__card .btn--primary {
+  background: #f5f5f7;
+  color: #1d1d1f;
+  border-color: #f5f5f7;
+}
+
+:root[data-theme='dark'] .prezzi2__card .btn--primary {
+  background: #1d1d1f;
+  color: #f5f5f7;
+  border-color: #1d1d1f;
 }
 
 .prezzi2__price-block {
@@ -4647,44 +4782,69 @@ textarea.input {
 .prezzi2__info {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 28px;
   padding-top: 8px;
 }
 
-.prezzi2__info-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-2);
-}
-
+/* step con linea verticale continua */
 .prezzi2__steps {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0;
 }
 
 .prezzi2__step {
   display: flex;
-  gap: 14px;
+  gap: 16px;
   align-items: flex-start;
 }
 
-.prezzi2__step-n {
-  font-size: 11px;
+.prezzi2__step-track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 28px;
+}
+
+.prezzi2__step-dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   color: var(--accent);
-  min-width: 26px;
-  padding-top: 2px;
+  flex-shrink: 0;
+}
+
+.prezzi2__step-line {
+  width: 1px;
+  flex: 1;
+  min-height: 20px;
+  background: var(--hairline-strong);
+  margin: 6px 0;
+}
+
+.prezzi2__step-body {
+  padding-bottom: 24px;
+}
+
+.prezzi2__step:last-child .prezzi2__step-body {
+  padding-bottom: 0;
 }
 
 .prezzi2__step-t {
   font-size: 14px;
   font-weight: 600;
   color: var(--text);
-  margin: 0 0 2px;
+  margin: 4px 0 4px;
+  line-height: 1.3;
 }
 
 .prezzi2__step-d {
@@ -4697,11 +4857,10 @@ textarea.input {
 .prezzi2__note {
   font-size: 13px;
   color: var(--text-2);
-  line-height: 1.6;
-  padding: 14px 16px;
-  background: color-mix(in srgb, var(--surface) 60%, transparent);
-  border: 1px solid var(--hairline);
-  border-radius: var(--r-md, 10px);
+  line-height: 1.65;
+  margin: 0;
+  padding-left: 4px;
+  border-left: 2px solid var(--hairline-strong);
 }
 
 .prezzi2__variabile {

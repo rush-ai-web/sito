@@ -1,15 +1,13 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Banknote, Check } from 'lucide-react';
-import { Section, Head, Pill } from './ui';
+import { Section, Head } from './ui';
 import { EASE_MODAL } from '../lib/motion';
 
 const INCLUSO = [
   'Configurazione avanzata su misura per la tua attività',
-  'Importazione dei dati storici',
-  'Dashboard operativa in tempo reale',
+  'Dashboard operativa',
   'Formazione del team',
-  'Codice sorgente di tua proprietà',
 ];
 
 const COME_FUNZIONA = [
@@ -32,6 +30,15 @@ const COME_FUNZIONA = [
 
 export default function Prezzi() {
   const [yearly, setYearly] = useState(false);
+  const cardRef = useRef(null);
+
+  const onMove = (e) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--gx', `${e.clientX - r.left}px`);
+    el.style.setProperty('--gy', `${e.clientY - r.top}px`);
+  };
 
   return (
     <Section id="prezzi" large>
@@ -45,17 +52,21 @@ export default function Prezzi() {
       <div className="prezzi2">
         {/* colonna sinistra — prezzo */}
         <motion.div
-          className="prezzi-card prezzi-card--accent prezzi2__card"
+          ref={cardRef}
+          onPointerMove={onMove}
+          className="prezzi-card prezzi2__card"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, ease: EASE_MODAL }}
         >
+          <span className="prezzi__edge" aria-hidden="true" />
+
           {/* toggle */}
           <div className="prezzi-toggle">
             {[
               { id: false, label: 'Trimestrale' },
-              { id: true,  label: 'Annuale', badge: '−13%' },
+              { id: true,  label: 'Annuale', badge: 'risparmia 13%' },
             ].map(({ id, label, badge }) => (
               <button
                 key={String(id)}
@@ -72,7 +83,9 @@ export default function Prezzi() {
                 )}
                 <span className="prezzi-toggle__label">
                   {label}
-                  {badge && <span className="prezzi-toggle__badge">{badge}</span>}
+                  {badge && yearly === id && (
+                    <span className="prezzi-toggle__badge">{badge}</span>
+                  )}
                 </span>
               </button>
             ))}
@@ -130,12 +143,16 @@ export default function Prezzi() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, ease: EASE_MODAL, delay: 0.1 }}
         >
-          <p className="prezzi2__info-label">Come funziona</p>
           <div className="prezzi2__steps">
-            {COME_FUNZIONA.map(({ n, t, d }) => (
+            {COME_FUNZIONA.map(({ n, t, d }, i) => (
               <div key={n} className="prezzi2__step">
-                <span className="prezzi2__step-n">{n}</span>
-                <div>
+                <div className="prezzi2__step-track">
+                  <span className="prezzi2__step-dot">{n}</span>
+                  {i < COME_FUNZIONA.length - 1 && (
+                    <span className="prezzi2__step-line" aria-hidden="true" />
+                  )}
+                </div>
+                <div className="prezzi2__step-body">
                   <p className="prezzi2__step-t">{t}</p>
                   <p className="prezzi2__step-d">{d}</p>
                 </div>
@@ -143,9 +160,9 @@ export default function Prezzi() {
             ))}
           </div>
 
-          <div className="prezzi2__note">
-            Il canone include una configurazione avanzata costruita sui tuoi processi reali — non un template generico. Moduli aggiuntivi, integrazioni e funzionalità AI sono disponibili su preventivo.
-          </div>
+          <p className="prezzi2__note">
+            Il canone include una configurazione avanzata costruita sui tuoi processi reali, non un template generico. Moduli aggiuntivi, integrazioni e funzionalità AI sono disponibili su preventivo.
+          </p>
         </motion.div>
       </div>
     </Section>
