@@ -4215,3 +4215,142 @@ textarea.input {
     font-size: 13px;
   }
 }
+
+/* ============================================================
+   Metodo — timeline SVG con clipPath
+   ============================================================ */
+
+/* il rect nel clipPath scala verso il basso con scaleY (GPU-composited) */
+.tl__clip-rect {
+  transform-box: fill-box;
+  transform-origin: top center;
+}
+
+/* bulb bianco/nero agganciato alla sezione metodo */
+.metodo-bulb {
+  position: absolute;
+  width: 70vw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  left: -38vw;
+  top: 68%;
+  transform: translateY(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--text) 22%, transparent),
+    transparent 72%
+  );
+}
+
+/* griglia estesa fino in fondo nella sezione metodo */
+#metodo.fx-grid::before {
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 18%, #000 78%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 18%, #000 78%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
+}
+
+/* griglia a tre colonne: left-card | svelte centrale | right-card */
+.tl {
+  display: grid;
+  grid-template-columns: 1fr 160px 1fr;
+  position: relative;
+  margin-top: var(--s-sec);
+}
+
+.tl__track {
+  grid-column: 2;
+  grid-row: 1 / 5;
+  position: relative;
+}
+
+.tl__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tl-item {
+  height: 280px;
+  padding-block: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+}
+
+.tl-item--left {
+  grid-column: 1;
+  padding-right: 48px;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.tl-item--right {
+  grid-column: 3;
+  padding-left: 48px;
+}
+
+.tl-item__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tl-item--left .tl-item__header {
+  flex-direction: row-reverse;
+}
+
+.tl-item__t {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.tl-item__d {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-2);
+  margin: 0;
+  max-width: 320px;
+}
+
+.tl-item--left .tl-item__d {
+  margin-left: auto;
+}
+
+/* mobile: colonna singola a destra, traccia a sinistra */
+@media (max-width: 680px) {
+  .tl {
+    grid-template-columns: 60px 1fr;
+  }
+
+  .tl__track {
+    grid-column: 1;
+  }
+
+  .tl-item--left,
+  .tl-item--right {
+    grid-column: 2;
+    padding-left: 20px;
+    padding-right: 0;
+    align-items: flex-start;
+    text-align: left;
+    height: auto;
+    min-height: 200px;
+  }
+
+  .tl-item--left .tl-item__header {
+    flex-direction: row;
+  }
+
+  .tl-item--left .tl-item__d {
+    margin-left: 0;
+  }
+}

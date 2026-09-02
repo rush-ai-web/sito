@@ -1,60 +1,168 @@
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, useInView, useReducedMotion } from 'framer-motion';
 import { GitBranch, Search, PenTool, Rocket, RefreshCw } from 'lucide-react';
-import { Section, Head, Group, Item, IconTile, Pill } from './ui';
+import { Section, Head } from './ui';
 
 const PASSI = [
   {
-    n: 'Passo 01',
     icon: Search,
     t: 'Analisi sul campo',
     d: 'Veniamo a vedere come lavori davvero: chi fa cosa, dove si perde tempo, quali dati esistono già e dove sono fermi.',
+    side: 'left',
   },
   {
-    n: 'Passo 02',
     icon: PenTool,
     t: 'Progetto e prototipo',
     d: 'Disegniamo il sistema e ti mostriamo le schermate vere prima di scrivere il codice definitivo. Si corregge lì, non dopo.',
+    side: 'right',
   },
   {
-    n: 'Passo 03',
     icon: Rocket,
     t: 'Sviluppo e messa in linea',
     d: 'Costruiamo, importiamo i tuoi dati storici, colleghiamo i sistemi esistenti e formiamo chi lo userà ogni giorno.',
+    side: 'left',
   },
   {
-    n: 'Passo 04',
     icon: RefreshCw,
     t: 'Evoluzione continua',
     d: "L'azienda cambia e il gestionale la segue: nuovi moduli, nuove automazioni, nuove integrazioni quando servono.",
+    side: 'right',
   },
 ];
 
+const PATH_D = [
+  'M 100 0',
+  'C 100 45 20 95 20 140',
+  'C 4 230 196 330 180 420',
+  'C 196 510 4 610 20 700',
+  'C 4 790 196 890 180 980',
+  'C 196 1065 100 1095 100 1120',
+].join(' ');
+
+const NODES = [
+  { cx: 20,  cy: 140,  frac: 0.125 },
+  { cx: 180, cy: 420,  frac: 0.375 },
+  { cx: 20,  cy: 700,  frac: 0.625 },
+  { cx: 180, cy: 980,  frac: 0.875 },
+];
+
+/* NodeDot — opacity agganciata al progresso dello scroll (composited) */
+function NodeDot({ cx, cy, frac, progress, reduce }) {
+  const opacity = useTransform(progress, [frac - 0.02, frac + 0.04], [0, 1]);
+  return (
+    <motion.circle
+      cx={cx} cy={cy} r="8"
+      fill="var(--accent)"
+      stroke="var(--bg)"
+      strokeWidth="3"
+      style={reduce ? undefined : { opacity }}
+    />
+  );
+}
+
+/* StepCard — compare e scompare bidirezionalmente con lo scroll */
+function StepCard({ passo, idx, reduce }) {
+  const ref = useRef(null);
+  const visible = useInView(ref, { amount: 0.4 });
+  const isLeft = passo.side === 'left';
+  const { icon: Icon, t, d } = passo;
+  return (
+    <motion.div
+      ref={ref}
+      className={`tl-item tl-item--${passo.side}`}
+      style={{ gridRow: idx + 1 }}
+      initial={false}
+      animate={
+        reduce
+          ? {}
+          : { opacity: visible ? 1 : 0, x: visible ? 0 : isLeft ? -24 : 24 }
+      }
+      transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+    >
+      <div className="tl-item__header">
+        <span className="icon-tile icon-tile--sm">
+          <Icon size={17} strokeWidth={1.75} />
+        </span>
+        <h3 className="tl-item__t">{t}</h3>
+      </div>
+      <p className="tl-item__d">{d}</p>
+    </motion.div>
+  );
+}
+
+/* Metodo */
 export default function Metodo() {
+  const tlRef = useRef(null);
+  const reduce = useReducedMotion();
+
+  /* progress 0 = prima card al centro, 1 = ultima card al centro */
+  const { scrollYProgress } = useScroll({
+    target: tlRef,
+    offset: ['start center', 'end center'],
+  });
+
   return (
     <Section id="metodo" grid>
+      <span aria-hidden="true" className="metodo-bulb" />
+
       <Head
         icon={GitBranch}
         label="Come lavoriamo"
-        title={
-          <>
-            Dal primo incontro alla produzione in otto settimane
-          </>
-        }
+        title="Dal primo incontro alla produzione in otto settimane"
         sub="Niente capitolati da trecento pagine. Si parte da un modulo che risolve il problema più caro, e da lì si cresce."
       />
 
-      <Group className="steps" each={0.1}>
-        {PASSI.map(({ n, icon, t, d }) => (
-          <Item key={n} className="step">
-            <Pill>{n}</Pill>
-            <div className="step__line shimmer" />
-            <IconTile icon={icon} size="sm" ghost />
-            <h3 className="t-card" style={{ margin: '18px 0 10px' }}>
-              {t}
-            </h3>
-            <p className="t-small">{d}</p>
-          </Item>
+      <div className="tl" ref={tlRef}>
+        <div className="tl__track" aria-hidden="true">
+          <svg viewBox="0 0 200 1120" fill="none" className="tl__svg">
+            <defs>
+              {/*
+                clipPath con rect animato via scaleY (CSS transform, GPU-composited).
+                transform-box:fill-box + transform-origin:top rivela il tracciato
+                dall'alto verso il basso man mano che si scrolla.
+                Nessun stroke-dashoffset: zero ricalcoli di lunghezza path.
+              */}
+              <clipPath id="metodo-line-clip">
+                <motion.rect
+                  x="0" y="0" width="200" height="1120"
+                  className="tl__clip-rect"
+                  style={reduce ? undefined : { scaleY: scrollYProgress }}
+                />
+              </clipPath>
+            </defs>
+
+            {/* traccia di sfondo sempre visibile */}
+            <path
+              d={PATH_D}
+              stroke="var(--hairline-strong)"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+
+            {/* traccia colorata rivelata dal clipPath */}
+            <path
+              d={PATH_D}
+              stroke="var(--accent)"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              clipPath="url(#metodo-line-clip)"
+            />
+
+            {NODES.map((node, i) => (
+              <NodeDot
+                key={i}
+                {...node}
+                progress={scrollYProgress}
+                reduce={reduce}
+              />
+            ))}
+          </svg>
+        </div>
+
+        {PASSI.map((passo, i) => (
+          <StepCard key={i} passo={passo} idx={i} reduce={reduce} />
         ))}
-      </Group>
+      </div>
     </Section>
   );
 }
