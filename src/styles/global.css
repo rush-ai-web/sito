@@ -4635,24 +4635,107 @@ textarea.input {
   margin: 0 auto;
 }
 
+/* ---- cornice con bordo animato + glow ---- */
+@property --prezzi-angle {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
+}
+
+.prezzi2__frame {
+  position: relative;
+  border-radius: 20px;
+  padding: 2px; /* spessore uniforme del bordo */
+  background: conic-gradient(
+    from var(--prezzi-angle),
+    color-mix(in srgb, var(--accent) 10%, transparent) 0deg,
+    color-mix(in srgb, var(--accent) 10%, transparent) 150deg,
+    color-mix(in srgb, var(--accent) 40%, transparent) 205deg,
+    var(--accent) 252deg,
+    #cbdcff 274deg,
+    var(--accent) 296deg,
+    color-mix(in srgb, var(--accent) 35%, transparent) 336deg,
+    color-mix(in srgb, var(--accent) 10%, transparent) 360deg
+  );
+  animation: prezziSpin 4s linear infinite;
+  isolation: isolate;
+}
+
+/* alone luminoso sincronizzato (eredita --prezzi-angle) */
+.prezzi2__frame-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--prezzi-angle),
+    transparent 0deg,
+    transparent 200deg,
+    color-mix(in srgb, var(--accent) 55%, transparent) 250deg,
+    var(--accent) 274deg,
+    color-mix(in srgb, var(--accent) 55%, transparent) 298deg,
+    transparent 348deg,
+    transparent 360deg
+  );
+  filter: blur(13px);
+  opacity: 0.75;
+}
+
+@keyframes prezziSpin {
+  to { --prezzi-angle: 360deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prezzi2__frame { animation: none; }
+}
+
 /* Card invertita: sfondo bianco in dark, nero in light */
 .prezzi2__card {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 8px !important;
-  padding: 16px 20px !important;
-  /* sfondo invertito rispetto al tema */
-  background: #1d1d1f !important;
+  padding: 26px 24px 22px;
+  border-radius: 18px;
+  background: #1d1d1f;
   color: #f5f5f7;
-  border: none !important;
-  box-shadow: 0 0 0 0 transparent;
-  /* NO overflow:hidden — il bordo animato è fuori dalla card */
 }
 
 :root[data-theme='dark'] .prezzi2__card {
-  background: #ffffff !important;
+  background: #ffffff;
   color: #1d1d1f;
+}
+
+/* divisore interno */
+.prezzi2__divider {
+  height: 1px;
+  margin: 20px 0;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+:root[data-theme='dark'] .prezzi2__divider {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* ritmo verticale esplicito */
+.prezzi2__card .prezzi-toggle {
+  margin-top: 4px;
+}
+
+.prezzi2__card .prezzi2__price-block {
+  margin-top: 22px;
+}
+
+.prezzi2__card .prezzi-features {
+  margin: 0;
+}
+
+.prezzi2__card .prezzi2__variabile {
+  margin-top: 16px;
+}
+
+.prezzi2__card .prezzi-cta {
+  margin-top: 22px;
 }
 
 /* sovrascrive colori interni per il tema invertito */
@@ -4725,7 +4808,6 @@ textarea.input {
 .prezzi2__card .prezzi-toggle {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.12);
-  margin-top: 14px; /* room for the floating .prezzi-toggle__tag */
 }
 
 :root[data-theme='dark'] .prezzi2__card .prezzi-toggle {
@@ -4765,49 +4847,6 @@ textarea.input {
 .prezzi2__card .prezzi-toggle__badge {
   background: color-mix(in srgb, var(--accent) 22%, transparent);
   color: #7a9ae8;
-}
-
-/* bordo che gira in loop — 2px FUORI dalla card, @property conic */
-@property --prezzi-angle {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
-}
-
-.prezzi__edge {
-  position: absolute;
-  /* -2px: si estende 2px oltre i bordi della card */
-  inset: -2px;
-  border-radius: calc(var(--r-card) + 2px);
-  pointer-events: none;
-  z-index: 4;
-  /* padding = larghezza del bordo visibile */
-  padding: 2px;
-  background: conic-gradient(
-    from var(--prezzi-angle),
-    transparent 0%,
-    transparent 48%,
-    color-mix(in srgb, var(--accent) 45%, transparent) 62%,
-    var(--accent) 75%,
-    #a8c0ff 80%,
-    var(--accent) 85%,
-    color-mix(in srgb, var(--accent) 25%, transparent) 94%,
-    transparent 100%
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  animation: prezziSpin 3.5s linear infinite;
-  /* glow visibile intorno all'arco */
-  filter:
-    drop-shadow(0 0 4px var(--accent))
-    drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 70%, transparent))
-    drop-shadow(0 0 20px color-mix(in srgb, var(--accent) 35%, transparent));
-}
-
-@keyframes prezziSpin {
-  to { --prezzi-angle: 360deg; }
 }
 
 /* CTA button inside dark card */

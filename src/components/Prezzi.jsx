@@ -41,85 +41,88 @@ export default function Prezzi() {
       />
 
       <div className="prezzi2">
-        {/* colonna sinistra — prezzo */}
+        {/* colonna sinistra — prezzo, dentro una cornice animata */}
         <motion.div
-          className="prezzi-card prezzi2__card"
+          className="prezzi2__frame"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, ease: EASE_MODAL }}
         >
-          <span className="prezzi__edge" aria-hidden="true" />
-
-          {/* toggle */}
-          <div className="prezzi-toggle">
-            {[
-              { id: false, label: 'Trimestrale' },
-              { id: true,  label: 'Annuale', tag: '13% di sconto' },
-            ].map(({ id, label, tag }) => (
-              <button
-                key={String(id)}
-                type="button"
-                className={`prezzi-toggle__btn${yearly === id ? ' is-active' : ''}`}
-                onClick={() => setYearly(id)}
-              >
-                {tag && <span className="prezzi-toggle__tag">{tag}</span>}
-                {yearly === id && (
-                  <motion.span
-                    layoutId="prezzi-pill"
-                    className="prezzi-toggle__pill"
-                    transition={{ type: 'spring', stiffness: 420, damping: 32 }}
-                  />
-                )}
-                <span className="prezzi-toggle__label">{label}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* prezzo */}
-          <div className="prezzi2__price-block">
-            <span className="prezzi-price__from">a partire da</span>
-            <div className="prezzi-price" style={{ alignItems: 'flex-end', gap: 4 }}>
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={yearly ? 'y' : 'm'}
-                  className="prezzi-price__num prezzi-price__num--lg"
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  transition={{ duration: 0.2, ease: EASE_MODAL }}
+          <span className="prezzi2__frame-glow" aria-hidden="true" />
+          <div className="prezzi2__card">
+            {/* toggle */}
+            <div className="prezzi-toggle">
+              {[
+                { id: false, label: 'Trimestrale' },
+                { id: true,  label: 'Annuale', tag: '13% di sconto' },
+              ].map(({ id, label, tag }) => (
+                <button
+                  key={String(id)}
+                  type="button"
+                  className={`prezzi-toggle__btn${yearly === id ? ' is-active' : ''}`}
+                  onClick={() => setYearly(id)}
                 >
-                  {yearly ? '259' : '299'}
-                </motion.span>
-              </AnimatePresence>
-              <span className="prezzi-price__unit">€ / mese</span>
+                  {tag && <span className="prezzi-toggle__tag">{tag}</span>}
+                  {yearly === id && (
+                    <motion.span
+                      layoutId="prezzi-pill"
+                      className="prezzi-toggle__pill"
+                      transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                    />
+                  )}
+                  <span className="prezzi-toggle__label">{label}</span>
+                </button>
+              ))}
             </div>
-            <p className="prezzi-sub">
-              {yearly
-                ? 'fatturato annualmente · minimo 12 mesi'
-                : 'fatturato ogni 3 mesi'}
+
+            {/* prezzo */}
+            <div className="prezzi2__price-block">
+              <span className="prezzi-price__from">a partire da</span>
+              <div className="prezzi-price" style={{ alignItems: 'flex-end', gap: 4 }}>
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={yearly ? 'y' : 'm'}
+                    className="prezzi-price__num prezzi-price__num--lg"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    transition={{ duration: 0.2, ease: EASE_MODAL }}
+                  >
+                    {yearly ? '259' : '299'}
+                  </motion.span>
+                </AnimatePresence>
+                <span className="prezzi-price__unit">€ / mese</span>
+              </div>
+              <p className="prezzi-sub">
+                {yearly
+                  ? 'fatturato annualmente · minimo 12 mesi'
+                  : 'fatturato ogni 3 mesi'}
+              </p>
+            </div>
+
+            <span className="prezzi2__divider" aria-hidden="true" />
+
+            {/* incluso */}
+            <ul className="prezzi-features">
+              {INCLUSO.map(({ Icon, label }) => (
+                <li key={label}>
+                  <span className="prezzi-feat-ic">
+                    <Icon size={14} strokeWidth={1.9} />
+                  </span>
+                  {label}
+                </li>
+              ))}
+            </ul>
+
+            <p className="prezzi2__variabile">
+              Il prezzo varia in base alla complessità e ai moduli scelti.
             </p>
+
+            <a href="#contatti" className="btn btn--primary prezzi-cta">
+              Parliamone
+            </a>
           </div>
-
-          {/* incluso */}
-          <ul className="prezzi-features">
-            {INCLUSO.map(({ Icon, label }) => (
-              <li key={label}>
-                <span className="prezzi-feat-ic">
-                  <Icon size={14} strokeWidth={1.9} />
-                </span>
-                {label}
-              </li>
-            ))}
-          </ul>
-
-          <p className="prezzi2__variabile">
-            Il prezzo varia in base alla complessità e ai moduli scelti.
-          </p>
-
-          <a href="#contatti" className="btn btn--primary prezzi-cta" style={{ marginTop: 'auto' }}>
-            Parliamone
-          </a>
         </motion.div>
 
         {/* colonna destra — come funziona */}
