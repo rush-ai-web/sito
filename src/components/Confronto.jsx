@@ -3,24 +3,64 @@ import { motion } from 'framer-motion';
 import { Section, Head } from './ui';
 import { inView } from '../lib/motion';
 
-// true = ✓, false = ✗, 'partial' = ~
+/* Righe: focus su ciò che distingue Rush davvero.
+   vals[0] = Rush, [1] = SaaS, [2] = Software house grande, [3] = Freelance
+   true = ✓ (verde), false = ✗ (rosso), 'partial' = ~ (grigio) */
 const RIGHE = [
-  { label: 'Software fatto su misura',         vals: [true,     false,    true,     false]   },
-  { label: 'Consegnato in 8 settimane',        vals: [true,     false,    false,    'partial'] },
-  { label: 'Nessuna licenza mensile',          vals: [true,     false,    true,     true]    },
-  { label: 'Preventivo a cifra fissa',         vals: [true,     true,     false,    false]   },
-  { label: 'Parli con chi sviluppa',           vals: [true,     false,    false,    true]    },
-  { label: 'Team strutturato dietro',          vals: [true,     true,     true,     false]   },
-  { label: 'Modifiche senza ticket a terzi',   vals: [true,     false,    false,    true]    },
-  { label: 'Dati esportabili in qualsiasi momento', vals: [true, 'partial', true,   true]    },
+  {
+    label: 'Supporto diretto con chi sviluppa',
+    vals: [true, false, false, true],
+  },
+  {
+    label: 'Software flessibile, adattato ai tuoi processi',
+    vals: [true, false, 'partial', 'partial'],
+  },
+  {
+    label: 'Nessun costo di licenza mensile',
+    vals: [true, false, true, true],
+  },
+  {
+    label: 'Preventivo a cifra fissa, niente sorprese',
+    vals: [true, 'partial', false, false],
+  },
+  {
+    label: 'Autonomia: dati e codice sono tuoi',
+    vals: [true, false, 'partial', true],
+  },
+  {
+    label: 'Delivery in massimo 8 settimane',
+    vals: [true, true, false, 'partial'],
+  },
+  {
+    label: 'Modifiche senza ticket a terzi',
+    vals: [true, false, false, true],
+  },
+  {
+    label: 'Team strutturato e continuità nel tempo',
+    vals: [true, true, true, false],
+  },
 ];
 
-const COLS = ['Rush', 'SaaS verticale', 'Software house', 'Freelance'];
+const COLS = [null, 'SaaS verticale', 'Software house grande', 'Freelance'];
 
 function Cell({ val, isRush }) {
-  if (val === true)    return <span className={`cf-icon cf-icon--yes${isRush ? ' cf-icon--rush' : ''}`}><Check size={15} strokeWidth={2.5} /></span>;
-  if (val === false)   return <span className="cf-icon cf-icon--no"><X size={15} strokeWidth={2.5} /></span>;
-  return                      <span className="cf-icon cf-icon--partial"><Minus size={15} strokeWidth={2.5} /></span>;
+  if (val === true)
+    return (
+      <span className={`cf-icon cf-icon--yes${isRush ? ' cf-icon--rush' : ''}`}>
+        <Check size={16} strokeWidth={2.6} />
+      </span>
+    );
+  if (val === false)
+    return (
+      <span className="cf-icon cf-icon--no">
+        <X size={16} strokeWidth={2.6} />
+      </span>
+    );
+  return (
+    <span className="cf-icon cf-icon--partial">
+      <Minus size={16} strokeWidth={2.6} />
+    </span>
+  );
 }
 
 export default function Confronto() {
@@ -30,7 +70,7 @@ export default function Confronto() {
         icon={Scale}
         label="Perché noi"
         title="Quello che trovi qui non lo trovi altrove"
-        sub="Software su misura in otto settimane, a cifra fissa, con chi lo sviluppa reperibile direttamente. Metti a confronto."
+        sub="Supporto diretto, software flessibile, costi certi, autonomia. Metti a confronto."
       />
 
       <motion.div
@@ -45,10 +85,23 @@ export default function Confronto() {
             <thead>
               <tr>
                 <th className="cf-th cf-th--feature" />
-                {COLS.map((col, i) => (
-                  <th key={col} className={`cf-th${i === 0 ? ' cf-th--rush' : ''}`}>
-                    {i === 0 && <span className="cf-rush-badge">Rush</span>}
-                    {i !== 0 && col}
+                <th className="cf-th cf-th--rush">
+                  <span className="cf-rush-logo">
+                    <img
+                      src="./rush-logo.png"
+                      alt="Rush"
+                      className="cf-rush-logo__img cf-rush-logo__img--l"
+                    />
+                    <img
+                      src="./rush-logo-dark.png"
+                      alt="Rush"
+                      className="cf-rush-logo__img cf-rush-logo__img--d"
+                    />
+                  </span>
+                </th>
+                {COLS.slice(1).map((col) => (
+                  <th key={col} className="cf-th">
+                    {col}
                   </th>
                 ))}
               </tr>
@@ -58,7 +111,10 @@ export default function Confronto() {
                 <tr key={label} className="cf-row">
                   <td className="cf-td cf-td--label">{label}</td>
                   {vals.map((val, i) => (
-                    <td key={i} className={`cf-td cf-td--cell${i === 0 ? ' cf-td--rush' : ''}`}>
+                    <td
+                      key={i}
+                      className={`cf-td cf-td--cell${i === 0 ? ' cf-td--rush' : ''}`}
+                    >
                       <Cell val={val} isRush={i === 0} />
                     </td>
                   ))}
