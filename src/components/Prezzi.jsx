@@ -1,13 +1,13 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Banknote, Check } from 'lucide-react';
+import { Banknote, SlidersHorizontal, Monitor, Users } from 'lucide-react';
 import { Section, Head } from './ui';
 import { EASE_MODAL } from '../lib/motion';
 
 const INCLUSO = [
-  'Configurazione avanzata su misura per la tua attività',
-  'Dashboard operativa',
-  'Formazione del team',
+  { Icon: SlidersHorizontal, label: 'Configurazione avanzata su misura per la tua attività' },
+  { Icon: Monitor,           label: 'Dashboard operativa' },
+  { Icon: Users,             label: 'Formazione del team' },
 ];
 
 const COME_FUNZIONA = [
@@ -30,15 +30,6 @@ const COME_FUNZIONA = [
 
 export default function Prezzi() {
   const [yearly, setYearly] = useState(false);
-  const cardRef = useRef(null);
-
-  const onMove = (e) => {
-    const el = cardRef.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--gx', `${e.clientX - r.left}px`);
-    el.style.setProperty('--gy', `${e.clientY - r.top}px`);
-  };
 
   return (
     <Section id="prezzi" large>
@@ -52,8 +43,6 @@ export default function Prezzi() {
       <div className="prezzi2">
         {/* colonna sinistra — prezzo */}
         <motion.div
-          ref={cardRef}
-          onPointerMove={onMove}
           className="prezzi-card prezzi2__card"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -83,9 +72,7 @@ export default function Prezzi() {
                 )}
                 <span className="prezzi-toggle__label">
                   {label}
-                  {badge && yearly === id && (
-                    <span className="prezzi-toggle__badge">{badge}</span>
-                  )}
+                  {badge && <span className="prezzi-toggle__badge">{badge}</span>}
                 </span>
               </button>
             ))}
@@ -117,11 +104,13 @@ export default function Prezzi() {
           </div>
 
           {/* incluso */}
-          <ul className="prezzi-features" style={{ marginTop: 4 }}>
-            {INCLUSO.map((f) => (
-              <li key={f}>
-                <span className="prezzi-check"><Check size={13} strokeWidth={2.5} /></span>
-                {f}
+          <ul className="prezzi-features">
+            {INCLUSO.map(({ Icon, label }) => (
+              <li key={label}>
+                <span className="prezzi-feat-ic">
+                  <Icon size={14} strokeWidth={1.9} />
+                </span>
+                {label}
               </li>
             ))}
           </ul>
