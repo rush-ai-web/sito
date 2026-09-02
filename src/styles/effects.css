@@ -338,7 +338,7 @@
   padding: 18px 20px;
   border-radius: var(--r-card);
   border: 1px solid var(--hairline);
-  background: transparent;
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
   color: inherit;
   cursor: pointer;
   transition: background var(--d-pop) var(--e-lift), border-color var(--d-pop) var(--e-lift),
