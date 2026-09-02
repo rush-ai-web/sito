@@ -509,13 +509,15 @@ main {
   width: 90vw;
   aspect-ratio: 1;
   border-radius: 50%;
-  bottom: clamp(-260px, -16vw, -60px);
+  /* centro del bulb ancorato all'angolo basso-laterale della sezione:
+     -45vw = metà del width, così il centro cade sul vertice. */
+  bottom: -45vw;
   pointer-events: none;
   z-index: 0;
   animation: bulbDrift 56s ease-in-out infinite;
 }
 .cta-bulb--l {
-  left: clamp(-310px, -28vw, -60px);
+  left: -45vw;
   background: radial-gradient(
     closest-side,
     color-mix(in srgb, var(--accent) 78%, transparent),
@@ -523,7 +525,7 @@ main {
   );
 }
 .cta-bulb--r {
-  right: clamp(-310px, -28vw, -60px);
+  right: -45vw;
   background: radial-gradient(
     closest-side,
     color-mix(in srgb, var(--text) 54%, transparent),
@@ -4490,12 +4492,6 @@ textarea.input {
 /* ============================================================
    Metodo — timeline SVG con clipPath
    ============================================================ */
-
-/* il rect nel clipPath scala verso il basso con scaleY (GPU-composited) */
-.tl__clip-rect {
-  transform-box: fill-box;
-  transform-origin: top center;
-}
 
 /* bulb bianco/nero agganciato alla sezione metodo */
 .metodo-bulb {

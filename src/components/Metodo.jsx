@@ -30,20 +30,22 @@ const PASSI = [
   },
 ];
 
+/* viewBox 160×1120 = stesso aspect ratio del container (160px × 1120px)
+   → nessun letterboxing e i cerchi restano rotondi (scala uniforme). */
 const PATH_D = [
-  'M 100 0',
-  'C 100 45 20 95 20 140',
-  'C 4 230 196 330 180 420',
-  'C 196 510 4 610 20 700',
-  'C 4 790 196 890 180 980',
-  'C 196 1065 100 1095 100 1120',
+  'M 80 0',
+  'C 80 45 16 95 16 140',
+  'C 3 230 157 330 144 420',
+  'C 157 510 3 610 16 700',
+  'C 3 790 157 890 144 980',
+  'C 157 1065 80 1095 80 1120',
 ].join(' ');
 
 const NODES = [
-  { cx: 20,  cy: 140,  frac: 0.125 },
-  { cx: 180, cy: 420,  frac: 0.375 },
-  { cx: 20,  cy: 700,  frac: 0.625 },
-  { cx: 180, cy: 980,  frac: 0.875 },
+  { cx: 16,  cy: 140,  frac: 0.125 },
+  { cx: 144, cy: 420,  frac: 0.375 },
+  { cx: 16,  cy: 700,  frac: 0.625 },
+  { cx: 144, cy: 980,  frac: 0.875 },
 ];
 
 /* NodeDot — opacity agganciata al progresso dello scroll (composited) */
@@ -51,7 +53,7 @@ function NodeDot({ cx, cy, frac, progress, reduce }) {
   const opacity = useTransform(progress, [frac - 0.02, frac + 0.04], [0, 1]);
   return (
     <motion.circle
-      cx={cx} cy={cy} r="11"
+      cx={cx} cy={cy} r="9"
       fill="var(--accent)"
       stroke="var(--bg)"
       strokeWidth="3"
@@ -95,11 +97,15 @@ export default function Metodo() {
   const tlRef = useRef(null);
   const reduce = useReducedMotion();
 
-  /* progress 0 = prima card al centro, 1 = ultima card al centro */
+  /* progress 0 = start di tlRef al centro del viewport, 1 = end di tlRef al centro */
   const { scrollYProgress } = useScroll({
     target: tlRef,
     offset: ['start center', 'end center'],
   });
+
+  /* animiamo l'attributo height del rect (SVG-native, sempre affidabile,
+     nessun problema di transform-origin o preserveAspectRatio) */
+  const rectHeight = useTransform(scrollYProgress, [0, 1], [0, 1120]);
 
   return (
     <Section id="metodo" grid>
@@ -114,19 +120,19 @@ export default function Metodo() {
 
       <div className="tl" ref={tlRef}>
         <div className="tl__track" aria-hidden="true">
-          <svg viewBox="0 0 200 1120" fill="none" preserveAspectRatio="none" className="tl__svg">
+          <svg viewBox="0 0 160 1120" fill="none" className="tl__svg">
             <defs>
               {/*
-                clipPath con rect animato via scaleY (CSS transform, GPU-composited).
-                transform-box:fill-box + transform-origin:top rivela il tracciato
-                dall'alto verso il basso man mano che si scrolla.
-                Nessun stroke-dashoffset: zero ricalcoli di lunghezza path.
+                Il colored path è rivelato progressivamente da un clipPath
+                che contiene un rect la cui height cresce dallo 0 a 1120 in
+                base allo scroll. Height è un attributo SVG nativo: nessun
+                stroke-dashoffset (evita ricalcoli lungo il path) e nessun
+                transform CSS (evita ambiguità di transform-origin sui rect).
               */}
               <clipPath id="metodo-line-clip">
                 <motion.rect
-                  x="0" y="0" width="200" height="1120"
-                  className="tl__clip-rect"
-                  style={reduce ? undefined : { scaleY: scrollYProgress }}
+                  x="0" y="0" width="160"
+                  height={reduce ? 1120 : rectHeight}
                 />
               </clipPath>
             </defs>
