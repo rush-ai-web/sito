@@ -1,58 +1,29 @@
-import { Banknote, Check } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { Section, Head, Group, Item } from './ui';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Banknote, Check, ArrowRight } from 'lucide-react';
+import { Section, Head, Pill } from './ui';
+import { EASE_MODAL } from '../lib/motion';
 
-const PIANI = [
-  {
-    label: 'MVP',
-    price: '9.000',
-    unit: '€',
-    sub: 'progetto una tantum',
-    desc: 'Un modulo — il più critico — funzionante in otto settimane, con i tuoi dati veri dentro.',
-    features: [
-      'Un modulo su misura',
-      'Importazione dati storici',
-      'Formazione del team',
-      'Codice sorgente tuo',
-    ],
-    cta: 'Parliamone',
-    accent: false,
-  },
-  {
-    label: 'Sistema completo',
-    price: 'da 22.000',
-    unit: '€',
-    sub: 'progetto una tantum',
-    desc: 'Più moduli collegati, automazioni, dashboard e integrazioni con i sistemi che già usi.',
-    features: [
-      'Moduli illimitati',
-      'Automazioni e notifiche',
-      'Dashboard in tempo reale',
-      'Integrazioni con sistemi esistenti',
-      'Importazione dati storici',
-      'Formazione del team',
-    ],
-    cta: 'Parliamone',
-    accent: true,
-  },
-  {
-    label: 'Evoluzione',
-    price: '600',
-    unit: '€/mese',
-    sub: 'canone mensile',
-    desc: 'Il sistema cresce con l\'azienda: nuovi moduli, correzioni e aggiornamenti quando servono.',
-    features: [
-      'Nuovi moduli su richiesta',
-      'Supporto prioritario',
-      'Aggiornamenti inclusi',
-      'Hosting e backup',
-    ],
-    cta: 'Inizia dal progetto',
-    accent: false,
-  },
+const FEATURES = [
+  'Configurazione su misura per il tuo settore e flusso di lavoro',
+  'Importazione dei dati storici esistenti',
+  'Modulo principale completamente personalizzato',
+  'Dashboard operativa in tempo reale',
+  'Formazione del team inclusa',
+  'Codice sorgente di tua proprietà',
+  'Supporto prioritario nel primo trimestre',
+];
+
+const EXTRA = [
+  'Moduli aggiuntivi',
+  'Automazioni e integrazioni con sistemi esistenti',
+  'App mobile dedicata',
+  'Funzionalità AI avanzate',
 ];
 
 export default function Prezzi() {
+  const [yearly, setYearly] = useState(false);
+
   return (
     <Section id="prezzi" large>
       <Head
@@ -62,40 +33,116 @@ export default function Prezzi() {
         sub="Preventivo fisso dal primo incontro. Se qualcosa cambia lo diciamo prima, non in fattura."
       />
 
-      <Group className="prezzi-grid" each={0.1}>
-        {PIANI.map((piano) => (
-          <Item key={piano.label}>
-            <div className={`prezzi-card${piano.accent ? ' prezzi-card--accent' : ''}`}>
-              <div className="prezzi-card__head">
-                <span className="prezzi-label">{piano.label}</span>
-                <div className="prezzi-price">
-                  <span className="prezzi-price__num">{piano.price}</span>
-                  <span className="prezzi-price__unit">{piano.unit}</span>
-                </div>
-                <span className="prezzi-sub">{piano.sub}</span>
-              </div>
+      {/* Toggle mensile / annuale */}
+      <div className="prezzi-toggle-wrap">
+        <div className="prezzi-toggle">
+          {[
+            { id: false, label: 'Trimestrale' },
+            { id: true,  label: 'Annuale', badge: 'Risparmi 13%' },
+          ].map(({ id, label, badge }) => (
+            <button
+              key={String(id)}
+              type="button"
+              className={`prezzi-toggle__btn${yearly === id ? ' is-active' : ''}`}
+              onClick={() => setYearly(id)}
+            >
+              {yearly === id && (
+                <motion.span
+                  layoutId="prezzi-pill"
+                  className="prezzi-toggle__pill"
+                  transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                />
+              )}
+              <span className="prezzi-toggle__label">
+                {label}
+                {badge && <span className="prezzi-toggle__badge">{badge}</span>}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
 
-              <p className="prezzi-desc">{piano.desc}</p>
+      {/* Card unica centrata */}
+      <div className="prezzi-solo">
+        <motion.div
+          className="prezzi-card prezzi-card--accent prezzi-card--solo"
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.65, ease: EASE_MODAL }}
+        >
+          {/* Header */}
+          <div className="prezzi-card__head">
+            <Pill>Canone mensile</Pill>
 
-              <ul className="prezzi-features">
-                {piano.features.map((f) => (
-                  <li key={f}>
-                    <span className="prezzi-check"><Check size={13} strokeWidth={2.5} /></span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-
-              <a href="#contatti" className={`btn${piano.accent ? ' btn--primary' : ' btn--ghost'} prezzi-cta`}>
-                {piano.cta}
-              </a>
+            <div className="prezzi-price" style={{ marginTop: 22, alignItems: 'flex-end', gap: 6 }}>
+              <span className="prezzi-price__from">a partire da</span>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={yearly ? 'y' : 'm'}
+                  className="prezzi-price__num prezzi-price__num--lg"
+                  initial={{ opacity: 0, y: -12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 12 }}
+                  transition={{ duration: 0.22, ease: EASE_MODAL }}
+                >
+                  {yearly ? '259' : '299'}
+                </motion.span>
+              </AnimatePresence>
+              <span className="prezzi-price__unit">€ / mese</span>
             </div>
-          </Item>
-        ))}
-      </Group>
+
+            <p className="prezzi-sub" style={{ marginTop: 6 }}>
+              {yearly
+                ? 'fatturazione annuale — minimo 12 mesi'
+                : 'minimo 3 mesi, poi mensile'}
+            </p>
+          </div>
+
+          {/* Descrizione */}
+          <p className="prezzi-desc prezzi-desc--solo">
+            Il prezzo include una configurazione avanzata e personalizzata per la tua attività — non un template preconfezionato, ma un sistema costruito attorno ai tuoi processi reali. Il costo finale dipende dalla complessità del progetto e dai moduli scelti.
+          </p>
+
+          <div className="prezzi-divider" />
+
+          {/* Feature incluse */}
+          <div className="prezzi-features-wrap">
+            <p className="prezzi-features-head">Incluso nel canone</p>
+            <ul className="prezzi-features">
+              {FEATURES.map((f) => (
+                <li key={f}>
+                  <span className="prezzi-check"><Check size={13} strokeWidth={2.5} /></span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="prezzi-divider" />
+
+          {/* Opzioni aggiuntive */}
+          <div className="prezzi-features-wrap">
+            <p className="prezzi-features-head prezzi-features-head--muted">Opzioni su preventivo</p>
+            <ul className="prezzi-features prezzi-features--muted">
+              {EXTRA.map((f) => (
+                <li key={f}>
+                  <span className="prezzi-check prezzi-check--muted"><ArrowRight size={11} strokeWidth={2.5} /></span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* CTA */}
+          <a href="#contatti" className="btn btn--primary prezzi-cta">
+            Parliamone
+          </a>
+        </motion.div>
+      </div>
 
       <p className="prezzi-note">
-        I prezzi sono orientativi. Ogni progetto parte da un'analisi gratuita: il preventivo definitivo arriva con perimetro e tempi precisi.
+        Il preventivo definitivo arriva dopo un'analisi gratuita — con perimetro, tempi e cifra esatta. Nessun impegno.
       </p>
     </Section>
   );

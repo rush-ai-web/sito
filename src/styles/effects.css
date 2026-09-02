@@ -1267,7 +1267,7 @@
   content: '';
   position: absolute;
   top: -0.5px;
-  left: 0;
+  left: -34%;
   width: 34%;
   height: 1px;
   pointer-events: none;
@@ -1282,15 +1282,15 @@
 
 @keyframes stairRun {
   0% {
-    transform: translateX(-40%);
+    transform: translateX(0%);
     opacity: 0;
   }
-  15%,
-  70% {
+  12%,
+  72% {
     opacity: 1;
   }
   100% {
-    transform: translateX(330%);
+    transform: translateX(400%);
     opacity: 0;
   }
 }

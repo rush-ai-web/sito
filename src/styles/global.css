@@ -4480,6 +4480,146 @@ textarea.input {
   }
 }
 
+/* ------------------------------------------------------------
+   Prezzi — versione card singola con toggle mensile/annuale
+   ------------------------------------------------------------ */
+
+/* wrapper centrato per il toggle */
+.prezzi-toggle-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+/* la pillola scorrevole */
+.prezzi-toggle {
+  position: relative;
+  display: inline-flex;
+  background: var(--chip-bg);
+  border: 1px solid var(--hairline-strong);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 2px;
+}
+
+.prezzi-toggle__btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px;
+  border: none;
+  background: transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--text-2);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition: color 0.18s;
+}
+
+.prezzi-toggle__btn.is-active {
+  color: var(--text);
+}
+
+/* la pillola animata (Framer Motion layout) */
+.prezzi-toggle__pill {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  box-shadow: 0 1px 6px color-mix(in srgb, var(--accent) 18%, transparent);
+  z-index: 0;
+}
+
+.prezzi-toggle__label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.prezzi-toggle__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* Card singola centrata */
+.prezzi-solo {
+  display: flex;
+  justify-content: center;
+  margin-top: 36px;
+}
+
+.prezzi-card--solo {
+  width: 100%;
+  max-width: 520px;
+}
+
+.prezzi-price__from {
+  font-size: 13px;
+  color: var(--text-2);
+  font-weight: 400;
+  margin-bottom: 4px;
+  align-self: flex-end;
+  padding-bottom: 10px;
+}
+
+.prezzi-price__num--lg {
+  font-size: 56px !important;
+  letter-spacing: -0.03em !important;
+}
+
+.prezzi-desc--solo {
+  line-height: 1.65;
+  font-size: 15px;
+}
+
+.prezzi-divider {
+  height: 0.5px;
+  background: var(--hairline);
+  margin: 4px 0;
+}
+
+.prezzi-features-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prezzi-features-head {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  margin: 0;
+}
+
+.prezzi-features-head--muted {
+  color: var(--text-3, var(--text-2));
+  opacity: 0.65;
+}
+
+.prezzi-features--muted li {
+  color: var(--text-2) !important;
+}
+
+.prezzi-check--muted {
+  background: color-mix(in srgb, var(--hairline-strong) 80%, transparent) !important;
+  color: var(--text-2) !important;
+}
+
 @media (max-width: 580px) {
   .cf-th, .cf-td {
     padding: 12px 12px;
