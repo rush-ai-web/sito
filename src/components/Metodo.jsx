@@ -61,7 +61,7 @@ function NodeDot({ cx, cy, frac, progress, reduce }) {
 }
 
 /* StepCard — compare in sincronia con il nodo corrispondente della linea */
-function StepCard({ passo, frac, progress, reduce }) {
+function StepCard({ passo, idx, frac, progress, reduce }) {
   const isLeft = passo.side === 'left';
   const { icon: Icon, t, d } = passo;
 
@@ -76,7 +76,7 @@ function StepCard({ passo, frac, progress, reduce }) {
   return (
     <motion.div
       className={`tl-item tl-item--${passo.side}`}
-      style={reduce ? undefined : { opacity, x }}
+      style={reduce ? { gridRow: idx + 1 } : { gridRow: idx + 1, opacity, x }}
     >
       <div className="tl-item__header">
         <span className="icon-tile icon-tile--sm">
@@ -153,6 +153,7 @@ export default function Metodo() {
           <StepCard
             key={i}
             passo={passo}
+            idx={i}
             frac={NODES[i].frac}
             progress={scrollYProgress}
             reduce={reduce}
