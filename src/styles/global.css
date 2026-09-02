@@ -4695,7 +4695,7 @@ textarea.input {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 26px 24px 22px;
+  padding: 22px 24px 24px;
   border-radius: 18px;
   background: #1d1d1f;
   color: #f5f5f7;
@@ -4709,7 +4709,7 @@ textarea.input {
 /* divisore interno */
 .prezzi2__divider {
   height: 1px;
-  margin: 20px 0;
+  margin: 18px 0;
   background: rgba(255, 255, 255, 0.1);
 }
 
@@ -4723,7 +4723,30 @@ textarea.input {
 }
 
 .prezzi2__card .prezzi2__price-block {
-  margin-top: 22px;
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* "a partire da" — etichetta chiara, attaccata sopra il numero */
+.prezzi2__card .prezzi-price__from {
+  align-self: flex-start;
+  padding: 0;
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.prezzi2__card .prezzi-price {
+  margin-top: 0;
+}
+
+.prezzi2__card .prezzi-sub {
+  margin-top: 8px;
+  font-size: 12.5px;
 }
 
 .prezzi2__card .prezzi-features {
@@ -4731,11 +4754,12 @@ textarea.input {
 }
 
 .prezzi2__card .prezzi2__variabile {
-  margin-top: 16px;
+  margin-top: 14px;
+  font-size: 12px;
 }
 
 .prezzi2__card .prezzi-cta {
-  margin-top: 22px;
+  margin-top: 20px;
 }
 
 /* sovrascrive colori interni per il tema invertito */
