@@ -65,15 +65,15 @@ export default function Confronto() {
       >
         <div className="cf-scroll">
           <div className="cf-grid" style={{ '--rows': RIGHE.length }}>
-            {/* tabella delle voci: parte dalla prima voce (riga 2), dietro le colonne */}
-            <div className="cf-voci-deco" aria-hidden="true" />
-
             {/* colonne dei nomi: partono dal nome (riga 1) fino in fondo.
                 Rush = bordo accento, gli altri = bordo scuro. */}
             <div className="cf-col-deco cf-col-deco--rush" aria-hidden="true" />
             <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 3 }} aria-hidden="true" />
             <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 4 }} aria-hidden="true" />
             <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 5 }} aria-hidden="true" />
+
+            {/* tabella delle voci: parte dalla prima voce (riga 2), separata */}
+            <div className="cf-voci-deco" aria-hidden="true" />
 
             {/* intestazioni nomi (in alto a sinistra: niente) */}
             <div className="cf-hcell cf-hcell--rush" style={{ gridColumn: 2, gridRow: 1 }}>

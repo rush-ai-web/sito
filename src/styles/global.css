@@ -4240,34 +4240,34 @@ textarea.input {
   padding: 8px;
 }
 
-/* la tabella = contenitore con bordo esterno; le decorazioni interne
-   restano staccate dai bordi grazie all'offset di 20px. */
+/* griglia = contenitore vero della tabella: bordo + sfondo nero/bianco.
+   Il padding di 20px dà respiro attorno alle track: le decorazioni
+   interne (col-deco, voci-deco) restano dentro le track e quindi
+   staccate di 20px dai bordi esterni. */
 .cf-grid {
   display: grid;
-  /* colonna finale da 20px = spazio a destra oltre l'ultima colonna */
-  grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(120px, 1fr)) 20px;
-  /* riga finale da 20px = stesso spazio sotto l'ultima voce */
-  grid-template-rows: auto repeat(var(--rows, 8), minmax(52px, auto)) 20px;
+  grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(120px, 1fr));
+  grid-template-rows: auto repeat(var(--rows, 8), minmax(52px, auto));
   column-gap: 12px;
-  min-width: 780px;
-  /* offset di 20px anche in alto e a sinistra, così le decorazioni non
-     toccano nessun bordo esterno della tabella */
-  padding: 20px 0 0 20px;
-  background: var(--surface);
-  border: 1px solid var(--hairline);
-  border-radius: 22px;
-  box-shadow: var(--sh-1);
+  padding: 20px;
+  min-width: 760px;
   position: relative;
+  background: var(--card);
+  border: 1.5px solid var(--text);
+  border-radius: 22px;
+  /* nuovo stacking context così i z-index negativi (voci-deco) restano
+     sopra lo sfondo della griglia e non spariscono dietro */
+  isolation: isolate;
 }
 
 /* colonne dei nomi: dal nome (riga 1) fino all'ultima voce.
-   -2 = si ferma prima della riga finale da 20px (spazio in fondo) */
+   z-index 1 così stanno sopra la fascia voci-deco (z-index 0) */
 .cf-col-deco {
-  grid-row: 1 / -2;
+  grid-row: 1 / -1;
   border-radius: 16px;
   background: var(--surface-top);
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
 
 .cf-col-deco--other {
@@ -4282,15 +4282,16 @@ textarea.input {
     0 18px 44px -16px color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
-/* tabella delle voci: fascia dietro le colonne. -2 su riga e colonna =
-   si ferma prima della riga/colonna finale da 20px (spazio sotto e a destra) */
+/* tabella delle voci: fascia dietro le colonne */
 .cf-voci-deco {
-  grid-column: 1 / -2;
-  grid-row: 2 / -2;
+  grid-column: 1 / -1;
+  grid-row: 2 / -1;
   position: relative;
+  /* z-index 0 (non -1): con isolation:isolate su .cf-grid resta sopra
+     lo sfondo della griglia; z-index -1 finirebbe dietro allo sfondo */
   z-index: 0;
   border-radius: 16px;
-  background: var(--surface-top);
+  background: var(--surface);
   border: 1.5px solid var(--text);
   pointer-events: none;
 }
@@ -4308,7 +4309,7 @@ textarea.input {
   text-align: center;
   line-height: 1.25;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .cf-hcell--rush {
@@ -4334,7 +4335,7 @@ textarea.input {
   padding: 12px;
   min-height: 52px;
   position: relative;
-  z-index: 1;
+  z-index: 2;
   border-bottom: 1px solid var(--hairline);
 }
 
