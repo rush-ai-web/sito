@@ -4272,15 +4272,16 @@ textarea.input {
     0 18px 44px -16px color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
-/* tabella delle voci: riquadro separato, parte dalla prima voce (riga 2) */
+/* tabella delle voci: fascia a tutta larghezza, dietro le colonne */
 .cf-voci-deco {
-  grid-column: 1;
+  grid-column: 1 / -1;
   grid-row: 2 / -1;
+  position: relative;
+  z-index: -1;
   border-radius: 16px;
   background: var(--surface);
   border: 1px solid var(--hairline);
   pointer-events: none;
-  z-index: 0;
 }
 
 /* intestazioni nomi — sopra i box */
@@ -4297,7 +4298,8 @@ textarea.input {
   line-height: 1.25;
   position: relative;
   z-index: 1;
-  border-bottom: 1px solid var(--hairline);
+  /* riga sotto il nome: scura come i bordi delle colonne */
+  border-bottom: 1.5px solid var(--text);
 }
 
 .cf-hcell--rush {
