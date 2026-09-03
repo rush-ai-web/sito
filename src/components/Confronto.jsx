@@ -85,11 +85,20 @@ export default function Confronto() {
             <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 4 }} aria-hidden="true" />
             <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 5 }} aria-hidden="true" />
 
-            {RIGHE.map(({ label, vals }) => (
+            {RIGHE.map(({ label, vals }, ri) => (
               <Fragment key={label}>
-                <div className="cf-cell cf-cell--label">{label}</div>
+                <div
+                  className="cf-cell cf-cell--label"
+                  style={{ gridColumn: 1, gridRow: ri + 1 }}
+                >
+                  {label}
+                </div>
                 {vals.map((val, i) => (
-                  <div key={i} className="cf-cell cf-cell--val">
+                  <div
+                    key={i}
+                    className="cf-cell cf-cell--val"
+                    style={{ gridColumn: i + 2, gridRow: ri + 1 }}
+                  >
                     <Cell val={val} isRush={i === 0} />
                   </div>
                 ))}
