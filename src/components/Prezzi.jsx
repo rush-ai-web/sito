@@ -168,7 +168,7 @@ export default function Prezzi() {
           </div>
 
           <p className="prezzi2__note">
-            Il canone copre analisi, configurazione iniziale, gestionale personalizzato e AI base. Automazioni e integrazioni complesse custom si aggiungono su preventivo.
+            Il canone copre analisi, configurazione iniziale, gestionale personalizzato e AI base; automazioni e integrazioni complesse custom si aggiungono su preventivo.
           </p>
         </motion.div>
       </div>
