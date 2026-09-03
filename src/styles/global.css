@@ -4248,6 +4248,7 @@ textarea.input {
   grid-template-rows: auto repeat(var(--rows, 8), minmax(52px, auto));
   column-gap: 12px;
   min-width: 740px;
+  padding-bottom: 20px;
   position: relative;
 }
 
@@ -4280,7 +4281,7 @@ textarea.input {
   z-index: -1;
   border-radius: 16px;
   background: var(--surface);
-  border: 1px solid var(--hairline);
+  border: 1.5px solid var(--text);
   pointer-events: none;
 }
 
