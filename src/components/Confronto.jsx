@@ -92,7 +92,7 @@ export default function Confronto() {
               return (
                 <Fragment key={label}>
                   <div
-                    className={`cf-cell cf-cell--label${last ? ' is-last' : ''}`}
+                    className={`cf-cell cf-cell--label${last ? ' is-last' : ''}${ri === 0 ? ' is-first' : ''}`}
                     style={{ gridColumn: 1, gridRow: ri + 2 }}
                   >
                     {label}

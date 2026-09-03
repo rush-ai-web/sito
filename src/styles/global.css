@@ -4362,6 +4362,11 @@ textarea.input {
   border-top: 1.5px solid var(--text);
 }
 
+/* prima riga dati: spazio in più in cima a ogni cella */
+.cf-cell.is-first {
+  padding-top: 25px;
+}
+
 /* Icone */
 .cf-icon {
   display: inline-flex;
