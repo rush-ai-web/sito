@@ -56,7 +56,7 @@ export default function Prezzi() {
       />
 
       <div className="prezzi2">
-        {/* colonna sinistra — prezzo, dentro una cornice animata */}
+        {/* colonna sinistra - prezzo, dentro una cornice animata */}
         <motion.div
           className="prezzi2__frame"
           initial={{ opacity: 0, y: 20 }}
@@ -140,7 +140,7 @@ export default function Prezzi() {
           </div>
         </motion.div>
 
-        {/* colonna destra — come funziona */}
+        {/* colonna destra - come funziona */}
         <motion.div
           className="prezzi2__info"
           initial={{ opacity: 0, y: 20 }}

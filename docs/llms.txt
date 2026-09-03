@@ -1,0 +1,34 @@
+# Rush
+
+> Rush crea gestionali su misura per PMI, collegando dati, automazioni e intelligenza artificiale per ridurre errori, costi e lavoro manuale.
+
+URL canonico: https://rush-ai.it/
+Lingua: italiano
+Area servita: Italia
+
+## Servizi principali
+
+- Gestionali personalizzati sui processi reali dell'azienda
+- Collegamento di cassa, magazzino, fatturazione, personale e altri sistemi
+- Automazioni end-to-end per eliminare attività manuali e ripetitive
+- Intelligenza artificiale integrata nei flussi e nei dati aziendali
+- Dashboard operative con dati aggiornati in tempo reale
+
+## Metodo
+
+Rush analizza i processi, realizza un prototipo, sviluppa il gestionale, importa i dati e forma il team. La prima versione può entrare in produzione entro otto settimane.
+
+## Prezzi
+
+Il canone parte da 299 EUR al mese con fatturazione trimestrale. Sono inclusi analisi, configurazione iniziale, gestionale personalizzato e AI base. Automazioni e integrazioni custom complesse sono valutate su preventivo.
+
+## Contatti
+
+- Email: info@rush.it
+- Modulo: https://rush-ai.it/#contatti
+
+## Risorse
+
+- Sitemap: https://rush-ai.it/sitemap.xml
+- Robots: https://rush-ai.it/robots.txt
+- Repository: https://github.com/rush-ai-web/sito

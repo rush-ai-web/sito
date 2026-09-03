@@ -28,13 +28,13 @@ export default function App() {
         {/* aurora curata: composizione variata per regione, mai fasci in fila
             fissa. Vive dentro <main> così scorre col contenuto. */}
         <div className="aurora" aria-hidden="true">
-          {/* Problema (grid): nessun glow qui — la sua unica animazione è la
+          {/* Problema (grid): nessun glow qui - la sua unica animazione è la
               fascia di luce bianca (.section--shine) che sweepa lo sfondo. */}
           {/* Soluzione: bulb accento a sx + neutro a dx */}
           <span className="glow bulb big accent l" style={{ top: '22%' }} />
           <span className="glow bulb white r" style={{ top: '19%' }} />
           {/* Prodotto (grid): non più un raggio diagonale, ma un lavaggio
-              d'accento morbido e diffuso — luce d'ambiente, non una banda */}
+              d'accento morbido e diffuso - luce d'ambiente, non una banda */}
           <span className="glow haze accent l" style={{ top: '34%' }} />
           {/* Numeri: bulb accento a dx + neutro a sx */}
           <span className="glow bulb big accent r" style={{ top: '48%' }} />
@@ -54,7 +54,7 @@ export default function App() {
         <Problema />
         {/* chiaro */}
         <Soluzione />
-        {/* tutto in un unico posto — diagramma di convergenza */}
+        {/* tutto in un unico posto - diagramma di convergenza */}
         <Ecosistema />
         {/* scuro */}
         <Metodo />

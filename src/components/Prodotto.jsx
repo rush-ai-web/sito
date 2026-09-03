@@ -7,11 +7,11 @@ import { EASE_MODAL } from '../lib/motion';
 const inViewOnce = { once: true, amount: 0.3 };
 
 /* ------------------------------------------------------------
-   Cosa costruiamo — bento animato.
+   Cosa costruiamo - bento animato.
    Cinque tessere in stile "feature grid": intestazione con icona,
    testo, e in basso una piccola scena SVG che vive in loop. Il
    bordo si illumina in accento seguendo il puntatore (glow che
-   traccia il cursore), come nel tema di riferimento — ma con i
+   traccia il cursore), come nel tema di riferimento - ma con i
    token, le icone e i colori del sito.
    Tutte le animazioni si spengono in prefers-reduced-motion.
    ------------------------------------------------------------ */
@@ -325,7 +325,7 @@ export default function Prodotto() {
         icon={Layers}
         label="Cosa costruiamo"
         title={<>Un solo sistema al posto di sei strumenti scollegati</>}
-        sub="Tutto quello che oggi vive in gestionali diversi, fogli di calcolo e messaggi torna in un posto solo — e resta aggiornato da solo."
+        sub="Tutto quello che oggi vive in gestionali diversi, fogli di calcolo e messaggi torna in un posto solo - e resta aggiornato da solo."
       />
 
       <div className="build">

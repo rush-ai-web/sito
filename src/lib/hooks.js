@@ -30,7 +30,7 @@ export function useSmoothScroll() {
 
     const lenis = new Lenis({
       duration: 1.15,
-      /* expo-out: parte veloce e si adagia — il feeling dei siti Framer */
+      /* expo-out: parte veloce e si adagia - il feeling dei siti Framer */
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       smoothTouch: false,
@@ -87,7 +87,7 @@ export function useTheme() {
   return [theme, () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))];
 }
 
-/* ---------- Orologio live — signature move ---------- */
+/* ---------- Orologio live - signature move ---------- */
 const GIORNI = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
 const MESI = [
   'Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
@@ -116,7 +116,7 @@ export const fmt = (n, dec = 0) =>
     maximumFractionDigits: dec,
   }).format(n);
 
-/* ---------- Conteggio animato — signature move ----------
+/* ---------- Conteggio animato - signature move ----------
    Parte quando il numero entra in viewport, si ferma sul valore
    finale. Con prefers-reduced-motion mostra subito il valore. */
 export function useCountUp(target, { dec = 0, duration = 1.5 } = {}) {

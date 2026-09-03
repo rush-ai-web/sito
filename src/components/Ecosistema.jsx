@@ -14,7 +14,7 @@ import { EASE_MODAL } from '../lib/motion';
 import { useIsMobile } from '../lib/hooks';
 
 /* ------------------------------------------------------------
-   Ecosistema — il diagramma "tutto in un unico posto".
+   Ecosistema - il diagramma "tutto in un unico posto".
    Cinque sistemi frammentati a sinistra convergono nel nodo
    Rush AI, che alimenta un unico gestionale su misura a destra.
    Le coordinate vivono in un sistema condiviso (viewBox 1160×520):
@@ -37,11 +37,11 @@ const MODULES = [
 const CARD_L = 12; /* x sinistro card modulo */
 const CARD_W = 236;
 const CARD_H = 72;
-const ANCHOR_X = CARD_L + CARD_W; /* 248 — bordo destro da cui parte la linea */
+const ANCHOR_X = CARD_L + CARD_W; /* 248 - bordo destro da cui parte la linea */
 const NODE_CX = 580;
 const NODE_CY = 244;
 const NODE_R = 60;
-const CONV_X = NODE_CX - NODE_R - 6; /* 514 — punto di convergenza a sx del nodo */
+const CONV_X = NODE_CX - NODE_R - 6; /* 514 - punto di convergenza a sx del nodo */
 const DEST_L = 888; /* bordo sinistro card destinazione */
 
 const pct = (v, total) => `${(v / total) * 100}%`;

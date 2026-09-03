@@ -36,18 +36,40 @@ export default function Footer() {
   const logoSrc = theme === 'dark' ? './rush-logo-dark.png' : './rush-logo.png';
 
   return (
-    <footer className="footer" data-tone="light">
+    <footer
+      className="footer h-card"
+      data-tone="light"
+      itemScope
+      itemType="https://schema.org/Organization"
+    >
+      <meta className="p-name" itemProp="name" content="Rush" />
+      <link className="u-url" itemProp="url" href="https://rush-ai.it/" />
+      <link
+        className="u-logo"
+        itemProp="logo"
+        href="https://rush-ai.it/favicon.png"
+      />
+      <meta itemProp="email" content="info@rush.it" />
       <div className="wrap">
         <div className="footer__grid">
           <div>
-            <a href="#home" className="footer__brand" aria-label="Rush — torna all'inizio">
-              <img src={logoSrc} alt="Rush" className="footer__logo" />
+            <a
+              href="#home"
+              className="footer__brand"
+              rel="home"
+              aria-label="Rush, torna all'inizio"
+            >
+              <img src={logoSrc} alt="Logo Rush" className="footer__logo u-logo" itemProp="logo" />
             </a>
-            <p className="t-small" style={{ marginTop: 16, maxWidth: 320 }}>
+            <p
+              className="t-small p-note"
+              itemProp="description"
+              style={{ marginTop: 16, maxWidth: 320 }}
+            >
               Software house italiana. Progettiamo e sviluppiamo gestionali su misura, con dati in
               tempo reale, automazioni e intelligenza artificiale integrata.
             </p>
-            {/* orologio live — signature move */}
+            {/* orologio live - signature move */}
             <div style={{ marginTop: 24, display: 'inline-flex', alignItems: 'center', gap: 10 }}>
               <LiveDot />
               <span>
@@ -65,7 +87,11 @@ export default function Footer() {
             <div className="footer__col" key={titolo}>
               <h4>{titolo}</h4>
               {voci.map(([label, href]) => (
-                <a key={label} href={href}>
+                <a
+                  key={label}
+                  href={href}
+                  className={href.startsWith('mailto:') ? 'u-email' : undefined}
+                >
                   {label}
                 </a>
               ))}
@@ -75,7 +101,7 @@ export default function Footer() {
 
         <div className="footer__base">
           <span>© {new Date().getFullYear()} Rush. Tutti i diritti riservati.</span>
-          <span>Demo — contenuti e integrazioni in evoluzione</span>
+          <span>Demo - contenuti e integrazioni in evoluzione</span>
         </div>
 
         {/* logo gigante, sfumato verso il basso */}

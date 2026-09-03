@@ -4,7 +4,7 @@ import { useCountUp } from '../lib/hooks';
 import EsitiShowcase from './EsitiShowcase';
 
 /* ------------------------------------------------------------
-   Risultati — i numeri prima di tutto.
+   Risultati - i numeri prima di tutto.
    La scalinata di KPI (le quattro colonne a gradino), poi tre esiti
    che raccontano cosa cambia per chi guida l'azienda.
    ------------------------------------------------------------ */

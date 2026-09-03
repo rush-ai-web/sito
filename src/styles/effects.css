@@ -1,5 +1,5 @@
 /* ============================================================
-   RUSH — effetti di scena.
+   RUSH - effetti di scena.
    Tutto quello che nel tema di riferimento fa "atmosfera":
    griglia di sfondo, faro radiale, bagliore d'angolo sulle card,
    scaletta dei KPI, bento, passi numerati, wordmark del footer.
@@ -8,7 +8,7 @@
    ============================================================ */
 
 /* ------------------------------------------------------------
-   0. Grain di sfondo — SVG fractalNoise fisso, opacità bassa.
+   0. Grain di sfondo - SVG fractalNoise fisso, opacità bassa.
    Dà la nitidezza analogica che si vede nel reference. Usa
    mix-blend per non alterare i colori sotto.
    ------------------------------------------------------------ */
@@ -38,7 +38,7 @@
     linear-gradient(to bottom, var(--hairline) 0.5px, transparent 0.5px);
   background-size: 72px 72px;
   /* la maglia SFUMA sia entrando dall'alto sia uscendo in basso (e ai lati):
-     non parte mai netta e non si taglia mai netta — è una banda morbida al
+     non parte mai netta e non si taglia mai netta - è una banda morbida al
      centro della sezione, così le sezioni restano un continuo unico. */
   -webkit-mask-image:
     linear-gradient(to bottom, transparent 0%, #000 22%, #000 58%, transparent 94%),
@@ -64,7 +64,7 @@
 
 /* shimmer diagonale a livello di sezione: banda di luce che attraversa
    il fondo dal basso-sinistra verso alto-destra al primo scorrimento in
-   viewport. Elemento DOM dedicato (.section-shine) — non usa ::before,
+   viewport. Elemento DOM dedicato (.section-shine) - non usa ::before,
    così non entra in conflitto con .fx-grid o .fx-spot che lo occupano. */
 .section--shine {
   position: relative;
@@ -96,7 +96,7 @@
   filter: blur(14px);
   will-change: transform, opacity;
   /* sweep smooth con l'easing della pill hero (ease-out cubico), poi pausa:
-     la banda scorre veloce e decelera, sparisce e riparte — non un loop lineare */
+     la banda scorre veloce e decelera, sparisce e riparte - non un loop lineare */
   animation: sectionShine 7s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 @keyframes sectionShine {
@@ -249,7 +249,7 @@
 
 /* ------------------------------------------------------------
    4. Card-pillola: riquadro icona + due righe di testo.
-   È il mattone che nel tema ricorre ovunque — orbita, elenchi,
+   È il mattone che nel tema ricorre ovunque - orbita, elenchi,
    riepiloghi sotto i KPI.
    ------------------------------------------------------------ */
 .pillcard {
@@ -312,7 +312,7 @@
 }
 
 /* ------------------------------------------------------------
-   5b. Esiti — showcase interattivo: lista a sinistra, palco a destra.
+   5b. Esiti - showcase interattivo: lista a sinistra, palco a destra.
    ------------------------------------------------------------ */
 .esiti {
   display: grid;
@@ -763,7 +763,7 @@
 }
 
 /* ------------------------------------------------------------
-   8. Riquadro dashboard — la finestra di prodotto del video
+   8. Riquadro dashboard - la finestra di prodotto del video
    ------------------------------------------------------------ */
 .frame {
   border-radius: var(--r-lg);
@@ -823,7 +823,7 @@
 }
 
 /* ------------------------------------------------------------
-   10. Marquee dei settori — scorrimento continuo
+   10. Marquee dei settori - scorrimento continuo
    ------------------------------------------------------------ */
 .marquee {
   position: relative;
@@ -1025,7 +1025,7 @@
 
 /* NB: la vecchia scan verticale (gridScan sulla maglia di sfondo) è stata
    rimossa. Sulle sezioni con .section--shine c'è un'unica banda diagonale
-   in loop lento — vedi .section-shine più sopra. */
+   in loop lento - vedi .section-shine più sopra. */
 
 /* 4. Hairline che si accende: un riflesso che scorre sui divisori
    della scalinata e dei passi */
@@ -1092,7 +1092,7 @@
   }
 }
 
-/* 6. Anello che si espande attorno al dot live — il "battito"
+/* 6. Anello che si espande attorno al dot live - il "battito"
    del sistema, ripreso dalla dashboard */
 .pulse-ring {
   position: relative;
@@ -1297,7 +1297,7 @@
 }
 
 /* ============================================================
-   Ecosistema — diagramma "tutto in un unico posto".
+   Ecosistema - diagramma "tutto in un unico posto".
    Canvas ad aspect-ratio fisso (1160×520): SVG e card HTML
    condividono lo stesso sistema di coordinate, così le linee
    toccano sempre le card a qualunque scala.
@@ -1316,7 +1316,7 @@
   aspect-ratio: 1160 / 520;
 }
 
-/* alone d'accento morbido dietro al nodo — sfondo smooth, non invadente */
+/* alone d'accento morbido dietro al nodo - sfondo smooth, non invadente */
 .eco__halo {
   position: absolute;
   left: 50%;

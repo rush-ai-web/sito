@@ -82,7 +82,7 @@ const PERIODS = [
 
 const ALERT_POOL = [
   { id: 0, k: 'red',   t: 'Codice A-238: ultime 2 unità a scorta',   s: 'Consumo 4 pz/sett · riordina oggi' },
-  { id: 1, k: 'amber', t: 'Prezzo acquisto +18% — Fornitore Rossi',  s: 'Fattura n.245 del 12 mag' },
+  { id: 1, k: 'amber', t: 'Prezzo acquisto +18% - Fornitore Rossi',  s: 'Fattura n.245 del 12 mag' },
   { id: 2, k: 'blue',  t: '2 fatture in scadenza entro 5 giorni',    s: '€1.840 · 2 fornitori' },
   { id: 3, k: 'amber', t: 'Costo acquisti +3,2pt rispetto al target', s: 'Mese in corso · verifica i fornitori' },
   { id: 4, k: 'red',   t: 'Fornitore Bianchi: nessuna consegna da 8 gg', s: 'Ordine sospeso · contatta il fornitore' },
@@ -252,7 +252,7 @@ export default function HeroScene() {
                   {/* grafico */}
                   <div className="dash__panel">
                     <div className="dash__panel-hd">
-                      <h5>Incassi vs spese — ultimi 6 periodi</h5>
+                      <h5>Incassi vs spese - ultimi 6 periodi</h5>
                       <span className="dash__legend">
                         <span className="dash__leg is-inc"><i />Incassi</span>
                         <span className="dash__leg is-spe"><i />Spese</span>
@@ -285,7 +285,7 @@ export default function HeroScene() {
                   {/* alert */}
                   <div className="dash__panel">
                     <div className="dash__panel-hd">
-                      <h5>Alert e anomalie — da gestire</h5>
+                      <h5>Alert e anomalie - da gestire</h5>
                     </div>
                     <div className="dash__alerts">
                       <AnimatePresence initial={false} mode="popLayout">

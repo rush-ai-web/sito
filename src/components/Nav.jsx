@@ -5,7 +5,7 @@ import { EASE_MODAL } from '../lib/motion';
 function LogoMark() {
   return (
     <span className="nav__logo-wrap">
-      <img src="./rush-logo-dark.png" alt="" aria-hidden="true" className="nav__logo-img" />
+      <img src="./rush-logo-dark.png" alt="Rush" className="nav__logo-img" />
     </span>
   );
 }
@@ -32,7 +32,7 @@ export default function Nav() {
       transition={{ duration: 0.7, ease: EASE_MODAL, delay: 0.1 }}
     >
       <div className="nav__pill">
-        <a className="nav__brand" href="#home">
+        <a className="nav__brand" href="#home" rel="home" aria-label="Rush, torna all'inizio">
           <LogoMark />
         </a>
 

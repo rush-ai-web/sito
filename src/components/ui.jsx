@@ -5,7 +5,7 @@ import { fadeUp, inView, stagger } from '../lib/motion';
 export const ThemeCtx = createContext('light');
 
 /* ------------------------------------------------------------
-   Section — fascia di pagina.
+   Section - fascia di pagina.
    `invert` alterna chiaro/scuro lungo lo scroll, come nel tema
    di riferimento. `data-tone` dice alla navbar su che fondo si
    trova, così la pillola può invertirsi.
@@ -24,7 +24,7 @@ export function Section({
   const theme = useContext(ThemeCtx);
   /* niente più alternanza chiaro/scuro: ogni sezione segue il tema.
      `invert` resta accettato come prop per non rompere i call-site, ma
-     non cambia più tono né sfondo — lo stravolgimento aurora vive su un
+     non cambia più tono né sfondo - lo stravolgimento aurora vive su un
      layer fisso dietro le sezioni, ora trasparenti. */
   const dark = theme === 'dark';
   const fx = [
@@ -47,7 +47,7 @@ export function Section({
 }
 
 /* ------------------------------------------------------------
-   Head — testata di sezione: pillola, titolo, sommario.
+   Head - testata di sezione: pillola, titolo, sommario.
    Centrata di default, come ogni sezione del tema.
    ------------------------------------------------------------ */
 export function Head({ icon, label, title, sub, left = false, children }) {
@@ -71,7 +71,7 @@ export function Head({ icon, label, title, sub, left = false, children }) {
   );
 }
 
-/* Reveal — comparsa allo scroll, una sola volta */
+/* Reveal - comparsa allo scroll, una sola volta */
 export function Reveal({ i = 0, as = 'div', className = '', children, ...rest }) {
   const M = motion[as] || motion.div;
   return (
@@ -89,7 +89,7 @@ export function Reveal({ i = 0, as = 'div', className = '', children, ...rest })
   );
 }
 
-/* Group — contenitore che scagliona i figli */
+/* Group - contenitore che scagliona i figli */
 export function Group({ delay = 0, each = 0.07, as = 'div', className = '', children, ...rest }) {
   const M = motion[as] || motion.div;
   return (
@@ -106,7 +106,7 @@ export function Group({ delay = 0, each = 0.07, as = 'div', className = '', chil
   );
 }
 
-/* Item — figlio di Group.
+/* Item - figlio di Group.
    Inoltra il ref: serve a useCountUp, che deve osservare il nodo
    vero per far partire il conteggio quando entra in viewport. */
 export const Item = forwardRef(function Item({ as = 'div', className = '', children, ...rest }, ref) {
@@ -131,7 +131,7 @@ export const LiftCard = forwardRef(function LiftCard({ className = '', children,
 });
 
 /* ------------------------------------------------------------
-   GlowCard — la card del tema: bagliore dietro all'icona,
+   GlowCard - la card del tema: bagliore dietro all'icona,
    riquadro icona, titolo, testo. Si solleva sull'hover.
    ------------------------------------------------------------ */
 export function GlowCard({ icon, title, children, accent = false, className = '' }) {
@@ -147,7 +147,7 @@ export function GlowCard({ icon, title, children, accent = false, className = ''
 }
 
 /* ------------------------------------------------------------
-   DecoratorCard — card centrata con decorator a griglia dietro
+   DecoratorCard - card centrata con decorator a griglia dietro
    all'icona (mask radiale che sfuma ai bordi), l'icona sta in un
    piccolo riquadro con bordo top+left in accento. Titolo + testo
    sotto, centrati.
@@ -200,7 +200,7 @@ export function PillCard({ icon: Icon, children, className = '', ...rest }) {
   );
 }
 
-/* Dot verde pulsante — signature move */
+/* Dot verde pulsante - signature move */
 export function LiveDot() {
   return <span className="livedot" aria-hidden="true" />;
 }

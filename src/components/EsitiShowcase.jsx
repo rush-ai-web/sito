@@ -6,7 +6,7 @@ import { EASE_MODAL } from '../lib/motion';
 const ROTATE_MS = 6000;
 
 /* ============================================================
-   Esiti — showcase interattivo.
+   Esiti - showcase interattivo.
    A sinistra tre esiti selezionabili (auto-avanzano con una barra
    di avanzamento); a destra un palco che mostra una scena viva per
    l'esito attivo. Le scene sono costruite in HTML + un piccolo SVG

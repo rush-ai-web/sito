@@ -8,8 +8,8 @@ import { IconTile } from './ui';
 /* risultati con icona + valore, come nella guida ai componenti */
 const RISULTATI = [
   { icon: Receipt, t: 'Fattura Distillerie Rossi · 12 mag', v: '€892' },
-  { icon: Package, t: 'Campari 1L — magazzino', v: '2 pz' },
-  { icon: Users, t: 'Marco Bernardini — ore di maggio', v: '142h' },
+  { icon: Package, t: 'Campari 1L - magazzino', v: '2 pz' },
+  { icon: Users, t: 'Marco Bernardini - ore di maggio', v: '142h' },
 ];
 
 export default function Fab() {
@@ -94,7 +94,7 @@ export default function Fab() {
                   <i />
                   <i />
                 </span>
-                Anteprima dimostrativa — nella dashboard risponde sui tuoi dati.
+                Anteprima dimostrativa - nella dashboard risponde sui tuoi dati.
               </div>
             </motion.div>
           </motion.div>

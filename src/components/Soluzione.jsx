@@ -26,7 +26,7 @@ const ORBIT = [
     id: 2,
     icon: Activity,
     t: 'Dati aggiornati\nal secondo',
-    body: 'Ogni movimento — vendita, carico, pagamento — arriva subito nei report. Niente foglio Excel di fine mese.',
+    body: 'Ogni movimento - vendita, carico, pagamento - arriva subito nei report. Niente foglio Excel di fine mese.',
     related: [1, 3],
   },
   {
@@ -54,14 +54,14 @@ const ORBIT = [
     id: 6,
     icon: Smartphone,
     t: 'Stessa esperienza\nda desktop e mobile',
-    body: "Interfaccia identica in ufficio e in movimento: apri, cerchi, aggiorni — senza doverlo reimparare.",
+    body: "Interfaccia identica in ufficio e in movimento: apri, cerchi, aggiorni - senza doverlo reimparare.",
     related: [5, 1],
   },
 ];
 
 const RADIUS_X = 530;
 const RADIUS_Y = 270;
-const AUTO_SPEED = 0.005; /* deg per ms — un giro ≈ 72 s */
+const AUTO_SPEED = 0.005; /* deg per ms - un giro ≈ 72 s */
 const STEP = 360 / ORBIT.length;
 const FOCUS_DURATION = 1100;
 
@@ -199,7 +199,7 @@ function SoluzioneDesktop() {
   }, [openId]);
 
   /* scrive le posizioni orbitali direttamente sul DOM (proprietà `translate`),
-     senza passare da React state — così non ci sono re-render a 60fps. */
+     senza passare da React state - così non ci sono re-render a 60fps. */
   const applyPositions = () => {
     for (let i = 0; i < ORBIT.length; i += 1) {
       const item = ORBIT[i];

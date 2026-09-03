@@ -21,7 +21,7 @@ export default function Cta() {
 
   return (
     <Section id="contatti" large grid>
-      {/* corner bulbs — clippati dalla section overflow:hidden → stacco netto col footer */}
+      {/* corner bulbs - clippati dalla section overflow:hidden → stacco netto col footer */}
       <span aria-hidden="true" className="cta-bulb cta-bulb--l" />
       <span aria-hidden="true" className="cta-bulb cta-bulb--r" />
       <div className="row2" style={{ alignItems: 'start', position: 'relative', zIndex: 1 }}>
@@ -33,7 +33,7 @@ export default function Cta() {
             Raccontaci come lavori oggi.
           </Item>
           <Item as="p" className="t-body">
-            Il primo incontro serve a capire se un gestionale su misura ha senso per te — e, se non
+            Il primo incontro serve a capire se un gestionale su misura ha senso per te - e, se non
             ce l'ha, te lo diciamo. Scrivici che software usi e dove si perde più tempo: ti
             rispondiamo con un'idea concreta di perimetro, tempi e costi.
           </Item>

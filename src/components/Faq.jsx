@@ -28,7 +28,7 @@ const FAQ_DATA = {
     },
     {
       q: 'Funziona sia da desktop che da mobile?',
-      a: "Sì. L'interfaccia è la stessa in ufficio e in movimento: apri, cerchi, aggiorni — senza dover reimparare nulla. Anche dal telefono lavori sui dati veri, non su una versione ridotta.",
+      a: "Sì. L'interfaccia è la stessa in ufficio e in movimento: apri, cerchi, aggiorni - senza dover reimparare nulla. Anche dal telefono lavori sui dati veri, non su una versione ridotta.",
     },
   ],
   processo: [
@@ -70,7 +70,7 @@ const FAQ_DATA = {
   tecnologia: [
     {
       q: "L'AI cosa fa esattamente nel gestionale?",
-      a: "Legge i tuoi dati e risponde con numeri veri: 'chi mi ha alzato i prezzi', 'quali clienti stanno rallentando', 'quanto ho perso su questo articolo'. Non è un chatbot appiccicato — è agganciato al database del tuo gestionale.",
+      a: "Legge i tuoi dati e risponde con numeri veri: 'chi mi ha alzato i prezzi', 'quali clienti stanno rallentando', 'quanto ho perso su questo articolo'. Non è un chatbot appiccicato - è agganciato al database del tuo gestionale.",
     },
     {
       q: "I miei dati sono al sicuro?",
@@ -78,7 +78,7 @@ const FAQ_DATA = {
     },
     {
       q: "Vi integrate con i servizi che uso già?",
-      a: "Sì. Fatturazione elettronica (SDI), banca, POS, e-commerce, corrieri, piattaforme di pagamento, CRM esterni — praticamente qualsiasi cosa esponga API o file. Se un'integrazione non esiste, la costruiamo.",
+      a: "Sì. Fatturazione elettronica (SDI), banca, POS, e-commerce, corrieri, piattaforme di pagamento, CRM esterni - praticamente qualsiasi cosa esponga API o file. Se un'integrazione non esiste, la costruiamo.",
     },
     {
       q: 'E se in futuro voglio cambiare fornitore?',

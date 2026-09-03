@@ -29,7 +29,7 @@ export default function Ristorazione() {
             ti avvisa quando un prezzo si muove.
           </Item>
           <Item as="p" className="t-body">
-            Lo stesso impianto — dati reali, automazioni, AI sui documenti — lo portiamo in
+            Lo stesso impianto - dati reali, automazioni, AI sui documenti - lo portiamo in
             produzione, logistica, retail e servizi.
           </Item>
           <Item>

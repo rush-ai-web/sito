@@ -3,7 +3,7 @@
 
 
 /* ============================================================
-   Horizon — font di titolazione del brand.
+   Horizon - font di titolazione del brand.
    Va sui pezzi grandi (hero, titoli di sezione, KPI, wordmark);
    il resto della pagina resta su Inter, come da guida.
    ============================================================ */
@@ -27,7 +27,7 @@
 }
 
 /* ============================================================
-   Scrollbar — accent color
+   Scrollbar - accent color
    ============================================================ */
 ::-webkit-scrollbar {
   width: 6px;
@@ -123,7 +123,7 @@ body {
 }
 
 /* ============================================================
-   Grain — texture analogica dell'hero, usata come LAYER DI SFONDO
+   Grain - texture analogica dell'hero, usata come LAYER DI SFONDO
    (dietro dashboard/testo/card, solo sopra i bulb e le ombreggiature).
    L'immagine è theme-aware: speckle nero sul tema chiaro, bianco sul
    tema scuro (nero-su-nero sarebbe invisibile). Riusata da .aurora,
@@ -141,7 +141,7 @@ body {
   }
 }
 
-/* ogni cifra è tabellare — nessun numero deve "ballare" */
+/* ogni cifra è tabellare - nessun numero deve "ballare" */
 .num,
 table,
 td,
@@ -193,7 +193,7 @@ h4 {
   line-height: 1.06;
 }
 
-/* Titolo hero — Inter uppercase bold, come la testata hero */
+/* Titolo hero - Inter uppercase bold, come la testata hero */
 .t-hero {
   font-family: var(--ff-body);
   font-weight: 800;
@@ -203,7 +203,7 @@ h4 {
   text-transform: uppercase;
 }
 
-/* Titolo di sezione — Inter uppercase bold, stesso trattamento dell'hero */
+/* Titolo di sezione - Inter uppercase bold, stesso trattamento dell'hero */
 .t-sec {
   font-family: var(--ff-body);
   font-weight: 800;
@@ -294,11 +294,11 @@ h4 {
 }
 
 /* ============================================================
-   Aurora curata — sfumature disposte a mano, mai in fila fissa.
+   Aurora curata - sfumature disposte a mano, mai in fila fissa.
    Ogni regione della pagina ha la sua composizione: a volte un solo
    fascio diagonale, a volte due bulb (uno per lato), a volte uno
-   streak che passa dietro alle card. Tre toni con peso comparabile —
-   blu accento, bianco, nero — così l'atmosfera cambia scendendo.
+   streak che passa dietro alle card. Tre toni con peso comparabile -
+   blu accento, bianco, nero - così l'atmosfera cambia scendendo.
    Vive dentro <main> (position: relative), quindi scorre col
    contenuto; le sezioni trasparenti ci passano sopra, l'hero opaco
    lo copre e conserva la sua aurora dedicata.
@@ -347,7 +347,7 @@ main {
 .glow.bulb.sm {
   width: 34vw;
 }
-/* beam: un vero RAGGIO di luce — banda stretta, nucleo bianco luminoso,
+/* beam: un vero RAGGIO di luce - banda stretta, nucleo bianco luminoso,
    sfocata e inclinata come nella reference (screenshot: light ray). */
 .glow.beam {
   width: 180vw;
@@ -359,7 +359,7 @@ main {
   mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.4) 22%, #000 50%, rgba(0,0,0,0.4) 78%, transparent 100%);
 }
 
-/* haze: un lavaggio d'accento largo, ellittico e molto sfocato — luce
+/* haze: un lavaggio d'accento largo, ellittico e molto sfocato - luce
    d'ambiente diffusa, l'opposto della banda diagonale netta del beam. */
 .glow.haze {
   width: 92vw;
@@ -376,7 +376,7 @@ main {
   );
 }
 
-/* rings: onde concentriche tenui — motivo diverso dai bulb, richiama la
+/* rings: onde concentriche tenui - motivo diverso dai bulb, richiama la
    connessione e gli anelli della scena AI. Nessuna banda, nessun blob pieno. */
 .glow.rings {
   width: 60vw;
@@ -418,7 +418,7 @@ main {
     transparent 78%
   );
 }
-/* "white" bulb: usa var(--text) così in dark è bianco chiaro, in light è nero — si adatta automaticamente */
+/* "white" bulb: usa var(--text) così in dark è bianco chiaro, in light è nero - si adatta automaticamente */
 .glow.white {
   background: radial-gradient(
     closest-side,
@@ -436,7 +436,7 @@ main {
 
 /* i raggi hanno un NUCLEO bianco luminoso al centro dello spessore, con i
    fianchi nel tono: è la sezione di un fascio di luce, brillante al centro
-   e sfumato ai bordi — come nella reference. */
+   e sfumato ai bordi - come nella reference. */
 .glow.beam.accent {
   background: linear-gradient(
     180deg,
@@ -501,7 +501,7 @@ main {
 }
 
 /* ============================================================
-   CTA corner bulbs — locali alla sezione, clippati in basso
+   CTA corner bulbs - locali alla sezione, clippati in basso
    dall'overflow:hidden della sezione → stacco netto col footer.
    ============================================================ */
 .cta-bulb {
@@ -568,7 +568,7 @@ main {
 }
 
 /* ============================================================
-   Superfici — gradiente leggero, hairline, ombra doppia.
+   Superfici - gradiente leggero, hairline, ombra doppia.
    Nessuna card flat con bordo 1px.
    ============================================================ */
 /* La card di riferimento della guida ("Hairline & vignette"):
@@ -597,7 +597,7 @@ main {
 }
 
 /* ------------------------------------------------------------
-   DecoratorCard — decorator a griglia dietro all'icona (mask
+   DecoratorCard - decorator a griglia dietro all'icona (mask
    radiale che sfuma ai bordi), icona in un box con bordo top+left
    in accento. Testo centrato.
    ------------------------------------------------------------ */
@@ -740,7 +740,7 @@ main {
 }
 
 /* ============================================================
-   Bottoni — il primario è il colore inverso del tema.
+   Bottoni - il primario è il colore inverso del tema.
    Accento/arancione/verde/rosso non compaiono mai su un bottone.
    Hover e press: solo opacità, mai un cambio di colore netto.
    ============================================================ */
@@ -788,7 +788,7 @@ main {
   padding-inline: 12px;
 }
 
-/* bottone in blu d'accento — sfondo pieno con leggera sfumatura */
+/* bottone in blu d'accento - sfondo pieno con leggera sfumatura */
 .btn--accent {
   background: linear-gradient(135deg, #6a8ce8 0%, #5b7fe0 45%, #4a72cc 100%);
   color: #fff;
@@ -849,7 +849,7 @@ main {
   background: color-mix(in srgb, var(--neg) 10%, transparent);
 }
 
-/* dot verde pulsante — signature move */
+/* dot verde pulsante - signature move */
 .livedot {
   width: 7px;
   height: 7px;
@@ -905,7 +905,7 @@ main {
 }
 
 /* ============================================================
-   Navbar — pillola flottante
+   Navbar - pillola flottante
    ============================================================ */
 /* Nav: FM gestisce la larghezza (wide → narrow su scroll);
    il CSS si limita a clampare e centrare. */
@@ -917,7 +917,7 @@ main {
   z-index: 60;
   margin-inline: auto;
   max-width: calc(100% - 28px);
-  /* colori fissi dark — la pillola non cambia mai con la sezione */
+  /* colori fissi dark - la pillola non cambia mai con la sezione */
   --nav-bg: #1d1d1f;
   --nav-ink: #f5f5f7;
   --nav-line: rgba(255, 255, 255, 0.10);
@@ -940,14 +940,14 @@ main {
   color: var(--nav-ink);
 }
 
-/* il logo occupa tutto il brand link — niente testo RUSH accanto */
+/* il logo occupa tutto il brand link - niente testo RUSH accanto */
 .nav__brand {
   display: flex;
   align-items: center;
   flex-shrink: 0;
 }
 
-/* logo senza sfondo né bordi — solo immagine diretta */
+/* logo senza sfondo né bordi - solo immagine diretta */
 .nav__logo-wrap {
   display: grid;
   place-items: center;
@@ -1058,7 +1058,7 @@ main {
 
 
 /* ============================================================
-   Hero — la promessa al centro, e il sistema che spunta già
+   Hero - la promessa al centro, e il sistema che spunta già
    dal primo colpo d'occhio.
    ============================================================ */
 .hero {
@@ -1411,7 +1411,7 @@ main {
 }
 
 /* ============================================================
-   Ticker "cosa cambia" — striscia scorrevole sotto l'hero.
+   Ticker "cosa cambia" - striscia scorrevole sotto l'hero.
    Fa da respiro tra l'hero e la prima sezione, e resta sempre
    leggibile perché ha una fascia sua.
    ============================================================ */
@@ -1617,7 +1617,7 @@ main {
 }
 
 /* ============================================================
-   Scena dell'hero — la finestra larga che emerge dal fondo,
+   Scena dell'hero - la finestra larga che emerge dal fondo,
    con due schede che le galleggiano ai lati.
    ============================================================ */
 .scene {
@@ -1996,7 +1996,7 @@ main {
   gap: 16px;
 }
 
-/* selettore sede compatto — hover apre il popover verso l'alto */
+/* selettore sede compatto - hover apre il popover verso l'alto */
 .dash__sede-sel {
   position: relative;
   display: flex;
@@ -2442,7 +2442,7 @@ main {
 }
 
 /* ============================================================
-   Orbita — le card che circondano il titolo della soluzione.
+   Orbita - le card che circondano il titolo della soluzione.
    Il contenitore è relativo e alto abbastanza da ospitarle;
    le card stanno sopra, il testo resta al centro.
    ============================================================ */
@@ -2683,7 +2683,7 @@ main {
 }
 
 /* ============================================================
-   Soluzione — carosello mobile (sostituisce l'orbita ≤760px)
+   Soluzione - carosello mobile (sostituisce l'orbita ≤760px)
    ============================================================ */
 .sol-track {
   display: flex;
@@ -2787,7 +2787,7 @@ main {
 }
 
 /* ============================================================
-   Cascata KPI — colonne sfalsate con divisori verticali
+   Cascata KPI - colonne sfalsate con divisori verticali
    ============================================================ */
 .cascade {
   display: grid;
@@ -2904,7 +2904,7 @@ main {
 }
 
 /* ============================================================
-   ThemeSwitch — pulsante circolare fisso in basso a sinistra,
+   ThemeSwitch - pulsante circolare fisso in basso a sinistra,
    stessa altezza del FAB (47px). Icona sola: luna in light, sole in dark.
    ============================================================ */
 .tsw {
@@ -3260,7 +3260,7 @@ textarea.input {
 }
 
 /* ============================================================
-   Responsive — sotto 720px: padding ridotto, colonne a 1fr
+   Responsive - sotto 720px: padding ridotto, colonne a 1fr
    ============================================================ */
 /* sotto questa soglia le card orbitanti stringerebbero il titolo */
 @media (max-width: 1160px) {
@@ -3520,7 +3520,7 @@ textarea.input {
 }
 
 /* ============================================================
-   Timeline — Come lavoriamo
+   Timeline - Come lavoriamo
    3 colonne: [contenuto-sx] [tracciato 60px] [contenuto-dx]
    Il tracciato SVG occupa tutte le righe; i card si alternano
    a sinistra (dispari) e destra (pari).
@@ -3659,7 +3659,7 @@ textarea.input {
     linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
 }
 
-/* un passo del metodo (vecchio stile — mantenuto per retrocompatibilità) */
+/* un passo del metodo (vecchio stile - mantenuto per retrocompatibilità) */
 .step {
   display: flex;
   flex-direction: column;
@@ -3740,7 +3740,7 @@ textarea.input {
 }
 
 /* ============================================================
-   FAQ — tabs a categoria + accordion col + animato
+   FAQ - tabs a categoria + accordion col + animato
    ============================================================ */
 .faq-sec {
   position: relative;
@@ -3895,7 +3895,7 @@ textarea.input {
 }
 
 /* ============================================================
-   Cosa costruiamo — bento animato.
+   Cosa costruiamo - bento animato.
    Tessere feature-grid con scena SVG in loop + bordo che
    traccia il cursore in accento. Tutto sui token del sito.
    ============================================================ */
@@ -3974,8 +3974,8 @@ textarea.input {
 }
 
 /* bordo che si illumina in accento intorno al cursore: un anello di
-   luce che segue il puntatore sul perimetro della card. Due strati —
-   il filo netto + un alito più largo e sfocato — così il bordo vicino
+   luce che segue il puntatore sul perimetro della card. Due strati -
+   il filo netto + un alito più largo e sfocato - così il bordo vicino
    al cursore è chiaramente in accento. */
 .buildcard__edge {
   position: absolute;
@@ -4148,7 +4148,7 @@ textarea.input {
   fill: var(--text-2);
 }
 
-/* Card E — righe di integrazione */
+/* Card E - righe di integrazione */
 .viz-links {
   display: flex;
   flex-direction: column;
@@ -4237,7 +4237,7 @@ textarea.input {
 }
 
 /* ============================================================
-   Confronto — colonne dei nomi (dal nome in giù) separate dalla
+   Confronto - colonne dei nomi (dal nome in giù) separate dalla
    tabella delle voci (che parte dalla prima voce). In alto a
    sinistra: niente. Rush = bordo accento, gli altri = bordo scuro.
    ============================================================ */
@@ -4308,7 +4308,7 @@ textarea.input {
   pointer-events: none;
 }
 
-/* intestazioni nomi — sopra i box */
+/* intestazioni nomi - sopra i box */
 .cf-hcell {
   display: flex;
   align-items: center;
@@ -4340,7 +4340,7 @@ textarea.input {
 :root[data-theme='dark'] .cf-rush-logo__img--l { display: none; }
 :root[data-theme='dark'] .cf-rush-logo__img--d { display: block; }
 
-/* celle dati — sopra i box, con linea orizzontale di divisione */
+/* celle dati - sopra i box, con linea orizzontale di divisione */
 .cf-cell {
   display: flex;
   align-items: center;
@@ -4369,7 +4369,7 @@ textarea.input {
 }
 
 /* riga sotto il nome: stessa linea (e altezza) del bordo alto della
-   tabella voci — bordo in cima alla prima riga dati, non sotto l'header */
+   tabella voci - bordo in cima alla prima riga dati, non sotto l'header */
 .cf-cell--val.is-first {
   border-top: 1.5px solid var(--text);
 }
@@ -4429,7 +4429,7 @@ textarea.input {
 }
 
 /* ============================================================
-   Prezzi — tre card affiancate
+   Prezzi - tre card affiancate
    ============================================================ */
 .prezzi-grid {
   display: grid;
@@ -4583,7 +4583,7 @@ textarea.input {
 }
 
 /* ------------------------------------------------------------
-   Prezzi — versione card singola con toggle mensile/annuale
+   Prezzi - versione card singola con toggle mensile/annuale
    ------------------------------------------------------------ */
 
 /* wrapper centrato per il toggle */
@@ -4725,7 +4725,7 @@ textarea.input {
 }
 
 /* ============================================================
-   Prezzi 2-col — card prezzo + colonna informativa
+   Prezzi 2-col - card prezzo + colonna informativa
    ============================================================ */
 .prezzi2 {
   display: grid;
@@ -4830,7 +4830,7 @@ textarea.input {
   gap: 0;
 }
 
-/* "a partire da" — etichetta chiara, attaccata sopra il numero */
+/* "a partire da" - etichetta chiara, attaccata sopra il numero */
 .prezzi2__card .prezzi-price__from {
   align-self: flex-start;
   padding: 0;
@@ -5094,7 +5094,7 @@ textarea.input {
 
 
 /* ============================================================
-   Metodo — timeline SVG con clipPath
+   Metodo - timeline SVG con clipPath
    ============================================================ */
 
 /* bulb bianco/nero agganciato alla sezione metodo */

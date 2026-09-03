@@ -1,6 +1,6 @@
 /* ============================================================
-   RUSH — token vincolanti
-   Fonte: "Rush — Guida al brand · Identità visiva, Apple edition".
+   RUSH - token vincolanti
+   Fonte: "Rush - Guida al brand · Identità visiva, Apple edition".
    Ogni valore qui sotto è copiato dalla tabella light/dark della
    guida. Se un colore, un raggio o una durata non è qui, non va
    inventato: va chiesto prima.
@@ -39,7 +39,7 @@
   --sh-2: 0 2px 4px rgba(0, 0, 0, 0.1), 0 28px 56px -18px rgba(0, 0, 0, 0.16);
   --sh-3: 0 3px 6px rgba(0, 0, 0, 0.12), 0 44px 88px -24px rgba(0, 0, 0, 0.2);
 
-  /* Vignetta della card — valore preso dalla guida, riquadro
+  /* Vignetta della card - valore preso dalla guida, riquadro
      "Hairline & vignette". È lo stile di riferimento di ogni
      superficie: radiale dall'alto, mai un flat fill, mai un
      gradiente lineare. */
@@ -47,7 +47,7 @@
   /* stessa vignetta con la luce spostata sull'angolo dell'icona */
   --card-vig-tl: radial-gradient(95% 80% at 14% -12%, #ffffff 0%, #fafaf9 46%, #f3f2ee 100%);
 
-  /* vignetta radiale sullo sfondo pagina — mai un flat fill */
+  /* vignetta radiale sullo sfondo pagina - mai un flat fill */
   --vignette: radial-gradient(
     120% 80% at 50% 0%,
     rgba(255, 255, 255, 0.9) 0%,

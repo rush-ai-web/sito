@@ -52,11 +52,11 @@ const TOTAL = 1120;
 const FRAC = NODES.map((n) => n.cy / TOTAL);
 
 /* finestra di reveal: parte appena prima e si completa appena dopo che la
-   linea tocca il punto — così la card esce quando la linea lo raggiunge. */
+   linea tocca il punto - così la card esce quando la linea lo raggiunge. */
 const LEAD_IN = 0.04;
 const LEAD_OUT = 0.02;
 
-/* NodeDot — appare in sincrono con la linea che lo raggiunge */
+/* NodeDot - appare in sincrono con la linea che lo raggiunge */
 function NodeDot({ cx, cy, frac, progress, reduce }) {
   const opacity = useTransform(progress, [frac - LEAD_IN, frac + LEAD_OUT], [0, 1]);
   const scale = useTransform(progress, [frac - LEAD_IN, frac + LEAD_OUT], [0.6, 1]);
@@ -76,7 +76,7 @@ function NodeDot({ cx, cy, frac, progress, reduce }) {
   );
 }
 
-/* StepCard — stessa sincronia: esce quando la linea raggiunge il suo nodo */
+/* StepCard - stessa sincronia: esce quando la linea raggiunge il suo nodo */
 function StepCard({ passo, idx, frac, progress, reduce }) {
   const isLeft = passo.side === 'left';
   const { icon: Icon, t, d } = passo;
