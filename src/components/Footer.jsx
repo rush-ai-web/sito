@@ -1,6 +1,6 @@
-import { Zap } from 'lucide-react';
+import { useContext } from 'react';
 import { useClock } from '../lib/hooks';
-import { LiveDot } from './ui';
+import { LiveDot, ThemeCtx } from './ui';
 
 const COLONNE = [
   [
@@ -32,27 +32,16 @@ const COLONNE = [
 
 export default function Footer() {
   const { time, date } = useClock();
+  const theme = useContext(ThemeCtx);
+  const logoSrc = theme === 'dark' ? './rush-logo-dark.png' : './rush-logo.png';
 
   return (
     <footer className="footer" data-tone="light">
       <div className="wrap">
         <div className="footer__grid">
           <div>
-            <a
-              href="#home"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 9,
-                fontFamily: 'var(--ff-display)',
-                fontSize: 20,
-                fontWeight: 400,
-                letterSpacing: '0.02em',
-                textTransform: 'uppercase',
-              }}
-            >
-              <Zap size={20} strokeWidth={2} />
-              Rush
+            <a href="#home" className="footer__brand" aria-label="Rush — torna all'inizio">
+              <img src={logoSrc} alt="Rush" className="footer__logo" />
             </a>
             <p className="t-small" style={{ marginTop: 16, maxWidth: 320 }}>
               Software house italiana. Progettiamo e sviluppiamo gestionali su misura, con dati in
@@ -85,13 +74,13 @@ export default function Footer() {
         </div>
 
         <div className="footer__base">
-          <span>© {new Date().getFullYear()} Rush · Infrastruttura europea, GDPR compliant</span>
+          <span>© {new Date().getFullYear()} Rush. Tutti i diritti riservati.</span>
           <span>Demo — contenuti e integrazioni in evoluzione</span>
         </div>
 
-        {/* wordmark gigante, sfumato verso il basso */}
+        {/* logo gigante, sfumato verso il basso */}
         <span className="wordmark" aria-hidden="true">
-          Rush
+          <img src={logoSrc} alt="" className="wordmark__logo" />
         </span>
       </div>
     </footer>

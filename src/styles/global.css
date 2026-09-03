@@ -921,7 +921,7 @@ main {
   --nav-bg: #1d1d1f;
   --nav-ink: #f5f5f7;
   --nav-line: rgba(255, 255, 255, 0.10);
-  --nav-muted: rgba(255, 255, 255, 0.52);
+  --nav-muted: #c5c5c5;
 }
 
 .nav__pill {
@@ -3213,6 +3213,18 @@ textarea.input {
   gap: 40px;
 }
 
+.footer__brand {
+  display: inline-flex;
+  align-items: center;
+}
+
+.footer__logo {
+  display: block;
+  width: auto;
+  height: 28px;
+  object-fit: contain;
+}
+
 .footer__col h4 {
   font-size: 13px;
   font-weight: 500;
@@ -4700,7 +4712,7 @@ textarea.input {
 
 .prezzi-features-head--muted {
   color: var(--text-3, var(--text-2));
-  opacity: 0.65;
+  opacity: 1;
 }
 
 .prezzi-features--muted li {
@@ -4719,7 +4731,7 @@ textarea.input {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
-  align-items: start;
+  align-items: stretch;
   max-width: 860px;
   margin: 0 auto;
 }
@@ -4856,14 +4868,14 @@ textarea.input {
 .prezzi2__card .prezzi-sub,
 .prezzi2__card .prezzi-price__unit,
 .prezzi2__card .prezzi2__variabile {
-  color: rgba(245, 245, 247, 0.55);
+  color: #c5c5c5;
 }
 
 :root[data-theme='dark'] .prezzi2__card .prezzi-price__from,
 :root[data-theme='dark'] .prezzi2__card .prezzi-sub,
 :root[data-theme='dark'] .prezzi2__card .prezzi-price__unit,
 :root[data-theme='dark'] .prezzi2__card .prezzi2__variabile {
-  color: rgba(29, 29, 31, 0.5);
+  color: #3b3b3d;
 }
 
 .prezzi2__card .prezzi-price__num {
@@ -4929,13 +4941,13 @@ textarea.input {
 }
 
 .prezzi2__card .prezzi-toggle__btn {
-  color: rgba(245, 245, 247, 0.5);
+  color: #c5c5c5;
   flex: 1;
   justify-content: center;
 }
 
 :root[data-theme='dark'] .prezzi2__card .prezzi-toggle__btn {
-  color: rgba(29, 29, 31, 0.45);
+  color: #3b3b3d;
 }
 
 /* light: card scura → pill bianca solida, testo nero */
@@ -4987,8 +4999,9 @@ textarea.input {
 .prezzi2__info {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 28px;
-  padding-top: 8px;
+  padding-block: 8px;
 }
 
 /* step con linea verticale continua */
@@ -5012,7 +5025,7 @@ textarea.input {
   width: 28px;
 }
 
-.prezzi2__step-dot {
+.prezzi2__step-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5021,9 +5034,6 @@ textarea.input {
   border-radius: 50%;
   background: color-mix(in srgb, var(--accent) 12%, transparent);
   border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
   color: var(--accent);
   flex-shrink: 0;
 }
@@ -5065,7 +5075,7 @@ textarea.input {
   line-height: 1.65;
   margin: 0;
   padding-left: 4px;
-  border-left: 2px solid var(--hairline-strong);
+  border-left: 2px solid var(--accent);
 }
 
 .prezzi2__variabile {

@@ -1,6 +1,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Banknote, SlidersHorizontal, Monitor, Users, Sparkles } from 'lucide-react';
+import {
+  Banknote,
+  SlidersHorizontal,
+  Monitor,
+  Users,
+  Sparkles,
+  ScanSearch,
+  Workflow,
+  Rocket,
+} from 'lucide-react';
 import { Section, Head } from './ui';
 import { EASE_MODAL } from '../lib/motion';
 
@@ -13,22 +22,22 @@ const INCLUSO = [
 
 const COME_FUNZIONA = [
   {
-    n: '01',
+    Icon: ScanSearch,
     t: 'Analisi dei processi attuali',
     d: 'Veniamo a vedere come lavori davvero: flussi, dati, dove si perde tempo. È incluso nel canone.',
   },
   {
-    n: '02',
+    Icon: SlidersHorizontal,
     t: 'Configurazione iniziale',
     d: 'Costruiamo il sistema sui tuoi processi reali. Gestionale personalizzato e AI base sono incluse.',
   },
   {
-    n: '03',
+    Icon: Workflow,
     t: 'Funzioni avanzate su valutazione',
     d: "Automazioni complesse, integrazioni custom e AI avanzata si valutano a parte e possono aumentare il preventivo.",
   },
   {
-    n: '04',
+    Icon: Rocket,
     t: 'In produzione in massimo 8 settimane',
     d: 'In media otto settimane dal via, con i tuoi dati veri dentro. Il canone parte da quel momento.',
   },
@@ -140,10 +149,12 @@ export default function Prezzi() {
           transition={{ duration: 0.6, ease: EASE_MODAL, delay: 0.1 }}
         >
           <div className="prezzi2__steps">
-            {COME_FUNZIONA.map(({ n, t, d }, i) => (
-              <div key={n} className="prezzi2__step">
+            {COME_FUNZIONA.map(({ Icon, t, d }, i) => (
+              <div key={t} className="prezzi2__step">
                 <div className="prezzi2__step-track">
-                  <span className="prezzi2__step-dot">{n}</span>
+                  <span className="prezzi2__step-icon" aria-hidden="true">
+                    <Icon size={14} strokeWidth={1.9} />
+                  </span>
                   {i < COME_FUNZIONA.length - 1 && (
                     <span className="prezzi2__step-line" aria-hidden="true" />
                   )}
@@ -157,7 +168,7 @@ export default function Prezzi() {
           </div>
 
           <p className="prezzi2__note">
-            Il canone copre analisi, configurazione iniziale, gestionale personalizzato e AI base. Automazioni complesse e integrazioni custom si aggiungono su preventivo.
+            Il canone copre analisi, configurazione iniziale, gestionale personalizzato e AI base. Automazioni e integrazioni complesse custom si aggiungono su preventivo.
           </p>
         </motion.div>
       </div>
