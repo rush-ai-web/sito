@@ -4240,8 +4240,8 @@ textarea.input {
   padding: 8px;
 }
 
-/* griglia: riga 1 = nomi, righe 2..N = voci. Nessun pannello esterno:
-   colonne-nome e tabella-voci sono riquadri separati. */
+/* la tabella = contenitore con bordo esterno; le decorazioni interne
+   restano staccate dai bordi grazie all'offset di 20px. */
 .cf-grid {
   display: grid;
   /* colonna finale da 20px = spazio a destra oltre l'ultima colonna */
@@ -4249,7 +4249,14 @@ textarea.input {
   /* riga finale da 20px = stesso spazio sotto l'ultima voce */
   grid-template-rows: auto repeat(var(--rows, 8), minmax(52px, auto)) 20px;
   column-gap: 12px;
-  min-width: 760px;
+  min-width: 780px;
+  /* offset di 20px anche in alto e a sinistra, così le decorazioni non
+     toccano nessun bordo esterno della tabella */
+  padding: 20px 0 0 20px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 22px;
+  box-shadow: var(--sh-1);
   position: relative;
 }
 
@@ -4281,9 +4288,9 @@ textarea.input {
   grid-column: 1 / -2;
   grid-row: 2 / -2;
   position: relative;
-  z-index: -1;
+  z-index: 0;
   border-radius: 16px;
-  background: var(--surface);
+  background: var(--surface-top);
   border: 1.5px solid var(--text);
   pointer-events: none;
 }
