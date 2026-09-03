@@ -47,8 +47,6 @@ function Cell({ val, isRush }) {
 }
 
 export default function Confronto() {
-  const nRows = RIGHE.length + 1; // intestazione + righe
-
   return (
     <Section id="confronto" large>
       <Head
@@ -66,16 +64,18 @@ export default function Confronto() {
         transition={{ duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }}
       >
         <div className="cf-scroll">
-          {/* Un'unica griglia: intestazioni e celle nella stessa colonna */}
-          <div className="cf-grid" style={{ '--rows': nRows }}>
-            {/* una colonna bordata e arrotondata per ogni nome (Rush = accento) */}
+          <div className="cf-grid" style={{ '--rows': RIGHE.length }}>
+            {/* colonne dei nomi: partono dal nome (riga 1) fino in fondo.
+                Rush = bordo accento, gli altri = bordo scuro. */}
             <div className="cf-col-deco cf-col-deco--rush" aria-hidden="true" />
             <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 3 }} aria-hidden="true" />
             <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 4 }} aria-hidden="true" />
             <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 5 }} aria-hidden="true" />
 
-            {/* cella in alto a sinistra: vuota */}
-            <div className="cf-hcell cf-hcell--label" style={{ gridColumn: 1, gridRow: 1 }} />
+            {/* tabella delle voci: parte dalla prima voce (riga 2), separata */}
+            <div className="cf-voci-deco" aria-hidden="true" />
+
+            {/* intestazioni nomi (in alto a sinistra: niente) */}
             <div className="cf-hcell cf-hcell--rush" style={{ gridColumn: 2, gridRow: 1 }}>
               <img src="./rush-logo.png"      alt="Rush" className="cf-rush-logo__img cf-rush-logo__img--l" />
               <img src="./rush-logo-dark.png" alt="Rush" className="cf-rush-logo__img cf-rush-logo__img--d" />

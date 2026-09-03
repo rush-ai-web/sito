@@ -4225,9 +4225,9 @@ textarea.input {
 }
 
 /* ============================================================
-   Confronto — pannello con una colonna bordata e arrotondata per ogni
-   nome (Rush = bordo accento, gli altri = bordo scuro). Cella in alto
-   a sinistra vuota. Righe divise da linee orizzontali sottili.
+   Confronto — colonne dei nomi (dal nome in giù) separate dalla
+   tabella delle voci (che parte dalla prima voce). In alto a
+   sinistra: niente. Rush = bordo accento, gli altri = bordo scuro.
    ============================================================ */
 .cf-wrap {
   margin-top: var(--s-sec);
@@ -4237,29 +4237,24 @@ textarea.input {
 .cf-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 8px;
+  padding: 8px 8px 12px;
 }
 
-/* pannello: griglia con intestazione (riga 1) + righe dati.
-   Niente overflow:hidden — il glow della colonna Rush deve poter uscire. */
+/* griglia: riga 1 = nomi, righe 2..N = voci. Nessun pannello esterno:
+   colonne-nome e tabella-voci sono riquadri separati. */
 .cf-grid {
   display: grid;
   grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(120px, 1fr));
-  grid-template-rows: auto repeat(var(--rows, 9), minmax(54px, auto));
+  grid-template-rows: auto repeat(var(--rows, 8), minmax(52px, auto));
   column-gap: 12px;
   min-width: 740px;
-  padding: 14px;
-  background: var(--surface);
-  border: 1px solid var(--hairline);
-  border-radius: 20px;
-  box-shadow: var(--sh-1);
   position: relative;
 }
 
-/* box decorativi = le colonne bordate e arrotondate, dietro alle celle */
+/* colonne dei nomi: dal nome (riga 1) fino all'ultima voce */
 .cf-col-deco {
   grid-row: 1 / -1;
-  border-radius: 14px;
+  border-radius: 16px;
   background: var(--surface-top);
   pointer-events: none;
   z-index: 0;
@@ -4277,12 +4272,23 @@ textarea.input {
     0 18px 44px -16px color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
-/* intestazioni — sopra i box */
+/* tabella delle voci: riquadro separato, parte dalla prima voce (riga 2) */
+.cf-voci-deco {
+  grid-column: 1;
+  grid-row: 2 / -1;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* intestazioni nomi — sopra i box */
 .cf-hcell {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 62px;
+  min-height: 60px;
   padding: 16px 12px;
   font-size: 13.5px;
   font-weight: 600;
@@ -4292,13 +4298,6 @@ textarea.input {
   position: relative;
   z-index: 1;
   border-bottom: 1px solid var(--hairline);
-}
-
-/* cella in alto a sinistra: vuota, senza niente */
-.cf-hcell--label {
-  min-height: 0;
-  background: transparent;
-  border: none;
 }
 
 .cf-hcell--rush {
@@ -4321,8 +4320,8 @@ textarea.input {
 .cf-cell {
   display: flex;
   align-items: center;
-  padding: 13px 12px;
-  min-height: 54px;
+  padding: 12px;
+  min-height: 52px;
   position: relative;
   z-index: 1;
   border-bottom: 1px solid var(--hairline);
@@ -4338,7 +4337,7 @@ textarea.input {
   font-weight: 500;
   color: var(--text);
   line-height: 1.4;
-  padding-left: 6px;
+  padding-left: 14px;
 }
 
 .cf-cell--val {
