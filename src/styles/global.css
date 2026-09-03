@@ -5032,9 +5032,10 @@ textarea.input {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
-  color: var(--accent);
+  background: var(--text);
+  border: 1px solid var(--text);
+  color: var(--bg);
+  box-shadow: var(--sh-1);
   flex-shrink: 0;
 }
 
@@ -5074,7 +5075,7 @@ textarea.input {
   color: var(--text-2);
   line-height: 1.65;
   margin: 0;
-  padding-left: 4px;
+  padding-left: 10px;
   border-left: 2px solid var(--accent);
 }
 
