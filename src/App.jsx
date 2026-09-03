@@ -52,16 +52,16 @@ export default function App() {
         <Hero />
         {/* scuro */}
         <Problema />
-        {/* tutto in un unico posto — diagramma di convergenza */}
-        <Ecosistema />
         {/* chiaro */}
         <Soluzione />
+        {/* tutto in un unico posto — diagramma di convergenza */}
+        <Ecosistema />
+        {/* scuro */}
+        <Metodo />
         {/* scuro */}
         <Prodotto />
         {/* chiaro */}
         <Numeri />
-        {/* scuro */}
-        <Metodo />
         {/* chiaro */}
         <Ristorazione />
         <Confronto />

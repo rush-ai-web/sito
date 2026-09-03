@@ -1,26 +1,49 @@
+import { Fragment } from 'react';
 import { Scale, Check, Minus, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Section, Head } from './ui';
 import { inView } from '../lib/motion';
 
-// true = ✓, false = ✗, 'partial' = ~
+/* vals[0] = Rush, [1] = SaaS, [2] = Software house grande, [3] = Freelance */
 const RIGHE = [
-  { label: 'Software fatto su misura',         vals: [true,     false,    true,     false]   },
-  { label: 'Consegnato in 8 settimane',        vals: [true,     false,    false,    'partial'] },
-  { label: 'Nessuna licenza mensile',          vals: [true,     false,    true,     true]    },
-  { label: 'Preventivo a cifra fissa',         vals: [true,     true,     false,    false]   },
-  { label: 'Parli con chi sviluppa',           vals: [true,     false,    false,    true]    },
-  { label: 'Team strutturato dietro',          vals: [true,     true,     true,     false]   },
-  { label: 'Modifiche senza ticket a terzi',   vals: [true,     false,    false,    true]    },
-  { label: 'Dati esportabili in qualsiasi momento', vals: [true, 'partial', true,   true]    },
+  { label: 'Supporto diretto con chi sviluppa',
+    vals: [true, false, false, true] },
+  { label: 'Software flessibile, adattato ai tuoi processi',
+    vals: [true, false, 'partial', 'partial'] },
+  { label: 'Preventivo a cifra fissa, niente sorprese',
+    vals: [true, 'partial', false, false] },
+  { label: 'Prezzo accessibile per una PMI',
+    vals: [true, true, false, true] },
+  { label: 'AI integrata nel gestionale',
+    vals: [true, 'partial', false, false] },
+  { label: 'Delivery in massimo 8 settimane',
+    vals: [true, true, false, 'partial'] },
+  { label: 'Modifiche senza ticket a terzi',
+    vals: [true, false, false, true] },
+  { label: 'Team strutturato e continuità nel tempo',
+    vals: [true, true, true, false] },
 ];
 
-const COLS = ['Rush', 'SaaS verticale', 'Software house', 'Freelance'];
+const COLS = ['SaaS verticale', 'Software house grande', 'Freelance'];
 
 function Cell({ val, isRush }) {
-  if (val === true)    return <span className={`cf-icon cf-icon--yes${isRush ? ' cf-icon--rush' : ''}`}><Check size={15} strokeWidth={2.5} /></span>;
-  if (val === false)   return <span className="cf-icon cf-icon--no"><X size={15} strokeWidth={2.5} /></span>;
-  return                      <span className="cf-icon cf-icon--partial"><Minus size={15} strokeWidth={2.5} /></span>;
+  if (val === true)
+    return (
+      <span className={`cf-icon cf-icon--yes${isRush ? ' cf-icon--rush' : ''}`}>
+        <Check size={16} strokeWidth={2.6} />
+      </span>
+    );
+  if (val === false)
+    return (
+      <span className="cf-icon cf-icon--no">
+        <X size={16} strokeWidth={2.6} />
+      </span>
+    );
+  return (
+    <span className="cf-icon cf-icon--partial">
+      <Minus size={16} strokeWidth={2.6} />
+    </span>
+  );
 }
 
 export default function Confronto() {
@@ -30,7 +53,7 @@ export default function Confronto() {
         icon={Scale}
         label="Perché noi"
         title="Quello che trovi qui non lo trovi altrove"
-        sub="Software su misura in otto settimane, a cifra fissa, con chi lo sviluppa reperibile direttamente. Metti a confronto."
+        sub="Supporto diretto, software flessibile, prezzo accessibile, AI integrata. Metti a confronto."
       />
 
       <motion.div
@@ -41,31 +64,47 @@ export default function Confronto() {
         transition={{ duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }}
       >
         <div className="cf-scroll">
-          <table className="cf-table">
-            <thead>
-              <tr>
-                <th className="cf-th cf-th--feature" />
-                {COLS.map((col, i) => (
-                  <th key={col} className={`cf-th${i === 0 ? ' cf-th--rush' : ''}`}>
-                    {i === 0 && <span className="cf-rush-badge">Rush</span>}
-                    {i !== 0 && col}
-                  </th>
+          {/* Headers: chip fluttuanti FUORI dal rettangolo del corpo */}
+          <div className="cf-heads">
+            <div className="cf-head cf-head--spacer" />
+            <div className="cf-head cf-head--rush">
+              <img src="./rush-logo.png"      alt="Rush" className="cf-rush-logo__img cf-rush-logo__img--l" />
+              <img src="./rush-logo-dark.png" alt="Rush" className="cf-rush-logo__img cf-rush-logo__img--d" />
+            </div>
+            {COLS.map((col) => (
+              <div key={col} className="cf-head">{col}</div>
+            ))}
+          </div>
+
+          {/* Body: rettangolo grande — griglia flat con celle come figli diretti
+              così i box decorativi delle colonne possono spannare tutte le righe */}
+          <div className="cf-body" style={{ '--rows': RIGHE.length }}>
+            {/* box decorativi che formano le colonne bordate — dietro alle celle */}
+            <div className="cf-col-deco cf-col-deco--rush" aria-hidden="true" />
+            <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 3 }} aria-hidden="true" />
+            <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 4 }} aria-hidden="true" />
+            <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 5 }} aria-hidden="true" />
+
+            {RIGHE.map(({ label, vals }, ri) => (
+              <Fragment key={label}>
+                <div
+                  className="cf-cell cf-cell--label"
+                  style={{ gridColumn: 1, gridRow: ri + 1 }}
+                >
+                  {label}
+                </div>
+                {vals.map((val, i) => (
+                  <div
+                    key={i}
+                    className="cf-cell cf-cell--val"
+                    style={{ gridColumn: i + 2, gridRow: ri + 1 }}
+                  >
+                    <Cell val={val} isRush={i === 0} />
+                  </div>
                 ))}
-              </tr>
-            </thead>
-            <tbody>
-              {RIGHE.map(({ label, vals }) => (
-                <tr key={label} className="cf-row">
-                  <td className="cf-td cf-td--label">{label}</td>
-                  {vals.map((val, i) => (
-                    <td key={i} className={`cf-td cf-td--cell${i === 0 ? ' cf-td--rush' : ''}`}>
-                      <Cell val={val} isRush={i === 0} />
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              </Fragment>
+            ))}
+          </div>
         </div>
       </motion.div>
     </Section>

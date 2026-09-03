@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Banknote, SlidersHorizontal, Monitor, Users } from 'lucide-react';
+import { Banknote, SlidersHorizontal, Monitor, Users, Sparkles } from 'lucide-react';
 import { Section, Head } from './ui';
 import { EASE_MODAL } from '../lib/motion';
 
 const INCLUSO = [
-  { Icon: SlidersHorizontal, label: 'Configurazione avanzata su misura per la tua attività' },
+  { Icon: SlidersHorizontal, label: 'Gestionale personalizzato sui tuoi processi' },
+  { Icon: Sparkles,          label: 'AI base integrata nel flusso' },
   { Icon: Monitor,           label: 'Dashboard operativa' },
   { Icon: Users,             label: 'Formazione del team' },
 ];
@@ -13,18 +14,23 @@ const INCLUSO = [
 const COME_FUNZIONA = [
   {
     n: '01',
-    t: 'Analisi gratuita',
-    d: 'Veniamo a vedere come lavori: flussi, dati, punti critici. Nessun impegno.',
+    t: 'Analisi dei processi attuali',
+    d: 'Veniamo a vedere come lavori davvero: flussi, dati, dove si perde tempo. È incluso nel canone.',
   },
   {
     n: '02',
-    t: 'Preventivo fisso',
-    d: 'Perimetro, tempi e cifra definitiva. Se qualcosa cambia lo diciamo prima, non in fattura.',
+    t: 'Configurazione iniziale',
+    d: 'Costruiamo il sistema sui tuoi processi reali. Gestionale personalizzato e AI base sono incluse.',
   },
   {
     n: '03',
-    t: 'In produzione in 8 settimane',
-    d: 'Il sistema entra in uso con i tuoi dati veri dentro. Il canone parte da quel momento.',
+    t: 'Funzioni avanzate su valutazione',
+    d: "Automazioni complesse, integrazioni custom e AI avanzata si valutano a parte e possono aumentare il preventivo.",
+  },
+  {
+    n: '04',
+    t: 'In produzione in massimo 8 settimane',
+    d: 'In media otto settimane dal via, con i tuoi dati veri dentro. Il canone parte da quel momento.',
   },
 ];
 
@@ -151,7 +157,7 @@ export default function Prezzi() {
           </div>
 
           <p className="prezzi2__note">
-            Il canone include una configurazione avanzata costruita sui tuoi processi reali, non un template generico. Moduli aggiuntivi, integrazioni e funzionalità AI sono disponibili su preventivo.
+            Il canone copre analisi, configurazione iniziale, gestionale personalizzato e AI base. Automazioni complesse e integrazioni custom si aggiungono su preventivo.
           </p>
         </motion.div>
       </div>

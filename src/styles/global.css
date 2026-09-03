@@ -1561,6 +1561,11 @@ main {
   background: rgba(0, 0, 0, 0.55);
 }
 
+/* in dark mode il bottone primario è bianco → alone bianco */
+:root[data-theme='dark'] .btn--hero.btn--primary::after {
+  background: rgba(255, 255, 255, 0.45);
+}
+
 .btn__badge {
   display: grid;
   place-items: center;
@@ -2899,36 +2904,41 @@ main {
 }
 
 /* ============================================================
-   ThemeSwitch — toggle sole/luna fisso in basso a sinistra
+   ThemeSwitch — pulsante circolare fisso in basso a sinistra,
+   stessa altezza del FAB (47px). Icona sola: luna in light, sole in dark.
    ============================================================ */
-.tsw-wrap {
-  position: fixed;
-  bottom: 28px;
-  left: 28px;
-  z-index: 110;
-}
-
 .tsw {
-  position: relative;
-  display: flex;
+  position: fixed;
+  bottom: 22px;
+  left: 22px;
+  z-index: 110;
+  display: inline-flex;
   align-items: center;
-  width: 84px;
-  height: 44px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  /* card style: same vignette + deep shadow as the dashboard cards */
-  background: var(--card-vig);
+  justify-content: center;
+  width: 47px;
+  height: 47px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  /* light mode: sfondo nero, icona bianca */
+  background: #1d1d1f;
+  color: #f5f5f7;
   box-shadow: var(--sh-2);
   cursor: pointer;
   padding: 0;
   appearance: none;
-  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.15s ease;
   overflow: hidden;
+}
+
+/* dark mode: sfondo bianco, icona nera */
+:root[data-theme='dark'] .tsw {
+  background: #f5f5f7;
+  color: #1d1d1f;
 }
 
 .tsw:hover {
   box-shadow: var(--sh-3);
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
 }
 
 .tsw:focus-visible {
@@ -2936,43 +2946,11 @@ main {
   box-shadow: var(--sh-2), 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
-/* Icons always above the thumb */
-.tsw__icon {
-  position: absolute;
-  display: flex;
+.tsw__ic {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 44px;
-  z-index: 2;
-  pointer-events: none;
-  transition: color 0.3s ease, opacity 0.3s ease;
-}
-
-.tsw__icon--sun  { left: 0; }
-.tsw__icon--moon { right: 0; }
-
-/* Light mode: sun accent + full, moon dim */
-.tsw:not(.is-dark) .tsw__icon--sun  { color: var(--accent); opacity: 1; }
-.tsw:not(.is-dark) .tsw__icon--moon { color: var(--fg-2);   opacity: 0.32; }
-
-/* Dark mode: moon accent + full, sun dim */
-.tsw.is-dark .tsw__icon--moon { color: var(--accent); opacity: 1; }
-.tsw.is-dark .tsw__icon--sun  { color: var(--fg-2);   opacity: 0.32; }
-
-/* Thumb floats above track — Framer Motion animates position via layout */
-.tsw__thumb {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--surface-top);
-  border: 1px solid var(--border);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14), 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 1;
-  pointer-events: none;
+  color: inherit;
 }
 
 /* ============================================================
@@ -2981,6 +2959,14 @@ main {
 /* Bordo animato "shiny border": container con overflow hidden + padding
    (= spessore del bordo), un raggio conico che ruota dietro, e il
    contenuto interno con sfondo solido che copre tutto tranne il bordo. */
+/* Bordo con conic-gradient animato via @property (stesso stile del prezzi2__frame):
+   il container ruota l'angle, il glow lo eredita per un alone sincronizzato. */
+@property --fab-angle {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
+}
+
 .fab {
   --fab-bg: #1d1d1f;
   --fab-ink: #f5f5f7;
@@ -2988,14 +2974,23 @@ main {
   right: 22px;
   bottom: 22px;
   z-index: 55;
-  padding: 2.5px; /* spessore del bordo luminoso */
+  padding: 2px; /* spessore uniforme del bordo animato */
   border-radius: var(--r-pill);
   border: 0;
   cursor: pointer;
-  background: var(--fab-bg);
-  overflow: hidden;
+  background: conic-gradient(
+    from var(--fab-angle),
+    color-mix(in srgb, var(--accent) 10%, transparent) 0deg,
+    color-mix(in srgb, var(--accent) 10%, transparent) 150deg,
+    color-mix(in srgb, var(--accent) 40%, transparent) 205deg,
+    var(--accent) 252deg,
+    #cbdcff 274deg,
+    var(--accent) 296deg,
+    color-mix(in srgb, var(--accent) 35%, transparent) 336deg,
+    color-mix(in srgb, var(--accent) 10%, transparent) 360deg
+  );
+  animation: fabSpin 4s linear infinite;
   isolation: isolate;
-  box-shadow: var(--sh-3), 0 0 24px -4px color-mix(in srgb, var(--accent) 60%, transparent);
 }
 
 :root[data-theme='dark'] .fab {
@@ -3003,24 +2998,25 @@ main {
   --fab-ink: #1d1d1f;
 }
 
-/* il raggio che ruota: molto più grande del container per non
-   lasciare angoli vuoti durante la rotazione */
+/* alone luminoso sincronizzato con lo stesso angle (ereditato) */
 .fab__glow {
   position: absolute;
-  inset: -100%;
+  inset: 0;
+  border-radius: inherit;
   z-index: -1;
-  /* solo colore d'accento: un arco ampio e luminoso che sfuma ai lati */
+  pointer-events: none;
   background: conic-gradient(
-    from 0deg,
+    from var(--fab-angle),
     transparent 0deg,
-    transparent 150deg,
-    color-mix(in srgb, var(--accent) 55%, transparent) 210deg,
-    var(--accent) 285deg,
-    var(--accent) 320deg,
-    color-mix(in srgb, var(--accent) 55%, transparent) 355deg,
+    transparent 200deg,
+    color-mix(in srgb, var(--accent) 55%, transparent) 250deg,
+    var(--accent) 274deg,
+    color-mix(in srgb, var(--accent) 55%, transparent) 298deg,
+    transparent 348deg,
     transparent 360deg
   );
-  animation: fabSpin 3.8s linear infinite;
+  filter: blur(13px);
+  opacity: 0.75;
 }
 
 /* il contenuto: sfondo solido, copre il centro lasciando solo il bordo */
@@ -3041,20 +3037,15 @@ main {
 }
 
 @keyframes fabSpin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { --fab-angle: 360deg; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .fab {
+    animation: none;
+  }
   .fab__glow {
-    animation: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .fab::before {
-    animation: none;
+    display: none;
   }
 }
 
@@ -3619,11 +3610,29 @@ textarea.input {
   pointer-events: none;
   z-index: 0;
   left: -38vw;
-  top: 68%;
+  top: 82%;
   transform: translateY(-50%);
   background: radial-gradient(
     closest-side,
-    color-mix(in srgb, var(--text) 22%, transparent),
+    color-mix(in srgb, var(--accent) 26%, transparent),
+    transparent 72%
+  );
+}
+
+/* bulb accento sinistra, alto, nella sezione Soluzione */
+.soluzione-bulb {
+  position: absolute;
+  width: 60vw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  left: -34vw;
+  top: 18%;
+  transform: translateY(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--accent) 24%, transparent),
     transparent 72%
   );
 }
@@ -4216,124 +4225,188 @@ textarea.input {
 }
 
 /* ============================================================
-   Confronto — tabella comparativa Rush vs. concorrenti
+   Confronto — grande rettangolo di sfondo con dentro colonne bordate.
+   Headers (nomi/logo) fluttuano SOPRA come chip fuori dal rettangolo.
+   Colonna Rush: bordo accento + glow. Altre: bordo neutro theme-aware.
    ============================================================ */
 .cf-wrap {
   margin-top: var(--s-sec);
+  position: relative;
 }
 
-/* contenitore unico, sfondo pieno (niente trasparenza) */
 .cf-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  background: var(--surface-top);
-  border: 1px solid var(--hairline-strong);
-  border-radius: var(--r-card);
-  box-shadow: var(--sh-1);
+  padding: 4px 4px 24px;
 }
 
-.cf-table {
-  width: 100%;
-  min-width: 600px;
-  border-collapse: collapse;
-  table-layout: fixed;
-  background: var(--surface-top);
+/* HEADER: chip fluttuanti FUORI dal rettangolo del body */
+.cf-heads {
+  display: grid;
+  grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(120px, 1fr));
+  column-gap: 10px;
+  min-width: 720px;
+  align-items: stretch;
+  margin-bottom: 14px;
+  padding: 0 14px; /* allineato col padding interno del body */
 }
 
-.cf-th {
-  padding: 16px 18px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-2);
-  text-align: center;
-  letter-spacing: 0.02em;
-  /* divisore orizzontale netto sotto l'intestazione */
-  border-bottom: 1px solid var(--hairline-strong);
-  /* divisore verticale: unisce intestazione e celle in un'unica colonna */
-  border-left: 1px solid var(--hairline);
-}
-
-.cf-th--feature {
-  text-align: left;
-  width: 34%;
-  color: transparent;
-  border-left: none;
-}
-
-/* Rush: nessuno sfondo d'accento, solo il nome in evidenza */
-.cf-th--rush {
-  color: var(--text);
-}
-
-.cf-rush-badge {
-  display: inline-flex;
+.cf-head {
+  display: flex;
   align-items: center;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--accent);
-  letter-spacing: -0.01em;
-}
-
-.cf-row {
-  transition: background 0.15s;
-}
-
-.cf-row:hover {
-  background: color-mix(in srgb, var(--text) 3%, transparent);
-}
-
-.cf-td {
-  padding: 15px 18px;
-  vertical-align: middle;
-  /* riga orizzontale che divide ogni voce */
-  border-bottom: 1px solid var(--hairline);
-  /* riga verticale che tiene insieme la colonna */
-  border-left: 1px solid var(--hairline);
-}
-
-.cf-row:last-child .cf-td {
-  border-bottom: none;
-}
-
-.cf-td--label {
-  font-size: 14px;
+  justify-content: center;
+  min-height: 62px;
+  padding: 14px 12px;
+  font-size: 13.5px;
+  font-weight: 600;
   color: var(--text);
-  font-weight: 500;
-  text-align: left;
-  border-left: none;
-}
-
-.cf-td--cell {
   text-align: center;
+  border-radius: 14px;
+  background: var(--card);
+  border: 1.5px solid var(--text);
+  box-shadow: var(--sh-2);
+  line-height: 1.25;
 }
 
+.cf-head--spacer {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* header Rush: accento pieno + alone */
+.cf-head--rush {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent),
+    0 12px 34px -10px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+/* logo Rush nell'header (alterna light/dark come nell'hero) */
+.cf-rush-logo__img {
+  height: 22px;
+  width: auto;
+  display: block;
+}
+
+.cf-rush-logo__img--d { display: none; }
+:root[data-theme='dark'] .cf-rush-logo__img--l { display: none; }
+:root[data-theme='dark'] .cf-rush-logo__img--d { display: block; }
+
+/* BODY = rettangolo grande. Griglia flat con celle come figli diretti. */
+.cf-body {
+  display: grid;
+  grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(120px, 1fr));
+  grid-template-rows: repeat(var(--rows, 8), minmax(56px, auto));
+  column-gap: 10px;
+  min-width: 720px;
+  padding: 14px;
+  border-radius: 20px;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--sh-2);
+  position: relative;
+}
+
+/* box decorativi per le colonne — spannano tutte le righe (grid-row: 1 / -1) */
+.cf-col-deco {
+  grid-row: 1 / -1;
+  border-radius: 14px;
+  pointer-events: none;
+  align-self: stretch;
+  justify-self: stretch;
+  z-index: 0;
+  min-height: 100%;
+}
+
+.cf-col-deco--other {
+  border: 1.5px solid var(--text);
+  background: transparent;
+}
+
+/* Rush: bordo accento + alone illuminato attorno */
+.cf-col-deco--rush {
+  grid-column: 2;
+  border: 2px solid var(--accent);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--accent) 15%, transparent),
+    0 22px 50px -14px color-mix(in srgb, var(--accent) 50%, transparent);
+  background: transparent;
+}
+
+/* Celle: sopra i decoratori */
+.cf-cell {
+  display: flex;
+  align-items: center;
+  padding: 14px 12px;
+  min-height: 58px;
+  position: relative;
+  z-index: 1;
+}
+
+.cf-cell--label {
+  justify-content: flex-start;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.4;
+  padding-left: 8px;
+}
+
+.cf-cell--val {
+  justify-content: center;
+}
+
+/* Icone */
 .cf-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
 }
 
 .cf-icon--yes {
-  background: color-mix(in srgb, var(--pos, #22c55e) 12%, transparent);
+  background: color-mix(in srgb, var(--pos, #22c55e) 14%, transparent);
   color: var(--pos, #22c55e);
 }
 
 .cf-icon--rush {
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
-  color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--accent) 55%, transparent);
 }
 
 .cf-icon--no {
-  background: color-mix(in srgb, var(--neg, #ef4444) 10%, transparent);
+  background: color-mix(in srgb, var(--neg, #ef4444) 12%, transparent);
   color: var(--neg, #ef4444);
 }
 
 .cf-icon--partial {
-  background: color-mix(in srgb, var(--text-2) 12%, transparent);
+  background: color-mix(in srgb, var(--text-2) 14%, transparent);
   color: var(--text-2);
+}
+
+@media (max-width: 720px) {
+  .cf-heads,
+  .cf-body {
+    min-width: 640px;
+    column-gap: 6px;
+    grid-template-columns: minmax(200px, 1.3fr) repeat(4, minmax(96px, 1fr));
+  }
+  .cf-head {
+    min-height: 54px;
+    font-size: 12.5px;
+    padding: 10px 6px;
+  }
+  .cf-cell {
+    padding: 12px 6px;
+    min-height: 52px;
+  }
+  .cf-cell--label { font-size: 13.5px; padding-left: 4px; }
 }
 
 /* ============================================================
@@ -4858,23 +4931,26 @@ textarea.input {
   color: rgba(29, 29, 31, 0.45);
 }
 
+/* light: card scura → pill bianca solida, testo nero */
 .prezzi2__card .prezzi-toggle__btn.is-active {
-  color: #f5f5f7;
-}
-
-:root[data-theme='dark'] .prezzi2__card .prezzi-toggle__btn.is-active {
   color: #1d1d1f;
 }
 
+/* dark: card bianca → pill nera solida, testo bianco */
+:root[data-theme='dark'] .prezzi2__card .prezzi-toggle__btn.is-active {
+  color: #f5f5f7;
+}
+
 .prezzi2__card .prezzi-toggle__pill {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: none;
+  background: #f5f5f7;
+  border-color: transparent;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
 :root[data-theme='dark'] .prezzi2__card .prezzi-toggle__pill {
-  background: rgba(0, 0, 0, 0.08);
-  border-color: rgba(0, 0, 0, 0.12);
+  background: #1d1d1f;
+  border-color: transparent;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
 }
 
 .prezzi2__card .prezzi-toggle__badge {
@@ -4998,14 +5074,6 @@ textarea.input {
   }
 }
 
-@media (max-width: 580px) {
-  .cf-th, .cf-td {
-    padding: 12px 12px;
-  }
-  .cf-td--label {
-    font-size: 13px;
-  }
-}
 
 /* ============================================================
    Metodo — timeline SVG con clipPath
@@ -5020,11 +5088,29 @@ textarea.input {
   pointer-events: none;
   z-index: 0;
   left: -38vw;
-  top: 68%;
+  top: 82%;
   transform: translateY(-50%);
   background: radial-gradient(
     closest-side,
-    color-mix(in srgb, var(--text) 22%, transparent),
+    color-mix(in srgb, var(--accent) 26%, transparent),
+    transparent 72%
+  );
+}
+
+/* bulb accento sinistra, alto, nella sezione Soluzione */
+.soluzione-bulb {
+  position: absolute;
+  width: 60vw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  left: -34vw;
+  top: 18%;
+  transform: translateY(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--accent) 24%, transparent),
     transparent 72%
   );
 }

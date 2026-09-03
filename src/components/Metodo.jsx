@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import { forwardRef, useRef } from 'react';
+import { motion, useScroll, useTransform, useInView, useReducedMotion } from 'framer-motion';
 import { GitBranch, Search, PenTool, Rocket, RefreshCw } from 'lucide-react';
 import { Section, Head } from './ui';
 
@@ -40,43 +40,40 @@ const PATH_D = [
 ].join(' ');
 
 const NODES = [
-  { cx: 16,  cy: 140,  frac: 0.125 },
-  { cx: 144, cy: 420,  frac: 0.375 },
-  { cx: 16,  cy: 700,  frac: 0.625 },
-  { cx: 144, cy: 980,  frac: 0.875 },
+  { cx: 16,  cy: 140 },
+  { cx: 144, cy: 420 },
+  { cx: 16,  cy: 700 },
+  { cx: 144, cy: 980 },
 ];
 
-/* NodeDot — opacity agganciata al progresso dello scroll */
-function NodeDot({ cx, cy, frac, progress, reduce }) {
-  const opacity = useTransform(progress, [frac - 0.02, frac + 0.04], [0, 1]);
+/* NodeDot — visibilità legata alla card (viewport-based, non alla linea) */
+function NodeDot({ cx, cy, visible, reduce }) {
   return (
     <motion.circle
       cx={cx} cy={cy} r="9"
       fill="var(--accent)"
       stroke="var(--bg)"
       strokeWidth="3"
-      style={reduce ? undefined : { opacity }}
+      initial={reduce ? undefined : { opacity: 0, scale: 0.6 }}
+      animate={reduce ? undefined : { opacity: visible ? 1 : 0, scale: visible ? 1 : 0.6 }}
+      transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
     />
   );
 }
 
-/* StepCard — compare in sincronia con il nodo corrispondente della linea */
-function StepCard({ passo, idx, frac, progress, reduce }) {
+/* StepCard — forwardRef così il parent può attaccare l'useInView direttamente
+   sul nodo motion senza wrapper aggiuntivi */
+const StepCard = forwardRef(function StepCard({ passo, idx, visible, reduce }, ref) {
   const isLeft = passo.side === 'left';
   const { icon: Icon, t, d } = passo;
-
-  /* stessa soglia del NodeDot: la card appare mentre la linea raggiunge il punto */
-  const opacity = useTransform(progress, [frac - 0.02, frac + 0.08], [0, 1]);
-  const x = useTransform(
-    progress,
-    [frac - 0.02, frac + 0.08],
-    [isLeft ? -20 : 20, 0],
-  );
-
   return (
     <motion.div
+      ref={ref}
       className={`tl-item tl-item--${passo.side}`}
-      style={reduce ? { gridRow: idx + 1 } : { gridRow: idx + 1, opacity, x }}
+      style={{ gridRow: idx + 1 }}
+      initial={reduce ? undefined : { opacity: 0, x: isLeft ? -20 : 20 }}
+      animate={reduce ? undefined : { opacity: visible ? 1 : 0, x: visible ? 0 : isLeft ? -20 : 20 }}
+      transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
     >
       <div className="tl-item__header">
         <span className="icon-tile icon-tile--sm">
@@ -87,17 +84,30 @@ function StepCard({ passo, idx, frac, progress, reduce }) {
       <p className="tl-item__d">{d}</p>
     </motion.div>
   );
-}
+});
 
 export default function Metodo() {
   const tlRef = useRef(null);
   const reduce = useReducedMotion();
 
+  /* 4 refs + 4 useInView, hooks fissi al livello top-level (regola React) */
+  const ref0 = useRef(null);
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
+  const ref3 = useRef(null);
+  const IV = { amount: 0.35, margin: '0px 0px -10% 0px' };
+  const v0 = useInView(ref0, IV);
+  const v1 = useInView(ref1, IV);
+  const v2 = useInView(ref2, IV);
+  const v3 = useInView(ref3, IV);
+  const refs = [ref0, ref1, ref2, ref3];
+  const visible = [v0, v1, v2, v3];
+
+  /* linea: sempre scroll-driven, indipendente dalla comparsa di card/dot */
   const { scrollYProgress } = useScroll({
     target: tlRef,
     offset: ['start center', 'end center'],
   });
-
   const rectHeight = useTransform(scrollYProgress, [0, 1], [0, 1120]);
 
   return (
@@ -142,7 +152,7 @@ export default function Metodo() {
               <NodeDot
                 key={i}
                 {...node}
-                progress={scrollYProgress}
+                visible={visible[i]}
                 reduce={reduce}
               />
             ))}
@@ -152,10 +162,10 @@ export default function Metodo() {
         {PASSI.map((passo, i) => (
           <StepCard
             key={i}
+            ref={refs[i]}
             passo={passo}
             idx={i}
-            frac={NODES[i].frac}
-            progress={scrollYProgress}
+            visible={visible[i]}
             reduce={reduce}
           />
         ))}
