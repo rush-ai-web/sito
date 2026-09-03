@@ -4225,9 +4225,9 @@ textarea.input {
 }
 
 /* ============================================================
-   Confronto — un'unica tabella a griglia, sfondo pieno.
-   Intestazioni unite alle colonne, righe divise da linee orizzontali,
-   colonna Rush evidenziata solo dal bordo accento (nessuno sfondo).
+   Confronto — pannello con una colonna bordata e arrotondata per ogni
+   nome (Rush = bordo accento, gli altri = bordo scuro). Cella in alto
+   a sinistra vuota. Righe divise da linee orizzontali sottili.
    ============================================================ */
 .cf-wrap {
   margin-top: var(--s-sec);
@@ -4237,24 +4237,47 @@ textarea.input {
 .cf-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 4px;
+  padding: 8px;
 }
 
-/* GRIGLIA unica: intestazione (riga 1) + righe dati, colonne allineate */
+/* pannello: griglia con intestazione (riga 1) + righe dati.
+   Niente overflow:hidden — il glow della colonna Rush deve poter uscire. */
 .cf-grid {
   display: grid;
   grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(120px, 1fr));
   grid-template-rows: auto repeat(var(--rows, 9), minmax(54px, auto));
-  min-width: 720px;
-  background: var(--surface-top);
-  border: 1px solid var(--hairline-strong);
-  border-radius: 18px;
+  column-gap: 12px;
+  min-width: 740px;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 20px;
   box-shadow: var(--sh-1);
   position: relative;
-  overflow: hidden;
 }
 
-/* intestazioni — stessa colonna delle celle */
+/* box decorativi = le colonne bordate e arrotondate, dietro alle celle */
+.cf-col-deco {
+  grid-row: 1 / -1;
+  border-radius: 14px;
+  background: var(--surface-top);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cf-col-deco--other {
+  border: 1.5px solid var(--text);
+}
+
+.cf-col-deco--rush {
+  grid-column: 2;
+  border: 2px solid var(--accent);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent),
+    0 18px 44px -16px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+/* intestazioni — sopra i box */
 .cf-hcell {
   display: flex;
   align-items: center;
@@ -4266,13 +4289,16 @@ textarea.input {
   color: var(--text);
   text-align: center;
   line-height: 1.25;
-  background: color-mix(in srgb, var(--text) 3.5%, var(--surface-top));
-  border-left: 1px solid var(--hairline);
-  border-bottom: 1.5px solid var(--hairline-strong);
+  position: relative;
+  z-index: 1;
+  border-bottom: 1px solid var(--hairline);
 }
 
+/* cella in alto a sinistra: vuota, senza niente */
 .cf-hcell--label {
-  border-left: none;
+  min-height: 0;
+  background: transparent;
+  border: none;
 }
 
 .cf-hcell--rush {
@@ -4291,16 +4317,7 @@ textarea.input {
 :root[data-theme='dark'] .cf-rush-logo__img--l { display: none; }
 :root[data-theme='dark'] .cf-rush-logo__img--d { display: block; }
 
-/* evidenziazione colonna Rush: bordo accento inset, senza sfondo */
-.cf-col-rush {
-  grid-column: 2;
-  grid-row: 1 / -1;
-  pointer-events: none;
-  z-index: 2;
-  box-shadow: inset 0 0 0 2px var(--accent);
-}
-
-/* celle dati */
+/* celle dati — sopra i box, con linea orizzontale di divisione */
 .cf-cell {
   display: flex;
   align-items: center;
@@ -4308,8 +4325,6 @@ textarea.input {
   min-height: 54px;
   position: relative;
   z-index: 1;
-  /* linea verticale: unisce ogni colonna; linea orizzontale: divide le righe */
-  border-left: 1px solid var(--hairline);
   border-bottom: 1px solid var(--hairline);
 }
 
@@ -4323,8 +4338,7 @@ textarea.input {
   font-weight: 500;
   color: var(--text);
   line-height: 1.4;
-  padding-left: 16px;
-  border-left: none;
+  padding-left: 6px;
 }
 
 .cf-cell--val {
@@ -4364,8 +4378,9 @@ textarea.input {
 
 @media (max-width: 720px) {
   .cf-grid {
-    min-width: 640px;
-    grid-template-columns: minmax(190px, 1.3fr) repeat(4, minmax(94px, 1fr));
+    min-width: 660px;
+    column-gap: 8px;
+    grid-template-columns: minmax(180px, 1.3fr) repeat(4, minmax(92px, 1fr));
   }
   .cf-hcell {
     min-height: 54px;

@@ -68,10 +68,13 @@ export default function Confronto() {
         <div className="cf-scroll">
           {/* Un'unica griglia: intestazioni e celle nella stessa colonna */}
           <div className="cf-grid" style={{ '--rows': nRows }}>
-            {/* evidenziazione colonna Rush: solo bordo accento, nessuno sfondo */}
-            <div className="cf-col-rush" aria-hidden="true" />
+            {/* una colonna bordata e arrotondata per ogni nome (Rush = accento) */}
+            <div className="cf-col-deco cf-col-deco--rush" aria-hidden="true" />
+            <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 3 }} aria-hidden="true" />
+            <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 4 }} aria-hidden="true" />
+            <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 5 }} aria-hidden="true" />
 
-            {/* riga intestazioni */}
+            {/* cella in alto a sinistra: vuota */}
             <div className="cf-hcell cf-hcell--label" style={{ gridColumn: 1, gridRow: 1 }} />
             <div className="cf-hcell cf-hcell--rush" style={{ gridColumn: 2, gridRow: 1 }}>
               <img src="./rush-logo.png"      alt="Rush" className="cf-rush-logo__img cf-rush-logo__img--l" />
