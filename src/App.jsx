@@ -54,10 +54,10 @@ export default function App() {
         <Problema />
         {/* chiaro */}
         <Soluzione />
-        {/* scuro */}
-        <Metodo />
         {/* tutto in un unico posto — diagramma di convergenza */}
         <Ecosistema />
+        {/* scuro */}
+        <Metodo />
         {/* scuro */}
         <Prodotto />
         {/* chiaro */}

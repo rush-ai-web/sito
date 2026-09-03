@@ -1561,6 +1561,11 @@ main {
   background: rgba(0, 0, 0, 0.55);
 }
 
+/* in dark mode il bottone primario è bianco → alone bianco */
+:root[data-theme='dark'] .btn--hero.btn--primary::after {
+  background: rgba(255, 255, 255, 0.45);
+}
+
 .btn__badge {
   display: grid;
   place-items: center;
@@ -2913,21 +2918,27 @@ main {
   width: 47px;
   height: 47px;
   border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--card-vig);
-  color: var(--text);
+  border: 1px solid transparent;
+  /* light mode: sfondo nero, icona bianca */
+  background: #1d1d1f;
+  color: #f5f5f7;
   box-shadow: var(--sh-2);
   cursor: pointer;
   padding: 0;
   appearance: none;
-  transition: box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.15s ease;
   overflow: hidden;
+}
+
+/* dark mode: sfondo bianco, icona nera */
+:root[data-theme='dark'] .tsw {
+  background: #f5f5f7;
+  color: #1d1d1f;
 }
 
 .tsw:hover {
   box-shadow: var(--sh-3);
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
-  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
 }
 
 .tsw:focus-visible {
@@ -3599,11 +3610,29 @@ textarea.input {
   pointer-events: none;
   z-index: 0;
   left: -38vw;
-  top: 68%;
+  top: 82%;
   transform: translateY(-50%);
   background: radial-gradient(
     closest-side,
-    color-mix(in srgb, var(--text) 22%, transparent),
+    color-mix(in srgb, var(--accent) 26%, transparent),
+    transparent 72%
+  );
+}
+
+/* bulb accento sinistra, alto, nella sezione Soluzione */
+.soluzione-bulb {
+  position: absolute;
+  width: 60vw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  left: -34vw;
+  top: 18%;
+  transform: translateY(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--accent) 24%, transparent),
     transparent 72%
   );
 }
@@ -4196,70 +4225,70 @@ textarea.input {
 }
 
 /* ============================================================
-   Confronto — tabella comparativa Rush vs. concorrenti
-   Card che stacca dallo sfondo con colonna Rush evidenziata in accento.
+   Confronto — headers fuori dallo sfondo del corpo tabella;
+   ogni colonna dei valori ha il proprio sfondo (profondità).
+   Layout via CSS Grid a 5 colonne condivise tra headers e body.
    ============================================================ */
 .cf-wrap {
   margin-top: var(--s-sec);
   position: relative;
-  border-radius: 20px;
-  background: var(--card, var(--surface-top));
-  border: 1px solid var(--hairline);
-  box-shadow: var(--sh-2);
-  overflow: hidden;
 }
 
 .cf-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 8px 6px 12px;
+  padding: 4px 4px 12px;
 }
 
-.cf-table {
-  width: 100%;
-  min-width: 640px;
-  border-collapse: separate;
-  border-spacing: 0;
-  table-layout: fixed;
+/* stessa template di colonne per headers e body → allineamento perfetto */
+.cf-heads,
+.cf-row {
+  display: grid;
+  grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(120px, 1fr));
+  column-gap: 10px;
+  min-width: 720px;
+  align-items: stretch;
 }
 
-.cf-th {
-  padding: 22px 18px 18px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-2);
-  text-align: center;
-  letter-spacing: 0.02em;
-  border-bottom: 1px solid var(--hairline);
-  vertical-align: middle;
+/* HEADER row — sopra al body, chip fluttuanti separati */
+.cf-heads {
+  margin-bottom: 14px;
 }
 
-.cf-th--feature {
-  text-align: left;
-  width: 34%;
-  color: transparent;
-  padding-left: 22px;
-}
-
-/* colonna Rush: header con sfondo accento + bordi arrotondati sopra */
-.cf-th--rush {
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
-  border-top: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
-  border-left: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
-  border-right: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
-  border-bottom-color: color-mix(in srgb, var(--accent) 28%, transparent);
-  border-radius: 14px 14px 0 0;
-  color: var(--accent);
-}
-
-/* logo Rush nell'header: alterna light/dark come nell'hero */
-.cf-rush-logo {
-  display: inline-flex;
+.cf-head {
+  display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 0;
+  min-height: 62px;
+  padding: 14px 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--sh-2);
+  line-height: 1.25;
 }
 
+.cf-head--spacer {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* header Rush: accento pieno + shadow più forte */
+.cf-head--rush {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent),
+    0 10px 28px -8px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+/* logo Rush dentro l'header: alterna light/dark come nell'hero */
 .cf-rush-logo__img {
   height: 22px;
   width: auto;
@@ -4270,50 +4299,76 @@ textarea.input {
 :root[data-theme='dark'] .cf-rush-logo__img--l { display: none; }
 :root[data-theme='dark'] .cf-rush-logo__img--d { display: block; }
 
+/* BODY: rows con celle che formano visualmente colonne continue */
+.cf-body {
+  display: flex;
+  flex-direction: column;
+}
+
 .cf-row {
-  transition: background 0.15s;
+  position: relative;
 }
 
-.cf-row:hover .cf-td:not(.cf-td--rush) {
-  background: color-mix(in srgb, var(--text) 3%, transparent);
+/* celle */
+.cf-cell {
+  display: flex;
+  align-items: center;
+  padding: 15px 16px;
+  min-height: 58px;
 }
 
-.cf-td {
-  padding: 16px 18px;
-  vertical-align: middle;
+.cf-cell--label {
+  justify-content: flex-start;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.4;
+  padding-left: 4px; /* label vive fuori dallo sfondo colonna */
+}
+
+.cf-cell--val {
+  justify-content: center;
+  background: var(--card);
+  border-top: 1px solid var(--hairline);
   border-bottom: 1px solid var(--hairline);
 }
 
-.cf-row:last-child .cf-td {
+/* prima riga: bordo superiore + angoli superiori arrotondati */
+.cf-row--first .cf-cell--val {
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  border-top-width: 1px;
+}
+.cf-row:not(.cf-row--first) .cf-cell--val {
+  border-top: none;
+}
+
+/* ultima riga: bordo inferiore + angoli inferiori arrotondati + shadow */
+.cf-row--last .cf-cell--val {
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  box-shadow: 0 12px 24px -14px color-mix(in srgb, var(--text) 22%, transparent);
+}
+.cf-row:not(.cf-row--last) .cf-cell--val {
   border-bottom: none;
 }
 
-.cf-td--label {
-  font-size: 14.5px;
-  color: var(--text);
-  font-weight: 500;
-  text-align: left;
-  padding-left: 22px;
-  line-height: 1.4;
+/* bordi laterali per formare una colonna continua */
+.cf-cell--val {
+  border-left: 1px solid var(--hairline);
+  border-right: 1px solid var(--hairline);
 }
 
-.cf-td--cell {
-  text-align: center;
+/* COLONNA RUSH: sfondo accento tenue + bordi accento + shadow più marcata */
+.cf-cell--rush {
+  background: color-mix(in srgb, var(--accent) 10%, var(--card));
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--hairline));
+}
+.cf-row--last .cf-cell--rush {
+  box-shadow: 0 14px 30px -12px color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
-/* colonna Rush: sfondo accento tenue + bordi laterali coordinati */
-.cf-td--rush {
-  background: color-mix(in srgb, var(--accent) 7%, transparent);
-  border-left: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
-  border-right: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
-  border-bottom-color: color-mix(in srgb, var(--accent) 18%, transparent);
-}
-
-.cf-row:last-child .cf-td--rush {
-  border-bottom: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
-  border-radius: 0 0 14px 14px;
-}
-
+/* Icone */
 .cf-icon {
   display: inline-flex;
   align-items: center;
@@ -4342,6 +4397,25 @@ textarea.input {
 .cf-icon--partial {
   background: color-mix(in srgb, var(--text-2) 14%, transparent);
   color: var(--text-2);
+}
+
+@media (max-width: 720px) {
+  .cf-heads,
+  .cf-row {
+    min-width: 640px;
+    column-gap: 6px;
+    grid-template-columns: minmax(200px, 1.3fr) repeat(4, minmax(96px, 1fr));
+  }
+  .cf-head {
+    min-height: 54px;
+    font-size: 12.5px;
+    padding: 10px 8px;
+  }
+  .cf-cell {
+    padding: 12px 8px;
+    min-height: 52px;
+  }
+  .cf-cell--label { font-size: 13.5px; }
 }
 
 /* ============================================================
@@ -4866,23 +4940,26 @@ textarea.input {
   color: rgba(29, 29, 31, 0.45);
 }
 
+/* light: card scura → pill bianca solida, testo nero */
 .prezzi2__card .prezzi-toggle__btn.is-active {
-  color: #f5f5f7;
-}
-
-:root[data-theme='dark'] .prezzi2__card .prezzi-toggle__btn.is-active {
   color: #1d1d1f;
 }
 
+/* dark: card bianca → pill nera solida, testo bianco */
+:root[data-theme='dark'] .prezzi2__card .prezzi-toggle__btn.is-active {
+  color: #f5f5f7;
+}
+
 .prezzi2__card .prezzi-toggle__pill {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: none;
+  background: #f5f5f7;
+  border-color: transparent;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
 :root[data-theme='dark'] .prezzi2__card .prezzi-toggle__pill {
-  background: rgba(0, 0, 0, 0.08);
-  border-color: rgba(0, 0, 0, 0.12);
+  background: #1d1d1f;
+  border-color: transparent;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
 }
 
 .prezzi2__card .prezzi-toggle__badge {
@@ -5006,14 +5083,6 @@ textarea.input {
   }
 }
 
-@media (max-width: 580px) {
-  .cf-th, .cf-td {
-    padding: 12px 12px;
-  }
-  .cf-td--label {
-    font-size: 13px;
-  }
-}
 
 /* ============================================================
    Metodo — timeline SVG con clipPath
@@ -5028,11 +5097,29 @@ textarea.input {
   pointer-events: none;
   z-index: 0;
   left: -38vw;
-  top: 68%;
+  top: 82%;
   transform: translateY(-50%);
   background: radial-gradient(
     closest-side,
-    color-mix(in srgb, var(--text) 22%, transparent),
+    color-mix(in srgb, var(--accent) 26%, transparent),
+    transparent 72%
+  );
+}
+
+/* bulb accento sinistra, alto, nella sezione Soluzione */
+.soluzione-bulb {
+  position: absolute;
+  width: 60vw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  left: -34vw;
+  top: 18%;
+  transform: translateY(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--accent) 24%, transparent),
     transparent 72%
   );
 }
