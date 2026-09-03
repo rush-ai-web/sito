@@ -1,5 +1,5 @@
-import { forwardRef, useRef } from 'react';
-import { motion, useScroll, useTransform, useInView, useReducedMotion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { GitBranch, Search, PenTool, Rocket, RefreshCw } from 'lucide-react';
 import { Section, Head } from './ui';
 
@@ -46,34 +46,46 @@ const NODES = [
   { cx: 144, cy: 980 },
 ];
 
-/* NodeDot — visibilità legata alla card (viewport-based, non alla linea) */
-function NodeDot({ cx, cy, visible, reduce }) {
+const TOTAL = 1120;
+/* frazione di scroll a cui la linea raggiunge ogni nodo (cy / altezza totale).
+   Con offset start-center → end-center, a quella frazione il punto è a metà schermo. */
+const FRAC = NODES.map((n) => n.cy / TOTAL);
+
+/* finestra di reveal: parte appena prima e si completa appena dopo che la
+   linea tocca il punto — così la card esce quando la linea lo raggiunge. */
+const LEAD_IN = 0.04;
+const LEAD_OUT = 0.02;
+
+/* NodeDot — appare in sincrono con la linea che lo raggiunge */
+function NodeDot({ cx, cy, frac, progress, reduce }) {
+  const opacity = useTransform(progress, [frac - LEAD_IN, frac + LEAD_OUT], [0, 1]);
+  const scale = useTransform(progress, [frac - LEAD_IN, frac + LEAD_OUT], [0.6, 1]);
+  if (reduce) {
+    return (
+      <circle cx={cx} cy={cy} r="9" fill="var(--accent)" stroke="var(--bg)" strokeWidth="3" />
+    );
+  }
   return (
     <motion.circle
       cx={cx} cy={cy} r="9"
       fill="var(--accent)"
       stroke="var(--bg)"
       strokeWidth="3"
-      initial={reduce ? undefined : { opacity: 0, scale: 0.6 }}
-      animate={reduce ? undefined : { opacity: visible ? 1 : 0, scale: visible ? 1 : 0.6 }}
-      transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
+      style={{ opacity, scale, transformBox: 'fill-box', transformOrigin: 'center' }}
     />
   );
 }
 
-/* StepCard — forwardRef così il parent può attaccare l'useInView direttamente
-   sul nodo motion senza wrapper aggiuntivi */
-const StepCard = forwardRef(function StepCard({ passo, idx, visible, reduce }, ref) {
+/* StepCard — stessa sincronia: esce quando la linea raggiunge il suo nodo */
+function StepCard({ passo, idx, frac, progress, reduce }) {
   const isLeft = passo.side === 'left';
   const { icon: Icon, t, d } = passo;
+  const opacity = useTransform(progress, [frac - LEAD_IN, frac + LEAD_OUT], [0, 1]);
+  const x = useTransform(progress, [frac - LEAD_IN, frac + LEAD_OUT], [isLeft ? -20 : 20, 0]);
   return (
     <motion.div
-      ref={ref}
       className={`tl-item tl-item--${passo.side}`}
-      style={{ gridRow: idx + 1 }}
-      initial={reduce ? undefined : { opacity: 0, x: isLeft ? -20 : 20 }}
-      animate={reduce ? undefined : { opacity: visible ? 1 : 0, x: visible ? 0 : isLeft ? -20 : 20 }}
-      transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+      style={reduce ? { gridRow: idx + 1 } : { gridRow: idx + 1, opacity, x }}
     >
       <div className="tl-item__header">
         <span className="icon-tile icon-tile--sm">
@@ -84,31 +96,18 @@ const StepCard = forwardRef(function StepCard({ passo, idx, visible, reduce }, r
       <p className="tl-item__d">{d}</p>
     </motion.div>
   );
-});
+}
 
 export default function Metodo() {
   const tlRef = useRef(null);
   const reduce = useReducedMotion();
 
-  /* 4 refs + 4 useInView, hooks fissi al livello top-level (regola React) */
-  const ref0 = useRef(null);
-  const ref1 = useRef(null);
-  const ref2 = useRef(null);
-  const ref3 = useRef(null);
-  const IV = { amount: 0.35, margin: '0px 0px -10% 0px' };
-  const v0 = useInView(ref0, IV);
-  const v1 = useInView(ref1, IV);
-  const v2 = useInView(ref2, IV);
-  const v3 = useInView(ref3, IV);
-  const refs = [ref0, ref1, ref2, ref3];
-  const visible = [v0, v1, v2, v3];
-
-  /* linea: sempre scroll-driven, indipendente dalla comparsa di card/dot */
+  /* la linea e la comparsa di card/dot sono guidate dallo stesso scroll */
   const { scrollYProgress } = useScroll({
     target: tlRef,
     offset: ['start center', 'end center'],
   });
-  const rectHeight = useTransform(scrollYProgress, [0, 1], [0, 1120]);
+  const rectHeight = useTransform(scrollYProgress, [0, 1], [0, TOTAL]);
 
   return (
     <Section id="metodo" grid>
@@ -128,7 +127,7 @@ export default function Metodo() {
               <clipPath id="metodo-line-clip">
                 <motion.rect
                   x="0" y="0" width="160"
-                  height={reduce ? 1120 : rectHeight}
+                  height={reduce ? TOTAL : rectHeight}
                 />
               </clipPath>
             </defs>
@@ -152,7 +151,8 @@ export default function Metodo() {
               <NodeDot
                 key={i}
                 {...node}
-                visible={visible[i]}
+                frac={FRAC[i]}
+                progress={scrollYProgress}
                 reduce={reduce}
               />
             ))}
@@ -162,10 +162,10 @@ export default function Metodo() {
         {PASSI.map((passo, i) => (
           <StepCard
             key={i}
-            ref={refs[i]}
             passo={passo}
             idx={i}
-            visible={visible[i]}
+            frac={FRAC[i]}
+            progress={scrollYProgress}
             reduce={reduce}
           />
         ))}
