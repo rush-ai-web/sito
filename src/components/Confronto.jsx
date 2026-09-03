@@ -47,6 +47,8 @@ function Cell({ val, isRush }) {
 }
 
 export default function Confronto() {
+  const nRows = RIGHE.length + 1; // intestazione + righe
+
   return (
     <Section id="confronto" large>
       <Head
@@ -64,46 +66,46 @@ export default function Confronto() {
         transition={{ duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }}
       >
         <div className="cf-scroll">
-          {/* Headers: chip fluttuanti FUORI dal rettangolo del corpo */}
-          <div className="cf-heads">
-            <div className="cf-head cf-head--spacer" />
-            <div className="cf-head cf-head--rush">
+          {/* Un'unica griglia: intestazioni e celle nella stessa colonna */}
+          <div className="cf-grid" style={{ '--rows': nRows }}>
+            {/* evidenziazione colonna Rush: solo bordo accento, nessuno sfondo */}
+            <div className="cf-col-rush" aria-hidden="true" />
+
+            {/* riga intestazioni */}
+            <div className="cf-hcell cf-hcell--label" style={{ gridColumn: 1, gridRow: 1 }} />
+            <div className="cf-hcell cf-hcell--rush" style={{ gridColumn: 2, gridRow: 1 }}>
               <img src="./rush-logo.png"      alt="Rush" className="cf-rush-logo__img cf-rush-logo__img--l" />
               <img src="./rush-logo-dark.png" alt="Rush" className="cf-rush-logo__img cf-rush-logo__img--d" />
             </div>
-            {COLS.map((col) => (
-              <div key={col} className="cf-head">{col}</div>
+            {COLS.map((col, i) => (
+              <div key={col} className="cf-hcell" style={{ gridColumn: i + 3, gridRow: 1 }}>
+                {col}
+              </div>
             ))}
-          </div>
 
-          {/* Body: rettangolo grande — griglia flat con celle come figli diretti
-              così i box decorativi delle colonne possono spannare tutte le righe */}
-          <div className="cf-body" style={{ '--rows': RIGHE.length }}>
-            {/* box decorativi che formano le colonne bordate — dietro alle celle */}
-            <div className="cf-col-deco cf-col-deco--rush" aria-hidden="true" />
-            <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 3 }} aria-hidden="true" />
-            <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 4 }} aria-hidden="true" />
-            <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 5 }} aria-hidden="true" />
-
-            {RIGHE.map(({ label, vals }, ri) => (
-              <Fragment key={label}>
-                <div
-                  className="cf-cell cf-cell--label"
-                  style={{ gridColumn: 1, gridRow: ri + 1 }}
-                >
-                  {label}
-                </div>
-                {vals.map((val, i) => (
+            {/* righe */}
+            {RIGHE.map(({ label, vals }, ri) => {
+              const last = ri === RIGHE.length - 1;
+              return (
+                <Fragment key={label}>
                   <div
-                    key={i}
-                    className="cf-cell cf-cell--val"
-                    style={{ gridColumn: i + 2, gridRow: ri + 1 }}
+                    className={`cf-cell cf-cell--label${last ? ' is-last' : ''}`}
+                    style={{ gridColumn: 1, gridRow: ri + 2 }}
                   >
-                    <Cell val={val} isRush={i === 0} />
+                    {label}
                   </div>
-                ))}
-              </Fragment>
-            ))}
+                  {vals.map((val, i) => (
+                    <div
+                      key={i}
+                      className={`cf-cell cf-cell--val${last ? ' is-last' : ''}`}
+                      style={{ gridColumn: i + 2, gridRow: ri + 2 }}
+                    >
+                      <Cell val={val} isRush={i === 0} />
+                    </div>
+                  ))}
+                </Fragment>
+              );
+            })}
           </div>
         </div>
       </motion.div>

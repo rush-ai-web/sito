@@ -4225,9 +4225,9 @@ textarea.input {
 }
 
 /* ============================================================
-   Confronto — grande rettangolo di sfondo con dentro colonne bordate.
-   Headers (nomi/logo) fluttuano SOPRA come chip fuori dal rettangolo.
-   Colonna Rush: bordo accento + glow. Altre: bordo neutro theme-aware.
+   Confronto — un'unica tabella a griglia, sfondo pieno.
+   Intestazioni unite alle colonne, righe divise da linee orizzontali,
+   colonna Rush evidenziata solo dal bordo accento (nessuno sfondo).
    ============================================================ */
 .cf-wrap {
   margin-top: var(--s-sec);
@@ -4237,51 +4237,47 @@ textarea.input {
 .cf-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 4px 4px 24px;
+  padding: 4px;
 }
 
-/* HEADER: chip fluttuanti FUORI dal rettangolo del body */
-.cf-heads {
+/* GRIGLIA unica: intestazione (riga 1) + righe dati, colonne allineate */
+.cf-grid {
   display: grid;
   grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(120px, 1fr));
-  column-gap: 10px;
+  grid-template-rows: auto repeat(var(--rows, 9), minmax(54px, auto));
   min-width: 720px;
-  align-items: stretch;
-  margin-bottom: 14px;
-  padding: 0 14px; /* allineato col padding interno del body */
+  background: var(--surface-top);
+  border: 1px solid var(--hairline-strong);
+  border-radius: 18px;
+  box-shadow: var(--sh-1);
+  position: relative;
+  overflow: hidden;
 }
 
-.cf-head {
+/* intestazioni — stessa colonna delle celle */
+.cf-hcell {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 62px;
-  padding: 14px 12px;
+  padding: 16px 12px;
   font-size: 13.5px;
   font-weight: 600;
   color: var(--text);
   text-align: center;
-  border-radius: 14px;
-  background: var(--card);
-  border: 1.5px solid var(--text);
-  box-shadow: var(--sh-2);
   line-height: 1.25;
+  background: color-mix(in srgb, var(--text) 3.5%, var(--surface-top));
+  border-left: 1px solid var(--hairline);
+  border-bottom: 1.5px solid var(--hairline-strong);
 }
 
-.cf-head--spacer {
-  background: transparent;
-  border: none;
-  box-shadow: none;
+.cf-hcell--label {
+  border-left: none;
 }
 
-/* header Rush: accento pieno + alone */
-.cf-head--rush {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-  box-shadow:
-    0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent),
-    0 12px 34px -10px color-mix(in srgb, var(--accent) 60%, transparent);
+.cf-hcell--rush {
+  color: var(--accent);
+  font-weight: 800;
 }
 
 /* logo Rush nell'header (alterna light/dark come nell'hero) */
@@ -4295,64 +4291,40 @@ textarea.input {
 :root[data-theme='dark'] .cf-rush-logo__img--l { display: none; }
 :root[data-theme='dark'] .cf-rush-logo__img--d { display: block; }
 
-/* BODY = rettangolo grande. Griglia flat con celle come figli diretti. */
-.cf-body {
-  display: grid;
-  grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(120px, 1fr));
-  grid-template-rows: repeat(var(--rows, 8), minmax(56px, auto));
-  column-gap: 10px;
-  min-width: 720px;
-  padding: 14px;
-  border-radius: 20px;
-  background: var(--card);
-  border: 1px solid var(--hairline);
-  box-shadow: var(--sh-2);
-  position: relative;
-}
-
-/* box decorativi per le colonne — spannano tutte le righe (grid-row: 1 / -1) */
-.cf-col-deco {
-  grid-row: 1 / -1;
-  border-radius: 14px;
-  pointer-events: none;
-  align-self: stretch;
-  justify-self: stretch;
-  z-index: 0;
-  min-height: 100%;
-}
-
-.cf-col-deco--other {
-  border: 1.5px solid var(--text);
-  background: transparent;
-}
-
-/* Rush: bordo accento + alone illuminato attorno */
-.cf-col-deco--rush {
+/* evidenziazione colonna Rush: bordo accento inset, senza sfondo */
+.cf-col-rush {
   grid-column: 2;
-  border: 2px solid var(--accent);
-  box-shadow:
-    0 0 0 4px color-mix(in srgb, var(--accent) 15%, transparent),
-    0 22px 50px -14px color-mix(in srgb, var(--accent) 50%, transparent);
-  background: transparent;
+  grid-row: 1 / -1;
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: inset 0 0 0 2px var(--accent);
 }
 
-/* Celle: sopra i decoratori */
+/* celle dati */
 .cf-cell {
   display: flex;
   align-items: center;
-  padding: 14px 12px;
-  min-height: 58px;
+  padding: 13px 12px;
+  min-height: 54px;
   position: relative;
   z-index: 1;
+  /* linea verticale: unisce ogni colonna; linea orizzontale: divide le righe */
+  border-left: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.cf-cell.is-last {
+  border-bottom: none;
 }
 
 .cf-cell--label {
   justify-content: flex-start;
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text);
   line-height: 1.4;
-  padding-left: 8px;
+  padding-left: 16px;
+  border-left: none;
 }
 
 .cf-cell--val {
@@ -4391,22 +4363,20 @@ textarea.input {
 }
 
 @media (max-width: 720px) {
-  .cf-heads,
-  .cf-body {
+  .cf-grid {
     min-width: 640px;
-    column-gap: 6px;
-    grid-template-columns: minmax(200px, 1.3fr) repeat(4, minmax(96px, 1fr));
+    grid-template-columns: minmax(190px, 1.3fr) repeat(4, minmax(94px, 1fr));
   }
-  .cf-head {
+  .cf-hcell {
     min-height: 54px;
     font-size: 12.5px;
-    padding: 10px 6px;
+    padding: 12px 6px;
   }
   .cf-cell {
     padding: 12px 6px;
     min-height: 52px;
   }
-  .cf-cell--label { font-size: 13.5px; padding-left: 4px; }
+  .cf-cell--label { font-size: 13.5px; padding-left: 12px; }
 }
 
 /* ============================================================
