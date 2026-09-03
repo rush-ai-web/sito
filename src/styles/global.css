@@ -4237,25 +4237,26 @@ textarea.input {
 .cf-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 8px 8px 12px;
+  padding: 8px;
 }
 
 /* griglia: riga 1 = nomi, righe 2..N = voci. Nessun pannello esterno:
    colonne-nome e tabella-voci sono riquadri separati. */
 .cf-grid {
   display: grid;
-  grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(120px, 1fr));
-  /* riga finale vuota (18px) = spazio tra l'ultima voce e il fondo dei box */
-  grid-template-rows: auto repeat(var(--rows, 8), minmax(52px, auto)) 18px;
+  /* colonna finale da 20px = spazio a destra oltre l'ultima colonna */
+  grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(120px, 1fr)) 20px;
+  /* riga finale da 20px = stesso spazio sotto l'ultima voce */
+  grid-template-rows: auto repeat(var(--rows, 8), minmax(52px, auto)) 20px;
   column-gap: 12px;
-  min-width: 740px;
-  padding-bottom: 20px;
+  min-width: 760px;
   position: relative;
 }
 
-/* colonne dei nomi: dal nome (riga 1) fino all'ultima voce */
+/* colonne dei nomi: dal nome (riga 1) fino all'ultima voce.
+   -2 = si ferma prima della riga finale da 20px (spazio in fondo) */
 .cf-col-deco {
-  grid-row: 1 / -1;
+  grid-row: 1 / -2;
   border-radius: 16px;
   background: var(--surface-top);
   pointer-events: none;
@@ -4274,10 +4275,11 @@ textarea.input {
     0 18px 44px -16px color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
-/* tabella delle voci: fascia a tutta larghezza, dietro le colonne */
+/* tabella delle voci: fascia dietro le colonne. -2 su riga e colonna =
+   si ferma prima della riga/colonna finale da 20px (spazio sotto e a destra) */
 .cf-voci-deco {
-  grid-column: 1 / -1;
-  grid-row: 2 / -1;
+  grid-column: 1 / -2;
+  grid-row: 2 / -2;
   position: relative;
   z-index: -1;
   border-radius: 16px;
