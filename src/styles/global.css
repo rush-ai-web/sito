@@ -4245,7 +4245,8 @@ textarea.input {
 .cf-grid {
   display: grid;
   grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(120px, 1fr));
-  grid-template-rows: auto repeat(var(--rows, 8), minmax(52px, auto));
+  /* riga finale vuota (18px) = spazio tra l'ultima voce e il fondo dei box */
+  grid-template-rows: auto repeat(var(--rows, 8), minmax(52px, auto)) 18px;
   column-gap: 12px;
   min-width: 740px;
   padding-bottom: 20px;
@@ -4299,8 +4300,6 @@ textarea.input {
   line-height: 1.25;
   position: relative;
   z-index: 1;
-  /* riga sotto il nome: scura come i bordi delle colonne */
-  border-bottom: 1.5px solid var(--text);
 }
 
 .cf-hcell--rush {
@@ -4345,6 +4344,12 @@ textarea.input {
 
 .cf-cell--val {
   justify-content: center;
+}
+
+/* riga sotto il nome: stessa linea (e altezza) del bordo alto della
+   tabella voci — bordo in cima alla prima riga dati, non sotto l'header */
+.cf-cell--val.is-first {
+  border-top: 1.5px solid var(--text);
 }
 
 /* Icone */

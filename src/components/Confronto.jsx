@@ -100,7 +100,7 @@ export default function Confronto() {
                   {vals.map((val, i) => (
                     <div
                       key={i}
-                      className={`cf-cell cf-cell--val${last ? ' is-last' : ''}`}
+                      className={`cf-cell cf-cell--val${last ? ' is-last' : ''}${ri === 0 ? ' is-first' : ''}`}
                       style={{ gridColumn: i + 2, gridRow: ri + 2 }}
                     >
                       <Cell val={val} isRush={i === 0} />
