@@ -4277,15 +4277,18 @@ textarea.input {
 }
 
 /* tabella delle voci: fascia dietro le colonne.
-   height/width con calc(100% + 20px) sconfinano di 20px oltre le track
-   della griglia (a destra e in basso), creando il contenitore visivo. */
+   Estende di 20px su tutti i lati oltre le sue track di griglia:
+   margin-top/left -20px sposta l'origine in alto-sinistra;
+   height/width +40px estendono altrettanto in basso-destra. */
 .cf-voci-deco {
   grid-column: 1 / -1;
   grid-row: 2 / -1;
   position: relative;
   z-index: -1;
-  height: calc(100% + 20px);
-  width: calc(100% + 20px);
+  margin-top: -20px;
+  margin-left: -20px;
+  height: calc(100% + 40px);
+  width: calc(100% + 40px);
   border-radius: 16px;
   background: var(--surface);
   border: 1.5px solid var(--text);
