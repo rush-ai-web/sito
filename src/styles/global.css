@@ -4225,9 +4225,9 @@ textarea.input {
 }
 
 /* ============================================================
-   Confronto — headers fuori dallo sfondo del corpo tabella;
-   ogni colonna dei valori ha il proprio sfondo (profondità).
-   Layout via CSS Grid a 5 colonne condivise tra headers e body.
+   Confronto — grande rettangolo di sfondo con dentro colonne bordate.
+   Headers (nomi/logo) fluttuano SOPRA come chip fuori dal rettangolo.
+   Colonna Rush: bordo accento + glow. Altre: bordo neutro theme-aware.
    ============================================================ */
 .cf-wrap {
   margin-top: var(--s-sec);
@@ -4237,22 +4237,18 @@ textarea.input {
 .cf-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 4px 4px 12px;
+  padding: 4px 4px 24px;
 }
 
-/* stessa template di colonne per headers e body → allineamento perfetto */
-.cf-heads,
-.cf-row {
+/* HEADER: chip fluttuanti FUORI dal rettangolo del body */
+.cf-heads {
   display: grid;
   grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(120px, 1fr));
   column-gap: 10px;
   min-width: 720px;
   align-items: stretch;
-}
-
-/* HEADER row — sopra al body, chip fluttuanti separati */
-.cf-heads {
   margin-bottom: 14px;
+  padding: 0 14px; /* allineato col padding interno del body */
 }
 
 .cf-head {
@@ -4267,7 +4263,7 @@ textarea.input {
   text-align: center;
   border-radius: 14px;
   background: var(--card);
-  border: 1px solid var(--hairline);
+  border: 1.5px solid var(--text);
   box-shadow: var(--sh-2);
   line-height: 1.25;
 }
@@ -4278,17 +4274,17 @@ textarea.input {
   box-shadow: none;
 }
 
-/* header Rush: accento pieno + shadow più forte */
+/* header Rush: accento pieno + alone */
 .cf-head--rush {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
   box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent),
-    0 10px 28px -8px color-mix(in srgb, var(--accent) 55%, transparent);
+    0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent),
+    0 12px 34px -10px color-mix(in srgb, var(--accent) 60%, transparent);
 }
 
-/* logo Rush dentro l'header: alterna light/dark come nell'hero */
+/* logo Rush nell'header (alterna light/dark come nell'hero) */
 .cf-rush-logo__img {
   height: 22px;
   width: auto;
@@ -4299,22 +4295,55 @@ textarea.input {
 :root[data-theme='dark'] .cf-rush-logo__img--l { display: none; }
 :root[data-theme='dark'] .cf-rush-logo__img--d { display: block; }
 
-/* BODY: rows con celle che formano visualmente colonne continue */
+/* BODY = rettangolo grande. Griglia flat con celle come figli diretti. */
 .cf-body {
-  display: flex;
-  flex-direction: column;
-}
-
-.cf-row {
+  display: grid;
+  grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(120px, 1fr));
+  grid-template-rows: repeat(var(--rows, 8), minmax(56px, auto));
+  column-gap: 10px;
+  min-width: 720px;
+  padding: 14px;
+  border-radius: 20px;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--sh-2);
   position: relative;
 }
 
-/* celle */
+/* box decorativi per le colonne — spannano tutte le righe (grid-row: 1 / -1) */
+.cf-col-deco {
+  grid-row: 1 / -1;
+  border-radius: 14px;
+  pointer-events: none;
+  align-self: stretch;
+  justify-self: stretch;
+  z-index: 0;
+  min-height: 100%;
+}
+
+.cf-col-deco--other {
+  border: 1.5px solid var(--text);
+  background: transparent;
+}
+
+/* Rush: bordo accento + alone illuminato attorno */
+.cf-col-deco--rush {
+  grid-column: 2;
+  border: 2px solid var(--accent);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--accent) 15%, transparent),
+    0 22px 50px -14px color-mix(in srgb, var(--accent) 50%, transparent);
+  background: transparent;
+}
+
+/* Celle: sopra i decoratori */
 .cf-cell {
   display: flex;
   align-items: center;
-  padding: 15px 16px;
+  padding: 14px 12px;
   min-height: 58px;
+  position: relative;
+  z-index: 1;
 }
 
 .cf-cell--label {
@@ -4323,49 +4352,11 @@ textarea.input {
   font-weight: 500;
   color: var(--text);
   line-height: 1.4;
-  padding-left: 4px; /* label vive fuori dallo sfondo colonna */
+  padding-left: 8px;
 }
 
 .cf-cell--val {
   justify-content: center;
-  background: var(--card);
-  border-top: 1px solid var(--hairline);
-  border-bottom: 1px solid var(--hairline);
-}
-
-/* prima riga: bordo superiore + angoli superiori arrotondati */
-.cf-row--first .cf-cell--val {
-  border-top-left-radius: 14px;
-  border-top-right-radius: 14px;
-  border-top-width: 1px;
-}
-.cf-row:not(.cf-row--first) .cf-cell--val {
-  border-top: none;
-}
-
-/* ultima riga: bordo inferiore + angoli inferiori arrotondati + shadow */
-.cf-row--last .cf-cell--val {
-  border-bottom-left-radius: 14px;
-  border-bottom-right-radius: 14px;
-  box-shadow: 0 12px 24px -14px color-mix(in srgb, var(--text) 22%, transparent);
-}
-.cf-row:not(.cf-row--last) .cf-cell--val {
-  border-bottom: none;
-}
-
-/* bordi laterali per formare una colonna continua */
-.cf-cell--val {
-  border-left: 1px solid var(--hairline);
-  border-right: 1px solid var(--hairline);
-}
-
-/* COLONNA RUSH: sfondo accento tenue + bordi accento + shadow più marcata */
-.cf-cell--rush {
-  background: color-mix(in srgb, var(--accent) 10%, var(--card));
-  border-color: color-mix(in srgb, var(--accent) 30%, var(--hairline));
-}
-.cf-row--last .cf-cell--rush {
-  box-shadow: 0 14px 30px -12px color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 /* Icone */
@@ -4401,7 +4392,7 @@ textarea.input {
 
 @media (max-width: 720px) {
   .cf-heads,
-  .cf-row {
+  .cf-body {
     min-width: 640px;
     column-gap: 6px;
     grid-template-columns: minmax(200px, 1.3fr) repeat(4, minmax(96px, 1fr));
@@ -4409,13 +4400,13 @@ textarea.input {
   .cf-head {
     min-height: 54px;
     font-size: 12.5px;
-    padding: 10px 8px;
+    padding: 10px 6px;
   }
   .cf-cell {
-    padding: 12px 8px;
+    padding: 12px 6px;
     min-height: 52px;
   }
-  .cf-cell--label { font-size: 13.5px; }
+  .cf-cell--label { font-size: 13.5px; padding-left: 4px; }
 }
 
 /* ============================================================

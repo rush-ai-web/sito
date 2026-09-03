@@ -1,10 +1,10 @@
+import { Fragment } from 'react';
 import { Scale, Check, Minus, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Section, Head } from './ui';
 import { inView } from '../lib/motion';
 
-/* vals[0] = Rush, [1] = SaaS, [2] = Software house grande, [3] = Freelance
-   true = ✓, false = ✗, 'partial' = ~ */
+/* vals[0] = Rush, [1] = SaaS, [2] = Software house grande, [3] = Freelance */
 const RIGHE = [
   { label: 'Supporto diretto con chi sviluppa',
     vals: [true, false, false, true] },
@@ -64,7 +64,7 @@ export default function Confronto() {
         transition={{ duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }}
       >
         <div className="cf-scroll">
-          {/* Header row: chip fluttuanti FUORI dallo sfondo del corpo tabella */}
+          {/* Headers: chip fluttuanti FUORI dal rettangolo del corpo */}
           <div className="cf-heads">
             <div className="cf-head cf-head--spacer" />
             <div className="cf-head cf-head--rush">
@@ -76,20 +76,24 @@ export default function Confronto() {
             ))}
           </div>
 
-          {/* Body: griglia con bg per-cella → colonne visualmente separate */}
-          <div className="cf-body">
-            {RIGHE.map(({ label, vals }, ri) => (
-              <div key={label} className={`cf-row${ri === 0 ? ' cf-row--first' : ''}${ri === RIGHE.length - 1 ? ' cf-row--last' : ''}`}>
+          {/* Body: rettangolo grande — griglia flat con celle come figli diretti
+              così i box decorativi delle colonne possono spannare tutte le righe */}
+          <div className="cf-body" style={{ '--rows': RIGHE.length }}>
+            {/* box decorativi che formano le colonne bordate — dietro alle celle */}
+            <div className="cf-col-deco cf-col-deco--rush" aria-hidden="true" />
+            <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 3 }} aria-hidden="true" />
+            <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 4 }} aria-hidden="true" />
+            <div className="cf-col-deco cf-col-deco--other" style={{ gridColumn: 5 }} aria-hidden="true" />
+
+            {RIGHE.map(({ label, vals }) => (
+              <Fragment key={label}>
                 <div className="cf-cell cf-cell--label">{label}</div>
                 {vals.map((val, i) => (
-                  <div
-                    key={i}
-                    className={`cf-cell cf-cell--val${i === 0 ? ' cf-cell--rush' : ''}`}
-                  >
+                  <div key={i} className="cf-cell cf-cell--val">
                     <Cell val={val} isRush={i === 0} />
                   </div>
                 ))}
-              </div>
+              </Fragment>
             ))}
           </div>
         </div>
