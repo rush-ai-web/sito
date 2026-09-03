@@ -4240,23 +4240,17 @@ textarea.input {
   padding: 8px;
 }
 
-/* griglia = contenitore vero della tabella: bordo + sfondo nero/bianco.
-   Il padding di 20px dà respiro attorno alle track: le decorazioni
-   interne (col-deco, voci-deco) restano dentro le track e quindi
-   staccate di 20px dai bordi esterni. */
+/* griglia: solo layout, nessun contenitore visivo. Il "bordo esterno"
+   è la fascia voci-deco stessa, che si estende oltre le sue track. */
 .cf-grid {
   display: grid;
   grid-template-columns: minmax(240px, 1.4fr) repeat(4, minmax(120px, 1fr));
   grid-template-rows: auto repeat(var(--rows, 8), minmax(52px, auto));
   column-gap: 12px;
-  padding: 20px;
   min-width: 760px;
   position: relative;
-  background: var(--card);
-  border: 1.5px solid var(--text);
-  border-radius: 22px;
-  /* nuovo stacking context così i z-index negativi (voci-deco) restano
-     sopra lo sfondo della griglia e non spariscono dietro */
+  /* stacking context locale: la voci-deco con z-index -1 resta comunque
+     dentro la griglia e visibile sopra qualsiasi sfondo di sezione */
   isolation: isolate;
 }
 
@@ -4282,14 +4276,16 @@ textarea.input {
     0 18px 44px -16px color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
-/* tabella delle voci: fascia dietro le colonne */
+/* tabella delle voci: fascia dietro le colonne.
+   height/width con calc(100% + 20px) sconfinano di 20px oltre le track
+   della griglia (a destra e in basso), creando il contenitore visivo. */
 .cf-voci-deco {
   grid-column: 1 / -1;
   grid-row: 2 / -1;
   position: relative;
-  /* z-index 0 (non -1): con isolation:isolate su .cf-grid resta sopra
-     lo sfondo della griglia; z-index -1 finirebbe dietro allo sfondo */
-  z-index: 0;
+  z-index: -1;
+  height: calc(100% + 20px);
+  width: calc(100% + 20px);
   border-radius: 16px;
   background: var(--surface);
   border: 1.5px solid var(--text);
