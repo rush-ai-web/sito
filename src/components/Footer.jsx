@@ -34,6 +34,9 @@ export default function Footer() {
   const { time, date } = useClock();
   const theme = useContext(ThemeCtx);
   const logoSrc = theme === 'dark' ? './rush-logo-dark.png' : './rush-logo.png';
+  const logoSrcSet = theme === 'dark'
+    ? './rush-logo-dark-192.png 192w, ./rush-logo-dark-320.png 320w, ./rush-logo-dark.png 800w'
+    : './rush-logo-192.png 192w, ./rush-logo-320.png 320w, ./rush-logo.png 800w';
 
   return (
     <footer
@@ -59,7 +62,7 @@ export default function Footer() {
               rel="home"
               aria-label="Rush, torna all'inizio"
             >
-              <img src={logoSrc} alt="Logo Rush" className="footer__logo u-logo" itemProp="logo" />
+              <img src={logoSrc} srcSet={logoSrcSet} sizes="112px" alt="Logo Rush" width="800" height="200" loading="lazy" className="footer__logo u-logo" itemProp="logo" />
             </a>
             <p
               className="t-small p-note"
@@ -106,7 +109,7 @@ export default function Footer() {
 
         {/* logo gigante, sfumato verso il basso */}
         <span className="wordmark" aria-hidden="true">
-          <img src={logoSrc} alt="" className="wordmark__logo" />
+          <img src={logoSrc} srcSet={logoSrcSet} sizes="(max-width: 1160px) 100vw, 1120px" alt="" width="800" height="200" loading="lazy" className="wordmark__logo" />
         </span>
       </div>
     </footer>

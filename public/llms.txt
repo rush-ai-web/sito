@@ -2,7 +2,7 @@
 
 > Rush crea gestionali su misura per PMI, collegando dati, automazioni e intelligenza artificiale per ridurre errori, costi e lavoro manuale.
 
-URL canonico: https://rush-ai.it/
+URL canonico: [https://rush-ai.it/](https://rush-ai.it/)
 Lingua: italiano
 Area servita: Italia
 
@@ -24,11 +24,11 @@ Il canone parte da 299 EUR al mese con fatturazione trimestrale. Sono inclusi an
 
 ## Contatti
 
-- Email: info@rush.it
-- Modulo: https://rush-ai.it/#contatti
+- Email: [info@rush.it](mailto:info@rush.it)
+- Modulo: [Contatta Rush](https://rush-ai.it/#contatti)
 
 ## Risorse
 
-- Sitemap: https://rush-ai.it/sitemap.xml
-- Robots: https://rush-ai.it/robots.txt
-- Repository: https://github.com/rush-ai-web/sito
+- [Sitemap XML](https://rush-ai.it/sitemap.xml)
+- [Direttive robots](https://rush-ai.it/robots.txt)
+- [Repository del sito](https://github.com/rush-ai-web/sito)

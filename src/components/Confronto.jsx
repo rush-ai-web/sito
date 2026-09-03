@@ -77,8 +77,8 @@ export default function Confronto() {
 
             {/* intestazioni nomi (in alto a sinistra: niente) */}
             <div className="cf-hcell cf-hcell--rush" style={{ gridColumn: 2, gridRow: 1 }}>
-              <img src="./rush-logo.png"      alt="Rush" className="cf-rush-logo__img cf-rush-logo__img--l" />
-              <img src="./rush-logo-dark.png" alt="Rush" className="cf-rush-logo__img cf-rush-logo__img--d" />
+              <img src="./rush-logo.png" srcSet="./rush-logo-192.png 192w, ./rush-logo-320.png 320w, ./rush-logo.png 800w" sizes="88px" alt="Rush" width="800" height="200" loading="lazy" className="cf-rush-logo__img cf-rush-logo__img--l" />
+              <img src="./rush-logo-dark.png" srcSet="./rush-logo-dark-192.png 192w, ./rush-logo-dark-320.png 320w, ./rush-logo-dark.png 800w" sizes="88px" alt="Rush" width="800" height="200" loading="lazy" className="cf-rush-logo__img cf-rush-logo__img--d" />
             </div>
             {COLS.map((col, i) => (
               <div key={col} className="cf-hcell" style={{ gridColumn: i + 3, gridRow: 1 }}>

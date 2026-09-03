@@ -182,8 +182,24 @@ export default function Hero() {
           initial="hidden"
           animate="show"
         >
-          <img src="./rush-logo.png" alt="Rush" className="hero__logo-img hero__logo-img--l" />
-          <img src="./rush-logo-dark.png" alt="Rush" className="hero__logo-img hero__logo-img--d" />
+          <img
+            src="./rush-logo.png"
+            srcSet="./rush-logo-192.png 192w, ./rush-logo-320.png 320w, ./rush-logo.png 800w"
+            sizes="144px"
+            alt="Rush"
+            width="800"
+            height="200"
+            className="hero__logo-img hero__logo-img--l"
+          />
+          <img
+            src="./rush-logo-dark.png"
+            srcSet="./rush-logo-dark-192.png 192w, ./rush-logo-dark-320.png 320w, ./rush-logo-dark.png 800w"
+            sizes="144px"
+            alt="Rush"
+            width="800"
+            height="200"
+            className="hero__logo-img hero__logo-img--d"
+          />
         </motion.div>
 
         <h1 className="hero__title">

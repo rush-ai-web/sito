@@ -23,6 +23,8 @@ import { EASE_MODAL } from '../lib/motion';
 
 const logoLight = `${import.meta.env.BASE_URL}rush-logo.png`;
 const logoDark = `${import.meta.env.BASE_URL}rush-logo-dark.png`;
+const logoLightSrcSet = `${import.meta.env.BASE_URL}rush-logo-192.png 192w, ${import.meta.env.BASE_URL}rush-logo-320.png 320w, ${logoLight} 800w`;
+const logoDarkSrcSet = `${import.meta.env.BASE_URL}rush-logo-dark-192.png 192w, ${import.meta.env.BASE_URL}rush-logo-dark-320.png 320w, ${logoDark} 800w`;
 
 const NAV = [
   { icon: LayoutDashboard, t: 'Dashboard' },
@@ -172,8 +174,8 @@ export default function HeroScene() {
             {/* menu laterale */}
             <aside className="dash__side">
               <div className="dash__brand">
-                <img className="dash__brand-logo win__logo--l" src={logoLight} alt="" />
-                <img className="dash__brand-logo win__logo--d" src={logoDark} alt="" />
+                <img className="dash__brand-logo win__logo--l" src={logoLight} srcSet={logoLightSrcSet} sizes="76px" alt="" width="800" height="200" />
+                <img className="dash__brand-logo win__logo--d" src={logoDark} srcSet={logoDarkSrcSet} sizes="76px" alt="" width="800" height="200" />
                 <span className="dash__brand-label">LA TUA ATTIVITÀ</span>
               </div>
 

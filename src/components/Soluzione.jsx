@@ -115,14 +115,13 @@ function SoluzioneMobile() {
         sub="Partiamo dai tuoi processi, non da un template. Quello che serve c'è, quello che non serve non lo paghi."
       />
 
-      <div className="sol-track" role="list" ref={trackRef} onScroll={onScroll}>
+      <div className="sol-track" ref={trackRef} onScroll={onScroll}>
         {ORBIT.map((item, idx) => {
           const isOpen = openId === item.id;
           const Icon = item.icon;
           return (
             <motion.button
               type="button"
-              role="listitem"
               key={item.id}
               className={`sol-card${isOpen ? ' is-open' : ''}`}
               initial={{ opacity: 0, y: 18 }}
@@ -166,14 +165,14 @@ function SoluzioneMobile() {
         })}
       </div>
 
-      <div className="sol-dots" role="tablist" aria-label="Scorri le voci">
+      <div className="sol-dots">
         {ORBIT.map((item, k) => (
           <button
             type="button"
             key={item.id}
             className={`sol-dot${k === active ? ' is-active' : ''}`}
             aria-label={`Vai alla voce ${k + 1}`}
-            aria-selected={k === active}
+            aria-current={k === active ? 'true' : undefined}
             onClick={() => goTo(k)}
           />
         ))}

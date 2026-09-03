@@ -5,7 +5,15 @@ import { EASE_MODAL } from '../lib/motion';
 function LogoMark() {
   return (
     <span className="nav__logo-wrap">
-      <img src="./rush-logo-dark.png" alt="Rush" className="nav__logo-img" />
+      <img
+        src="./rush-logo-dark.png"
+        srcSet="./rush-logo-dark-192.png 192w, ./rush-logo-dark-320.png 320w, ./rush-logo-dark.png 800w"
+        sizes="(max-width: 760px) 72px, 96px"
+        alt="Rush"
+        width="800"
+        height="200"
+        className="nav__logo-img"
+      />
     </span>
   );
 }

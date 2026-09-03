@@ -191,10 +191,15 @@ function EcosistemaDesktop() {
           >
             <span className="eco__core-ring">
               <span className="eco__core-mark">
-                <img src="./rush-logo.png" alt="Rush" className="eco__core-logo eco__core-logo--l" />
+                <img src="./rush-logo.png" srcSet="./rush-logo-192.png 192w, ./rush-logo-320.png 320w, ./rush-logo.png 800w" sizes="88px" alt="Rush" width="800" height="200" loading="lazy" className="eco__core-logo eco__core-logo--l" />
                 <img
                   src="./rush-logo-dark.png"
+                  srcSet="./rush-logo-dark-192.png 192w, ./rush-logo-dark-320.png 320w, ./rush-logo-dark.png 800w"
+                  sizes="88px"
                   alt="Rush"
+                  width="800"
+                  height="200"
+                  loading="lazy"
                   className="eco__core-logo eco__core-logo--d"
                 />
               </span>
@@ -268,8 +273,8 @@ function EcosistemaMobile() {
 
         <div className="eco-m__core">
           <span className="eco__core-ring">
-            <img src="./rush-logo.png" alt="Rush" className="eco__core-logo eco__core-logo--l" />
-            <img src="./rush-logo-dark.png" alt="Rush" className="eco__core-logo eco__core-logo--d" />
+            <img src="./rush-logo.png" srcSet="./rush-logo-192.png 192w, ./rush-logo-320.png 320w, ./rush-logo.png 800w" sizes="88px" alt="Rush" width="800" height="200" loading="lazy" className="eco__core-logo eco__core-logo--l" />
+            <img src="./rush-logo-dark.png" srcSet="./rush-logo-dark-192.png 192w, ./rush-logo-dark-320.png 320w, ./rush-logo-dark.png 800w" sizes="88px" alt="Rush" width="800" height="200" loading="lazy" className="eco__core-logo eco__core-logo--d" />
           </span>
         </div>
 
