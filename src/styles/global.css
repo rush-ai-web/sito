@@ -4237,7 +4237,11 @@ textarea.input {
 .cf-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 8px;
+  padding: 14px 14px 28px;
+  border-radius: 22px;
+  /* bordo generale della tabella, nero/bianco a seconda del tema (come le voci) */
+  border: 1.5px solid var(--text);
+  background: var(--card);
 }
 
 /* griglia: riga 1 = nomi, righe 2..N = voci. Nessun pannello esterno:
