@@ -1,6 +1,5 @@
 import { useContext } from 'react';
-import { useClock } from '../lib/hooks';
-import { LiveDot, ThemeCtx } from './ui';
+import { ThemeCtx } from './ui';
 
 const COLONNE = [
   [
@@ -16,7 +15,7 @@ const COLONNE = [
     'Azienda',
     [
       ['Come lavoriamo', '#metodo'],
-      ['Perché Rush', '#principi'],
+      ['Perché Rush', '#confronto'],
       ['Risultati', '#numeri'],
       ['Ristorazione', '#ristorazione'],
     ],
@@ -31,7 +30,6 @@ const COLONNE = [
 ];
 
 export default function Footer() {
-  const { time, date } = useClock();
   const theme = useContext(ThemeCtx);
   const logoSrc = theme === 'dark' ? './rush-logo-dark.png' : './rush-logo.png';
   const logoSrcSet = theme === 'dark'
@@ -72,23 +70,11 @@ export default function Footer() {
               Costruiamo il gestionale su misura per la tua azienda: dati sempre aggiornati, lavoro
               ripetitivo automatizzato e AI integrata dove serve davvero.
             </p>
-            {/* orologio live - signature move */}
-            <div style={{ marginTop: 24, display: 'inline-flex', alignItems: 'center', gap: 10 }}>
-              <LiveDot />
-              <span>
-                <time className="num" style={{ fontWeight: 500, letterSpacing: '-0.02em' }}>
-                  {time}
-                </time>
-                <span className="t-small faint" style={{ display: 'block', fontSize: 13 }}>
-                  {date}
-                </span>
-              </span>
-            </div>
           </div>
 
           {COLONNE.map(([titolo, voci]) => (
             <div className="footer__col" key={titolo}>
-              <h4>{titolo}</h4>
+              <h3>{titolo}</h3>
               {voci.map(([label, href]) => (
                 <a
                   key={label}

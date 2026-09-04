@@ -221,7 +221,7 @@ export default function Hero() {
         <motion.p
           className="hero__note"
           variants={fadeUp}
-          custom={7}
+          custom={0}
           initial="hidden"
           animate="show"
         >

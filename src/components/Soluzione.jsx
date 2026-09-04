@@ -189,6 +189,7 @@ function SoluzioneDesktop() {
   const angleRef = useRef(0);
   const focusRef = useRef(null);
   const rafRef = useRef(null);
+  const inViewportRef = useRef(false);
   const openIdRef = useRef(null);
   const cardRefs = useRef({});
   const rootRef = useRef(null);
@@ -223,9 +224,9 @@ function SoluzioneDesktop() {
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
+          inViewportRef.current = e.isIntersecting;
           if (e.isIntersecting) {
             setEntered(true);
-            io.disconnect();
           }
         });
       },
@@ -242,6 +243,10 @@ function SoluzioneDesktop() {
     const loop = (now) => {
       const dt = now - last;
       last = now;
+      if (!inViewportRef.current || document.hidden) {
+        rafRef.current = requestAnimationFrame(loop);
+        return;
+      }
       const f = focusRef.current;
       if (f) {
         const t = Math.min((now - f.start) / FOCUS_DURATION, 1);

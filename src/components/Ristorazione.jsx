@@ -20,10 +20,10 @@ const INCLUSO = [
 export default function Ristorazione() {
   const theme = useContext(ThemeCtx);
   const cardRef = useRef(null);
-  const logoSrc = theme === 'dark' ? './rush-logo-dark.png' : './rush-logo.png';
-  const logoSrcSet = theme === 'dark'
-    ? './rush-logo-dark-192.png 192w, ./rush-logo-dark-320.png 320w, ./rush-logo-dark.png 800w'
-    : './rush-logo-192.png 192w, ./rush-logo-320.png 320w, ./rush-logo.png 800w';
+  /* La card è volutamente inversa rispetto alla pagina. */
+  const logoSrc = theme === 'dark'
+    ? './Rush%20ristorazione%20logo.png'
+    : './Rush%20ristorazione%20logo%20con%20sfondo%20scuro.png';
 
   const onMove = (e) => {
     const el = cardRef.current;
@@ -35,6 +35,7 @@ export default function Ristorazione() {
 
   return (
     <Section id="ristorazione" large>
+      <span aria-hidden="true" className="ristorazione-bulb" />
       <div className="risto2">
         <motion.div
           className="risto2__text"
@@ -84,7 +85,7 @@ export default function Ristorazione() {
         <motion.div
           ref={cardRef}
           onPointerMove={onMove}
-          className="risto2__card"
+          className="risto2__card contrast-card restaurant-card"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={inView}
@@ -96,11 +97,9 @@ export default function Ristorazione() {
           <div className="risto2__brand">
             <img
               src={logoSrc}
-              srcSet={logoSrcSet}
-              sizes="120px"
               alt="Rush"
-              width="800"
-              height="200"
+              width="1668"
+              height="943"
               loading="lazy"
               className="risto2__brand-logo"
             />

@@ -27,6 +27,7 @@ export function useSmoothScroll() {
     /* niente smooth su touch: sui telefoni lo scroll nativo è già ottimo
        e Lenis sul wheel non serve. */
     const coarse = window.matchMedia('(pointer: coarse)').matches;
+    if (coarse) return undefined;
 
     const lenis = new Lenis({
       duration: 1.15,
@@ -34,7 +35,7 @@ export function useSmoothScroll() {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       smoothTouch: false,
-      touchMultiplier: coarse ? 1 : 1.5,
+      touchMultiplier: 1.5,
       wheelMultiplier: 1,
     });
 
@@ -85,28 +86,6 @@ export function useTheme() {
   }, [theme]);
 
   return [theme, () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))];
-}
-
-/* ---------- Orologio live - signature move ---------- */
-const GIORNI = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
-const MESI = [
-  'Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
-  'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre',
-];
-
-export function useClock() {
-  const [now, setNow] = useState(() => new Date());
-
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  const p = (n) => String(n).padStart(2, '0');
-  return {
-    time: `${p(now.getHours())}:${p(now.getMinutes())}:${p(now.getSeconds())}`,
-    date: `${GIORNI[now.getDay()]} ${now.getDate()} ${MESI[now.getMonth()]}`,
-  };
 }
 
 /* ---------- Numeri in formato italiano ---------- */

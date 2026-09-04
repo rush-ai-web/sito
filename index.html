@@ -7,13 +7,32 @@
     <meta name="application-name" content="Rush" />
     <meta name="author" content="Rush" />
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6J3NDZV133"></script>
+    <!-- CookieScript deve inizializzarsi prima del Consent Mode e di GA4. -->
+    <script type="text/javascript" charset="UTF-8" src="https://cdn.cookie-script.com/s/ddec896396806f5032917701d54d3247.js"></script>
+
+    <!-- Stato iniziale del consenso, definito prima di caricare gtag.js. -->
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+      function gtag() {
+        dataLayer.push(arguments);
+      }
 
+      gtag("consent", "default", {
+        ad_storage: "denied",
+        analytics_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        wait_for_update: 500
+      });
+
+      gtag("set", "ads_data_redaction", true);
+      gtag("set", "developer_id.dMmY1Mm", true);
+    </script>
+
+    <!-- Google tag (gtag.js), caricato solo dopo il consenso predefinito. -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6J3NDZV133"></script>
+    <script>
+      gtag('js', new Date());
       gtag('config', 'G-6J3NDZV133');
     </script>
     <meta
@@ -117,7 +136,6 @@
         ]
       }
     </script>
-    <script type="text/javascript" charset="UTF-8" src="//cdn.cookie-script.com/s/ddec896396806f5032917701d54d3247.js"></script>
   </head>
   <body>
     <div id="root"></div>

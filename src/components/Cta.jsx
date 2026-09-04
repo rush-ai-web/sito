@@ -44,7 +44,7 @@ export default function Cta() {
         </Group>
 
         <motion.div
-          className="card card--lg"
+          className="card card--lg contrast-card contact-card"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={inView}

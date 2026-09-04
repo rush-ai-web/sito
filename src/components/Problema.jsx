@@ -35,7 +35,7 @@ export default function Problema() {
 
       <Group className="grid grid-3 grid--deco" each={0.09}>
         {PUNTI.map(({ icon, t, d }) => (
-          <DecoratorCard key={t} icon={icon} title={t}>
+          <DecoratorCard key={t} icon={icon} title={t} className="problem-card">
             {d}
           </DecoratorCard>
         ))}

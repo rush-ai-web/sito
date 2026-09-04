@@ -19,9 +19,9 @@ function LogoMark() {
 }
 
 const LINKS = [
-  ['Cosa costruiamo', '#prodotto'],
-  ['Come lavoriamo', '#metodo'],
-  ['Perché Rush', '#principi'],
+  ['Prodotto', '#prodotto'],
+  ['Metodo', '#metodo'],
+  ['Vantaggi', '#confronto'],
   ['Ristorazione', '#ristorazione'],
   ['FAQ', '#faq'],
 ];

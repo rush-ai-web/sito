@@ -4,14 +4,14 @@ import { motion } from 'framer-motion';
 import { Section, Head } from './ui';
 import { inView } from '../lib/motion';
 
-/* vals[0] = Rush, [1] = SaaS, [2] = Software house grande, [3] = Freelance */
+/* vals[0] = Rush, [1] = SaaS, [2] = Software house, [3] = Freelance */
 const RIGHE = [
   { label: 'Supporto diretto con chi sviluppa',
     vals: [true, false, false, true] },
   { label: 'Software flessibile, adattato ai tuoi processi',
     vals: [true, false, 'partial', 'partial'] },
   { label: 'Preventivo a cifra fissa, niente sorprese',
-    vals: [true, 'partial', false, false] },
+    vals: [true, 'partial', 'partial', false] },
   { label: 'Prezzo accessibile per una PMI',
     vals: [true, true, false, true] },
   { label: 'AI integrata nel gestionale',
@@ -24,7 +24,7 @@ const RIGHE = [
     vals: [true, true, true, false] },
 ];
 
-const COLS = ['SaaS verticale', 'Software house grande', 'Freelance'];
+const COLS = ['SaaS verticale', 'Software house', 'Freelance'];
 
 function Cell({ val, isRush }) {
   if (val === true)
