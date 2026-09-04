@@ -104,7 +104,26 @@ export default function Footer() {
 
         <div className="footer__base">
           <span>© {new Date().getFullYear()} Rush. Tutti i diritti riservati.</span>
-          <span>Demo - contenuti e integrazioni in evoluzione</span>
+          <span style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+            <a
+              href="https://www.iubenda.com/privacy-policy/64941360"
+              className="iubenda-nostyle iubenda-noiframe iubenda-embed"
+              title="Privacy Policy"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="https://www.iubenda.com/privacy-policy/64941360/cookie-policy"
+              className="iubenda-nostyle iubenda-noiframe iubenda-embed"
+              title="Cookie Policy"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Cookie Policy
+            </a>
+          </span>
         </div>
 
         {/* logo gigante, sfumato verso il basso */}
