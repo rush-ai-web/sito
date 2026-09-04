@@ -153,11 +153,9 @@ export default function Prezzi() {
               <div key={t} className="prezzi2__step">
                 <div className="prezzi2__step-track">
                   <span className="prezzi2__step-icon" aria-hidden="true">
-                    <Icon size={14} strokeWidth={1.9} />
+                    <Icon size={18} strokeWidth={1.9} />
                   </span>
-                  {i < COME_FUNZIONA.length - 1 && (
-                    <span className="prezzi2__step-line" aria-hidden="true" />
-                  )}
+                  <span className="prezzi2__step-line" aria-hidden="true" />
                 </div>
                 <div className="prezzi2__step-body">
                   <p className="prezzi2__step-t">{t}</p>

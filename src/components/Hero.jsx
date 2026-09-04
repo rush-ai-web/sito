@@ -72,9 +72,11 @@ function RotatingSlot() {
   const reduce = useReducedMotion();
   const [i, setI] = useState(0);
   /* al primo mount evitiamo la spring per carattere (pesa 15+ animazioni
-     simultanee): letters entrano in blocco con la pill. Alle rotazioni
-     successive torna la spring per lettera. */
-  const isFirst = i === 0;
+     simultanee): letters entrano in blocco con la pill. Dopo la prima
+     rotazione torna sempre la spring per lettera — anche quando il ciclo
+     torna alla prima frase, così il "giro" è smooth come gli altri cambi. */
+  const [started, setStarted] = useState(false);
+  const useBlock = i === 0 && !started;
 
   /* layout OFF durante l'entrata: al mount il font Horizon (font-display
      block) non ha ancora disposto il titolo, così `layout` misurerebbe la
@@ -86,7 +88,10 @@ function RotatingSlot() {
   useEffect(() => {
     if (reduce) return undefined;
     const settle = setTimeout(() => setLayoutReady(true), 1300);
-    const id = setInterval(() => setI((v) => (v + 1) % ROTATE.length), 4600);
+    const id = setInterval(() => {
+      setStarted(true);
+      setI((v) => (v + 1) % ROTATE.length);
+    }, 4600);
     return () => {
       clearTimeout(settle);
       clearInterval(id);
@@ -118,7 +123,7 @@ function RotatingSlot() {
           transition={{ duration: 0.32, ease: EASE_MODAL }}
         >
           <span className="hero__pill-t">
-            {isFirst || reduce
+            {useBlock || reduce
               ? chars.map((c, cIdx) => (
                   <span key={cIdx} className="hero__pill-c-wrap">
                     <span className="hero__pill-c">{c === ' ' ? ' ' : c}</span>
@@ -143,7 +148,7 @@ function RotatingSlot() {
                   </span>
                 ))}
           </span>
-          {isFirst || reduce ? (
+          {useBlock || reduce ? (
             <span className="hero__pill-ic">
               <Icon size={30} strokeWidth={2} />
             </span>

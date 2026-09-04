@@ -105,6 +105,13 @@ html.lenis body {
   overflow-y: visible;
 }
 
+/* il bulb della soluzione deve poter debordare in verticale senza taglio
+   netto: disattiviamo la paint-containment di content-visibility su questa
+   sezione (resta il clip orizzontale, così niente scroll laterale). */
+#soluzione {
+  content-visibility: visible;
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -3133,6 +3140,14 @@ textarea.input {
   padding-block: 13px;
   resize: vertical;
   min-height: 96px;
+  /* niente scrollbar accento visibile nel campo di testo */
+  scrollbar-width: none;
+}
+
+textarea.input::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 .input:focus {
@@ -3243,7 +3258,7 @@ textarea.input {
 }
 
 .footer__col a:hover {
-  color: var(--text);
+  color: var(--accent);
 }
 
 .footer__base {
@@ -5028,15 +5043,15 @@ textarea.input {
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
-  width: 28px;
+  width: 38px;
 }
 
 .prezzi2__step-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: var(--text);
   border: 1px solid var(--text);
@@ -5053,6 +5068,12 @@ textarea.input {
   margin: 6px 0;
 }
 
+/* anche l'ultimo passo ha la sua linietta sotto (stub corto) */
+.prezzi2__step:last-child .prezzi2__step-line {
+  flex: none;
+  height: 22px;
+}
+
 .prezzi2__step-body {
   padding-bottom: 24px;
 }
@@ -5065,7 +5086,7 @@ textarea.input {
   font-size: 14px;
   font-weight: 600;
   color: var(--text);
-  margin: 4px 0 4px;
+  margin: 8px 0 4px;
   line-height: 1.3;
 }
 

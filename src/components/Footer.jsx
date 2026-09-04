@@ -69,8 +69,8 @@ export default function Footer() {
               itemProp="description"
               style={{ marginTop: 16, maxWidth: 320 }}
             >
-              Software house italiana. Progettiamo e sviluppiamo gestionali su misura, con dati in
-              tempo reale, automazioni e intelligenza artificiale integrata.
+              Costruiamo il gestionale su misura per la tua azienda: dati sempre aggiornati, lavoro
+              ripetitivo automatizzato e AI integrata dove serve davvero.
             </p>
             {/* orologio live - signature move */}
             <div style={{ marginTop: 24, display: 'inline-flex', alignItems: 'center', gap: 10 }}>

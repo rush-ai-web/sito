@@ -105,7 +105,7 @@ export default function Cta() {
 
                 <label className="field">
                   <span className="field__label">Nome e cognome</span>
-                  <input className="input" name="nome" required placeholder="Veronica Pazzaglia" />
+                  <input className="input" name="nome" required placeholder="Mario Rossi" />
                 </label>
 
                 <label className="field">
