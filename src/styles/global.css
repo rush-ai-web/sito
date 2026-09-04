@@ -630,6 +630,38 @@ main {
   transition: opacity var(--d-lift) var(--e-lift);
 }
 
+/* piccolo alone di luce che scorre in loop dentro la griglia, come se ne
+   accendesse un punto alla volta — stessa maschera radiale della griglia
+   così resta contenuto nell'area dietro l'icona */
+.card-deco__grid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 90%, transparent) 0%,
+    transparent 68%
+  );
+  background-repeat: no-repeat;
+  background-size: 46% 46%;
+  background-position: 12% 15%;
+  -webkit-mask-image: radial-gradient(ellipse 55% 55% at 50% 50%, #000 25%, transparent 90%);
+  mask-image: radial-gradient(ellipse 55% 55% at 50% 50%, #000 25%, transparent 90%);
+  filter: blur(1px);
+  animation: cardDecoGlow 7s ease-in-out infinite;
+}
+
+@keyframes cardDecoGlow {
+  0%, 100% { background-position: 12% 15%; opacity: 0.7; }
+  25%      { background-position: 85% 18%; opacity: 1; }
+  50%      { background-position: 78% 82%; opacity: 0.7; }
+  75%      { background-position: 15% 80%; opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-deco__grid::before { animation: none; }
+}
+
 /* cerchio pieno piccolo dietro l'icona (davanti alla griglia accento):
    isola l'icona sulla maglia e le dà un basamento coerente col resto
    delle card del sito. */
@@ -3568,16 +3600,11 @@ textarea.input::-webkit-scrollbar {
   margin-top: 30px;
 }
 
-.risto2__live {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--text-2);
-}
-
-/* card — bordo che segue il cursore, come le tessere di "Cosa costruiamo" */
+/* card — bordo che segue il cursore, come le tessere di "Cosa costruiamo",
+   ma in rosso (colore del verticale ristorazione). Niente sollevamento né
+   ombra dietro: solo il bordo e l'alone che si accendono in hover. */
 .risto2__card {
+  --risto-red: #e5484d;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -3587,12 +3614,6 @@ textarea.input::-webkit-scrollbar {
   background-image: var(--card-vig-tl);
   border: 1px solid var(--hairline-strong);
   overflow: hidden;
-  transition: box-shadow var(--d-lift) var(--e-lift), translate var(--d-lift) var(--e-lift);
-}
-
-.risto2__card:hover {
-  translate: 0 -4px;
-  box-shadow: var(--sh-2);
 }
 
 .risto2__card-wash {
@@ -3603,7 +3624,7 @@ textarea.input::-webkit-scrollbar {
   transition: opacity var(--d-modal) var(--e-lift);
   background: radial-gradient(
     420px circle at var(--gx, 50%) var(--gy, 50%),
-    color-mix(in srgb, var(--accent) 10%, transparent) 0%,
+    color-mix(in srgb, var(--risto-red) 10%, transparent) 0%,
     transparent 62%
   );
 }
@@ -3623,9 +3644,9 @@ textarea.input::-webkit-scrollbar {
   transition: opacity var(--d-modal) var(--e-lift);
   background: radial-gradient(
     260px circle at var(--gx, 50%) var(--gy, 50%),
-    var(--accent) 0%,
-    var(--accent) 24%,
-    color-mix(in srgb, var(--accent) 55%, transparent) 46%,
+    var(--risto-red) 0%,
+    var(--risto-red) 24%,
+    color-mix(in srgb, var(--risto-red) 55%, transparent) 46%,
     transparent 66%
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);

@@ -1,13 +1,12 @@
 import { useContext, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { UtensilsCrossed, ArrowUpRight, Boxes, Coins, Truck, Users, Megaphone, Check } from 'lucide-react';
-import { Section, Pill, LiveDot, ThemeCtx } from './ui';
+import { UtensilsCrossed, ArrowRight, Boxes, Coins, Users, Megaphone, Check } from 'lucide-react';
+import { Section, Pill, ThemeCtx } from './ui';
 import { EASE_MODAL, inView } from '../lib/motion';
 
 const VANTAGGI = [
   { icon: Boxes, t: 'Sai sempre cosa hai in magazzino, senza fare l’inventario a mano' },
   { icon: Coins, t: 'Vedi il margine reale di ogni piatto, non una stima a occhio' },
-  { icon: Truck, t: 'Non ti accorgi di un rincaro fornitore tre mesi dopo' },
   { icon: Users, t: 'Turni e presenze del team, senza fogli Excel e messaggi in chat' },
   { icon: Megaphone, t: 'Marketing, promozioni e fidelizzazione clienti dallo stesso sistema' },
 ];
@@ -53,8 +52,7 @@ export default function Ristorazione() {
           <p className="t-body" style={{ marginTop: 14 }}>
             Per chi manda avanti il locale, non solo per chi lo tiene in ordine: sai a colpo
             d'occhio quanto margine fai su ogni piatto, quando un fornitore alza i prezzi e cosa
-            sta per finire in magazzino — senza rincorrere fogli Excel o chiamare il commercialista
-            per saperlo.
+            sta per finire in magazzino.
           </p>
 
           <ul className="risto2__list">
@@ -77,13 +75,9 @@ export default function Ristorazione() {
             >
               Scopri Rush Ristorazione
               <span className="btn__badge">
-                <ArrowUpRight size={16} strokeWidth={2.2} />
+                <ArrowRight size={16} strokeWidth={2.2} />
               </span>
             </a>
-            <span className="risto2__live">
-              <LiveDot />
-              Attivo su locali reali
-            </span>
           </div>
         </motion.div>
 
