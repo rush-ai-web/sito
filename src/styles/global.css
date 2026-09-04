@@ -4351,6 +4351,12 @@ textarea.input {
   border-bottom: 1px solid var(--hairline);
 }
 
+/* prima riga voci: padding-top extra così le icone non toccano
+   il bordo superiore della voci-deco */
+.cf-cell.is-first {
+  padding-top: 25px;
+}
+
 .cf-cell.is-last {
   border-bottom: none;
 }
