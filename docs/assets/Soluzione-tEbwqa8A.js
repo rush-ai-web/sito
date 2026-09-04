@@ -1,4 +1,4 @@
-import{j as e,r,m as S,A as k,b as $}from"./motion-O5FbsOQl.js";import{u as w,S as E,H as C,E as z,I as M}from"./index-BqX0uSt4.js";import{n as O,o as L,p as U,q as W,S as q,r as F,s as B,A as D}from"./icons-9TXWL4ZD.js";import"./react-Ba-aqz7a.js";const f=[{id:1,icon:L,t:`Costruito sui tuoi
+import{j as e,r,m as S,A as k,b as $}from"./motion-O5FbsOQl.js";import{u as w,S as E,H as C,E as z,I as M}from"./index-DmRWESJI.js";import{n as O,o as L,p as U,q as W,S as q,r as F,s as B,A as D}from"./icons-9TXWL4ZD.js";import"./react-Ba-aqz7a.js";const f=[{id:1,icon:L,t:`Costruito sui tuoi
 processi reali`,body:"Nessun template preconfezionato: i moduli, i campi e i flussi seguono come lavori davvero oggi.",related:[2,6]},{id:2,icon:U,t:`Dati aggiornati
 al secondo`,body:"Ogni movimento - vendita, carico, pagamento - arriva subito nei report. Niente foglio Excel di fine mese.",related:[1,3]},{id:3,icon:W,t:`Automazioni al posto
 del lavoro manuale`,body:"Registrazioni, riordini, promemoria e conciliazioni girano da soli. Tu decidi, il gestionale esegue.",related:[2,4]},{id:4,icon:q,t:`AI integrata
