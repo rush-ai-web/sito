@@ -3546,21 +3546,18 @@ textarea.input::-webkit-scrollbar {
 .risto2__list li {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   font-size: 14.5px;
   color: var(--text);
 }
 
+/* icon-tile della sezione: stesso riquadro arrotondato pieno del resto del
+   sito, ma in rosso — colore del verticale ristorazione (vs. blu accento). */
 .risto2__list-ic {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  flex-shrink: 0;
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
-  color: var(--accent);
+  --risto-red: #e5484d;
+  background: linear-gradient(135deg, #ef6a61 0%, var(--risto-red) 45%, #c2352f 100%);
+  color: #fff;
+  box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--risto-red) 55%, transparent);
 }
 
 .risto2__cta-row {
@@ -3582,7 +3579,10 @@ textarea.input::-webkit-scrollbar {
 /* card — bordo che segue il cursore, come le tessere di "Cosa costruiamo" */
 .risto2__card {
   position: relative;
-  padding: 30px 28px;
+  display: flex;
+  flex-direction: column;
+  min-height: 480px;
+  padding: 32px 28px;
   border-radius: var(--r-lg);
   background-image: var(--card-vig-tl);
   border: 1px solid var(--hairline-strong);
@@ -3674,6 +3674,37 @@ textarea.input::-webkit-scrollbar {
 
 .risto2__kpi .t-kpi {
   margin: 10px 0 8px;
+}
+
+/* riquadro "cosa include" — riempie la card, aggiunge sostanza sotto il KPI */
+.risto2__incluso {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  padding-top: 22px;
+  border-top: 1px solid var(--hairline);
+}
+
+.risto2__incluso ul {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.risto2__incluso li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+
+.risto2__incluso li svg {
+  flex-shrink: 0;
+  color: var(--pos, #22c55e);
 }
 
 @media (max-width: 860px) {

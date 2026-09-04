@@ -1,14 +1,20 @@
 import { useContext, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { UtensilsCrossed, ArrowUpRight, Boxes, Coins, Truck, Users } from 'lucide-react';
+import { UtensilsCrossed, ArrowUpRight, Boxes, Coins, Truck, Users, Check } from 'lucide-react';
 import { Section, Pill, LiveDot, ThemeCtx } from './ui';
 import { EASE_MODAL, inView } from '../lib/motion';
 
 const VANTAGGI = [
-  { icon: Boxes, t: 'Magazzino sempre esatto: mai un numero calato dal cielo' },
-  { icon: Coins, t: 'Food cost reale su ogni piatto, non l’ultimo prezzo pagato' },
-  { icon: Truck, t: 'Riordino proposto per fornitore, pronto da inviare' },
-  { icon: Users, t: 'Turni, presenze e timbrature nello stesso sistema' },
+  { icon: Boxes, t: 'Sai sempre cosa hai in magazzino, senza fare l’inventario a mano' },
+  { icon: Coins, t: 'Vedi il margine reale di ogni piatto, non una stima a occhio' },
+  { icon: Truck, t: 'Non ti accorgi di un rincaro fornitore tre mesi dopo' },
+  { icon: Users, t: 'Turni e presenze del team, senza fogli Excel e messaggi in chat' },
+];
+
+const INCLUSO = [
+  'Import automatico delle fatture fornitore',
+  'Costing FIFO su ogni ricetta',
+  'App per timbrature e turni dello staff',
 ];
 
 export default function Ristorazione() {
@@ -40,20 +46,21 @@ export default function Ristorazione() {
           <Pill icon={UtensilsCrossed}>Un esempio: Rush Ristorazione</Pill>
 
           <h2 className="t-sec" style={{ marginTop: 16 }}>
-            Lo stesso impianto, verticalizzato per bar e ristoranti
+            Il gestionale perfetto per bar e ristoranti
           </h2>
 
           <p className="t-body" style={{ marginTop: 14 }}>
-            È il settore da cui siamo partiti, e quello in cui il nostro gestionale è più maturo:
-            legge le fatture fornitore, calcola il costo reale di ogni piatto con il metodo FIFO e
-            avvisa quando un prezzo si muove — prima che diventi un problema a bilancio chiuso.
+            Per chi manda avanti il locale, non solo per chi lo tiene in ordine: sai a colpo
+            d'occhio quanto margine fai su ogni piatto, quando un fornitore alza i prezzi e cosa
+            sta per finire in magazzino — senza rincorrere fogli Excel o chiamare il commercialista
+            per saperlo.
           </p>
 
           <ul className="risto2__list">
             {VANTAGGI.map(({ icon: Icon, t }) => (
               <li key={t}>
-                <span className="risto2__list-ic">
-                  <Icon size={15} strokeWidth={1.9} />
+                <span className="icon-tile icon-tile--sm risto2__list-ic">
+                  <Icon size={16} strokeWidth={1.9} />
                 </span>
                 {t}
               </li>
@@ -112,6 +119,18 @@ export default function Ristorazione() {
               Solo dal confronto automatico dei listini fornitore, con i rincari intercettati il
               giorno in cui arrivano.
             </p>
+          </div>
+
+          <div className="risto2__incluso">
+            <span className="t-label">Cosa include</span>
+            <ul>
+              {INCLUSO.map((v) => (
+                <li key={v}>
+                  <Check size={14} strokeWidth={2.4} />
+                  {v}
+                </li>
+              ))}
+            </ul>
           </div>
         </motion.div>
       </div>
