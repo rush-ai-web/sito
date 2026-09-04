@@ -117,7 +117,13 @@ export default function Metodo() {
         icon={GitBranch}
         label="Come lavoriamo"
         title="Dal primo incontro alla produzione in otto settimane"
-        sub="Niente capitolati da trecento pagine. Si parte da un modulo che risolve il problema più caro, e da lì si cresce."
+        sub={
+          <>
+            <strong>Niente capitolati da trecento pagine.</strong>
+            <br />
+            Si parte da un modulo che risolve il problema più caro, e da lì si cresce.
+          </>
+        }
       />
 
       <div className="tl" ref={tlRef}>

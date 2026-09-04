@@ -30,7 +30,13 @@ export default function Problema() {
             I gestionali standard costringono l'azienda ad adattarsi al software
           </>
         }
-        sub="Dovrebbe essere il contrario. Un sistema che non segue i tuoi processi diventa una tassa quotidiana su chi ci lavora."
+        sub={
+          <>
+            <strong>Dovrebbe essere il contrario.</strong>
+            <br />
+            Un sistema che non segue i tuoi processi diventa una tassa quotidiana su chi ci lavora.
+          </>
+        }
       />
 
       <Group className="grid grid-3 grid--deco" each={0.09}>

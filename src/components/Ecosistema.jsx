@@ -62,10 +62,16 @@ function EcosistemaDesktop() {
   return (
     <Section id="ecosistema" large>
       <Head
+        className="head--wide-copy"
         icon={Boxes}
         label="Un unico posto"
         title={<>Tutti i tuoi sistemi in un solo gestionale</>}
-        sub="Cassa, magazzino, personale, ordini, fatturazione: oggi vivono in strumenti separati che non si parlano. Rush li fa convergere in un unico posto, con l'AI che tiene tutto allineato."
+        sub={
+          <>
+            <span className="head-copy-line">Cassa, magazzino, personale, ordini, fatturazione: oggi vivono in strumenti separati che non si parlano.</span>
+            <strong className="head-copy-line">Rush li fa convergere in un unico posto, con l'AI che tiene tutto allineato.</strong>
+          </>
+        }
       />
 
       <div className="eco">
@@ -240,10 +246,16 @@ function EcosistemaMobile() {
   return (
     <Section id="ecosistema" large>
       <Head
+        className="head--wide-copy"
         icon={Boxes}
         label="Un unico posto"
         title={<>Tutti i tuoi sistemi in un solo gestionale</>}
-        sub="Cassa, magazzino, personale, ordini, fatturazione: oggi vivono in strumenti separati. Rush li fa convergere in un unico posto."
+        sub={
+          <>
+            <span className="head-copy-line">Cassa, magazzino, personale, ordini, fatturazione: oggi vivono in strumenti separati che non si parlano.</span>
+            <strong className="head-copy-line">Rush li fa convergere in un unico posto, con l'AI che tiene tutto allineato.</strong>
+          </>
+        }
       />
 
       <div className="eco-m">

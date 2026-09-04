@@ -102,7 +102,12 @@ const QUERIES = [
 function useNum(target) {
   const mv = useMotionValue(target);
   const [n, setN] = useState(target);
+  const previous = useRef(target);
   useEffect(() => {
+    const from = previous.current;
+    previous.current = target;
+    if (from === target) return undefined;
+    mv.set(from);
     const c = animate(mv, target, { duration: 0.85, ease: EASE_MODAL, onUpdate: setN });
     return () => c.stop();
   }, [target, mv]);
@@ -269,11 +274,13 @@ export default function HeroScene() {
                           <div className="dash__pair">
                             <motion.span
                               className="dash__bar is-inc"
+                              initial={false}
                               animate={{ height: `${(p.inc[i] / maxBar) * 100}%` }}
                               transition={{ duration: 0.7, ease: EASE_MODAL, delay: i * 0.04 }}
                             />
                             <motion.span
                               className="dash__bar is-spe"
+                              initial={false}
                               animate={{ height: `${(p.spe[i] / maxBar) * 100}%` }}
                               transition={{ duration: 0.7, ease: EASE_MODAL, delay: i * 0.04 + 0.05 }}
                             />

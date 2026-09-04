@@ -1,7 +1,70 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { animate, useInView, useMotionValue, useReducedMotion } from 'framer-motion';
 import Lenis from 'lenis';
 import { EASE_MODAL } from './motion';
+
+const BOOT_TIMEOUT_MS = 1800;
+const BOOT_MINIMUM_MS = 220;
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function preloadImage(src) {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.decoding = 'async';
+    image.onload = resolve;
+    image.onerror = resolve;
+    image.src = src;
+    if (image.complete) {
+      image.decode?.().catch(() => {}).finally(resolve);
+    }
+  });
+}
+
+/* Prima di montare le animazioni iniziali prepariamo i due font e i loghi
+   usati above the fold. Il timeout evita che una risorsa guasta possa mai
+   bloccare la pagina. Due frame vuoti lasciano al browser il tempo di creare
+   layout e layer del compositor prima dell'ingresso dell'hero. */
+export function useAppReady() {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    let timeoutId;
+
+    const fontTasks = document.fonts
+      ? [
+          document.fonts.load('700 48px Horizon'),
+          document.fonts.load('400 18px "Inter Variable"'),
+          document.fonts.ready,
+        ]
+      : [];
+    const imageTasks = [
+      preloadImage(`${import.meta.env.BASE_URL}rush-logo-192.png`),
+      preloadImage(`${import.meta.env.BASE_URL}rush-logo-dark-192.png`),
+    ];
+    const resources = Promise.allSettled([...fontTasks, ...imageTasks]);
+    const timeout = new Promise((resolve) => {
+      timeoutId = window.setTimeout(resolve, BOOT_TIMEOUT_MS);
+    });
+
+    Promise.all([wait(BOOT_MINIMUM_MS), Promise.race([resources, timeout])]).then(() => {
+      window.clearTimeout(timeoutId);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (!cancelled) setReady(true);
+        });
+      });
+    });
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
+
+  return ready;
+}
 
 /* ---------- Viewport: mobile vs desktop ---------- */
 export function useIsMobile(query = '(max-width: 760px)') {
@@ -19,11 +82,11 @@ export function useIsMobile(query = '(max-width: 760px)') {
 }
 
 /* ---------- Smooth scroll stile Framer (Lenis) ---------- */
-export function useSmoothScroll() {
+export function useSmoothScroll(enabled = true) {
   const reduce = useReducedMotion();
 
   useEffect(() => {
-    if (reduce) return undefined;
+    if (!enabled || reduce) return undefined;
     /* niente smooth su touch: sui telefoni lo scroll nativo è già ottimo
        e Lenis sul wheel non serve. */
     const coarse = window.matchMedia('(pointer: coarse)').matches;
@@ -66,19 +129,17 @@ export function useSmoothScroll() {
       document.removeEventListener('click', onClick);
       lenis.destroy();
     };
-  }, [reduce]);
+  }, [enabled, reduce]);
 }
 
 /* ---------- Tema: light di default, dark alla pari ---------- */
 export function useTheme() {
-  const [theme, setTheme] = useState('light');
-
-  useEffect(() => {
+  const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('rush-theme');
-    if (saved === 'light' || saved === 'dark') setTheme(saved);
-  }, []);
+    return saved === 'light' || saved === 'dark' ? saved : 'light';
+  });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('rush-theme', theme);
     const meta = document.querySelector('meta[name="theme-color"]');

@@ -19,11 +19,11 @@ function LogoMark() {
 }
 
 const LINKS = [
-  ['Prodotto', '#prodotto'],
+  ['Problema', '#problema'],
+  ['Soluzione', '#soluzione'],
   ['Metodo', '#metodo'],
-  ['Vantaggi', '#confronto'],
-  ['Ristorazione', '#ristorazione'],
-  ['FAQ', '#faq'],
+  ['Risultati', '#numeri'],
+  ['Prezzi', '#prezzi'],
 ];
 
 export default function Nav() {

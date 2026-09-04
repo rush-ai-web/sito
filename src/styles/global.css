@@ -167,6 +167,57 @@ body {
   transition: background var(--d-pop) var(--e-lift), color var(--d-pop) var(--e-lift);
 }
 
+/* Schermata statica di preparazione: evita di far partire l'ingresso
+   dell'hero mentre font e asset critici stanno ancora assestandosi. */
+.boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 18px;
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.boot-screen__logo {
+  display: block;
+  width: 144px;
+  height: auto;
+}
+
+.boot-screen__logo--dark {
+  display: none;
+}
+
+:root[data-theme='dark'] .boot-screen__logo--light {
+  display: none;
+}
+
+:root[data-theme='dark'] .boot-screen__logo--dark {
+  display: block;
+}
+
+.boot-screen__label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-2);
+}
+
+/* Il sito viene montato per due frame dietro la schermata di preparazione:
+   layout e layer sono già pronti quando diventa visibile, senza rimontare i
+   componenti e senza interrompere le animazioni appena avviate. */
+.site-shell {
+  visibility: hidden;
+}
+
+.site-shell.is-visible {
+  visibility: visible;
+}
+
 /* ============================================================
    Grain - texture analogica dell'hero, usata come LAYER DI SFONDO
    (dietro dashboard/testo/card, solo sopra i bulb e le ombreggiature).
@@ -274,6 +325,31 @@ h4 {
   letter-spacing: -0.005em;
   line-height: 1.6;
   margin: 0;
+}
+
+.head .t-body strong {
+  color: inherit;
+  font-weight: 750;
+}
+
+.head.head--wide-copy {
+  max-width: 1120px;
+}
+
+.head.head--wide-copy .t-body {
+  max-width: 1080px;
+}
+
+.head-copy-line {
+  display: block;
+}
+
+.head.head--wide-summary {
+  max-width: 1000px;
+}
+
+.head.head--wide-summary .t-body {
+  max-width: 920px;
 }
 
 .t-small {
@@ -2686,7 +2762,7 @@ main {
   left: 50%;
   translate: -50% 0;
   width: 320px;
-  padding: 18px 20px;
+  padding: 18px 48px 18px 20px;
   border-radius: 16px;
   background: var(--bg);
   border: 1px solid var(--hairline-strong);
@@ -2722,14 +2798,18 @@ main {
   margin: 0;
 }
 
-.orbit-card__chev {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 10px;
+.orbit-card__close,
+.sol-card__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
   color: var(--accent);
-  font-weight: 600;
-  font-size: 12.5px;
 }
 
 @media (max-width: 1160px) {
@@ -2767,6 +2847,7 @@ main {
 }
 
 .sol-card {
+  position: relative;
   flex: 0 0 76%;
   max-width: 320px;
   scroll-snap-align: center;
@@ -2787,6 +2868,7 @@ main {
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 .sol-card.is-open {
+  padding-right: 52px;
   border-color: color-mix(in srgb, var(--accent) 55%, var(--hairline-strong));
   box-shadow: var(--sh-2);
 }

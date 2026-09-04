@@ -53,7 +53,13 @@ export default function Confronto() {
         icon={Scale}
         label="Perché noi"
         title="Quello che trovi qui non lo trovi altrove"
-        sub="Supporto diretto, software flessibile, prezzo accessibile, AI integrata. Metti a confronto."
+        sub={
+          <>
+            Supporto diretto, software flessibile, prezzo accessibile, AI integrata.
+            <br />
+            <strong>Metti a confronto.</strong>
+          </>
+        }
       />
 
       <motion.div

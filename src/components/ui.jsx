@@ -50,9 +50,9 @@ export function Section({
    Head - testata di sezione: pillola, titolo, sommario.
    Centrata di default, come ogni sezione del tema.
    ------------------------------------------------------------ */
-export function Head({ icon, label, title, sub, left = false, children }) {
+export function Head({ icon, label, title, sub, left = false, className = '', children }) {
   return (
-    <Group className={`head ${left ? 'head--left' : ''}`} each={0.09}>
+    <Group className={`head ${left ? 'head--left' : ''} ${className}`} each={0.09}>
       {label ? (
         <Item>
           <Pill icon={icon}>{label}</Pill>

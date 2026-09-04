@@ -1,4 +1,5 @@
-import { useTheme, useSmoothScroll } from './lib/hooks';
+import { useEffect, useState } from 'react';
+import { useAppReady, useTheme, useSmoothScroll } from './lib/hooks';
 import { ThemeCtx } from './components/ui';
 import Nav from './components/Nav';
 import Hero from './components/Hero';
@@ -17,12 +18,48 @@ import Footer from './components/Footer';
 import Fab from './components/Fab';
 import ThemeSwitch from './components/ThemeSwitch';
 
+function BootScreen() {
+  return (
+    <div className="boot-screen" role="status" aria-live="polite" aria-label="Caricamento del sito Rush">
+      <img
+        className="boot-screen__logo boot-screen__logo--light"
+        src="./rush-logo-192.png"
+        width="192"
+        height="48"
+        alt="Rush"
+      />
+      <img
+        className="boot-screen__logo boot-screen__logo--dark"
+        src="./rush-logo-dark-192.png"
+        width="192"
+        height="48"
+        alt=""
+        aria-hidden="true"
+      />
+      <span className="boot-screen__label">Prepariamo il tuo gestionale</span>
+    </div>
+  );
+}
+
 export default function App() {
   const [theme, toggleTheme] = useTheme();
-  useSmoothScroll();
+  const prepared = useAppReady();
+  const [visible, setVisible] = useState(false);
+  useSmoothScroll(visible);
+
+  useEffect(() => {
+    if (!prepared) return undefined;
+    let frameId = requestAnimationFrame(() => {
+      frameId = requestAnimationFrame(() => setVisible(true));
+    });
+    return () => cancelAnimationFrame(frameId);
+  }, [prepared]);
 
   return (
     <ThemeCtx.Provider value={theme}>
+      {!visible ? <BootScreen /> : null}
+      {prepared ? (
+        <div className={`site-shell${visible ? ' is-visible' : ''}`} aria-hidden={visible ? undefined : true}>
       <Nav />
       <main>
         {/* aurora curata: composizione variata per regione, mai fasci in fila
@@ -73,6 +110,8 @@ export default function App() {
       <Footer />
       <Fab />
       <ThemeSwitch theme={theme} onToggle={toggleTheme} />
+        </div>
+      ) : null}
     </ThemeCtx.Provider>
   );
 }

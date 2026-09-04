@@ -57,6 +57,7 @@ export default function Numeri() {
   return (
     <Section id="numeri" large>
       <Head
+        className="head--wide-summary"
         icon={TrendingUp}
         label="Risultati"
         title={<>Quanto lavoro ti toglie, misurato in numeri</>}

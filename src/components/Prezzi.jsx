@@ -44,7 +44,7 @@ const COME_FUNZIONA = [
 ];
 
 export default function Prezzi() {
-  const [yearly, setYearly] = useState(false);
+  const [yearly, setYearly] = useState(true);
 
   return (
     <Section id="prezzi" large>
@@ -52,7 +52,11 @@ export default function Prezzi() {
         icon={Banknote}
         label="Prezzi"
         title="Cifre chiare, nessuna sorpresa"
-        sub="Un canone tutto incluso, senza licenze extra o costi nascosti."
+        sub={
+          <>
+            <strong>Un canone tutto incluso</strong>, senza licenze extra o costi nascosti.
+          </>
+        }
       />
 
       <div className="prezzi2">
@@ -77,6 +81,7 @@ export default function Prezzi() {
                   type="button"
                   className={`prezzi-toggle__btn${yearly === id ? ' is-active' : ''}`}
                   onClick={() => setYearly(id)}
+                  aria-pressed={yearly === id}
                 >
                   {tag && <span className="prezzi-toggle__tag">{tag}</span>}
                   {yearly === id && (

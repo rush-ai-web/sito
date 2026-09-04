@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   Smartphone,
   ArrowRight,
+  X,
 } from 'lucide-react';
 import { Section, Head, IconTile } from './ui';
 import { EASE_MODAL } from '../lib/motion';
@@ -156,10 +157,16 @@ function SoluzioneMobile() {
                 )}
               </AnimatePresence>
 
-              <span className="sol-card__hint">
-                {isOpen ? 'Tocca per chiudere' : 'Tocca per aprire'}
-                <ArrowRight size={13} strokeWidth={2.2} />
-              </span>
+              {isOpen ? (
+                <span className="sol-card__close" aria-hidden="true">
+                  <X size={16} strokeWidth={2.4} />
+                </span>
+              ) : (
+                <span className="sol-card__hint">
+                  Tocca per aprire
+                  <ArrowRight size={13} strokeWidth={2.2} />
+                </span>
+              )}
             </motion.button>
           );
         })}
@@ -326,6 +333,7 @@ function SoluzioneDesktop() {
                 }
               }}
               aria-expanded={isOpen}
+              aria-label={`${isOpen ? 'Chiudi' : 'Apri'} il dettaglio: ${item.t.replace('\n', ' ')}`}
             >
               <div className="orbit-card__row">
                 <IconTile icon={Icon} size="sm" />
@@ -348,8 +356,8 @@ function SoluzioneDesktop() {
                     transition={{ duration: 0.28, ease: EASE_MODAL, delay: 0.4 }}
                   >
                     <p>{item.body}</p>
-                    <span className="orbit-card__chev">
-                      <ArrowRight size={14} strokeWidth={2.2} />
+                    <span className="orbit-card__close" aria-hidden="true">
+                      <X size={16} strokeWidth={2.4} />
                     </span>
                   </motion.div>
                 )}
