@@ -1,21 +1,28 @@
+import { Suspense, lazy } from 'react';
 import { useTheme, useSmoothScroll } from './lib/hooks';
 import { ThemeCtx } from './components/ui';
 import Nav from './components/Nav';
 import Hero from './components/Hero';
-import Problema from './components/Problema';
-import Ecosistema from './components/Ecosistema';
-import Soluzione from './components/Soluzione';
-import Prodotto from './components/Prodotto';
-import Numeri from './components/Numeri';
-import Metodo from './components/Metodo';
-import Ristorazione from './components/Ristorazione';
-import Confronto from './components/Confronto';
-import Prezzi from './components/Prezzi';
-import Faq from './components/Faq';
-import Cta from './components/Cta';
-import Footer from './components/Footer';
 import Fab from './components/Fab';
 import ThemeSwitch from './components/ThemeSwitch';
+
+/* Sezioni sotto la piega: code-split così il bundle iniziale resta piccolo
+   e il thread principale ha meno JS da valutare nei primi secondi (mobile
+   in particolare). Nessun cambio di effetti o layout: sono le stesse
+   sezioni, solo caricate/eseguite in chunk separati invece che tutte
+   insieme al bootstrap. */
+const Problema = lazy(() => import('./components/Problema'));
+const Soluzione = lazy(() => import('./components/Soluzione'));
+const Ecosistema = lazy(() => import('./components/Ecosistema'));
+const Metodo = lazy(() => import('./components/Metodo'));
+const Prodotto = lazy(() => import('./components/Prodotto'));
+const Numeri = lazy(() => import('./components/Numeri'));
+const Ristorazione = lazy(() => import('./components/Ristorazione'));
+const Confronto = lazy(() => import('./components/Confronto'));
+const Prezzi = lazy(() => import('./components/Prezzi'));
+const Faq = lazy(() => import('./components/Faq'));
+const Cta = lazy(() => import('./components/Cta'));
+const Footer = lazy(() => import('./components/Footer'));
 
 export default function App() {
   const [theme, toggleTheme] = useTheme();
@@ -50,27 +57,31 @@ export default function App() {
         </div>
         {/* chiaro */}
         <Hero />
-        {/* scuro */}
-        <Problema />
-        {/* chiaro */}
-        <Soluzione />
-        {/* tutto in un unico posto - diagramma di convergenza */}
-        <Ecosistema />
-        {/* scuro */}
-        <Metodo />
-        {/* scuro */}
-        <Prodotto />
-        {/* chiaro */}
-        <Numeri />
-        {/* chiaro */}
-        <Ristorazione />
-        <Confronto />
-        <Prezzi />
-        <Faq />
-        {/* scuro */}
-        <Cta />
+        <Suspense fallback={null}>
+          {/* scuro */}
+          <Problema />
+          {/* chiaro */}
+          <Soluzione />
+          {/* tutto in un unico posto - diagramma di convergenza */}
+          <Ecosistema />
+          {/* scuro */}
+          <Metodo />
+          {/* scuro */}
+          <Prodotto />
+          {/* chiaro */}
+          <Numeri />
+          {/* chiaro */}
+          <Ristorazione />
+          <Confronto />
+          <Prezzi />
+          <Faq />
+          {/* scuro */}
+          <Cta />
+        </Suspense>
       </main>
-      <Footer />
+      <Suspense fallback={null}>
+        <Footer />
+      </Suspense>
       <Fab />
       <ThemeSwitch theme={theme} onToggle={toggleTheme} />
     </ThemeCtx.Provider>
