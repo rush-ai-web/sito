@@ -21,10 +21,9 @@ function preloadImage(src) {
   });
 }
 
-/* Prima di montare le animazioni iniziali prepariamo i due font e i loghi
-   usati above the fold. Il timeout evita che una risorsa guasta possa mai
-   bloccare la pagina. Due frame vuoti lasciano al browser il tempo di creare
-   layout e layer del compositor prima dell'ingresso dell'hero. */
+/* Prima di montare le animazioni iniziali prepariamo i font, i loghi visibili
+   subito e le varianti Ristorazione usate più avanti. Il timeout evita che
+   una risorsa guasta possa mai bloccare la pagina. */
 export function useAppReady() {
   const [ready, setReady] = useState(false);
 
@@ -42,6 +41,8 @@ export function useAppReady() {
     const imageTasks = [
       preloadImage(`${import.meta.env.BASE_URL}rush-logo-192.png`),
       preloadImage(`${import.meta.env.BASE_URL}rush-logo-dark-192.png`),
+      preloadImage(`${import.meta.env.BASE_URL}Rush%20ristorazione%20logo.png`),
+      preloadImage(`${import.meta.env.BASE_URL}Rush%20ristorazione%20logo%20con%20sfondo%20scuro.png`),
     ];
     const resources = Promise.allSettled([...fontTasks, ...imageTasks]);
     const timeout = new Promise((resolve) => {

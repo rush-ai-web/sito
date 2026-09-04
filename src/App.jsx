@@ -49,10 +49,16 @@ export default function App() {
 
   useEffect(() => {
     if (!prepared) return undefined;
-    let frameId = requestAnimationFrame(() => {
-      frameId = requestAnimationFrame(() => setVisible(true));
-    });
-    return () => cancelAnimationFrame(frameId);
+    let frameId;
+    const settleId = window.setTimeout(() => {
+      frameId = requestAnimationFrame(() => {
+        frameId = requestAnimationFrame(() => setVisible(true));
+      });
+    }, 180);
+    return () => {
+      window.clearTimeout(settleId);
+      cancelAnimationFrame(frameId);
+    };
   }, [prepared]);
 
   return (

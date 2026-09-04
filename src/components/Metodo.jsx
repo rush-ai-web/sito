@@ -121,7 +121,7 @@ export default function Metodo() {
           <>
             <strong>Niente capitolati da trecento pagine.</strong>
             <br />
-            Si parte da un modulo che risolve il problema più caro, e da lì si cresce.
+            Scegliamo insieme la priorità, la trasformiamo in una prima versione utile e la mettiamo subito al lavoro.
           </>
         }
       />
