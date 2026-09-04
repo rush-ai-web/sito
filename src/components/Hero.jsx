@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, Sparkles, Layers, Zap, TrendingUp } from 'lucide-react';
+import { ArrowDown, Sparkles, Layers, Zap, TrendingUp } from 'lucide-react';
 import HeroScene from './HeroScene';
 import { wordUp, fadeUp, EASE_MODAL } from '../lib/motion';
 
@@ -240,13 +240,13 @@ export default function Hero() {
           <a className="btn btn--hero btn--accent" href="#contatti">
             Prenota una call
             <span className="btn__badge">
-              <ArrowRight size={16} strokeWidth={2.2} />
+              <ArrowDown size={16} strokeWidth={2.2} />
             </span>
           </a>
           <a className="btn btn--primary btn--hero" href="#prodotto">
             Scopri come funziona
             <span className="btn__badge">
-              <ArrowRight size={16} strokeWidth={2.2} />
+              <ArrowDown size={16} strokeWidth={2.2} />
             </span>
           </a>
         </motion.div>

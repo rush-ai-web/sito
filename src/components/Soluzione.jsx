@@ -8,7 +8,7 @@ import {
   Sparkles,
   ShieldCheck,
   Smartphone,
-  ArrowRight,
+  ChevronDown,
   X,
 } from 'lucide-react';
 import { Section, Head, IconTile } from './ui';
@@ -172,7 +172,7 @@ function SoluzioneMobile() {
               ) : (
                 <span className="sol-card__hint">
                   Tocca per aprire
-                  <ArrowRight size={13} strokeWidth={2.2} />
+                  <ChevronDown size={15} strokeWidth={2.4} />
                 </span>
               )}
             </motion.button>

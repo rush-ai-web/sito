@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { GitBranch, Search, PenTool, Rocket, RefreshCw } from 'lucide-react';
 import { Section, Head } from './ui';
+import { useIsMobile } from '../lib/hooks';
 
 const PASSI = [
   {
@@ -45,6 +46,10 @@ const NODES = [
   { cx: 16,  cy: 700 },
   { cx: 144, cy: 980 },
 ];
+
+/* mobile: linea dritta sulla sinistra, tutti i nodi sulla stessa verticale */
+const M_PATH_D = 'M 20 0 L 20 1120';
+const M_NODES = NODES.map((n) => ({ cx: 20, cy: n.cy }));
 
 const TOTAL = 1120;
 /* frazione di scroll a cui la linea raggiunge ogni nodo (cy / altezza totale).
@@ -101,6 +106,16 @@ function StepCard({ passo, idx, frac, progress, reduce }) {
 export default function Metodo() {
   const tlRef = useRef(null);
   const reduce = useReducedMotion();
+  const isMobile = useIsMobile('(max-width: 680px)');
+
+  /* su mobile la linea è dritta a sinistra e più spessa; su desktop resta
+     il percorso che serpeggia tra le card alternate */
+  const path = isMobile ? M_PATH_D : PATH_D;
+  const nodes = isMobile ? M_NODES : NODES;
+  const viewBox = isMobile ? '0 0 40 1120' : '0 0 160 1120';
+  const clipW = isMobile ? 40 : 160;
+  const strokeBase = isMobile ? 3.5 : 2;
+  const strokeAccent = isMobile ? 4.5 : 2.5;
 
   /* la linea e la comparsa di card/dot sono guidate dallo stesso scroll */
   const { scrollYProgress } = useScroll({
@@ -128,32 +143,32 @@ export default function Metodo() {
 
       <div className="tl" ref={tlRef}>
         <div className="tl__track" aria-hidden="true">
-          <svg viewBox="0 0 160 1120" fill="none" className="tl__svg">
+          <svg viewBox={viewBox} fill="none" className="tl__svg" preserveAspectRatio="xMidYMid meet">
             <defs>
               <clipPath id="metodo-line-clip">
                 <motion.rect
-                  x="0" y="0" width="160"
+                  x="0" y="0" width={clipW}
                   height={reduce ? TOTAL : rectHeight}
                 />
               </clipPath>
             </defs>
 
             <path
-              d={PATH_D}
+              d={path}
               stroke="var(--hairline-strong)"
-              strokeWidth="2"
+              strokeWidth={strokeBase}
               strokeLinecap="round"
             />
 
             <path
-              d={PATH_D}
+              d={path}
               stroke="var(--accent)"
-              strokeWidth="2.5"
+              strokeWidth={strokeAccent}
               strokeLinecap="round"
               clipPath="url(#metodo-line-clip)"
             />
 
-            {NODES.map((node, i) => (
+            {nodes.map((node, i) => (
               <NodeDot
                 key={i}
                 {...node}

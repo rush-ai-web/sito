@@ -3,6 +3,7 @@ import { Scale, Check, Minus, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Section, Head } from './ui';
 import { inView } from '../lib/motion';
+import { useIsMobile } from '../lib/hooks';
 
 /* vals[0] = Rush, [1] = SaaS, [2] = Software house, [3] = Freelance */
 const RIGHE = [
@@ -25,6 +26,8 @@ const RIGHE = [
 ];
 
 const COLS = ['SaaS verticale', 'Software house', 'Freelance'];
+/* nomi completi (Rush + alternative) per la versione mobile impilata */
+const ALL_COLS = ['Rush', ...COLS];
 
 function Cell({ val, isRush }) {
   if (val === true)
@@ -46,7 +49,41 @@ function Cell({ val, isRush }) {
   );
 }
 
+/* ---- Mobile: niente tabella larga (verrebbe tagliata). Ogni criterio
+   diventa una card che mostra tutte e quattro le opzioni, una sotto
+   l'altra, con Rush in evidenza. Così si vede tutto senza scroll. ---- */
+function ConfrontoMobile() {
+  return (
+    <div className="cf-mstack">
+      {RIGHE.map(({ label, vals }) => (
+        <motion.div
+          className="cf-mcard"
+          key={label}
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+        >
+          <p className="cf-mcard__label">{label}</p>
+          <div className="cf-mcard__opts">
+            {ALL_COLS.map((col, i) => (
+              <div
+                key={col}
+                className={`cf-mrow${i === 0 ? ' cf-mrow--rush' : ''}`}
+              >
+                <span className="cf-mrow__name">{col}</span>
+                <Cell val={vals[i]} isRush={i === 0} />
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
 export default function Confronto() {
+  const isMobile = useIsMobile();
   return (
     <Section id="confronto" large>
       <Head
@@ -62,7 +99,10 @@ export default function Confronto() {
         }
       />
 
+      {isMobile && <ConfrontoMobile />}
+
       <motion.div
+        hidden={isMobile}
         className="cf-wrap"
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}

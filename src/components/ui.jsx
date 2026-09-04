@@ -152,9 +152,9 @@ export function GlowCard({ icon, title, children, accent = false, className = ''
    piccolo riquadro con bordo top+left in accento. Titolo + testo
    sotto, centrati.
    ------------------------------------------------------------ */
-export function DecoratorCard({ icon: Icon, title, children, className = '' }) {
+export function DecoratorCard({ icon: Icon, title, children, className = '', ...rest }) {
   return (
-    <LiftCard className={`card card--deco ${className}`}>
+    <LiftCard className={`card card--deco ${className}`} {...rest}>
       <div className="card-deco" aria-hidden="true">
         <div className="card-deco__grid" />
         {Icon ? <Icon className="card-deco__ic" size={22} strokeWidth={1.9} /> : null}

@@ -1,6 +1,6 @@
 import { TrendingUp } from 'lucide-react';
 import { Section, Head, Group, Item, Pill } from './ui';
-import { useCountUp } from '../lib/hooks';
+import { useCountUp, useIsMobile } from '../lib/hooks';
 import EsitiShowcase from './EsitiShowcase';
 
 /* ------------------------------------------------------------
@@ -54,6 +54,7 @@ function Kpi({ label, to, prefix = '', suffix = '', d, dec = 0 }) {
 }
 
 export default function Numeri() {
+  const isMobile = useIsMobile();
   return (
     <Section id="numeri" large>
       <Head
@@ -70,9 +71,11 @@ export default function Numeri() {
         ))}
       </Group>
 
-      <div style={{ marginTop: 'var(--s-block)' }}>
-        <EsitiShowcase />
-      </div>
+      {!isMobile && (
+        <div style={{ marginTop: 'var(--s-block)' }}>
+          <EsitiShowcase />
+        </div>
+      )}
     </Section>
   );
 }

@@ -1,5 +1,6 @@
 import { TriangleAlert, Unplug, FileWarning, Clock } from 'lucide-react';
 import { Section, Head, Group, DecoratorCard } from './ui';
+import { useIsMobile } from '../lib/hooks';
 
 const PUNTI = [
   {
@@ -20,6 +21,7 @@ const PUNTI = [
 ];
 
 export default function Problema() {
+  const isMobile = useIsMobile();
   return (
     <Section id="problema" grid className="section--shine">
       <Head
@@ -42,13 +44,33 @@ export default function Problema() {
         }
       />
 
-      <Group className="grid grid-3 grid--deco" each={0.09}>
-        {PUNTI.map(({ icon, t, d }) => (
-          <DecoratorCard key={t} icon={icon} title={t} className="problem-card">
-            {d}
-          </DecoratorCard>
-        ))}
-      </Group>
+      {isMobile ? (
+        /* su mobile ogni card compare per conto suo quando entra in
+           viewport: una alla volta mentre si scrolla */
+        <div className="grid grid-3 grid--deco">
+          {PUNTI.map(({ icon, t, d }) => (
+            <DecoratorCard
+              key={t}
+              icon={icon}
+              title={t}
+              className="problem-card"
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.6 }}
+            >
+              {d}
+            </DecoratorCard>
+          ))}
+        </div>
+      ) : (
+        <Group className="grid grid-3 grid--deco" each={0.09}>
+          {PUNTI.map(({ icon, t, d }) => (
+            <DecoratorCard key={t} icon={icon} title={t} className="problem-card">
+              {d}
+            </DecoratorCard>
+          ))}
+        </Group>
+      )}
     </Section>
   );
 }
