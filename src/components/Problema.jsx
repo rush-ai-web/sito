@@ -23,6 +23,7 @@ export default function Problema() {
   return (
     <Section id="problema" grid className="section--shine">
       <Head
+        className="head--problem-copy"
         icon={TriangleAlert}
         label="Il problema"
         title={
@@ -34,7 +35,9 @@ export default function Problema() {
           <>
             <strong>Dovrebbe essere il contrario.</strong>
             <br />
-            Un sistema che non segue i tuoi processi diventa una tassa quotidiana su chi ci lavora.
+            <span className="problem-copy-line">
+              Un sistema che non segue i tuoi processi diventa una tassa quotidiana su chi ci lavora.
+            </span>
           </>
         }
       />

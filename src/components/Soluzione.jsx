@@ -60,6 +60,14 @@ const ORBIT = [
   },
 ];
 
+const SOLUTION_SUB = (
+  <>
+    <strong>Partiamo dai tuoi processi, non da un template.</strong>
+    <br />
+    Quello che serve c'è, quello che non serve non lo paghi.
+  </>
+);
+
 const RADIUS_X = 530;
 const RADIUS_Y = 270;
 const AUTO_SPEED = 0.005; /* deg per ms - un giro ≈ 72 s */
@@ -113,7 +121,7 @@ function SoluzioneMobile() {
         icon={Lightbulb}
         label="La soluzione"
         title={<>Un gestionale disegnato attorno a come lavori già</>}
-        sub="Partiamo dai tuoi processi, non da un template. Quello che serve c'è, quello che non serve non lo paghi."
+        sub={SOLUTION_SUB}
       />
 
       <div className="sol-track" ref={trackRef} onScroll={onScroll}>
@@ -299,7 +307,7 @@ function SoluzioneDesktop() {
             icon={Lightbulb}
             label="La soluzione"
             title={<>Un gestionale disegnato attorno a come lavori già</>}
-            sub="Partiamo dai tuoi processi, non da un template. Quello che serve c'è, quello che non serve non lo paghi."
+            sub={SOLUTION_SUB}
           />
         </div>
 

@@ -225,8 +225,9 @@ export default function Hero() {
           initial="hidden"
           animate="show"
         >
-          Costruito attorno alla tua azienda: i dati restano aggiornati da soli, i documenti si
-          registrano da soli, il lavoro ripetitivo esce dalla giornata.
+          <strong>Il gestionale si adatta alla tua azienda, non il contrario.</strong>{' '}
+          Collega processi, persone e strumenti, automatizza il lavoro ripetitivo e lascia più
+          spazio alle decisioni che contano.
         </motion.p>
 
         <motion.div
