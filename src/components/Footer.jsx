@@ -107,7 +107,6 @@ export default function Footer() {
           <span style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
             <a
               href="https://www.iubenda.com/privacy-policy/64941360"
-              className="iubenda-nostyle iubenda-noiframe iubenda-embed"
               title="Privacy Policy"
               target="_blank"
               rel="noopener noreferrer"
@@ -116,13 +115,18 @@ export default function Footer() {
             </a>
             <a
               href="https://www.iubenda.com/privacy-policy/64941360/cookie-policy"
-              className="iubenda-nostyle iubenda-noiframe iubenda-embed"
               title="Cookie Policy"
               target="_blank"
               rel="noopener noreferrer"
             >
               Cookie Policy
             </a>
+            <button
+              onClick={() => window.CookieScript?.instance?.show()}
+              style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: 'inherit', color: 'inherit' }}
+            >
+              Gestisci i cookie
+            </button>
           </span>
         </div>
 
