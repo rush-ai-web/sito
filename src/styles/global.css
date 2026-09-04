@@ -3672,11 +3672,7 @@ textarea.input::-webkit-scrollbar {
   border-top: 1px solid var(--hairline);
 }
 
-.risto2__kpi .t-kpi {
-  margin: 10px 0 8px;
-}
-
-/* riquadro "cosa include" — riempie la card, aggiunge sostanza sotto il KPI */
+/* riquadro "cosa include" — riempie la card, aggiunge sostanza sotto il blocco multi-sede */
 .risto2__incluso {
   position: relative;
   z-index: 1;

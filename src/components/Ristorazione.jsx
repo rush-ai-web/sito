@@ -1,6 +1,6 @@
 import { useContext, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { UtensilsCrossed, ArrowUpRight, Boxes, Coins, Truck, Users, Check } from 'lucide-react';
+import { UtensilsCrossed, ArrowUpRight, Boxes, Coins, Truck, Users, Megaphone, Check } from 'lucide-react';
 import { Section, Pill, LiveDot, ThemeCtx } from './ui';
 import { EASE_MODAL, inView } from '../lib/motion';
 
@@ -9,6 +9,7 @@ const VANTAGGI = [
   { icon: Coins, t: 'Vedi il margine reale di ogni piatto, non una stima a occhio' },
   { icon: Truck, t: 'Non ti accorgi di un rincaro fornitore tre mesi dopo' },
   { icon: Users, t: 'Turni e presenze del team, senza fogli Excel e messaggi in chat' },
+  { icon: Megaphone, t: 'Marketing, promozioni e fidelizzazione clienti dallo stesso sistema' },
 ];
 
 const INCLUSO = [
@@ -113,11 +114,10 @@ export default function Ristorazione() {
           </div>
 
           <div className="risto2__kpi">
-            <span className="t-label">Recuperato in un anno · locale singolo</span>
-            <span className="t-kpi num">€1.300</span>
-            <p className="t-small">
-              Solo dal confronto automatico dei listini fornitore, con i rincari intercettati il
-              giorno in cui arrivano.
+            <span className="t-label">Pensato per crescere</span>
+            <p className="t-body" style={{ marginTop: 10 }}>
+              Un bar, un ristorante e una panineria? Non tre login separati: un unico gestionale
+              con più sedi, dove il titolare vede tutto e ogni responsabile solo la sua.
             </p>
           </div>
 
