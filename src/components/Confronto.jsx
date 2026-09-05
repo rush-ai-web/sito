@@ -72,8 +72,7 @@ export default function Confronto() {
         <div
           className="cf-scroll"
           role="region"
-          aria-label="Tabella comparativa. Scorri orizzontalmente per vedere tutte le alternative."
-          tabIndex="0"
+          aria-label="Tabella comparativa: Rush a confronto con SaaS verticale, software house e freelance."
         >
           <div className="cf-grid" style={{ '--rows': RIGHE.length }}>
             {/* colonne dei nomi: partono dal nome (riga 1) fino in fondo.
