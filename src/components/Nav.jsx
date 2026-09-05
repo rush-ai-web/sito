@@ -10,7 +10,7 @@ function LogoMark() {
         src="./rush-logo-dark.png"
         srcSet="./rush-logo-dark-192.png 192w, ./rush-logo-dark-320.png 320w, ./rush-logo-dark.png 800w"
         sizes="(max-width: 980px) 76px, 96px"
-        alt="Rush"
+        alt="Logo Rush"
         width="800"
         height="200"
         className="nav__logo-img nav__logo-img--on-dark"

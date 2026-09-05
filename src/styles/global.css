@@ -132,13 +132,66 @@ body {
   display: grid;
   place-content: center;
   justify-items: center;
-  gap: 18px;
+  gap: 14px;
   min-height: 100svh;
   background: var(--bg);
   color: var(--text);
 }
 
+@property --boot-angle {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
+}
+
+.boot-screen__mark {
+  --boot-angle: 0deg;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  width: 210px;
+  height: 82px;
+  margin-bottom: 4px;
+  border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--sh-1);
+}
+
+.boot-screen__ring,
+.boot-screen__halo {
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--boot-angle),
+    transparent 0deg 220deg,
+    color-mix(in srgb, var(--accent) 26%, transparent) 255deg,
+    var(--accent) 300deg,
+    #cbdcff 322deg,
+    transparent 360deg
+  );
+  animation: bootSpin 1.6s linear infinite;
+}
+
+.boot-screen__ring {
+  padding: 2px;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.boot-screen__halo {
+  filter: blur(18px);
+  opacity: 0.38;
+}
+
 .boot-screen__logo {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 144px;
   height: auto;
@@ -161,6 +214,49 @@ body {
   font-weight: 600;
   letter-spacing: 0.01em;
   color: var(--text-2);
+}
+
+.boot-screen__progress {
+  position: relative;
+  display: block;
+  width: 96px;
+  height: 2px;
+  margin-top: 4px;
+  overflow: hidden;
+  border-radius: var(--r-pill);
+  background: var(--hairline-strong);
+}
+
+.boot-screen__progress i {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 44%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent, var(--accent), #cbdcff);
+  animation: bootProgress 1.15s var(--e-lift) infinite;
+}
+
+@keyframes bootSpin {
+  to { --boot-angle: 360deg; }
+}
+
+@keyframes bootProgress {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(330%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot-screen__ring,
+  .boot-screen__halo,
+  .boot-screen__progress i {
+    animation: none;
+  }
+
+  .boot-screen__progress i {
+    width: 100%;
+    background: var(--accent);
+  }
 }
 
 /* Il sito viene montato per due frame dietro la schermata di preparazione:
@@ -3134,7 +3230,7 @@ main {
    ============================================================ */
 .back-to-top {
   position: fixed;
-  right: 22px;
+  left: 22px;
   bottom: 85px;
   z-index: 55;
   display: inline-flex;
@@ -3143,19 +3239,22 @@ main {
   width: 47px;
   height: 47px;
   padding: 0;
-  border: 1px solid var(--hairline-strong);
+  border: 1px solid transparent;
   border-radius: 50%;
-  background: var(--card-vig);
-  color: var(--text-1);
+  background: #1d1d1f;
+  color: #f5f5f7;
   box-shadow: var(--sh-2);
   cursor: pointer;
   appearance: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+  transition: box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+:root[data-theme='dark'] .back-to-top {
+  background: #f5f5f7;
+  color: #1d1d1f;
 }
 
 .back-to-top:hover {
-  color: var(--accent);
-  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
   box-shadow: var(--sh-3);
 }
 
@@ -5973,8 +6072,6 @@ textarea.input::-webkit-scrollbar {
 
 @media (max-width: 720px), (hover: none), (pointer: coarse) {
   .back-to-top:hover {
-    color: var(--text);
-    border-color: var(--hairline-strong);
     box-shadow: var(--sh-2);
   }
 

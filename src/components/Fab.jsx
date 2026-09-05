@@ -19,10 +19,37 @@ export default function Fab() {
   useHotkey(set);
 
   useEffect(() => {
-    const onScroll = () => setShowBackToTop(window.scrollY > 640);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    let frameId;
+    let triggerTop = Number.POSITIVE_INFINITY;
+
+    const measure = () => {
+      const section = document.getElementById('ristorazione');
+      triggerTop = section
+        ? section.getBoundingClientRect().top + window.scrollY - window.innerHeight
+        : Number.POSITIVE_INFINITY;
+    };
+
+    const update = () => {
+      cancelAnimationFrame(frameId);
+      frameId = requestAnimationFrame(() => {
+        setShowBackToTop(window.scrollY >= triggerTop);
+      });
+    };
+
+    const onResize = () => {
+      measure();
+      update();
+    };
+
+    measure();
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
+    return () => {
+      cancelAnimationFrame(frameId);
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', onResize);
+    };
   }, []);
 
   useEffect(() => {

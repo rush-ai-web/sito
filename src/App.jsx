@@ -21,22 +21,28 @@ import ThemeSwitch from './components/ThemeSwitch';
 function BootScreen() {
   return (
     <div className="boot-screen" role="status" aria-live="polite" aria-label="Caricamento del sito Rush">
-      <img
-        className="boot-screen__logo boot-screen__logo--light"
-        src="./rush-logo-192.png"
-        width="192"
-        height="48"
-        alt="Rush"
-      />
-      <img
-        className="boot-screen__logo boot-screen__logo--dark"
-        src="./rush-logo-dark-192.png"
-        width="192"
-        height="48"
-        alt=""
-        aria-hidden="true"
-      />
+      <div className="boot-screen__mark" aria-hidden="true">
+        <span className="boot-screen__ring" />
+        <span className="boot-screen__halo" />
+        <img
+          className="boot-screen__logo boot-screen__logo--light"
+          src="./rush-logo-192.png"
+          width="192"
+          height="48"
+          alt=""
+        />
+        <img
+          className="boot-screen__logo boot-screen__logo--dark"
+          src="./rush-logo-dark-192.png"
+          width="192"
+          height="48"
+          alt=""
+        />
+      </div>
       <span className="boot-screen__label">Prepariamo il tuo gestionale</span>
+      <span className="boot-screen__progress" aria-hidden="true">
+        <i />
+      </span>
     </div>
   );
 }

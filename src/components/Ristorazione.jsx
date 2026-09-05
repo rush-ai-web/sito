@@ -84,7 +84,7 @@ export default function Ristorazione() {
           <div className="risto2__brand">
             <img
               src={logoSrc}
-              alt="Rush"
+              alt="Logo Rush Ristorazione"
               width="1668"
               height="943"
               loading="lazy"
