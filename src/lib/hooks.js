@@ -135,19 +135,49 @@ export function useSmoothScroll(enabled = true) {
 
 /* ---------- Tema: light di default, dark alla pari ---------- */
 export function useTheme() {
+  /* tema del sistema (impostazione del dispositivo/browser) */
+  const systemTheme = () =>
+    typeof window !== 'undefined' &&
+    window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
+
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('rush-theme');
-    return saved === 'light' || saved === 'dark' ? saved : 'light';
+    /* se l'utente ha scelto a mano si rispetta, altrimenti si segue il sistema */
+    return saved === 'light' || saved === 'dark' ? saved : systemTheme();
   });
 
+  /* finché l'utente NON ha scelto a mano, il sito segue in tempo reale le
+     impostazioni del dispositivo (chiaro/scuro) */
+  useEffect(() => {
+    const saved = localStorage.getItem('rush-theme');
+    if (saved === 'light' || saved === 'dark') return undefined;
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const onChange = () => setTheme(mq.matches ? 'dark' : 'light');
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  /* NB: qui NON salviamo su localStorage, altrimenti il primo render
+     "congelerebbe" il tema di sistema come se fosse una scelta manuale.
+     Il salvataggio avviene solo nel toggle sotto. */
   useLayoutEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('rush-theme', theme);
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute('content', theme === 'dark' ? '#17171A' : '#FAFAF9');
   }, [theme]);
 
-  return [theme, () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))];
+  const toggle = () =>
+    setTheme((t) => {
+      const next = t === 'dark' ? 'light' : 'dark';
+      /* scelta manuale: da ora in poi vince sulle impostazioni del sistema */
+      localStorage.setItem('rush-theme', next);
+      return next;
+    });
+
+  return [theme, toggle];
 }
 
 /* ---------- Numeri in formato italiano ---------- */

@@ -1,0 +1,14 @@
+name = "rush-contact"
+main = "index.js"
+compatibility_date = "2024-11-01"
+
+# La RESEND_API_KEY NON va qui: si imposta come secret con
+#   npx wrangler secret put RESEND_API_KEY
+# (vedi README.md in questa cartella)
+
+# Opzionale: per servire l'endpoint su api.rush-ai.it invece che su
+# <nome>.workers.dev, scommenta e configura la route (richiede il dominio
+# rush-ai.it gestito su Cloudflare).
+# routes = [
+#   { pattern = "api.rush-ai.it/contact", custom_domain = true }
+# ]

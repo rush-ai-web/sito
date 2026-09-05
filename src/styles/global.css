@@ -3562,10 +3562,10 @@ textarea.input::-webkit-scrollbar {
 
 .footer__col h3 {
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--text-3);
+  color: var(--text-2);
   margin-bottom: 15px;
 }
 
@@ -6119,4 +6119,53 @@ textarea.input::-webkit-scrollbar {
   .ticker:hover .ticker__track {
     animation-play-state: running;
   }
+}
+
+/* ============================================================
+   Conferma invio form contatti — pannello brandizzato con barra
+   nera + logo Rush, coerente in tema chiaro e scuro.
+   ============================================================ */
+.cta-confirm {
+  /* rompe il padding della card così la barra arriva ai bordi arrotondati */
+  margin: calc(var(--s-card) * -1);
+  border-radius: inherit;
+  overflow: hidden;
+}
+.cta-confirm__bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 24px;
+  background: #17171a;
+}
+.cta-confirm__logo {
+  height: 26px;
+  width: auto;
+  display: block;
+}
+.cta-confirm__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 34px 28px 42px;
+}
+.cta-confirm__check {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  margin-bottom: 4px;
+  background: var(--pos, #22c55e);
+  color: #fff;
+  box-shadow: 0 8px 22px -8px color-mix(in srgb, var(--pos, #22c55e) 60%, transparent);
+}
+.cta-confirm__body .t-card {
+  margin: 0;
+}
+.cta-confirm__body .t-small {
+  margin: 0;
+  max-width: 36ch;
 }
