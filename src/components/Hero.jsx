@@ -73,8 +73,8 @@ function RotatingSlot() {
   const [i, setI] = useState(0);
   /* al primo mount evitiamo la spring per carattere (pesa 15+ animazioni
      simultanee): letters entrano in blocco con la pill. Dopo la prima
-     rotazione torna sempre la spring per lettera — anche quando il ciclo
-     torna alla prima frase, così il "giro" è smooth come gli altri cambi. */
+     rotazione torna sempre la spring per lettera, anche quando il ciclo
+     torna alla prima frase, così il giro è smooth come gli altri cambi. */
   const [started, setStarted] = useState(false);
   const useBlock = i === 0 && !started;
 
@@ -226,8 +226,7 @@ export default function Hero() {
           animate="show"
         >
           <strong>Il gestionale si adatta alla tua azienda, non il contrario.</strong>{' '}
-          Collega processi, persone e strumenti, automatizza il lavoro ripetitivo e lascia più
-          spazio alle decisioni che contano.
+          Collega processi e strumenti e automatizza il lavoro ripetitivo.
         </motion.p>
 
         <motion.div

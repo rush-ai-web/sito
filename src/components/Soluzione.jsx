@@ -63,7 +63,7 @@ const ORBIT = [
 const SOLUTION_SUB = (
   <>
     <strong>Partiamo dai tuoi processi, non da un template.</strong>
-    <br />
+    <br className="solution-copy-break" />{' '}
     Quello che serve c'è, quello che non serve non lo paghi.
   </>
 );
@@ -120,7 +120,7 @@ function SoluzioneMobile() {
       <Head
         icon={Lightbulb}
         label="La soluzione"
-        title={<>Un gestionale disegnato attorno a come lavori già</>}
+        title={<>Un gestionale disegnato attorno a come lavori</>}
         sub={SOLUTION_SUB}
       />
 
@@ -306,7 +306,7 @@ function SoluzioneDesktop() {
           <Head
             icon={Lightbulb}
             label="La soluzione"
-            title={<>Un gestionale disegnato attorno a come lavori già</>}
+            title={<>Un gestionale disegnato attorno a come lavori</>}
             sub={SOLUTION_SUB}
           />
         </div>

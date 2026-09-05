@@ -4,7 +4,7 @@ import Lenis from 'lenis';
 import { EASE_MODAL } from './motion';
 
 const BOOT_TIMEOUT_MS = 1800;
-const BOOT_MINIMUM_MS = 220;
+const BOOT_MINIMUM_MS = 1000;
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
