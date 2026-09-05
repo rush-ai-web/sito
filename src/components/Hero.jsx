@@ -242,7 +242,7 @@ export default function Hero() {
               <ArrowDown size={16} strokeWidth={2.2} />
             </span>
           </a>
-          <a className="btn btn--primary btn--hero" href="#prodotto">
+          <a className="btn btn--primary btn--hero" href="#ecosistema">
             Scopri come funziona
             <span className="btn__badge">
               <ArrowDown size={16} strokeWidth={2.2} />

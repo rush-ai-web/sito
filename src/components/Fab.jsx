@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Package, Receipt, Search, Sparkles, Users } from 'lucide-react';
+import { ArrowUp, Package, Receipt, Search, Sparkles, Users } from 'lucide-react';
 import { DUR, EASE_MODAL } from '../lib/motion';
 import { useHotkey } from '../lib/hooks';
 import { IconTile } from './ui';
@@ -14,8 +14,16 @@ const RISULTATI = [
 
 export default function Fab() {
   const [open, setOpen] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const set = useCallback((v) => setOpen(v), []);
   useHotkey(set);
+
+  useEffect(() => {
+    const onScroll = () => setShowBackToTop(window.scrollY > 640);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -26,6 +34,23 @@ export default function Fab() {
 
   return (
     <>
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            type="button"
+            className="back-to-top"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            initial={{ opacity: 0, y: 10, scale: 0.92 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 8, scale: 0.92 }}
+            transition={{ duration: 0.22, ease: EASE_MODAL }}
+            aria-label="Torna all'inizio della pagina"
+          >
+            <ArrowUp size={19} strokeWidth={2.1} aria-hidden="true" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
       <motion.button
         className="fab"
         onClick={() => setOpen(true)}

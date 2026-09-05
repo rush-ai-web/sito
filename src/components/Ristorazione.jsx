@@ -1,6 +1,6 @@
 import { useContext, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { UtensilsCrossed, ArrowRight, Boxes, Coins, Users, Megaphone, Check } from 'lucide-react';
+import { UtensilsCrossed, Boxes, Coins, Users, Megaphone, Check } from 'lucide-react';
 import { Section, Pill, ThemeCtx } from './ui';
 import { EASE_MODAL, inView } from '../lib/motion';
 
@@ -67,19 +67,6 @@ export default function Ristorazione() {
             ))}
           </ul>
 
-          <div className="risto2__cta-row">
-            <a
-              className="btn btn--primary btn--hero"
-              href="https://ristorazione.rush.it"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Scopri Rush Ristorazione
-              <span className="btn__badge">
-                <ArrowRight size={16} strokeWidth={2.2} />
-              </span>
-            </a>
-          </div>
         </motion.div>
 
         <motion.div

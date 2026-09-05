@@ -3132,6 +3132,38 @@ main {
 /* ============================================================
    FAB "Chiedi a Rush" + command palette
    ============================================================ */
+.back-to-top {
+  position: fixed;
+  right: 22px;
+  bottom: 85px;
+  z-index: 55;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 47px;
+  height: 47px;
+  padding: 0;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 50%;
+  background: var(--card-vig);
+  color: var(--text-1);
+  box-shadow: var(--sh-2);
+  cursor: pointer;
+  appearance: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.back-to-top:hover {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: var(--sh-3);
+}
+
+.back-to-top:focus-visible {
+  outline: none;
+  box-shadow: var(--sh-2), 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
 /* Bordo animato "shiny border": container con overflow hidden + padding
    (= spessore del bordo), un raggio conico che ruota dietro, e il
    contenuto interno con sfondo solido che copre tutto tranne il bordo. */
@@ -5940,6 +5972,12 @@ textarea.input::-webkit-scrollbar {
 }
 
 @media (max-width: 720px), (hover: none), (pointer: coarse) {
+  .back-to-top:hover {
+    color: var(--text);
+    border-color: var(--hairline-strong);
+    box-shadow: var(--sh-2);
+  }
+
   .card--hover:hover,
   .buildcard:hover,
   .pillcard:hover,

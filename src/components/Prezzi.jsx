@@ -54,7 +54,7 @@ export default function Prezzi() {
         title="Cifre chiare, nessuna sorpresa"
         sub={
           <>
-            <strong>Un canone tutto incluso</strong>, senza licenze extra o costi nascosti.
+            <strong>Un canone chiaro</strong>, senza licenze extra o costi nascosti.
           </>
         }
       />
