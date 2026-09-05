@@ -125,16 +125,17 @@ function VizDati({ reduce }) {
       {[42, 84, 126].map((y) => (
         <line key={y} x1="18" y1={y} x2="284" y2={y} stroke="var(--hairline)" strokeWidth="1" strokeDasharray="3 5" />
       ))}
-      {/* area */}
-      <motion.path
-        d={area} fill="url(#datiFill)" stroke="none"
-        initial={reduce ? false : { opacity: 0 }}
-        whileInView={reduce ? undefined : { opacity: 1 }}
-        viewport={inViewOnce}
-        transition={{ duration: 0.9, ease: EASE_MODAL, delay: 0.5 }}
+      {/* area e linea restano sempre visibili: su iOS l'in-view puo' lasciare visibile solo il dot */}
+      <path d={area} fill="url(#datiFill)" stroke="none" />
+      <path
+        id="datiLine"
+        d={line}
+        fill="none"
+        stroke="var(--accent)"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
-      {/* linea */}
-      <DrawPath d={line} id="datiLine" stroke="var(--accent)" width={2} delay={0.15} reduce={reduce} />
       {/* dot che scorre */}
       {!reduce && (
         <circle r="4" fill="var(--accent)" stroke="var(--surface-top)" strokeWidth="1.5">

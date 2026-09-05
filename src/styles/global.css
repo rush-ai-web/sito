@@ -5061,7 +5061,7 @@ textarea.input::-webkit-scrollbar {
   }
   .cf-scroll {
     max-width: 100%;
-    padding: 6px 12px 18px;
+    padding: 6px 0px 18px;
     overflow: visible;
   }
   .cf-grid {
@@ -5095,7 +5095,7 @@ textarea.input::-webkit-scrollbar {
   }
   .cf-cell.is-first { padding-top: 18px; }
   .cf-cell--label {
-    padding-left: 8px;
+    padding-left: 0px;
     font-size: 11px;
     line-height: 1.25;
   }
@@ -5937,4 +5937,51 @@ textarea.input::-webkit-scrollbar {
 .ristorazione-bulb {
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 26%, #000 74%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, #000 26%, #000 74%, transparent 100%);
+}
+
+@media (max-width: 720px), (hover: none), (pointer: coarse) {
+  .card--hover:hover,
+  .buildcard:hover,
+  .pillcard:hover,
+  .orbit__card:not(.orbit-card):hover,
+  .prezzi-card:hover {
+    translate: 0 0;
+    transform: none;
+    box-shadow: var(--sh-1);
+  }
+
+  .card--deco:hover {
+    box-shadow: var(--sh-1);
+  }
+
+  .card--deco:hover .card-deco__grid {
+    opacity: 0.85;
+  }
+
+  .buildcard:hover .buildcard__wash,
+  .buildcard:hover .buildcard__edge,
+  .risto2__card:hover .risto2__card-wash,
+  .risto2__card:hover .risto2__card-edge {
+    opacity: 0;
+  }
+
+  .orbit-card:hover {
+    --lift: 0px;
+    box-shadow: var(--sh-1);
+    border-color: var(--hairline-strong);
+  }
+
+  .orbit-card.is-dim:hover {
+    opacity: 0.18;
+  }
+
+  .prezzi-card--accent:hover {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent),
+      0 8px 32px -6px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+
+  .ticker:hover .ticker__track {
+    animation-play-state: running;
+  }
 }
