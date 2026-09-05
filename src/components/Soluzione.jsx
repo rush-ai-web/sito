@@ -379,6 +379,8 @@ function SoluzioneDesktop() {
 }
 
 export default function Soluzione() {
-  const isMobile = useIsMobile();
-  return isMobile ? <SoluzioneMobile /> : <SoluzioneDesktop />;
+  /* l'orbita ha senso solo con molto spazio: sotto i 1160px (tablet inclusi)
+     usiamo il carosello, che resta ordinato a ogni larghezza */
+  const compact = useIsMobile('(max-width: 1160px)');
+  return compact ? <SoluzioneMobile /> : <SoluzioneDesktop />;
 }

@@ -121,6 +121,57 @@ export function emailHtml({ nome, email, tipoLabel, campoLabel, messaggio }) {
 </html>`;
 }
 
+/* ------------------------------------------------------------------
+   Email di conferma per chi ha compilato il form. Stesso stile scuro
+   e coerente in dark mode dei client.
+   ------------------------------------------------------------------ */
+export function confirmHtml({ nome }) {
+  const primo = (nome.split(' ')[0] || nome).trim();
+  return `<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="supported-color-schemes" content="dark light">
+<title>Abbiamo ricevuto la tua richiesta</title>
+</head>
+<body style="margin:0;padding:0;background:#0e0e10;">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Grazie ${esc(primo)}, ti rispondiamo entro due giorni lavorativi.</div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0e0e10;padding:28px 16px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#1d1d1f;border:1px solid rgba(255,255,255,.12);border-radius:18px;overflow:hidden;">
+          <tr>
+            <td align="center" style="background:#17171a;padding:24px;">
+              <img src="https://rush-ai.it/rush-logo-dark.png" alt="Rush" height="26" style="height:26px;width:auto;display:block;">
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:32px 30px 10px;">
+              <h1 style="margin:0 0 14px;font-size:23px;line-height:1.25;color:#ffffff;font-weight:700;">Grazie, ${esc(primo)}! 🎉</h1>
+              <p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:#e6e6e8;">Abbiamo ricevuto la tua richiesta e la stiamo già leggendo.</p>
+              <p style="margin:0 0 6px;font-size:15px;line-height:1.6;color:#e6e6e8;">Ti rispondiamo <strong style="color:#ffffff;">entro due giorni lavorativi</strong> con un'idea concreta di perimetro, tempi e costi. Se nel frattempo ti viene in mente un dettaglio, rispondi pure a questa email.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:16px 30px 30px;">
+              <a href="https://rush-ai.it" style="display:inline-block;background:#4a72cc;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;padding:12px 22px;border-radius:999px;">Torna su rush-ai.it</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:18px 30px 26px;border-top:1px solid rgba(255,255,255,.1);">
+              <p style="margin:0;font-size:12px;line-height:1.5;color:#9a9a9e;">Rush — la software house che costruisce il tuo gestionale su misura, con AI integrata.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
@@ -178,6 +229,28 @@ export default {
         const detail = await res.text();
         return json({ ok: false, error: 'Invio non riuscito', detail }, 502, origin);
       }
+
+      /* email di conferma a chi ha compilato il form. Non blocca la risposta:
+         se non parte, la richiesta al team è comunque andata a buon fine. */
+      try {
+        await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${env.RESEND_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: FROM,
+            to: [email],
+            reply_to: 'info@rush-ai.it',
+            subject: 'Abbiamo ricevuto la tua richiesta — Rush',
+            html: confirmHtml({ nome }),
+          }),
+        });
+      } catch {
+        /* ignoriamo: la conferma è un extra, non deve far fallire il form */
+      }
+
       return json({ ok: true }, 200, origin);
     } catch (err) {
       return json({ ok: false, error: 'Errore di rete verso Resend' }, 502, origin);

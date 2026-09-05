@@ -226,6 +226,7 @@ export default function Hero() {
           animate="show"
         >
           <strong>Il gestionale si adatta alla tua azienda, non il contrario.</strong>{' '}
+          <br className="hero-note-break" />
           Collega processi e strumenti e automatizza il lavoro ripetitivo.
         </motion.p>
 

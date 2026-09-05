@@ -4975,6 +4975,9 @@ textarea.input::-webkit-scrollbar {
 @media (max-width: 980px) {
   .build {
     grid-template-columns: 1fr 1fr;
+    /* dense: l'ultima card riempie il buco lasciato dalla tessera larga,
+       così su tablet non restano spazi vuoti */
+    grid-auto-flow: dense;
   }
   .buildcard--wide {
     grid-column: span 2;
@@ -6168,4 +6171,49 @@ textarea.input::-webkit-scrollbar {
 .cta-confirm__body .t-small {
   margin: 0;
   max-width: 36ch;
+}
+
+/* ============================================================
+   Ritocchi desktop/tablet aggiuntivi
+   ============================================================ */
+/* Hero: a capo dopo la prima frase solo da desktop/tablet, non su mobile */
+.hero-note-break { display: inline; }
+@media (max-width: 720px) {
+  .hero-note-break { display: none; }
+}
+
+/* ---- Tablet (portrait): 721–1024px ---- */
+@media (min-width: 721px) and (max-width: 1024px) {
+  /* Problema: 1 card centrata in alto, le altre 2 sotto affiancate */
+  #problema .grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+  #problema .grid-3 > :first-child {
+    grid-column: 1 / -1;
+    max-width: calc(50% - 10px);
+    margin-inline: auto;
+  }
+
+  /* Ristorazione: card nascosta anche su tablet, testo a piena larghezza */
+  .risto2 {
+    grid-template-columns: 1fr;
+  }
+  .risto2__card {
+    display: none;
+  }
+
+  /* Confronto: tabella che sta tutta nello schermo (niente taglio a destra) */
+  .cf-wrap {
+    margin-inline: 0;
+  }
+  .cf-scroll {
+    max-width: 100%;
+    overflow: visible;
+    padding: 8px 8px 20px;
+  }
+  .cf-grid {
+    min-width: 0;
+    column-gap: 8px;
+    grid-template-columns: minmax(0, 1.4fr) repeat(4, minmax(0, 1fr));
+  }
 }
