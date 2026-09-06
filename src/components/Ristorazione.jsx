@@ -22,8 +22,8 @@ export default function Ristorazione() {
   const cardRef = useRef(null);
   /* La card è volutamente inversa rispetto alla pagina. */
   const logoSrc = theme === 'dark'
-    ? './Rush%20ristorazione%20logo.png'
-    : './Rush%20ristorazione%20logo%20con%20sfondo%20scuro.png';
+    ? './Rush-ristorazione-logo.webp'
+    : './Rush-ristorazione-logo-con-sfondo-scuro.webp';
 
   const onMove = (e) => {
     const el = cardRef.current;

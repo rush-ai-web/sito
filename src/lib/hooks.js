@@ -41,8 +41,8 @@ export function useAppReady() {
     const imageTasks = [
       preloadImage(`${import.meta.env.BASE_URL}rush-logo-192.png`),
       preloadImage(`${import.meta.env.BASE_URL}rush-logo-dark-192.png`),
-      preloadImage(`${import.meta.env.BASE_URL}Rush%20ristorazione%20logo.png`),
-      preloadImage(`${import.meta.env.BASE_URL}Rush%20ristorazione%20logo%20con%20sfondo%20scuro.png`),
+      preloadImage(`${import.meta.env.BASE_URL}Rush-ristorazione-logo.webp`),
+      preloadImage(`${import.meta.env.BASE_URL}Rush-ristorazione-logo-con-sfondo-scuro.webp`),
     ];
     const resources = Promise.allSettled([...fontTasks, ...imageTasks]);
     const timeout = new Promise((resolve) => {

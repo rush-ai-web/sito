@@ -53,11 +53,12 @@ const esc = (s = '') =>
 
 /* ------------------------------------------------------------------
    Template email — pensato per rendersi UGUALE in tema chiaro e scuro:
-   sfondo scuro fisso, testo chiaro, barra nera con logo. Un'email a
-   fondo scuro non viene "invertita" dai client in dark mode, quindi
-   l'aspetto resta coerente ovunque.
+   sfondo scuro fisso, testo chiaro. La barra col logo è BLU (accento del
+   brand) e non nera: un client in dark mode può invertire una banda scura
+   in bianca facendo sparire il logo bianco, mentre un blu saturo resta blu
+   in ogni caso → il logo bianco è sempre leggibile.
    ------------------------------------------------------------------ */
-export function emailHtml({ nome, email, tipoLabel, campoLabel, messaggio }) {
+export function emailHtml({ nome, email, telefono, tipoLabel, campoLabel, settore, team, messaggio }) {
   const row = (label, value) => `
     <tr>
       <td style="padding:0 0 4px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8aa4e6;">${esc(label)}</td>
@@ -66,6 +67,11 @@ export function emailHtml({ nome, email, tipoLabel, campoLabel, messaggio }) {
       <td style="padding:0 0 20px;font-size:15px;line-height:1.5;color:#f5f5f7;">${value}</td>
     </tr>`;
 
+  const telBlock = telefono
+    ? row('Telefono', `<a href="tel:${esc(telefono)}" style="color:#8aa4e6;text-decoration:none;">${esc(telefono)}</a>`)
+    : '';
+  const settoreBlock = settore ? row('Settore', esc(settore)) : '';
+  const teamBlock = team ? row('Dimensione team', esc(team)) : '';
   const msgBlock = messaggio
     ? row(campoLabel, esc(messaggio).replace(/\n/g, '<br>'))
     : '';
@@ -85,9 +91,9 @@ export function emailHtml({ nome, email, tipoLabel, campoLabel, messaggio }) {
     <tr>
       <td align="center">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#1d1d1f;border:1px solid rgba(255,255,255,.12);border-radius:18px;overflow:hidden;">
-          <!-- barra nera con logo -->
+          <!-- barra blu brand con logo: robusta all'inversione dark-mode -->
           <tr>
-            <td align="center" style="background:#17171a;padding:24px;">
+            <td align="center" style="background:#5b7fe0;padding:24px;">
               <img src="https://rush-ai.it/rush-logo-dark.png" alt="Rush" height="26" style="height:26px;width:auto;display:block;">
             </td>
           </tr>
@@ -99,6 +105,9 @@ export function emailHtml({ nome, email, tipoLabel, campoLabel, messaggio }) {
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 ${row('Nome e cognome', esc(nome))}
                 ${row('Email', `<a href="mailto:${esc(email)}" style="color:#8aa4e6;text-decoration:none;">${esc(email)}</a>`)}
+                ${telBlock}
+                ${settoreBlock}
+                ${teamBlock}
                 ${msgBlock}
               </table>
             </td>
@@ -143,7 +152,7 @@ export function confirmHtml({ nome }) {
       <td align="center">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#1d1d1f;border:1px solid rgba(255,255,255,.12);border-radius:18px;overflow:hidden;">
           <tr>
-            <td align="center" style="background:#17171a;padding:24px;">
+            <td align="center" style="background:#5b7fe0;padding:24px;">
               <img src="https://rush-ai.it/rush-logo-dark.png" alt="Rush" height="26" style="height:26px;width:auto;display:block;">
             </td>
           </tr>
@@ -192,7 +201,10 @@ export default {
 
     const nome = String(body.nome || '').trim();
     const email = String(body.email || '').trim();
+    const telefono = String(body.telefono || '').trim();
     const aud = body.aud === 'partner' ? 'partner' : 'progetto';
+    const settore = String(body.settore || '').trim();
+    const team = String(body.team || '').trim();
     const messaggio = String(body.contesto || '').trim();
 
     /* honeypot anti-spam: se compilato, fingiamo successo e usciamo */
@@ -207,7 +219,7 @@ export default {
     const tipoLabel = aud === 'partner' ? 'Vuole collaborare' : 'Ha un progetto';
     const campoLabel = aud === 'partner' ? 'Come vorrebbe collaborare' : 'Azienda e sistemi che usa';
 
-    const html = emailHtml({ nome, email, tipoLabel, campoLabel, messaggio });
+    const html = emailHtml({ nome, email, telefono, tipoLabel, campoLabel, settore, team, messaggio });
 
     try {
       const res = await fetch('https://api.resend.com/emails', {

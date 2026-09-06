@@ -1,43 +1,114 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Check, Mail } from 'lucide-react';
+import {
+  Check,
+  Mail,
+  ArrowRight,
+  ArrowLeft,
+  Rocket,
+  Handshake,
+  UtensilsCrossed,
+  Store,
+  Factory,
+  Briefcase,
+  ShoppingCart,
+  MoreHorizontal,
+} from 'lucide-react';
 import { DUR, EASE_MODAL, inView } from '../lib/motion';
 import { Group, Item, LiveDot, Pill, Section } from './ui';
 
-const TABS = [
-  ['progetto', 'Ho un progetto'],
-  ['partner', 'Voglio collaborare'],
+/* URL della funzione che invia l'email (Cloudflare Worker + Resend).
+   Si può sovrascrivere in build con VITE_CONTACT_ENDPOINT. */
+const CONTACT_ENDPOINT =
+  import.meta.env.VITE_CONTACT_ENDPOINT || 'https://rush-contact.withered-voice-c323.workers.dev';
+
+const PRIVACY_URL = 'https://www.iubenda.com/privacy-policy/64941360';
+
+/* obiettivo del contatto: sceglie il tono del resto del percorso */
+const AUDIENCES = [
+  {
+    id: 'progetto',
+    icon: Rocket,
+    t: 'Ho un progetto',
+    d: 'Voglio un gestionale su misura per la mia attività.',
+  },
+  {
+    id: 'partner',
+    icon: Handshake,
+    t: 'Voglio collaborare',
+    d: 'Sono un professionista o un partner e voglio lavorare con Rush.',
+  },
 ];
 
-/* URL della funzione che invia l'email (Cloudflare Worker + Resend).
-   Si può sovrascrivere in build con VITE_CONTACT_ENDPOINT. Finché è vuoto,
-   il form propone la scrittura diretta via email invece di fingere l'invio. */
-const CONTACT_ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT || 'https://rush-contact.withered-voice-c323.workers.dev';
+/* settore / tipo di attività */
+const SETTORI = [
+  { id: 'Ristorazione', icon: UtensilsCrossed, t: 'Ristorazione' },
+  { id: 'Retail e negozi', icon: Store, t: 'Retail e negozi' },
+  { id: 'Produzione', icon: Factory, t: 'Produzione' },
+  { id: 'Servizi e consulenza', icon: Briefcase, t: 'Servizi e consulenza' },
+  { id: 'E-commerce', icon: ShoppingCart, t: 'E-commerce' },
+  { id: 'Altro', icon: MoreHorizontal, t: 'Altro' },
+];
+
+/* dimensione del team */
+const TEAM = ['1–5', '6–20', '21–50', '50+'];
+
+const TOTAL_STEPS = 4;
 
 export default function Cta() {
-  const [aud, setAud] = useState('progetto');
+  const [step, setStep] = useState(0);
+  const [dir, setDir] = useState(1); // 1 avanti, -1 indietro
   const [sent, setSent] = useState(false);
-  const [nome, setNome] = useState('');
   const [status, setStatus] = useState('idle'); // idle | sending | error
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    if (!form.checkValidity()) return;
-    const data = new FormData(form);
-    const payload = {
-      nome: String(data.get('nome') || '').trim(),
-      email: String(data.get('email') || '').trim(),
-      aud,
-      contesto: String(data.get('contesto') || '').trim(),
-      website: String(data.get('website') || ''), // honeypot anti-spam
-    };
-    setNome(payload.nome);
+  /* dati raccolti lungo il percorso */
+  const [aud, setAud] = useState('progetto');
+  const [settore, setSettore] = useState('');
+  const [team, setTeam] = useState('');
+  const [contesto, setContesto] = useState('');
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [telefono, setTelefono] = useState('');
+  const [privacy, setPrivacy] = useState(false);
+  const [website, setWebsite] = useState(''); // honeypot anti-spam
 
-    if (!CONTACT_ENDPOINT) {
-      setStatus('error');
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
+  /* condizione per poter proseguire, step per step */
+  const canNext =
+    step === 0
+      ? Boolean(aud)
+      : step === 1
+        ? Boolean(settore && team)
+        : step === 2
+          ? true // il contesto è facoltativo
+          : Boolean(nome.trim() && emailOk && privacy);
+
+  const go = (delta) => {
+    setDir(delta);
+    setStep((s) => Math.min(TOTAL_STEPS - 1, Math.max(0, s + delta)));
+  };
+
+  const submit = async () => {
+    if (!canNext || status === 'sending') return;
+
+    if (website.trim()) {
+      /* honeypot compilato → è un bot: fingiamo successo e usciamo */
+      setSent(true);
       return;
     }
+
+    const payload = {
+      nome: nome.trim(),
+      email: email.trim(),
+      telefono: telefono.trim(),
+      aud,
+      settore,
+      team,
+      contesto: contesto.trim(),
+      privacy,
+      website,
+    };
 
     setStatus('sending');
     try {
@@ -54,6 +125,29 @@ export default function Cta() {
     }
   };
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (step < TOTAL_STEPS - 1) {
+      if (canNext) go(1);
+    } else {
+      submit();
+    }
+  };
+
+  /* animazione di scorrimento tra gli step */
+  const variants = {
+    enter: (d) => ({ opacity: 0, x: d > 0 ? 26 : -26 }),
+    center: { opacity: 1, x: 0 },
+    exit: (d) => ({ opacity: 0, x: d > 0 ? -26 : 26 }),
+  };
+
+  const contestoLabel =
+    aud === 'partner' ? 'Come vorresti collaborare' : 'Cosa usi oggi e dove si perde tempo';
+  const contestoPlaceholder =
+    aud === 'partner'
+      ? 'Sono consulente e seguo una ventina di aziende: vorrei capire se ha senso proporlo.'
+      : 'Gestionale legacy per gli ordini, magazzino su Excel, presenze su carta. Perdiamo tempo nei doppi inserimenti.';
+
   return (
     <Section id="contatti" large grid>
       {/* corner bulbs - clippati dalla section overflow:hidden → stacco netto col footer */}
@@ -69,8 +163,8 @@ export default function Cta() {
           </Item>
           <Item as="p" className="t-body">
             Il primo incontro serve a capire se un gestionale su misura ha senso per te - e, se non
-            ce l'ha, te lo diciamo. Scrivici che software usi e dove si perde più tempo: ti
-            rispondiamo con un'idea concreta di perimetro, tempi e costi.
+            ce l'ha, te lo diciamo. Pochi passaggi e ti ricontattiamo con un'idea concreta di
+            perimetro, tempi e costi.
           </Item>
           <Item as="p" className="t-small" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <LiveDot />
@@ -94,8 +188,7 @@ export default function Cta() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: DUR.modal, ease: EASE_MODAL }}
               >
-                {/* barra nera con il logo Rush: coerente e brandizzata in
-                    entrambi i temi */}
+                {/* barra col logo Rush: coerente e brandizzata in entrambi i temi */}
                 <div className="cta-confirm__bar">
                   <img
                     src="./rush-logo-dark.png"
@@ -112,9 +205,7 @@ export default function Cta() {
                   <span className="cta-confirm__check">
                     <Check size={22} strokeWidth={2.4} />
                   </span>
-                  <h3 className="t-card">
-                    {nome ? `Grazie, ${nome.split(' ')[0]}!` : 'Grazie!'}
-                  </h3>
+                  <h3 className="t-card">{nome ? `Grazie, ${nome.split(' ')[0]}!` : 'Grazie!'}</h3>
                   <p className="t-small">
                     Abbiamo ricevuto la tua richiesta. Ti rispondiamo entro due giorni lavorativi
                     all'indirizzo email che ci hai lasciato.
@@ -122,88 +213,171 @@ export default function Cta() {
                 </div>
               </motion.div>
             ) : (
-              <motion.form
-                key="form"
-                onSubmit={onSubmit}
-                initial={{ opacity: 1 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: DUR.pop, ease: EASE_MODAL }}
-                style={{ display: 'grid', gap: 16 }}
-              >
-                <div className="segbar" style={{ justifySelf: 'start' }}>
-                  {TABS.map(([id, label]) => (
-                    <button
-                      key={id}
-                      type="button"
-                      data-active={aud === id}
-                      onClick={() => setAud(id)}
-                      style={{ position: 'relative', zIndex: 0 }}
-                    >
-                      {aud === id && (
-                        <motion.span
-                          layoutId="segpill"
-                          className="segbar__pill"
-                          transition={{ duration: DUR.lift, ease: [0.2, 0.8, 0.2, 1] }}
-                        />
-                      )}
-                      {label}
-                    </button>
+              <form key="form" onSubmit={onSubmit} className="wiz">
+                {/* barra di avanzamento */}
+                <div className="wiz__progress" aria-hidden="true">
+                  {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
+                    <span key={i} className={`wiz__seg${i <= step ? ' is-done' : ''}`} />
                   ))}
                 </div>
+                <p className="wiz__count">
+                  Passo {step + 1} di {TOTAL_STEPS}
+                </p>
 
-                <label className="field">
-                  <span className="field__label">Nome e cognome</span>
-                  <input className="input" name="nome" required placeholder="Mario Rossi" />
-                </label>
-
-                <label className="field">
-                  <span className="field__label">Email</span>
-                  <input
-                    className="input"
-                    type="email"
-                    name="email"
-                    required
-                    placeholder="nome@azienda.it"
-                  />
-                </label>
-
-                <AnimatePresence mode="wait" initial={false}>
-                  {aud === 'progetto' ? (
-                    <motion.label
-                      key="b"
-                      className="field"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: DUR.pop, ease: EASE_MODAL }}
-                      style={{ overflow: 'hidden' }}
+                <div className="wiz__stage">
+                  <AnimatePresence mode="wait" custom={dir} initial={false}>
+                    <motion.div
+                      key={step}
+                      custom={dir}
+                      variants={variants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{ duration: 0.32, ease: EASE_MODAL }}
+                      className="wiz__step"
                     >
-                      <span className="field__label">Azienda e sistemi che usi</span>
-                      <textarea
-                        className="input"
-                        name="contesto"
-                        placeholder="Azienda di produzione, 40 dipendenti. Gestionale legacy per gli ordini, magazzino su Excel, presenze su carta."
-                      />
-                    </motion.label>
-                  ) : (
-                    <motion.label
-                      key="p"
-                      className="field"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: DUR.pop, ease: EASE_MODAL }}
-                      style={{ overflow: 'hidden' }}
-                    >
-                      <span className="field__label">Come vorresti collaborare</span>
-                      <textarea
-                        className="input"
-                        name="contesto"
-                        placeholder="Sono consulente e seguo una ventina di aziende: vorrei capire se ha senso proporlo."
-                      />
-                    </motion.label>
-                  )}
-                </AnimatePresence>
+                      {step === 0 && (
+                        <fieldset className="wiz__fs">
+                          <legend className="wiz__q">Cosa ti porta qui?</legend>
+                          <div className="wiz__cards">
+                            {AUDIENCES.map(({ id, icon: Icon, t, d }) => (
+                              <button
+                                type="button"
+                                key={id}
+                                className={`wiz-card${aud === id ? ' is-on' : ''}`}
+                                onClick={() => setAud(id)}
+                                aria-pressed={aud === id}
+                              >
+                                <span className="wiz-card__ic">
+                                  <Icon size={20} strokeWidth={2} />
+                                </span>
+                                <span className="wiz-card__t">{t}</span>
+                                <span className="wiz-card__d">{d}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </fieldset>
+                      )}
+
+                      {step === 1 && (
+                        <div className="wiz__group">
+                          <fieldset className="wiz__fs">
+                            <legend className="wiz__q">In che settore operi?</legend>
+                            <div className="wiz__chips">
+                              {SETTORI.map(({ id, icon: Icon, t }) => (
+                                <button
+                                  type="button"
+                                  key={id}
+                                  className={`wiz-chip${settore === id ? ' is-on' : ''}`}
+                                  onClick={() => setSettore(id)}
+                                  aria-pressed={settore === id}
+                                >
+                                  <Icon size={16} strokeWidth={2} />
+                                  {t}
+                                </button>
+                              ))}
+                            </div>
+                          </fieldset>
+
+                          <fieldset className="wiz__fs">
+                            <legend className="wiz__q">Quante persone nel team?</legend>
+                            <div className="wiz__chips">
+                              {TEAM.map((t) => (
+                                <button
+                                  type="button"
+                                  key={t}
+                                  className={`wiz-chip${team === t ? ' is-on' : ''}`}
+                                  onClick={() => setTeam(t)}
+                                  aria-pressed={team === t}
+                                >
+                                  {t}
+                                </button>
+                              ))}
+                            </div>
+                          </fieldset>
+                        </div>
+                      )}
+
+                      {step === 2 && (
+                        <fieldset className="wiz__fs">
+                          <legend className="wiz__q">{contestoLabel}</legend>
+                          <label className="field">
+                            <span className="field__label">Facoltativo, ma ci aiuta molto</span>
+                            <textarea
+                              className="input"
+                              name="contesto"
+                              value={contesto}
+                              onChange={(e) => setContesto(e.target.value)}
+                              placeholder={contestoPlaceholder}
+                              rows={4}
+                            />
+                          </label>
+                        </fieldset>
+                      )}
+
+                      {step === 3 && (
+                        <fieldset className="wiz__fs">
+                          <legend className="wiz__q">Dove ti ricontattiamo?</legend>
+                          <div className="wiz__group">
+                            <label className="field">
+                              <span className="field__label">Nome e cognome</span>
+                              <input
+                                className="input"
+                                name="nome"
+                                value={nome}
+                                onChange={(e) => setNome(e.target.value)}
+                                placeholder="Mario Rossi"
+                                autoComplete="name"
+                                required
+                              />
+                            </label>
+                            <label className="field">
+                              <span className="field__label">Email</span>
+                              <input
+                                className="input"
+                                type="email"
+                                name="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="nome@azienda.it"
+                                autoComplete="email"
+                                required
+                              />
+                            </label>
+                            <label className="field">
+                              <span className="field__label">Telefono (facoltativo)</span>
+                              <input
+                                className="input"
+                                type="tel"
+                                name="telefono"
+                                value={telefono}
+                                onChange={(e) => setTelefono(e.target.value)}
+                                placeholder="+39 333 1234567"
+                                autoComplete="tel"
+                              />
+                            </label>
+
+                            <label className="wiz-consent">
+                              <input
+                                type="checkbox"
+                                checked={privacy}
+                                onChange={(e) => setPrivacy(e.target.checked)}
+                                required
+                              />
+                              <span>
+                                Ho letto e accetto la{' '}
+                                <a href={PRIVACY_URL} target="_blank" rel="noopener noreferrer">
+                                  Privacy Policy
+                                </a>
+                                . Usiamo i dati solo per risponderti.
+                              </span>
+                            </label>
+                          </div>
+                        </fieldset>
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
 
                 {/* honeypot anti-spam: nascosto agli umani, riempito dai bot */}
                 <input
@@ -212,33 +386,58 @@ export default function Cta() {
                   tabIndex={-1}
                   autoComplete="off"
                   aria-hidden="true"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
                   style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }}
                 />
 
-                <button
-                  className="btn btn--primary"
-                  type="submit"
-                  disabled={status === 'sending'}
-                  style={{ width: '100%', justifyContent: 'center', opacity: status === 'sending' ? 0.7 : 1 }}
-                >
-                  {status === 'sending' ? 'Invio…' : 'Invia richiesta'}
-                </button>
+                <div className="wiz__nav">
+                  {step > 0 ? (
+                    <button
+                      type="button"
+                      className="btn btn--ghost wiz__back"
+                      onClick={() => go(-1)}
+                    >
+                      <ArrowLeft size={16} strokeWidth={2.2} />
+                      Indietro
+                    </button>
+                  ) : (
+                    <span />
+                  )}
 
-                {status === 'error' ? (
-                  <p className="t-small" style={{ fontSize: 13, color: 'var(--neg)' }}>
+                  {step < TOTAL_STEPS - 1 ? (
+                    <button
+                      type="submit"
+                      className="btn btn--primary wiz__next"
+                      disabled={!canNext}
+                    >
+                      Continua
+                      <ArrowRight size={16} strokeWidth={2.2} />
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="btn btn--primary wiz__next"
+                      disabled={!canNext || status === 'sending'}
+                    >
+                      {status === 'sending' ? 'Invio…' : 'Invia richiesta'}
+                    </button>
+                  )}
+                </div>
+
+                {status === 'error' && (
+                  <p className="t-small" style={{ fontSize: 13, color: 'var(--neg)', marginTop: 4 }}>
                     Ops, l'invio non è andato a buon fine. Scrivici direttamente a{' '}
-                    <a href="mailto:info@rush-ai.it" style={{ color: 'inherit', textDecoration: 'underline' }}>
+                    <a
+                      href="mailto:info@rush-ai.it"
+                      style={{ color: 'inherit', textDecoration: 'underline' }}
+                    >
                       info@rush-ai.it
                     </a>
                     .
                   </p>
-                ) : (
-                  <p className="t-small faint" style={{ fontSize: 13 }}>
-                    Usiamo questi dati solo per risponderti. Nessuna newsletter, nessuna cessione a
-                    terzi.
-                  </p>
                 )}
-              </motion.form>
+              </form>
             )}
           </AnimatePresence>
         </motion.div>
