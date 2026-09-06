@@ -12,7 +12,7 @@ const TABS = [
 /* URL della funzione che invia l'email (Cloudflare Worker + Resend).
    Si può sovrascrivere in build con VITE_CONTACT_ENDPOINT. Finché è vuoto,
    il form propone la scrittura diretta via email invece di fingere l'invio. */
-const CONTACT_ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT || '';
+const CONTACT_ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT || 'https://rush-contact.withered-voice-c323.workers.dev';
 
 export default function Cta() {
   const [aud, setAud] = useState('progetto');
