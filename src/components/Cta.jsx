@@ -64,6 +64,7 @@ export default function Cta() {
   /* dati raccolti lungo il percorso */
   const [aud, setAud] = useState('progetto');
   const [settore, setSettore] = useState('');
+  const [settoreAltro, setSettoreAltro] = useState(''); // testo libero quando settore = "Altro"
   const [team, setTeam] = useState('');
   const [contesto, setContesto] = useState('');
   const [nome, setNome] = useState('');
@@ -73,13 +74,15 @@ export default function Cta() {
   const [website, setWebsite] = useState(''); // honeypot anti-spam
 
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  /* se il settore è "Altro" serve anche il testo libero compilato */
+  const settoreOk = settore === 'Altro' ? Boolean(settoreAltro.trim()) : Boolean(settore);
 
   /* condizione per poter proseguire, step per step */
   const canNext =
     step === 0
       ? Boolean(aud)
       : step === 1
-        ? Boolean(settore && team)
+        ? Boolean(settoreOk && team)
         : step === 2
           ? true // il contesto è facoltativo
           : Boolean(nome.trim() && emailOk && privacy);
@@ -103,7 +106,8 @@ export default function Cta() {
       email: email.trim(),
       telefono: telefono.trim(),
       aud,
-      settore,
+      /* se "Altro", mandiamo il settore scritto dall'utente */
+      settore: settore === 'Altro' ? `Altro: ${settoreAltro.trim()}` : settore,
       team,
       contesto: contesto.trim(),
       privacy,
@@ -277,6 +281,31 @@ export default function Cta() {
                                 </button>
                               ))}
                             </div>
+
+                            <AnimatePresence initial={false}>
+                              {settore === 'Altro' && (
+                                <motion.div
+                                  key="altro"
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: 'auto' }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  transition={{ duration: DUR.pop, ease: EASE_MODAL }}
+                                  style={{ overflow: 'hidden' }}
+                                >
+                                  <label className="field" style={{ marginTop: 12 }}>
+                                    <span className="field__label">Quale settore?</span>
+                                    <input
+                                      className="input"
+                                      name="settore-altro"
+                                      value={settoreAltro}
+                                      onChange={(e) => setSettoreAltro(e.target.value)}
+                                      placeholder="Es. Studio medico, palestra, agenzia…"
+                                      autoFocus
+                                    />
+                                  </label>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
                           </fieldset>
 
                           <fieldset className="wiz__fs">
