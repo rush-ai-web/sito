@@ -78,11 +78,10 @@ function RotatingSlot() {
   const [started, setStarted] = useState(false);
   const useBlock = i === 0 && !started;
 
-  /* layout OFF durante l'entrata: al mount il font Horizon (font-display
-     block) non ha ancora disposto il titolo, così `layout` misurerebbe la
-     pill nel posto sbagliato e la farebbe slittare sopra il titolo. Lo
-     accendiamo solo dopo l'assestamento, per animare la larghezza ai cambi
-     frase. */
+  /* layout OFF durante l'entrata: al mount il font Inter Variable non ha
+     ancora disposto il titolo, così `layout` misurerebbe la pill nel posto
+     sbagliato e la farebbe slittare sopra il titolo. Lo accendiamo solo
+     dopo l'assestamento, per animare la larghezza ai cambi frase. */
   const [layoutReady, setLayoutReady] = useState(false);
 
   useEffect(() => {

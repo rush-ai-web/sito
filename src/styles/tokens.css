@@ -85,9 +85,7 @@
 
   --maxw: 1160px;
 
-  /* Famiglie tipografiche: Horizon per i titoli, Inter per tutto
-     il resto. Non si mischiano dentro alla stessa parola. */
-  --ff-display: 'Horizon', 'Inter Variable', 'Inter', -apple-system, sans-serif;
+  /* Famiglia tipografica unica: Inter, per titoli e corpo. */
   --ff-body: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont,
     'Segoe UI', sans-serif;
 }

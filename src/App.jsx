@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAppReady, useTheme, useSmoothScroll } from './lib/hooks';
 import { ThemeCtx } from './components/ui';
+import BootScreen from './components/BootScreen';
 import Nav from './components/Nav';
 import Hero from './components/Hero';
 import Problema from './components/Problema';
@@ -17,35 +18,6 @@ import Cta from './components/Cta';
 import Footer from './components/Footer';
 import Fab from './components/Fab';
 import ThemeSwitch from './components/ThemeSwitch';
-
-function BootScreen() {
-  return (
-    <div className="boot-screen" role="status" aria-live="polite" aria-label="Caricamento del sito Rush">
-      <div className="boot-screen__mark" aria-hidden="true">
-        <span className="boot-screen__ring" />
-        <span className="boot-screen__halo" />
-        <img
-          className="boot-screen__logo boot-screen__logo--light"
-          src="./rush-logo-192.png"
-          width="192"
-          height="48"
-          alt=""
-        />
-        <img
-          className="boot-screen__logo boot-screen__logo--dark"
-          src="./rush-logo-dark-192.png"
-          width="192"
-          height="48"
-          alt=""
-        />
-      </div>
-      <span className="boot-screen__label">Prepariamo il tuo gestionale</span>
-      <span className="boot-screen__progress" aria-hidden="true">
-        <i />
-      </span>
-    </div>
-  );
-}
 
 export default function App() {
   const [theme, toggleTheme] = useTheme();

@@ -32,11 +32,7 @@ export function useAppReady() {
     let timeoutId;
 
     const fontTasks = document.fonts
-      ? [
-          document.fonts.load('700 48px Horizon'),
-          document.fonts.load('400 18px "Inter Variable"'),
-          document.fonts.ready,
-        ]
+      ? [document.fonts.load('400 18px "Inter Variable"'), document.fonts.ready]
       : [];
     const imageTasks = [
       preloadImage(`${import.meta.env.BASE_URL}rush-logo-192.png`),

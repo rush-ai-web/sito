@@ -1,31 +1,6 @@
 @import './tokens.css';
 @import './effects.css';
 
-
-/* ============================================================
-   Horizon - font di titolazione del brand.
-   Va sui pezzi grandi (hero, titoli di sezione, KPI, wordmark);
-   il resto della pagina resta su Inter, come da guida.
-   ============================================================ */
-@font-face {
-  font-family: 'Horizon';
-  src: url('../fonts/Horizon.woff2') format('woff2');
-  font-weight: 400 700;
-  font-style: normal;
-  /* block: niente FOUT né reflow a metà animazione d'entrata. Il titolo
-     parte a opacity 0, quindi l'attesa (pochi ms, font locale) è invisibile
-     e il testo appare già in Horizon, senza ridisporsi. */
-  font-display: block;
-}
-
-@font-face {
-  font-family: 'Horizon';
-  src: url('../fonts/Horizon-Outlined.woff2') format('woff2');
-  font-weight: 400;
-  font-style: italic; /* variante contorno riconoscibile via italic */
-  font-display: block;
-}
-
 /* ============================================================
    Scrollbar - accent color
    ============================================================ */
@@ -210,10 +185,18 @@ body {
 }
 
 .boot-screen__label {
+  display: inline-flex;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.01em;
   color: var(--text-2);
+}
+
+/* etichetta che si accende lettera per lettera, in onda continua */
+.boot-screen__letter {
+  display: inline-block;
+  white-space: pre;
+  animation: bootLetter 1.6s ease-in-out infinite;
 }
 
 .boot-screen__progress {
@@ -246,11 +229,31 @@ body {
   100% { transform: translateX(330%); }
 }
 
+@keyframes bootLetter {
+  0%, 100% {
+    opacity: 0.35;
+    transform: translateY(0) scale(1);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-1px) scale(1.06);
+    color: var(--accent);
+  }
+  55% {
+    opacity: 0.65;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .boot-screen__ring,
   .boot-screen__halo,
+  .boot-screen__letter,
   .boot-screen__progress i {
     animation: none;
+  }
+  .boot-screen__letter {
+    opacity: 1;
   }
 
   .boot-screen__progress i {
@@ -1450,8 +1453,8 @@ main {
   box-shadow: 0 12px 34px -10px color-mix(in srgb, var(--accent) 75%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
   isolation: isolate;
-  /* frasi dinamiche: Inter minuscolo, leggermente più grande di Horizon
-     uppercase per compensare la minore altezza ottica */
+  /* frasi dinamiche: Inter minuscolo, leggermente ingrandito per
+     compensare la minore altezza ottica del lowercase */
   font-family: var(--ff-body);
   text-transform: lowercase;
   font-size: 1.28em;
@@ -1567,7 +1570,7 @@ main {
   }
 }
 
-/* con Horizon lo spazio è quasi nullo: lo forziamo qui */
+/* spaziatura tra le parole del titolo, forzata qui */
 .hero__word {
   display: inline-block;
   overflow: hidden;
@@ -1749,8 +1752,7 @@ main {
   }
 }
 
-/* garantisce uno spazio visibile tra le parole animate,
-   perché il font Horizon renderizza lo spazio quasi a zero. */
+/* garantisce uno spazio visibile tra le parole animate del titolo */
 .hero__word {
   margin-right: 0.32em;
 }
@@ -4049,7 +4051,8 @@ textarea.input::-webkit-scrollbar {
 }
 
 .risto2__brand-seg {
-  font-family: var(--ff-display);
+  font-family: var(--ff-body);
+  font-weight: 700;
   font-size: 13px;
   letter-spacing: 0.03em;
   text-transform: uppercase;
