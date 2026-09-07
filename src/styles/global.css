@@ -113,16 +113,8 @@ body {
   color: var(--text);
 }
 
-@property --boot-angle {
-  syntax: '<angle>';
-  inherits: true;
-  initial-value: 0deg;
-}
-
 .boot-screen__mark {
-  --boot-angle: 0deg;
   position: relative;
-  isolation: isolate;
   display: grid;
   place-items: center;
   width: 210px;
@@ -132,36 +124,6 @@ body {
   background: color-mix(in srgb, var(--surface) 72%, transparent);
   border: 1px solid var(--hairline);
   box-shadow: var(--sh-1);
-}
-
-.boot-screen__ring,
-.boot-screen__halo {
-  position: absolute;
-  inset: -2px;
-  z-index: -1;
-  border-radius: inherit;
-  pointer-events: none;
-  background: conic-gradient(
-    from var(--boot-angle),
-    transparent 0deg 220deg,
-    color-mix(in srgb, var(--accent) 26%, transparent) 255deg,
-    var(--accent) 300deg,
-    #cbdcff 322deg,
-    transparent 360deg
-  );
-  animation: bootSpin 1.6s linear infinite;
-}
-
-.boot-screen__ring {
-  padding: 2px;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-}
-
-.boot-screen__halo {
-  filter: blur(18px);
-  opacity: 0.38;
 }
 
 .boot-screen__logo {
@@ -220,10 +182,6 @@ body {
   animation: bootProgress 1.15s var(--e-lift) infinite;
 }
 
-@keyframes bootSpin {
-  to { --boot-angle: 360deg; }
-}
-
 @keyframes bootProgress {
   0% { transform: translateX(-120%); }
   100% { transform: translateX(330%); }
@@ -246,8 +204,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .boot-screen__ring,
-  .boot-screen__halo,
   .boot-screen__letter,
   .boot-screen__progress i {
     animation: none;
@@ -3958,12 +3914,12 @@ textarea.input::-webkit-scrollbar {
 }
 
 /* icon-tile della sezione: stesso riquadro arrotondato pieno del resto del
-   sito, ma in rosso, colore del verticale ristorazione (vs. blu accento). */
+   sito, ma nell'arancione del verticale ristorazione (vs. blu accento). */
 .risto2__list-ic {
-  --risto-red: #e5484d;
-  background: linear-gradient(135deg, #ef6a61 0%, var(--risto-red) 45%, #c2352f 100%);
+  --risto-accent: #ff642f;
+  background: linear-gradient(135deg, #ff8759 0%, var(--risto-accent) 45%, #cc4a1f 100%);
   color: #fff;
-  box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--risto-red) 55%, transparent);
+  box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--risto-accent) 55%, transparent);
 }
 
 .risto2__cta-row {
@@ -3975,11 +3931,11 @@ textarea.input::-webkit-scrollbar {
 }
 
 /* card: bordo che segue il cursore, come le tessere di "Cosa costruiamo",
-   ma in rosso (colore del verticale ristorazione). Niente sollevamento né
+   ma nell'arancione del verticale ristorazione. Niente sollevamento né
    ombra dietro: solo il bordo e l'alone che si accendono in hover. */
 .risto2__card {
-  --risto-red: #e5484d;
-  --risto-word: #ff6b63;
+  --risto-accent: #ff642f;
+  --risto-word: #ff642f;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -3999,7 +3955,7 @@ textarea.input::-webkit-scrollbar {
   transition: opacity var(--d-modal) var(--e-lift);
   background: radial-gradient(
     420px circle at var(--gx, 50%) var(--gy, 50%),
-    color-mix(in srgb, var(--risto-red) 10%, transparent) 0%,
+    color-mix(in srgb, var(--risto-accent) 10%, transparent) 0%,
     transparent 62%
   );
 }
@@ -4019,9 +3975,9 @@ textarea.input::-webkit-scrollbar {
   transition: opacity var(--d-modal) var(--e-lift);
   background: radial-gradient(
     260px circle at var(--gx, 50%) var(--gy, 50%),
-    var(--risto-red) 0%,
-    var(--risto-red) 24%,
-    color-mix(in srgb, var(--risto-red) 55%, transparent) 46%,
+    var(--risto-accent) 0%,
+    var(--risto-accent) 24%,
+    color-mix(in srgb, var(--risto-accent) 55%, transparent) 46%,
     transparent 66%
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -4043,10 +3999,9 @@ textarea.input::-webkit-scrollbar {
 }
 
 .risto2__brand-logo {
-  width: 118px;
-  height: 67px;
+  width: auto;
+  height: 28px;
   object-fit: contain;
-  margin-block: -20.5px;
   display: block;
 }
 
@@ -4056,7 +4011,7 @@ textarea.input::-webkit-scrollbar {
   font-size: 13px;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: var(--risto-word, #ff6b63);
+  color: var(--risto-word, #ff642f);
   padding-left: 10px;
   border-left: 1.5px solid var(--hairline-strong);
 }
@@ -4324,7 +4279,7 @@ textarea.input::-webkit-scrollbar {
 }
 
 :root[data-theme='dark'] .restaurant-card {
-  --risto-word: #b42318;
+  --risto-word: #b34a1f;
 }
 
 .contrast-card .input {
@@ -6895,5 +6850,147 @@ textarea.input::-webkit-scrollbar {
   .rh-mock__q,
   .rh-mock__a {
     max-width: 100%;
+  }
+}
+
+/* ============================================================
+   Rush Ristorazione - override arancione
+   Alcuni pezzi condivisi (bottone hero, CTA nav, FAB, cornice
+   prezzi, tab FAQ) hanno un blu scritto fisso in gradiente, non
+   letto da var(--accent). Qui li ricoloriamo solo dentro allo
+   scope .risto-orange, senza toccare il resto del sito.
+   ============================================================ */
+.risto-orange .btn--accent {
+  background: linear-gradient(135deg, #ff8759 0%, #ff642f 45%, #cc4a1f 100%);
+}
+.risto-orange .btn--accent .btn__badge {
+  color: #cc4a1f;
+}
+.risto-orange .btn--hero.btn--accent::after {
+  background: rgba(204, 74, 31, 0.7);
+}
+
+.risto-orange .nav__cta {
+  background: linear-gradient(135deg, #ff8759 0%, #ff642f 45%, #cc4a1f 100%);
+  box-shadow: 0 1px 6px rgba(204, 74, 31, 0.35);
+}
+.risto-orange .nav__cta-badge {
+  color: #cc4a1f;
+}
+.risto-orange .nav__cta:hover {
+  box-shadow: 0 2px 14px rgba(204, 74, 31, 0.55);
+}
+
+.risto-orange .fab {
+  background: conic-gradient(
+    from var(--fab-angle),
+    color-mix(in srgb, var(--accent) 10%, transparent) 0deg,
+    color-mix(in srgb, var(--accent) 10%, transparent) 150deg,
+    color-mix(in srgb, var(--accent) 40%, transparent) 205deg,
+    var(--accent) 252deg,
+    #ffd0b8 274deg,
+    var(--accent) 296deg,
+    color-mix(in srgb, var(--accent) 35%, transparent) 336deg,
+    color-mix(in srgb, var(--accent) 10%, transparent) 360deg
+  );
+}
+
+.risto-orange .prezzi2__frame {
+  background: conic-gradient(
+    from var(--prezzi-angle),
+    color-mix(in srgb, var(--accent) 10%, transparent) 0deg,
+    color-mix(in srgb, var(--accent) 10%, transparent) 150deg,
+    color-mix(in srgb, var(--accent) 40%, transparent) 205deg,
+    var(--accent) 252deg,
+    #ffd0b8 274deg,
+    var(--accent) 296deg,
+    color-mix(in srgb, var(--accent) 35%, transparent) 336deg,
+    color-mix(in srgb, var(--accent) 10%, transparent) 360deg
+  );
+}
+.risto-orange .prezzi-feat-ic {
+  background: rgba(255, 100, 47, 0.16);
+  color: #e05a26;
+}
+
+.risto-orange .faq-tab__bg {
+  background: linear-gradient(140deg, #ff7a45 0%, #e0551f 55%, #b03d15 100%);
+}
+
+.risto-orange .boot-screen__progress i {
+  background: linear-gradient(90deg, transparent, var(--accent), #ffd0b8);
+}
+
+/* --- Moduli opzionali: 3 cluster con checklist interna, non tante
+   tessere sparse --- */
+.rh-mod-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.rh-mod-card {
+  display: flex;
+  flex-direction: column;
+}
+.rh-mod-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.rh-mod-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+}
+.rh-mod-list__ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  margin-top: 1px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent);
+}
+.rh-mod-list strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+.rh-mod-list__tag {
+  font-weight: 500;
+  color: var(--text-3);
+}
+.rh-mod-list__d {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+.rh-mod-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 28px auto 0;
+  max-width: 60ch;
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+.rh-mod-note svg {
+  flex: none;
+  color: var(--accent);
+}
+
+@media (max-width: 960px) {
+  .rh-mod-grid {
+    grid-template-columns: 1fr;
   }
 }

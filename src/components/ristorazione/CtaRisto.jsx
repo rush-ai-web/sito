@@ -113,9 +113,7 @@ export default function CtaRisto() {
               >
                 <div className="cta-confirm__bar">
                   <img
-                    src="./rush-logo-dark.png"
-                    srcSet="./rush-logo-dark-192.png 192w, ./rush-logo-dark-320.png 320w, ./rush-logo-dark.png 800w"
-                    sizes="104px"
+                    src="./rush-logo-orange-dark.webp"
                     alt="Rush"
                     width="800"
                     height="200"

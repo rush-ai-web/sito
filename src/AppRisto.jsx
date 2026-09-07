@@ -39,42 +39,51 @@ export default function AppRisto() {
 
   return (
     <ThemeCtx.Provider value={theme}>
-      {!visible ? (
-        <BootScreen label="Prepariamo il tuo locale" ariaLabel="Caricamento di Rush Ristorazione" />
-      ) : null}
-      {prepared ? (
-        <div className={`site-shell${visible ? ' is-visible' : ''}`} aria-hidden={visible ? undefined : true}>
-          <Nav />
-          <main>
-            {/* aurora curata: vive dietro alle sezioni e scorre col contenuto */}
-            <div className="aurora" aria-hidden="true">
-              <span className="glow bulb big accent l" style={{ top: '20%' }} />
-              <span className="glow bulb white r" style={{ top: '17%' }} />
-              <span className="glow haze accent l" style={{ top: '34%' }} />
-              <span className="glow bulb big accent r" style={{ top: '46%' }} />
-              <span className="glow bulb black l" style={{ top: '50%' }} />
-              <span className="glow rings accent r" style={{ top: '58%' }} />
-              <span className="glow bulb big accent r" style={{ top: '72%' }} />
-              <span className="glow bulb white l" style={{ top: '77%' }} />
-              <span className="glow bulb black r" style={{ top: '86%' }} />
-            </div>
+      {/* tutta la pagina vive nello scope arancione del verticale
+          ristorazione: bottoni, chip, bulb e logo si ricolorano da soli. */}
+      <div className="risto-orange">
+        {!visible ? (
+          <BootScreen
+            label="Prepariamo il tuo locale"
+            ariaLabel="Caricamento di Rush Ristorazione"
+            logoLight="./rush-logo-orange.webp"
+            logoDark="./rush-logo-orange-dark.webp"
+          />
+        ) : null}
+        {prepared ? (
+          <div className={`site-shell${visible ? ' is-visible' : ''}`} aria-hidden={visible ? undefined : true}>
+            <Nav logoVariant="ristorazione" />
+            <main>
+              {/* aurora curata: vive dietro alle sezioni e scorre col contenuto */}
+              <div className="aurora" aria-hidden="true">
+                <span className="glow bulb big accent l" style={{ top: '20%' }} />
+                <span className="glow bulb white r" style={{ top: '17%' }} />
+                <span className="glow haze accent l" style={{ top: '34%' }} />
+                <span className="glow bulb big accent r" style={{ top: '46%' }} />
+                <span className="glow bulb black l" style={{ top: '50%' }} />
+                <span className="glow rings accent r" style={{ top: '58%' }} />
+                <span className="glow bulb big accent r" style={{ top: '72%' }} />
+                <span className="glow bulb white l" style={{ top: '77%' }} />
+                <span className="glow bulb black r" style={{ top: '86%' }} />
+              </div>
 
-            <HeroRisto />
-            <ProblemaRisto />
-            <SoluzioneRisto />
-            <ComeRisto />
-            <CoreRisto />
-            <ChatRisto />
-            <ModuliRisto />
-            <Prezzi />
-            <FaqRisto />
-            <CtaRisto />
-          </main>
-          <Footer />
-          <Fab />
-          <ThemeSwitch theme={theme} onToggle={toggleTheme} />
-        </div>
-      ) : null}
+              <HeroRisto />
+              <ProblemaRisto />
+              <SoluzioneRisto />
+              <ComeRisto />
+              <CoreRisto />
+              <ChatRisto />
+              <ModuliRisto />
+              <Prezzi />
+              <FaqRisto />
+              <CtaRisto />
+            </main>
+            <Footer logoVariant="ristorazione" />
+            <Fab />
+            <ThemeSwitch theme={theme} onToggle={toggleTheme} />
+          </div>
+        ) : null}
+      </div>
     </ThemeCtx.Provider>
   );
 }

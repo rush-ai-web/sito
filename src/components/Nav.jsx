@@ -3,22 +3,42 @@ import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, Menu, X } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
 
-function LogoMark() {
+/* variante ristorazione: stesso lockup, logo con R arancione al posto
+   del blu. Un solo file per tono (niente srcset: uso di nicchia). */
+const LOGO_SETS = {
+  default: {
+    dark: {
+      src: './rush-logo-dark.png',
+      srcSet: './rush-logo-dark-192.png 192w, ./rush-logo-dark-320.png 320w, ./rush-logo-dark.png 800w',
+    },
+    light: {
+      src: './rush-logo.png',
+      srcSet: './rush-logo-192.png 192w, ./rush-logo-320.png 320w, ./rush-logo.png 800w',
+    },
+  },
+  ristorazione: {
+    dark: { src: './rush-logo-orange-dark.webp' },
+    light: { src: './rush-logo-orange.webp' },
+  },
+};
+
+function LogoMark({ variant = 'default' }) {
+  const set = LOGO_SETS[variant] || LOGO_SETS.default;
   return (
     <span className="nav__logo-wrap">
       <img
-        src="./rush-logo-dark.png"
-        srcSet="./rush-logo-dark-192.png 192w, ./rush-logo-dark-320.png 320w, ./rush-logo-dark.png 800w"
-        sizes="(max-width: 980px) 76px, 96px"
+        src={set.dark.src}
+        srcSet={set.dark.srcSet}
+        sizes={set.dark.srcSet ? '(max-width: 980px) 76px, 96px' : undefined}
         alt="Logo Rush"
         width="800"
         height="200"
         className="nav__logo-img nav__logo-img--on-dark"
       />
       <img
-        src="./rush-logo.png"
-        srcSet="./rush-logo-192.png 192w, ./rush-logo-320.png 320w, ./rush-logo.png 800w"
-        sizes="(max-width: 980px) 76px, 96px"
+        src={set.light.src}
+        srcSet={set.light.srcSet}
+        sizes={set.light.srcSet ? '(max-width: 980px) 76px, 96px' : undefined}
         alt=""
         aria-hidden="true"
         width="800"
@@ -47,7 +67,7 @@ function ContactLink({ className = '', onClick }) {
   );
 }
 
-export default function Nav() {
+export default function Nav({ logoVariant = 'default' }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { scrollY } = useScroll();
   /* wide at the top (almost full screen), shrinks to a compact pill on scroll */
@@ -84,7 +104,7 @@ export default function Nav() {
     >
       <div className="nav__pill">
         <a className="nav__brand" href="#home" rel="home" aria-label="Rush, torna all'inizio" onClick={closeMobile}>
-          <LogoMark />
+          <LogoMark variant={logoVariant} />
         </a>
 
         <nav className="nav__links" aria-label="Navigazione principale">

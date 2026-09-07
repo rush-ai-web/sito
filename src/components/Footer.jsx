@@ -29,12 +29,17 @@ const COLONNE = [
   ],
 ];
 
-export default function Footer() {
+export default function Footer({ logoVariant = 'default' }) {
   const theme = useContext(ThemeCtx);
-  const logoSrc = theme === 'dark' ? './rush-logo-dark.png' : './rush-logo.png';
-  const logoSrcSet = theme === 'dark'
-    ? './rush-logo-dark-192.png 192w, ./rush-logo-dark-320.png 320w, ./rush-logo-dark.png 800w'
-    : './rush-logo-192.png 192w, ./rush-logo-320.png 320w, ./rush-logo.png 800w';
+  const isRisto = logoVariant === 'ristorazione';
+  const logoSrc = isRisto
+    ? theme === 'dark' ? './rush-logo-orange-dark.webp' : './rush-logo-orange.webp'
+    : theme === 'dark' ? './rush-logo-dark.png' : './rush-logo.png';
+  const logoSrcSet = isRisto
+    ? undefined
+    : theme === 'dark'
+      ? './rush-logo-dark-192.png 192w, ./rush-logo-dark-320.png 320w, ./rush-logo-dark.png 800w'
+      : './rush-logo-192.png 192w, ./rush-logo-320.png 320w, ./rush-logo.png 800w';
 
   return (
     <footer

@@ -22,8 +22,8 @@ export default function Ristorazione() {
   const cardRef = useRef(null);
   /* La card è volutamente inversa rispetto alla pagina. */
   const logoSrc = theme === 'dark'
-    ? './Rush-ristorazione-logo.webp'
-    : './Rush-ristorazione-logo-con-sfondo-scuro.webp';
+    ? './rush-logo-orange.webp'
+    : './rush-logo-orange-dark.webp';
 
   const onMove = (e) => {
     const el = cardRef.current;
@@ -34,7 +34,7 @@ export default function Ristorazione() {
   };
 
   return (
-    <Section id="ristorazione" large>
+    <Section id="ristorazione" large className="risto-orange">
       <span aria-hidden="true" className="ristorazione-bulb" />
       <div className="risto2">
         <motion.div

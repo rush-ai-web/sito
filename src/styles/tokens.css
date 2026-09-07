@@ -212,3 +212,23 @@
     rgba(0, 0, 0, 0) 60%
   );
 }
+
+/* ============================================================
+   Rush Ristorazione - variante di brand.
+   Sostituisce l'accento blu del sito con l'arancione del verticale
+   ovunque sia applicata: la sezione ristorazione in home, l'intera
+   landing /ristorazione. Ogni componente esistente (bottoni, chip,
+   bulb, focus ring...) legge var(--accent) e si ricolora da solo.
+   ============================================================ */
+.risto-orange {
+  --accent: #ff642f;
+  --accent-soft: rgba(255, 100, 47, 0.1);
+}
+:root[data-theme='dark'] .risto-orange {
+  --accent-soft: rgba(255, 100, 47, 0.16);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .risto-orange {
+    --accent-soft: rgba(255, 100, 47, 0.16);
+  }
+}

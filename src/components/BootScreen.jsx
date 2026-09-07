@@ -5,28 +5,16 @@
 export default function BootScreen({
   label = 'Prepariamo il tuo gestionale',
   ariaLabel = 'Caricamento del sito Rush',
+  logoLight = './rush-logo-192.png',
+  logoDark = './rush-logo-dark-192.png',
 }) {
   const letters = Array.from(label);
 
   return (
     <div className="boot-screen" role="status" aria-live="polite" aria-label={ariaLabel}>
       <div className="boot-screen__mark" aria-hidden="true">
-        <span className="boot-screen__ring" />
-        <span className="boot-screen__halo" />
-        <img
-          className="boot-screen__logo boot-screen__logo--light"
-          src="./rush-logo-192.png"
-          width="192"
-          height="48"
-          alt=""
-        />
-        <img
-          className="boot-screen__logo boot-screen__logo--dark"
-          src="./rush-logo-dark-192.png"
-          width="192"
-          height="48"
-          alt=""
-        />
+        <img className="boot-screen__logo boot-screen__logo--light" src={logoLight} width="192" height="48" alt="" />
+        <img className="boot-screen__logo boot-screen__logo--dark" src={logoDark} width="192" height="48" alt="" />
       </div>
 
       <span className="boot-screen__label" aria-hidden="true">
