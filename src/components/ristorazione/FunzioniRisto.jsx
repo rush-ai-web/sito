@@ -19,7 +19,7 @@ import {
   Workflow,
   Languages,
 } from 'lucide-react';
-import { Section, Head } from '../ui';
+import { Section, Head, IconTile } from '../ui';
 import { EASE_MODAL, inView } from '../../lib/motion';
 
 /* tutto quello che Rush Ristorazione fa, in un'unica griglia: il
@@ -78,9 +78,7 @@ export default function FunzioniRisto() {
               viewport={inView}
               transition={{ duration: 0.45, ease: EASE_MODAL, delay: (i % 8) * 0.04 }}
             >
-              <span className="rh-fx-tile__ic">
-                <Icon size={17} strokeWidth={1.9} />
-              </span>
+              <IconTile icon={Icon} size="sm" />
               <span className="rh-fx-tile__t">{t}</span>
             </motion.button>
           );
@@ -98,9 +96,7 @@ export default function FunzioniRisto() {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.22, ease: EASE_MODAL }}
             >
-              <span className="rh-fx-panel__ic">
-                <active.icon size={18} strokeWidth={1.9} />
-              </span>
+              <IconTile icon={active.icon} size="sm" />
               <span className="rh-fx-panel__body">
                 <strong>{active.t}</strong>
                 <span>{active.d}</span>
