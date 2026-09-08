@@ -29,7 +29,7 @@ const COLONNE = [
   ],
 ];
 
-export default function Footer({ logoVariant = 'default' }) {
+export default function Footer({ logoVariant = 'default', columns = COLONNE }) {
   const theme = useContext(ThemeCtx);
   const isRisto = logoVariant === 'ristorazione';
   const logoSrc = isRisto
@@ -77,7 +77,7 @@ export default function Footer({ logoVariant = 'default' }) {
             </p>
           </div>
 
-          {COLONNE.map(([titolo, voci]) => (
+          {columns.map(([titolo, voci]) => (
             <div className="footer__col" key={titolo}>
               <h3>{titolo}</h3>
               {voci.map(([label, href]) => (

@@ -67,7 +67,7 @@ function ContactLink({ className = '', onClick }) {
   );
 }
 
-export default function Nav({ logoVariant = 'default' }) {
+export default function Nav({ logoVariant = 'default', links = LINKS }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { scrollY } = useScroll();
   /* wide at the top (almost full screen), shrinks to a compact pill on scroll */
@@ -108,7 +108,7 @@ export default function Nav({ logoVariant = 'default' }) {
         </a>
 
         <nav className="nav__links" aria-label="Navigazione principale">
-          {LINKS.map(([label, href]) => (
+          {links.map(([label, href]) => (
             <a key={href} className="nav__link" href={href}>
               {label}
             </a>
@@ -141,7 +141,7 @@ export default function Nav({ logoVariant = 'default' }) {
             transition={{ duration: 0.3, ease: EASE_MODAL }}
           >
             <div className="nav__mobile-inner">
-              {LINKS.map(([label, href], index) => (
+              {links.map(([label, href], index) => (
                 <motion.a
                   key={href}
                   className="nav__mobile-link"

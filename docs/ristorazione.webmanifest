@@ -1,0 +1,23 @@
+{
+  "name": "Rush Ristorazione",
+  "short_name": "Rush Ristorazione",
+  "description": "Il gestionale intelligente per bar e ristoranti.",
+  "lang": "it-IT",
+  "start_url": "./ristorazione.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fafaf9",
+  "theme_color": "#fafaf9",
+  "icons": [
+    {
+      "src": "./favicon-192-orange.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./favicon-512-orange.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
