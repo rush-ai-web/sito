@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   LayoutGrid,
   Boxes,
@@ -45,9 +44,6 @@ const FUNZIONI = [
 ];
 
 export default function FunzioniRisto() {
-  const [openIdx, setOpenIdx] = useState(null);
-  const active = openIdx !== null ? FUNZIONI[openIdx] : null;
-
   return (
     <Section id="funzioni" grid large>
       <Head
@@ -57,53 +53,25 @@ export default function FunzioniRisto() {
         sub={
           <>
             Non un gestionale e poi il resto sparso altrove: <strong>tutto quello che serve per
-            mandare avanti e far crescere il locale vive nello stesso sistema.</strong> Tocca una
-            voce per vedere cosa fa.
+            mandare avanti e far crescere il locale vive nello stesso sistema.</strong>
           </>
         }
       />
 
       <div className="rh-fx-grid">
-        {FUNZIONI.map(({ icon: Icon, t }, i) => {
-          const isOpen = openIdx === i;
-          return (
-            <motion.button
-              type="button"
-              key={t}
-              className={`rh-fx-tile${isOpen ? ' is-open' : ''}`}
-              onClick={() => setOpenIdx(isOpen ? null : i)}
-              aria-expanded={isOpen}
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={inView}
-              transition={{ duration: 0.45, ease: EASE_MODAL, delay: (i % 8) * 0.04 }}
-            >
-              <IconTile icon={Icon} size="sm" />
-              <span className="rh-fx-tile__t">{t}</span>
-            </motion.button>
-          );
-        })}
-      </div>
-
-      <div className="rh-fx-panel-slot">
-        <AnimatePresence mode="wait">
-          {active && (
-            <motion.div
-              key={active.t}
-              className="rh-fx-panel"
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.22, ease: EASE_MODAL }}
-            >
-              <IconTile icon={active.icon} size="sm" />
-              <span className="rh-fx-panel__body">
-                <strong>{active.t}</strong>
-                <span>{active.d}</span>
-              </span>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {FUNZIONI.map(({ icon: Icon, t }, i) => (
+          <motion.div
+            key={t}
+            className="rh-fx-tile"
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={inView}
+            transition={{ duration: 0.45, ease: EASE_MODAL, delay: (i % 8) * 0.04 }}
+          >
+            <IconTile icon={Icon} size="sm" />
+            <span className="rh-fx-tile__t">{t}</span>
+          </motion.div>
+        ))}
       </div>
 
       <p className="rh-fx-note">
