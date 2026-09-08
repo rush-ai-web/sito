@@ -79,9 +79,9 @@ export default function ModuliRisto() {
         title={<>I moduli che fanno crescere il locale, uno alla volta</>}
         sub={
           <>
-            Il gestionale resta semplice: quello che vedi sopra basta da solo. Intorno,{' '}
-            <strong>una strategia di crescita fatta di moduli indipendenti</strong> - ognuno con
-            il suo prezzo, attivi solo quelli che ti servono.
+            Il gestionale resta semplice: quello che vedi sopra basta da solo.{' '}
+            <strong>Questi si aggiungono quando vuoi far crescere il locale</strong>, non solo
+            mandarlo avanti - li scegli tu, uno alla volta.
           </>
         }
       />
@@ -96,10 +96,7 @@ export default function ModuliRisto() {
             viewport={inView}
             transition={{ duration: 0.5, ease: EASE_MODAL, delay: (i % 3) * 0.07 }}
           >
-            <div className="rh-mod-tile__head">
-              <IconTile icon={Icon} size="sm" />
-              <span className="chip chip--accent rh-mod-tile__price">da 50€/mese</span>
-            </div>
+            <IconTile icon={Icon} size="sm" />
             <h3 className="t-card" style={{ marginTop: 16, marginBottom: 8 }}>
               {t}
             </h3>
@@ -107,11 +104,6 @@ export default function ModuliRisto() {
           </motion.div>
         ))}
       </div>
-
-      <p className="rh-mod-note">
-        Il prezzo esatto dipende da cosa attivi e dalla complessità: lo definiamo insieme in demo.
-        E non finisce qui - se ti serve qualcosa che non vedi, ne parliamo.
-      </p>
     </Section>
   );
 }

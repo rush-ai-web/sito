@@ -2600,6 +2600,14 @@ main {
   color: var(--warn);
 }
 
+/* blu fisso: usato per distinguere una scheda dal resto quando la
+   pagina è nello scope arancione (es. Rush Ristorazione), così non
+   tutto è dello stesso colore. */
+.sat__ic.is-blue {
+  background: color-mix(in srgb, #5b7fe0 12%, transparent);
+  color: #5b7fe0;
+}
+
 .sat__t {
   display: flex;
   flex-direction: column;
@@ -6376,161 +6384,6 @@ textarea.input::-webkit-scrollbar {
    Classi con prefisso rh-. Riusa i token e i primitivi del sito.
    ============================================================ */
 
-/* --- Hero: mini-dashboard mock --- */
-.rh-mock {
-  max-width: 760px;
-  margin: 0 auto;
-  border-radius: 18px;
-  overflow: hidden;
-  background: var(--surface, #fff);
-  border: 1px solid var(--hairline);
-  box-shadow: var(--sh-2);
-}
-:root[data-theme='dark'] .rh-mock {
-  --surface: #17171a;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .rh-mock {
-    --surface: #17171a;
-  }
-}
-.rh-mock__bar {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 12px 16px;
-  background: color-mix(in srgb, var(--accent) 8%, var(--chip-bg));
-  border-bottom: 1px solid var(--hairline);
-}
-.rh-mock__dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--hairline-strong, rgba(0, 0, 0, 0.2));
-}
-.rh-mock__title {
-  margin-left: 8px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--text-3);
-}
-.rh-mock__body {
-  padding: 18px;
-  display: grid;
-  gap: 14px;
-}
-.rh-mock__kpis {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-.rh-mock__kpi {
-  display: grid;
-  gap: 4px;
-  padding: 14px;
-  border-radius: 14px;
-  background: var(--chip-bg);
-  border: 1px solid var(--hairline);
-}
-.rh-mock__kpi-ic {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 9px;
-  background: color-mix(in srgb, var(--accent) 15%, transparent);
-  color: var(--accent);
-}
-.rh-mock__kpi-k {
-  font-size: 12px;
-  color: var(--text-3);
-  margin-top: 2px;
-}
-.rh-mock__kpi-v {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.02em;
-}
-.rh-mock__kpi-d {
-  font-size: 12px;
-  font-weight: 600;
-}
-.rh-mock__kpi-d.is-up {
-  color: var(--pos);
-}
-.rh-mock__kpi-d.is-down {
-  color: var(--neg);
-}
-.rh-mock__chat {
-  display: grid;
-  gap: 10px;
-  padding: 16px;
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--accent) 7%, var(--chip-bg));
-  border: 1px solid var(--hairline);
-}
-.rh-mock__q {
-  align-self: flex-end;
-  max-width: 85%;
-  margin-left: auto;
-  padding: 9px 13px;
-  border-radius: 13px 13px 3px 13px;
-  background: var(--accent);
-  color: #fff;
-  font-size: 13.5px;
-}
-.rh-mock__a {
-  display: flex;
-  gap: 9px;
-  max-width: 92%;
-  font-size: 13.5px;
-  line-height: 1.5;
-  color: var(--text);
-}
-.rh-mock__a-ic {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
-  color: var(--accent);
-}
-.rh-mock__a strong {
-  color: var(--accent);
-}
-
-/* --- Soluzione: striscia compatibilità --- */
-.rh-compat {
-  margin-top: 34px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 10px 14px;
-}
-.rh-compat__label {
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-3);
-}
-.rh-compat__chips {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-}
-
-/* --- Come funziona: contenitore step centrato --- */
-.rh-steps {
-  max-width: 620px;
-  margin: 8px auto 0;
-}
-
 /* --- Core: mini-viz --- */
 .rh-bars {
   display: flex;
@@ -6921,8 +6774,20 @@ textarea.input::-webkit-scrollbar {
   background: linear-gradient(90deg, transparent, var(--accent), #ffd0b8);
 }
 
-/* --- Moduli opzionali: catalogo di card singole, ognuna con la sua
-   etichetta di prezzo - non tessere raggruppate --- */
+/* Icone: riquadro pieno arancione, glifo nero in tema chiaro e bianco in
+   tema scuro (var(--text) è già esattamente questo). Sostituisce sia il
+   riquadro neutro di .icon-tile (condiviso con il resto del sito) sia i
+   badge a tinta morbida usati nelle sezioni di questa pagina. */
+.risto-orange .icon-tile,
+.risto-orange .rh-fx-tile__ic,
+.risto-orange .rh-metrics__ic,
+.risto-orange .rh-strategy__ic,
+.risto-orange .prezzi-feat-ic {
+  background: var(--accent);
+  color: var(--text);
+}
+
+/* --- Moduli opzionali: catalogo di card singole --- */
 .rh-mods {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -6931,25 +6796,6 @@ textarea.input::-webkit-scrollbar {
 .rh-mod-tile {
   display: flex;
   flex-direction: column;
-}
-.rh-mod-tile__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-.rh-mod-tile__price {
-  font-size: 12.5px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-.rh-mod-note {
-  margin: 28px auto 0;
-  max-width: 62ch;
-  text-align: center;
-  font-size: 13.5px;
-  line-height: 1.55;
-  color: var(--text-2);
 }
 
 @media (max-width: 960px) {
@@ -6983,20 +6829,38 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #ff8759 0%, #cc4a1f 100%);
 }
 
-/* --- Funzioni: griglia compatta a icone (16 voci, scansione veloce) --- */
+/* --- Funzioni: griglia compatta a icone (16 voci, apribili al tocco) --- */
 .rh-fx-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  align-items: start;
   gap: 12px;
 }
 .rh-fx-tile {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  width: 100%;
+  text-align: left;
   padding: 14px 16px;
   border-radius: 14px;
   background: var(--chip-bg);
   border: 1px solid var(--hairline);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: border-color var(--d-hover) var(--e-out), background var(--d-hover) var(--e-out);
+}
+.rh-fx-tile:hover {
+  border-color: var(--hairline-strong);
+}
+.rh-fx-tile.is-open {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--chip-bg));
+}
+.rh-fx-tile__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 .rh-fx-tile__ic {
   flex: none;
@@ -7009,17 +6873,39 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   color: var(--accent);
 }
 .rh-fx-tile__t {
+  flex: 1;
   font-size: 13.5px;
   font-weight: 600;
   line-height: 1.3;
   color: var(--text);
 }
+.rh-fx-tile__chev {
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--text-3);
+}
+.rh-fx-tile__body {
+  display: block;
+  overflow: hidden;
+}
+.rh-fx-tile__d {
+  display: block;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hairline);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-2);
+}
 .rh-fx-note {
-  margin: 26px auto 0;
-  max-width: 56ch;
+  margin: 30px auto 0;
+  max-width: 52ch;
   text-align: center;
-  font-size: 14px;
-  line-height: 1.55;
+  font-size: clamp(19px, 2.1vw, 23px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
   color: var(--text-2);
 }
 .rh-fx-note strong {
@@ -7147,9 +7033,18 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   }
 }
 
-/* --- Prezzi ristorazione: pannello strategia --- */
+/* --- Prezzi ristorazione: card del canone in cima, centrata --- */
+.rh-price-frame {
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+/* pannello strategia, sotto la card: i moduli visti sopra sono
+   opzionali, il canone base basta da solo. */
 .rh-strategy {
-  padding: 22px;
+  max-width: 640px;
+  margin: 28px auto 0;
+  padding: 26px 28px;
   border-radius: 16px;
   background: color-mix(in srgb, var(--accent) 7%, var(--chip-bg));
   border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--hairline));
@@ -7186,4 +7081,18 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   font-size: 14px;
   font-weight: 600;
   color: var(--accent);
+}
+
+.rh-adv-list {
+  max-width: 640px;
+  margin: 22px auto 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 24px;
+  row-gap: 10px;
+}
+@media (max-width: 640px) {
+  .rh-adv-list {
+    grid-template-columns: 1fr;
+  }
 }

@@ -212,8 +212,8 @@ export default function HeroSceneRisto() {
               </div>
 
               <div className="dash__user">
-                <span className="dash__ava">V</span>
-                <b>Veronica</b>
+                <span className="dash__ava">M</span>
+                <b>Mario</b>
               </div>
             </aside>
 
@@ -244,7 +244,7 @@ export default function HeroSceneRisto() {
 
               <div className="dash__scroll">
                 <div className="dash__greet">
-                  <h4>Buongiorno, Veronica</h4>
+                  <h4>Buongiorno, Mario</h4>
                   <p>Maggio 2026 · ecco come va Caffè Centrale in questo momento</p>
                 </div>
 
@@ -349,7 +349,7 @@ export default function HeroSceneRisto() {
         }}
         aria-hidden="true"
       >
-        <span className="sat__ic is-accent"><Megaphone size={15} strokeWidth={2} /></span>
+        <span className="sat__ic is-blue"><Megaphone size={15} strokeWidth={2} /></span>
         <span className="sat__t">
           <b>Promo attivata</b>
           <em>sincronizzata su sito e QR</em>
@@ -368,8 +368,8 @@ export default function HeroSceneRisto() {
       >
         <span className="sat__ic is-warn"><TrendingDown size={15} strokeWidth={2} /></span>
         <span className="sat__t">
-          <b>Scorta in esaurimento</b>
-          <em>3 prodotti sotto soglia</em>
+          <b>Gin premium, farina 00</b>
+          <em>in esaurimento · riordina oggi</em>
         </span>
       </motion.div>
     </div>
