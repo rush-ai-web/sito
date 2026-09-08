@@ -6828,7 +6828,7 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #ff8759 0%, #cc4a1f 100%);
 }
 
-/* --- Funzioni: griglia compatta a icone, statica (16 voci) --- */
+/* --- Funzioni: griglia compatta a icone (16 voci, tocca per il dettaglio) --- */
 .rh-fx-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -6846,6 +6846,16 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   border-radius: 14px;
   background: var(--chip-bg);
   border: 1px solid var(--hairline);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: border-color var(--d-hover) var(--e-out), translate var(--d-hover) var(--e-out),
+    box-shadow var(--d-hover) var(--e-out);
+}
+.rh-fx-tile:hover {
+  border-color: var(--hairline-strong);
+  translate: 0 -2px;
+  box-shadow: var(--sh-1);
 }
 .rh-fx-tile .icon-tile {
   flex: none;
@@ -6854,6 +6864,52 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   font-size: 13.5px;
   font-weight: 600;
   line-height: 1.3;
+  color: var(--text);
+}
+
+.rh-fx-modal {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 22px;
+  position: relative;
+}
+.rh-fx-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 2px;
+  padding-right: 22px;
+}
+.rh-fx-modal__body strong {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+.rh-fx-modal__body p {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+.rh-fx-modal__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--chip-bg);
+  color: var(--text-2);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--d-hover) var(--e-out), color var(--d-hover) var(--e-out);
+}
+.rh-fx-modal__close:hover {
+  background: var(--hairline);
   color: var(--text);
 }
 .rh-fx-note {

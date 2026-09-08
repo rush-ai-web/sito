@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   LayoutGrid,
   Boxes,
@@ -19,7 +20,7 @@ import {
   Languages,
 } from 'lucide-react';
 import { Section, Head, IconTile } from '../ui';
-import { EASE_MODAL, inView } from '../../lib/motion';
+import { DUR, EASE_MODAL, inView } from '../../lib/motion';
 
 /* tutto quello che Rush Ristorazione fa, in un'unica griglia: il
    gestionale e la strategia intorno, allo stesso livello. Presentiamo
@@ -44,6 +45,22 @@ const FUNZIONI = [
 ];
 
 export default function FunzioniRisto() {
+  const [openIdx, setOpenIdx] = useState(null);
+  const active = openIdx !== null ? FUNZIONI[openIdx] : null;
+
+  useEffect(() => {
+    if (openIdx === null) return;
+    const onKey = (e) => {
+      if (e.key === 'Escape') setOpenIdx(null);
+    };
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [openIdx]);
+
   return (
     <Section id="funzioni" grid large>
       <Head
@@ -53,16 +70,19 @@ export default function FunzioniRisto() {
         sub={
           <>
             Non un gestionale e poi il resto sparso altrove: <strong>tutto quello che serve per
-            mandare avanti e far crescere il locale vive nello stesso sistema.</strong>
+            mandare avanti e far crescere il locale vive nello stesso sistema.</strong> Tocca una
+            voce per vedere cosa fa.
           </>
         }
       />
 
       <div className="rh-fx-grid">
         {FUNZIONI.map(({ icon: Icon, t }, i) => (
-          <motion.div
+          <motion.button
+            type="button"
             key={t}
             className="rh-fx-tile"
+            onClick={() => setOpenIdx(i)}
             initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={inView}
@@ -70,7 +90,7 @@ export default function FunzioniRisto() {
           >
             <IconTile icon={Icon} size="sm" />
             <span className="rh-fx-tile__t">{t}</span>
-          </motion.div>
+          </motion.button>
         ))}
       </div>
 
@@ -78,6 +98,44 @@ export default function FunzioniRisto() {
         Costruito su misura per tutto il locale: <strong>paghi solo quello che ti serve</strong>,
         non un pacchetto fisso uguale per tutti.
       </p>
+
+      <AnimatePresence>
+        {active && (
+          <motion.div
+            className="palette__scrim"
+            onClick={() => setOpenIdx(null)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: DUR.pop, ease: EASE_MODAL }}
+          >
+            <motion.div
+              className="palette rh-fx-modal"
+              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, y: -14, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.985 }}
+              transition={{ duration: DUR.modal, ease: EASE_MODAL }}
+              role="dialog"
+              aria-label={active.t}
+            >
+              <IconTile icon={active.icon} />
+              <div className="rh-fx-modal__body">
+                <strong>{active.t}</strong>
+                <p>{active.d}</p>
+              </div>
+              <button
+                type="button"
+                className="rh-fx-modal__close"
+                onClick={() => setOpenIdx(null)}
+                aria-label="Chiudi"
+              >
+                ×
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Section>
   );
 }
