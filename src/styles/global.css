@@ -6921,76 +6921,44 @@ textarea.input::-webkit-scrollbar {
   background: linear-gradient(90deg, transparent, var(--accent), #ffd0b8);
 }
 
-/* --- Moduli opzionali: 3 cluster con checklist interna, non tante
-   tessere sparse --- */
-.rh-mod-grid {
+/* --- Moduli opzionali: catalogo di card singole, ognuna con la sua
+   etichetta di prezzo - non tessere raggruppate --- */
+.rh-mods {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
-.rh-mod-card {
+.rh-mod-tile {
   display: flex;
   flex-direction: column;
 }
-.rh-mod-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.rh-mod-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 11px;
-}
-.rh-mod-list__ic {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  margin-top: 1px;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
-  color: var(--accent);
-}
-.rh-mod-list strong {
-  display: block;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-}
-.rh-mod-list__tag {
-  font-weight: 500;
-  color: var(--text-3);
-}
-.rh-mod-list__d {
-  display: block;
-  margin-top: 2px;
-  font-size: 13px;
-  line-height: 1.45;
-  color: var(--text-2);
-}
-.rh-mod-note {
+.rh-mod-tile__head {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 12px;
+}
+.rh-mod-tile__price {
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.rh-mod-note {
   margin: 28px auto 0;
-  max-width: 60ch;
+  max-width: 62ch;
   text-align: center;
   font-size: 13.5px;
+  line-height: 1.55;
   color: var(--text-2);
-}
-.rh-mod-note svg {
-  flex: none;
-  color: var(--accent);
 }
 
 @media (max-width: 960px) {
-  .rh-mod-grid {
+  .rh-mods {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .rh-mods {
     grid-template-columns: 1fr;
   }
 }
