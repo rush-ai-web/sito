@@ -18,8 +18,6 @@ import {
   MapPin,
   Workflow,
   Languages,
-  ChevronDown,
-  X,
 } from 'lucide-react';
 import { Section, Head } from '../ui';
 import { EASE_MODAL, inView } from '../../lib/motion';
@@ -47,7 +45,8 @@ const FUNZIONI = [
 ];
 
 export default function FunzioniRisto() {
-  const [openId, setOpenId] = useState(null);
+  const [openIdx, setOpenIdx] = useState(null);
+  const active = openIdx !== null ? FUNZIONI[openIdx] : null;
 
   return (
     <Section id="funzioni" grid large>
@@ -65,46 +64,50 @@ export default function FunzioniRisto() {
       />
 
       <div className="rh-fx-grid">
-        {FUNZIONI.map(({ icon: Icon, t, d }, i) => {
-          const isOpen = openId === t;
+        {FUNZIONI.map(({ icon: Icon, t }, i) => {
+          const isOpen = openIdx === i;
           return (
             <motion.button
               type="button"
               key={t}
               className={`rh-fx-tile${isOpen ? ' is-open' : ''}`}
-              onClick={() => setOpenId(isOpen ? null : t)}
+              onClick={() => setOpenIdx(isOpen ? null : i)}
               aria-expanded={isOpen}
               initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={inView}
               transition={{ duration: 0.45, ease: EASE_MODAL, delay: (i % 8) * 0.04 }}
             >
-              <span className="rh-fx-tile__row">
-                <span className="rh-fx-tile__ic">
-                  <Icon size={17} strokeWidth={1.9} />
-                </span>
-                <span className="rh-fx-tile__t">{t}</span>
-                <span className="rh-fx-tile__chev" aria-hidden="true">
-                  {isOpen ? <X size={14} strokeWidth={2.4} /> : <ChevronDown size={14} strokeWidth={2.4} />}
-                </span>
+              <span className="rh-fx-tile__ic">
+                <Icon size={17} strokeWidth={1.9} />
               </span>
-
-              <AnimatePresence initial={false}>
-                {isOpen && (
-                  <motion.span
-                    className="rh-fx-tile__body"
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.28, ease: EASE_MODAL }}
-                  >
-                    <span className="rh-fx-tile__d">{d}</span>
-                  </motion.span>
-                )}
-              </AnimatePresence>
+              <span className="rh-fx-tile__t">{t}</span>
             </motion.button>
           );
         })}
+      </div>
+
+      <div className="rh-fx-panel-slot">
+        <AnimatePresence mode="wait">
+          {active && (
+            <motion.div
+              key={active.t}
+              className="rh-fx-panel"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.22, ease: EASE_MODAL }}
+            >
+              <span className="rh-fx-panel__ic">
+                <active.icon size={18} strokeWidth={1.9} />
+              </span>
+              <span className="rh-fx-panel__body">
+                <strong>{active.t}</strong>
+                <span>{active.d}</span>
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <p className="rh-fx-note">
