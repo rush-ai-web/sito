@@ -53,10 +53,13 @@ const esc = (s = '') =>
 
 /* ------------------------------------------------------------------
    Template email — pensato per rendersi UGUALE in tema chiaro e scuro:
-   sfondo scuro fisso, testo chiaro. La barra col logo è BLU (accento del
-   brand) e non nera: un client in dark mode può invertire una banda scura
-   in bianca facendo sparire il logo bianco, mentre un blu saturo resta blu
-   in ogni caso → il logo bianco è sempre leggibile.
+   sfondo scuro fisso, testo chiaro, barra col logo SEMPRE NERA. Alcuni
+   client (soprattutto l'app Gmail) invertono un blocco quasi-nero in
+   quasi-bianco quando l'utente ha il dark mode attivo, facendo sparire
+   il logo bianco: per questo la barra ha sia l'attributo HTML bgcolor
+   sia una regola CSS scoped su [data-ogsc] (il marcatore che Gmail
+   aggiunge quando ricolora in dark mode) che reimpone lo stesso nero
+   con !important, vincendo sulla sua reinterpretazione.
    ------------------------------------------------------------------ */
 export function emailHtml({ nome, email, telefono, tipoLabel, campoLabel, settore, team, messaggio }) {
   const row = (label, value) => `
@@ -84,6 +87,12 @@ export function emailHtml({ nome, email, telefono, tipoLabel, campoLabel, settor
 <meta name="color-scheme" content="dark light">
 <meta name="supported-color-schemes" content="dark light">
 <title>Nuova richiesta dal sito Rush</title>
+<style>
+  /* Gmail (app e web) marca gli elementi ricolorati in dark mode con
+     [data-ogsc]: qui reimponiamo il nero della barra, vincendo sulla
+     sua inversione automatica. */
+  [data-ogsc] .rush-bar { background-color: #17171a !important; }
+</style>
 </head>
 <body style="margin:0;padding:0;background:#0e0e10;">
   <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Nuova richiesta da ${esc(nome)} — ${esc(tipoLabel)}</div>
@@ -91,9 +100,10 @@ export function emailHtml({ nome, email, telefono, tipoLabel, campoLabel, settor
     <tr>
       <td align="center">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#1d1d1f;border:1px solid rgba(255,255,255,.12);border-radius:18px;overflow:hidden;">
-          <!-- barra blu brand con logo: robusta all'inversione dark-mode -->
+          <!-- barra nera con logo: bgcolor + classe .rush-bar forzano il
+               nero anche quando il client tenta di ricolorare in dark mode -->
           <tr>
-            <td align="center" style="background:#5b7fe0;padding:24px;">
+            <td align="center" bgcolor="#17171a" class="rush-bar" style="background-color:#17171a;padding:24px;">
               <img src="https://rush-ai.it/rush-logo-dark.png" alt="Rush" height="26" style="height:26px;width:auto;display:block;">
             </td>
           </tr>
@@ -144,6 +154,9 @@ export function confirmHtml({ nome }) {
 <meta name="color-scheme" content="dark light">
 <meta name="supported-color-schemes" content="dark light">
 <title>Abbiamo ricevuto la tua richiesta</title>
+<style>
+  [data-ogsc] .rush-bar { background-color: #17171a !important; }
+</style>
 </head>
 <body style="margin:0;padding:0;background:#0e0e10;">
   <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Grazie ${esc(primo)}, ti rispondiamo entro due giorni lavorativi.</div>
@@ -152,7 +165,7 @@ export function confirmHtml({ nome }) {
       <td align="center">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#1d1d1f;border:1px solid rgba(255,255,255,.12);border-radius:18px;overflow:hidden;">
           <tr>
-            <td align="center" style="background:#5b7fe0;padding:24px;">
+            <td align="center" bgcolor="#17171a" class="rush-bar" style="background-color:#17171a;padding:24px;">
               <img src="https://rush-ai.it/rush-logo-dark.png" alt="Rush" height="26" style="height:26px;width:auto;display:block;">
             </td>
           </tr>
