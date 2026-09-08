@@ -6779,7 +6779,6 @@ textarea.input::-webkit-scrollbar {
    riquadro neutro di .icon-tile (condiviso con il resto del sito) sia i
    badge a tinta morbida usati nelle sezioni di questa pagina. */
 .risto-orange .icon-tile,
-.risto-orange .rh-fx-tile__ic,
 .risto-orange .rh-metrics__ic,
 .risto-orange .rh-strategy__ic,
 .risto-orange .prezzi-feat-ic {
@@ -6848,29 +6847,24 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   cursor: pointer;
   font: inherit;
   color: inherit;
-  transition: border-color var(--d-hover) var(--e-out), background var(--d-hover) var(--e-out);
+  transition: border-color var(--d-hover) var(--e-out), background var(--d-hover) var(--e-out),
+    translate var(--d-hover) var(--e-out), box-shadow var(--d-hover) var(--e-out);
 }
 .rh-fx-tile:hover {
   border-color: var(--hairline-strong);
+  translate: 0 -2px;
+  box-shadow: var(--sh-1);
 }
 .rh-fx-tile.is-open {
+  grid-column: 1 / -1;
   border-color: var(--accent);
   background: color-mix(in srgb, var(--accent) 8%, var(--chip-bg));
+  translate: 0 0;
 }
 .rh-fx-tile__row {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-.rh-fx-tile__ic {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--accent) 15%, transparent);
-  color: var(--accent);
 }
 .rh-fx-tile__t {
   flex: 1;

@@ -21,7 +21,7 @@ import {
   ChevronDown,
   X,
 } from 'lucide-react';
-import { Section, Head } from '../ui';
+import { Section, Head, IconTile } from '../ui';
 import { EASE_MODAL, inView } from '../../lib/motion';
 
 /* tutto quello che Rush Ristorazione fa, in un'unica griglia: il
@@ -64,13 +64,14 @@ export default function FunzioniRisto() {
         }
       />
 
-      <div className="rh-fx-grid">
+      <motion.div className="rh-fx-grid" layout>
         {FUNZIONI.map(({ icon: Icon, t, d }, i) => {
           const isOpen = openId === t;
           return (
             <motion.button
               type="button"
               key={t}
+              layout
               className={`rh-fx-tile${isOpen ? ' is-open' : ''}`}
               onClick={() => setOpenId(isOpen ? null : t)}
               aria-expanded={isOpen}
@@ -80,9 +81,7 @@ export default function FunzioniRisto() {
               transition={{ duration: 0.45, ease: EASE_MODAL, delay: (i % 8) * 0.04 }}
             >
               <span className="rh-fx-tile__row">
-                <span className="rh-fx-tile__ic">
-                  <Icon size={17} strokeWidth={1.9} />
-                </span>
+                <IconTile icon={Icon} size="sm" />
                 <span className="rh-fx-tile__t">{t}</span>
                 <span className="rh-fx-tile__chev" aria-hidden="true">
                   {isOpen ? <X size={14} strokeWidth={2.4} /> : <ChevronDown size={14} strokeWidth={2.4} />}
@@ -105,7 +104,7 @@ export default function FunzioniRisto() {
             </motion.button>
           );
         })}
-      </div>
+      </motion.div>
 
       <p className="rh-fx-note">
         Costruito su misura per tutto il locale: <strong>paghi solo quello che ti serve</strong>,
