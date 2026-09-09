@@ -21,11 +21,12 @@ export default function MisurabilitaRisto() {
         title={<>Non promesse. Numeri, uno per uno</>}
         sub={
           <>
-            Hai il sito web? Sai quante persone l'hanno visitato e cosa cercavano. Fai una
-            promozione? Sai in tempo reale quante persone l'hanno usata. Fai pubblicità? Sai
-            quanti hanno cliccato, quanti hanno prenotato, quanti sono passati a chiedere
-            indicazioni. <strong>Ogni euro investito nella crescita del locale lascia un numero,
-            non un atto di fede.</strong>
+            <strong>Hai il sito web?</strong> Sai quante persone l'hanno visitato e cosa
+            cercavano. <strong>Fai una promozione?</strong> Sai in tempo reale quante persone
+            l'hanno usata. <strong>Fai pubblicità?</strong> Sai quanti hanno cliccato, quanti
+            hanno prenotato, quanti sono passati a chiedere indicazioni.{' '}
+            <strong>Ogni euro investito nella crescita del locale lascia un numero, non un atto
+            di fede.</strong>
           </>
         }
       />

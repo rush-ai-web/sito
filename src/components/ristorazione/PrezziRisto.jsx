@@ -12,6 +12,7 @@ import {
   Ban,
   Users,
   FileCheck,
+  ChevronUp,
   ChevronDown,
 } from 'lucide-react';
 import { Section, Head } from '../ui';
@@ -140,8 +141,14 @@ export default function PrezziRisto() {
             </ul>
 
             <p className="prezzi2__variabile">
-              Il prezzo varia in base alla complessità del locale.
+              Il prezzo varia in base ai moduli che vuoi aggiungere e a eventuali automazioni o
+              funzioni particolari fatte su misura per il tuo locale.
             </p>
+
+            <a href="#funzioni" className="prezzi2__detail-link prezzi2__detail-link--up">
+              <ChevronUp size={14} strokeWidth={2.2} />
+              Rivedi i moduli aggiuntivi
+            </a>
 
             <a href="#contatti" className="btn btn--primary prezzi-cta">
               Prenota una demo

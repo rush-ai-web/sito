@@ -47,8 +47,8 @@ export default function ChatRisto() {
     <Section id="chat" large>
       <Head
         icon={Sparkles}
-        label="La chat AI"
-        title={<>Non solo risposte. Anche segnalazioni e consigli, da sola</>}
+        label="Rush AI"
+        title={<>Non solo risposte. Rush AI segnala e consiglia da sola</>}
         sub={
           <>
             Chiedi come parli e ti risponde con i numeri veri, ma non aspetta che tu chieda:{' '}
