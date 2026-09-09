@@ -24,7 +24,8 @@ export default function MisurabilitaRisto() {
             <strong>Hai il sito web?</strong> Sai quante persone l'hanno visitato e cosa
             cercavano. <strong>Fai una promozione?</strong> Sai in tempo reale quante persone
             l'hanno usata. <strong>Fai pubblicità?</strong> Sai quanti hanno cliccato, quanti
-            hanno prenotato, quanti sono passati a chiedere indicazioni.{' '}
+            hanno prenotato, quanti sono passati a chiedere indicazioni.
+            <br />
             <strong>Ogni euro investito nella crescita del locale lascia un numero, non un atto
             di fede.</strong>
           </>

@@ -128,7 +128,6 @@ export default function PrezziRisto() {
 
             <span className="prezzi2__divider" aria-hidden="true" />
 
-            <p className="prezzi2__incluso-label">Incluso:</p>
             <ul className="prezzi-features">
               {INCLUSO.map(({ Icon, label }) => (
                 <li key={label}>
@@ -139,11 +138,6 @@ export default function PrezziRisto() {
                 </li>
               ))}
             </ul>
-
-            <p className="prezzi2__variabile">
-              Il prezzo varia in base ai moduli che vuoi aggiungere e a eventuali automazioni o
-              funzioni particolari fatte su misura per il tuo locale.
-            </p>
 
             <a href="#funzioni" className="prezzi2__detail-link prezzi2__detail-link--up">
               <ChevronUp size={14} strokeWidth={2.2} />
@@ -188,10 +182,13 @@ export default function PrezziRisto() {
           <p className="prezzi2__note">
             Il gestionale tiene tutto sotto controllo; marketing, prenotazioni, ADV e social
             lavorano ogni giorno per portarti clienti nuovi, non solo per registrare quelli che
-            arrivano da soli. Il prezzo dei moduli aggiuntivi è <strong>su preventivo</strong>: così
-            paghi solo le funzioni che ti servono davvero, e{' '}
-            <strong>più moduli attivi, più il canone di ciascuno si abbassa</strong> — conviene
-            usare Rush Ristorazione davvero, in profondità.
+            arrivano da soli. Il prezzo varia in base ai moduli che vuoi aggiungere e a eventuali
+            automazioni o funzioni particolari fatte su misura per il tuo locale.
+          </p>
+          <p className="prezzi2__note">
+            Il prezzo dei moduli aggiuntivi è <strong>su preventivo</strong>: così paghi solo le
+            funzioni che ti servono davvero, e{' '}
+            <strong>più moduli attivi, più il canone di ciascuno si abbassa</strong>.
           </p>
         </motion.div>
       </div>

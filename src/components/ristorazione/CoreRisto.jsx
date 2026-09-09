@@ -54,109 +54,24 @@ function BuildCard({ icon, title, desc, accent = false, wide = false, children }
   );
 }
 
-/* ── mini-viz ── */
-function VizIncassi() {
-  const bars = [52, 61, 48, 72, 66, 88, 79];
+/* ── mini-viz: stessa "sfumatura bassa" a barre in ogni card, solo il
+   pattern cambia, così tutte e sei restano identiche per stile e altezza ── */
+function Bars({ values }) {
   return (
     <div className="rh-bars">
-      {bars.map((h, i) => (
+      {values.map((h, i) => (
         <span key={i} className="rh-bars__b" style={{ height: `${h}%` }} />
       ))}
     </div>
   );
 }
 
-function VizMagazzino() {
-  const rows = [
-    { n: 'Caffè in grani', s: 'ok' },
-    { n: 'Gin premium', s: 'warn' },
-    { n: 'Burro', s: 'low' },
-  ];
-  return (
-    <div className="rh-stock">
-      {rows.map((r) => (
-        <div className="rh-stock__row" key={r.n}>
-          <span className={`rh-stock__dot rh-stock__dot--${r.s}`} />
-          <span className="rh-stock__n">{r.n}</span>
-          <span className={`rh-stock__tag rh-stock__tag--${r.s}`}>
-            {r.s === 'ok' ? 'in stock' : r.s === 'warn' ? 'in calo' : 'sotto soglia'}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function VizFatture() {
-  const steps = ['Inquadra', 'OCR + AI', 'Conferma', 'Carico'];
-  return (
-    <div className="rh-flow">
-      {steps.map((s, i) => (
-        <span className="rh-flow__node" key={s}>
-          {s}
-          {i < steps.length - 1 && <span className="rh-flow__arr">→</span>}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-function VizFornitori() {
-  const rows = [
-    { n: 'Distillerie Rossi · Gin', d: '+18%' },
-    { n: 'Latteria Bianchi · Burro', d: '+11%' },
-  ];
-  return (
-    <div className="rh-alerts">
-      {rows.map((r) => (
-        <div className="rh-alert" key={r.n}>
-          <span className="rh-alert__n">{r.n}</span>
-          <span className="rh-alert__d">{r.d}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function VizMenu() {
-  const cells = [
-    { t: 'Stelle', c: 'good' },
-    { t: 'Puzzle', c: 'mid' },
-    { t: 'Cavalli', c: 'mid' },
-    { t: 'Cani', c: 'bad' },
-  ];
-  return (
-    <div className="rh-quad">
-      {cells.map((c) => (
-        <span key={c.t} className={`rh-quad__c rh-quad__c--${c.c}`}>
-          {c.t}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-const TURNI = [
-  { who: 'Sara', cells: [1, 0, 2, 0, 1, 2, 0] },
-  { who: 'Luca', cells: [0, 2, 0, 1, 0, 1, 2] },
-  { who: 'Emma', cells: [2, 1, 0, 2, 0, 0, 1] },
-];
-function VizTurni() {
-  return (
-    <div className="rh-turni">
-      {TURNI.map((r) => (
-        <div className="rh-turni__row" key={r.who}>
-          <span className="rh-turni__who">{r.who}</span>
-          <span className="rh-turni__cells">
-            {r.cells.map((c, i) => (
-              <span key={i} className={`rh-turni__c ${c === 1 ? 'is-day' : c === 2 ? 'is-eve' : ''}`} />
-            ))}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
+const VizIncassi = () => <Bars values={[52, 61, 48, 72, 66, 88, 79]} />;
+const VizMagazzino = () => <Bars values={[70, 45, 90, 30, 55, 80, 60]} />;
+const VizFatture = () => <Bars values={[40, 55, 35, 70, 60, 85, 50]} />;
+const VizFornitori = () => <Bars values={[30, 35, 45, 60, 55, 75, 90]} />;
+const VizMenu = () => <Bars values={[90, 40, 65, 25, 80, 50, 35]} />;
+const VizTurni = () => <Bars values={[60, 80, 45, 90, 70, 55, 85]} />;
 
 /* voci core minori, in una striscia compatta sotto al bento */
 const ALTRO = [
@@ -181,7 +96,7 @@ export default function CoreRisto() {
       />
 
       <div className="build">
-        <BuildCard icon={Wallet} title="Cassa & incassi" desc="Vendite per articolo, chiusure, split contante/POS/Satispay e riconciliazione col cassetto automatico. In lettura dalla tua cassa, ogni pochi minuti.">
+        <BuildCard icon={Wallet} title="Registra costi e incassi" desc="Si collega alla tua cassa e alle fatture in arrivo: incassi e spese si registrano da soli, così sai sempre quanto guadagni davvero, non a fine mese.">
           <VizIncassi />
         </BuildCard>
 
@@ -193,7 +108,7 @@ export default function CoreRisto() {
           <VizFatture />
         </BuildCard>
 
-        <BuildCard icon={TrendingUp} title="Fornitori & prezzi" desc="Rush confronta ogni riga fattura con lo storico e ti avvisa quando un fornitore alza i prezzi oltre soglia. Con bozza d'ordine pronta." wide>
+        <BuildCard icon={TrendingUp} title="Fornitori & prezzi" desc="Rush confronta ogni riga fattura con lo storico e ti avvisa quando un fornitore alza i prezzi oltre soglia. Con bozza d'ordine pronta.">
           <VizFornitori />
         </BuildCard>
 

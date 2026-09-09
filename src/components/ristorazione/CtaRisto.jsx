@@ -11,6 +11,18 @@ const PRIVACY_URL = 'https://www.iubenda.com/privacy-policy/64941360';
 
 const TOTAL_STEPS = 3;
 
+const MODULI = [
+  'Sito web',
+  'Marketing',
+  'Prenotazioni',
+  'Chiamate e chat AI',
+  'Recensioni',
+  'ADV su Maps, Google e Meta',
+  'Social, video e foto',
+  'Automazioni',
+  'Menu multilingua',
+];
+
 export default function CtaRisto() {
   const [step, setStep] = useState(0);
   const [dir, setDir] = useState(1);
@@ -24,8 +36,13 @@ export default function CtaRisto() {
   const [telefono, setTelefono] = useState('');
   const [cassa, setCassa] = useState('');
   const [messaggio, setMessaggio] = useState('');
+  const [moduli, setModuli] = useState([]);
   const [privacy, setPrivacy] = useState(false);
   const [website, setWebsite] = useState(''); // honeypot
+
+  const toggleModulo = (m) => {
+    setModuli((prev) => (prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m]));
+  };
 
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
@@ -56,6 +73,7 @@ export default function CtaRisto() {
       `Locale: ${locale.trim()}`,
       citta.trim() && `Città: ${citta.trim()}`,
       cassa.trim() && `Cassa attuale: ${cassa.trim()}`,
+      moduli.length > 0 && `Moduli di interesse: ${moduli.join(', ')}`,
       messaggio.trim() && `Note: ${messaggio.trim()}`,
     ]
       .filter(Boolean)
@@ -212,9 +230,26 @@ export default function CtaRisto() {
                       )}
 
                       {step === 1 && (
-                        <fieldset className="wiz__fs">
-                          <legend className="wiz__q">Cosa usi oggi, e dove si perde tempo</legend>
-                          <div className="wiz__group">
+                        <div className="wiz__group">
+                          <fieldset className="wiz__fs">
+                            <legend className="wiz__q">Quali moduli ti interessano? (facoltativo)</legend>
+                            <div className="wiz__chips">
+                              {MODULI.map((m) => (
+                                <button
+                                  type="button"
+                                  key={m}
+                                  className={`wiz-chip${moduli.includes(m) ? ' is-on' : ''}`}
+                                  onClick={() => toggleModulo(m)}
+                                  aria-pressed={moduli.includes(m)}
+                                >
+                                  {m}
+                                </button>
+                              ))}
+                            </div>
+                          </fieldset>
+
+                          <fieldset className="wiz__fs">
+                            <legend className="wiz__q">Cosa usi oggi, e dove si perde tempo</legend>
                             <label className="field">
                               <span className="field__label">Cassa che usi (facoltativo)</span>
                               <input
@@ -234,8 +269,8 @@ export default function CtaRisto() {
                                 rows={4}
                               />
                             </label>
-                          </div>
-                        </fieldset>
+                          </fieldset>
+                        </div>
                       )}
 
                       {step === 2 && (
