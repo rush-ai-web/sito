@@ -48,7 +48,7 @@ export default function ChatRisto() {
       <Head
         icon={Sparkles}
         label="Rush AI"
-        title={<>Intelligenza artificiale applicata davvero: analizza, segnala e consiglia</>}
+        title={<>Intelligenza artificiale che lavora per il locale, non solo che risponde</>}
         className="head--chat-risto"
         sub={
           <>

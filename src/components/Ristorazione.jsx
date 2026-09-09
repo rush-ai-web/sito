@@ -93,6 +93,7 @@ export default function Ristorazione() {
             <span className="risto-brand-icon risto-brand-icon--card" aria-hidden="true">
               <UtensilsCrossed size={17} strokeWidth={2.15} />
             </span>
+            <span className="risto2__brand-seg">Ristorazione</span>
           </div>
 
           <div className="risto2__kpi">

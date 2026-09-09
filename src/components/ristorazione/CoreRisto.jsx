@@ -11,6 +11,10 @@ import {
   Trophy,
   MessageSquareText,
   FileSpreadsheet,
+  Star,
+  Puzzle as PuzzleIcon,
+  Flame,
+  Anvil,
 } from 'lucide-react';
 import { Section, Head, IconTile } from '../ui';
 import { EASE_MODAL, inView } from '../../lib/motion';
@@ -121,16 +125,17 @@ function VizFornitori() {
 
 function VizMenu() {
   const cells = [
-    { t: 'Stelle', c: 'star' },
-    { t: 'Puzzle', c: 'puzzle' },
-    { t: 'Cavalli da tiro', c: 'horse' },
-    { t: 'Cani', c: 'dog' },
+    { t: 'Stelle', c: 'stella', icon: Star },
+    { t: 'Puzzle', c: 'puzzle', icon: PuzzleIcon },
+    { t: 'Cavalli', c: 'cavallo', icon: Flame },
+    { t: 'Incudini', c: 'incudine', icon: Anvil },
   ];
   return (
     <div className="rh-quad">
-      {cells.map((c) => (
-        <span key={c.t} className={`rh-quad__c rh-quad__c--${c.c}`}>
-          {c.t}
+      {cells.map(({ t, c, icon: Icon }) => (
+        <span key={t} className={`rh-quad__c rh-quad__c--${c}`}>
+          <Icon size={14} strokeWidth={2} />
+          {t}
         </span>
       ))}
     </div>
@@ -198,7 +203,7 @@ export default function CoreRisto() {
           <VizFornitori />
         </BuildCard>
 
-        <BuildCard icon={ChefHat} title="Ricette, food cost & menu" desc="Costo materie prime per piatto aggiornato a ogni fattura, margini reali e menu engineering: stelle, puzzle, cavalli da tiro e cani, in automatico.">
+        <BuildCard icon={ChefHat} title="Ricette, food cost & menu" desc="Costo materie prime per piatto aggiornato a ogni fattura, margini reali e menu engineering: stelle, puzzle, cavalli e incudini, in automatico.">
           <VizMenu />
         </BuildCard>
 

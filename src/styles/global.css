@@ -1170,7 +1170,6 @@ main {
   display: block;
 }
 
-
 .nav__links {
   display: flex;
   align-items: center;
@@ -1375,6 +1374,7 @@ main {
   width: auto;
   object-fit: contain;
 }
+
 
 /* mostra logo scuro su sfondo chiaro, logo chiaro in dark mode */
 .hero__logo-img--d {
@@ -4094,6 +4094,11 @@ textarea.input::-webkit-scrollbar {
   height: 40px;
 }
 
+.risto-brand-icon--card {
+  width: 28px;
+  height: 28px;
+}
+
 .risto2__kpi {
   position: relative;
   z-index: 1;
@@ -4706,6 +4711,13 @@ textarea.input::-webkit-scrollbar {
   overflow: hidden;
   padding: 26px 26px 0;
   min-height: 300px;
+}
+
+/* su /ristorazione i mini-viz hanno testo/badge fino in fondo (non solo
+   barre a tutta altezza come in home): un filo di margine sotto evita che
+   tocchino il bordo della card. */
+.risto-orange .buildcard {
+  padding-bottom: 22px;
 }
 
 .buildcard--wide {
@@ -6618,6 +6630,10 @@ textarea.input::-webkit-scrollbar {
   gap: 8px;
 }
 .rh-quad__c {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   padding: 12px;
   border-radius: 11px;
   font-size: 13px;
@@ -6625,19 +6641,19 @@ textarea.input::-webkit-scrollbar {
   text-align: center;
   border: 1px solid var(--hairline);
 }
-.rh-quad__c--star {
+.rh-quad__c--stella {
   color: var(--pos);
   background: color-mix(in srgb, var(--pos) 12%, transparent);
 }
 .rh-quad__c--puzzle {
+  color: #5b7fe0;
+  background: color-mix(in srgb, #5b7fe0 12%, transparent);
+}
+.rh-quad__c--cavallo {
   color: var(--accent);
   background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
-.rh-quad__c--horse {
-  color: var(--warn);
-  background: color-mix(in srgb, var(--warn) 12%, transparent);
-}
-.rh-quad__c--dog {
+.rh-quad__c--incudine {
   color: var(--neg);
   background: color-mix(in srgb, var(--neg) 10%, transparent);
 }
