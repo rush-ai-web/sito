@@ -12,7 +12,7 @@ import {
   Ban,
   Users,
   FileCheck,
-  ArrowRight,
+  ChevronDown,
 } from 'lucide-react';
 import { Section, Head } from '../ui';
 import { EASE_MODAL } from '../../lib/motion';
@@ -80,7 +80,7 @@ export default function PrezziRisto() {
           <div className="prezzi2__card">
             <div className="prezzi-toggle">
               {[
-                { id: false, label: 'Mensile' },
+                { id: false, label: 'Trimestrale' },
                 { id: true, label: 'Annuale', tag: '13% di sconto' },
               ].map(({ id, label, tag }) => (
                 <button
@@ -115,13 +115,13 @@ export default function PrezziRisto() {
                     exit={{ opacity: 0, y: 10 }}
                     transition={{ duration: 0.2, ease: EASE_MODAL }}
                   >
-                    {yearly ? '300' : '349'}
+                    {yearly ? '261' : '300'}
                   </motion.span>
                 </AnimatePresence>
                 <span className="prezzi-price__unit">€ / mese</span>
               </div>
               <p className="prezzi-sub">
-                {yearly ? 'fatturato annualmente · minimo 12 mesi' : 'fatturato ogni mese'}
+                {yearly ? 'fatturato annualmente · minimo 12 mesi' : 'fatturato ogni 3 mesi'}
               </p>
             </div>
 
@@ -140,17 +140,16 @@ export default function PrezziRisto() {
             </ul>
 
             <p className="prezzi2__variabile">
-              Il prezzo varia in base alla complessità del locale. I moduli aggiuntivi (marketing,
-              prenotazioni, ADV, social…) hanno un costo a parte —{' '}
-              <a href="#prodotto" className="prezzi2__variabile-link">
-                vedi nel dettaglio cosa include il canone
-                <ArrowRight size={13} strokeWidth={2.2} />
-              </a>
-              .
+              Il prezzo varia in base alla complessità del locale.
             </p>
 
             <a href="#contatti" className="btn btn--primary prezzi-cta">
               Prenota una demo
+            </a>
+
+            <a href="#prodotto" className="prezzi2__detail-link">
+              Vedi nel dettaglio cosa include il canone
+              <ChevronDown size={14} strokeWidth={2.2} />
             </a>
           </div>
         </motion.div>
@@ -180,9 +179,12 @@ export default function PrezziRisto() {
           </div>
 
           <p className="prezzi2__note">
-            <strong>Più moduli attivi, più il canone di ciascuno si abbassa.</strong> Il gestionale
-            tiene tutto sotto controllo; marketing, prenotazioni, ADV e social lavorano ogni giorno
-            per portarti clienti nuovi, non solo per registrare quelli che arrivano da soli.
+            Il gestionale tiene tutto sotto controllo; marketing, prenotazioni, ADV e social
+            lavorano ogni giorno per portarti clienti nuovi, non solo per registrare quelli che
+            arrivano da soli. Il prezzo dei moduli aggiuntivi è <strong>su preventivo</strong>: così
+            paghi solo le funzioni che ti servono davvero, e{' '}
+            <strong>più moduli attivi, più il canone di ciascuno si abbassa</strong> — conviene
+            usare Rush Ristorazione davvero, in profondità.
           </p>
         </motion.div>
       </div>

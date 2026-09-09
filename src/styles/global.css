@@ -5642,17 +5642,27 @@ textarea.input::-webkit-scrollbar {
   text-transform: uppercase;
 }
 
-.prezzi2__variabile-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-weight: 600;
-  color: var(--accent);
-  white-space: nowrap;
-}
-
 .prezzi2__card .prezzi-cta {
   margin-top: 20px;
+}
+
+.prezzi2__detail-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #e1e1e1;
+  text-align: center;
+  transition: opacity var(--d-hover) var(--e-out);
+}
+.prezzi2__detail-link:hover {
+  opacity: 0.75;
+}
+:root[data-theme='dark'] .prezzi2__detail-link {
+  color: #3b3b3d;
 }
 
 /* sovrascrive colori interni per il tema invertito */

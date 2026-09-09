@@ -23,10 +23,16 @@ export default function Fab() {
     let triggerTop = Number.POSITIVE_INFINITY;
 
     const measure = () => {
+      /* sulla home il trigger è l'inizio della sezione Ristorazione; sulle
+         pagine che non la hanno (es. /ristorazione stessa) usiamo metà
+         dell'altezza scrollabile della pagina, come richiesto. */
       const section = document.getElementById('ristorazione');
-      triggerTop = section
-        ? section.getBoundingClientRect().top + window.scrollY - window.innerHeight
-        : Number.POSITIVE_INFINITY;
+      if (section) {
+        triggerTop = section.getBoundingClientRect().top + window.scrollY - window.innerHeight;
+      } else {
+        const fullHeight = document.documentElement.scrollHeight;
+        triggerTop = (fullHeight - window.innerHeight) / 2;
+      }
     };
 
     const update = () => {
