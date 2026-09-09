@@ -1,16 +1,25 @@
 import { motion } from 'framer-motion';
-import { Sparkles, ArrowUp } from 'lucide-react';
+import { Sparkles, BellRing, ArrowUp } from 'lucide-react';
 import { Section, Head } from '../ui';
 import { EASE_MODAL, inView } from '../../lib/motion';
 
 const CHAT = [
+  {
+    role: 'alert',
+    t: (
+      <>
+        Il food cost della <strong>tartare</strong> è salito al 42% questo mese: il tonno costa il
+        18% in più da Distillerie Rossi. Vuoi che ti proponga un piatto con margine simile?
+      </>
+    ),
+  },
   { role: 'q', t: 'Qual è il piatto del brunch più redditizio?' },
   {
     role: 'a',
     t: (
       <>
         Il <strong>pancake salato</strong>: margine 74%, 128 venduti a settembre. Il meno redditizio
-        è la <strong>tartare</strong> (margine 31%). Vuoi che la segni tra i piatti da rivedere?
+        è proprio la <strong>tartare</strong> di cui ti ho appena parlato.
       </>
     ),
   },
@@ -39,8 +48,15 @@ export default function ChatRisto() {
       <Head
         icon={Sparkles}
         label="La chat AI"
-        title={<>Chiedi come parli. Risponde con i numeri veri.</>}
-        sub="Niente formule, niente export. La barra AI accede a fatture, magazzino, vendite, cassa, ricette e personale e risponde con le fonti."
+        title={<>Non solo risposte. Anche segnalazioni e consigli, da sola</>}
+        sub={
+          <>
+            Chiedi come parli e ti risponde con i numeri veri, ma non aspetta che tu chieda:{' '}
+            <strong>accede da sola a fatture, magazzino, vendite, cassa, ricette e personale,
+            li analizza e ti avvisa se qualcosa non torna</strong>, con un consiglio pronto,
+            prima ancora che tu te ne accorga.
+          </>
+        }
       />
 
       <motion.div
@@ -60,12 +76,19 @@ export default function ChatRisto() {
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.45, ease: EASE_MODAL, delay: i * 0.12 }}
             >
-              {m.role === 'a' && (
+              {m.role !== 'q' && (
                 <span className="rh-chat__ai" aria-hidden="true">
-                  <Sparkles size={14} strokeWidth={2} />
+                  {m.role === 'alert' ? (
+                    <BellRing size={14} strokeWidth={2} />
+                  ) : (
+                    <Sparkles size={14} strokeWidth={2} />
+                  )}
                 </span>
               )}
-              <span className="rh-chat__bubble">{m.t}</span>
+              <span className="rh-chat__bubble">
+                {m.role === 'alert' && <span className="rh-chat__flag">Rush nota da solo</span>}
+                {m.t}
+              </span>
             </motion.div>
           ))}
         </div>

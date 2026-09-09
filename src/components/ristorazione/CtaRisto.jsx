@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Check, CalendarClock } from 'lucide-react';
+import { Check, CalendarClock, ArrowRight, ArrowLeft } from 'lucide-react';
 import { DUR, EASE_MODAL, inView } from '../../lib/motion';
 import { Group, Item, LiveDot, Pill, Section } from '../ui';
 
@@ -9,7 +9,11 @@ const CONTACT_ENDPOINT =
 
 const PRIVACY_URL = 'https://www.iubenda.com/privacy-policy/64941360';
 
+const TOTAL_STEPS = 3;
+
 export default function CtaRisto() {
+  const [step, setStep] = useState(0);
+  const [dir, setDir] = useState(1);
   const [sent, setSent] = useState(false);
   const [status, setStatus] = useState('idle'); // idle | sending | error
 
@@ -24,11 +28,21 @@ export default function CtaRisto() {
   const [website, setWebsite] = useState(''); // honeypot
 
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-  const canSend = Boolean(nome.trim() && locale.trim() && emailOk && privacy);
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    if (!canSend || status === 'sending') return;
+  const canNext =
+    step === 0
+      ? Boolean(locale.trim())
+      : step === 1
+        ? true // cassa e contesto sono facoltativi
+        : Boolean(nome.trim() && emailOk && privacy);
+
+  const go = (delta) => {
+    setDir(delta);
+    setStep((s) => Math.min(TOTAL_STEPS - 1, Math.max(0, s + delta)));
+  };
+
+  const submit = async () => {
+    if (!canNext || status === 'sending') return;
 
     if (website.trim()) {
       setSent(true);
@@ -71,6 +85,21 @@ export default function CtaRisto() {
     } catch {
       setStatus('error');
     }
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (step < TOTAL_STEPS - 1) {
+      if (canNext) go(1);
+    } else {
+      submit();
+    }
+  };
+
+  const variants = {
+    enter: (d) => ({ opacity: 0, x: d > 0 ? 26 : -26 }),
+    center: { opacity: 1, x: 0 },
+    exit: (d) => ({ opacity: 0, x: d > 0 ? -26 : 26 }),
   };
 
   return (
@@ -132,38 +161,143 @@ export default function CtaRisto() {
                 </div>
               </motion.div>
             ) : (
-              <form key="form" onSubmit={onSubmit} style={{ display: 'grid', gap: 14 }}>
-                <div className="rh-form-grid">
-                  <label className="field">
-                    <span className="field__label">Nome e cognome</span>
-                    <input className="input" value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Mario Rossi" autoComplete="name" required />
-                  </label>
-                  <label className="field">
-                    <span className="field__label">Nome del locale</span>
-                    <input className="input" value={locale} onChange={(e) => setLocale(e.target.value)} placeholder="Caffè Centrale" required />
-                  </label>
-                  <label className="field">
-                    <span className="field__label">Città</span>
-                    <input className="input" value={citta} onChange={(e) => setCitta(e.target.value)} placeholder="Fano" />
-                  </label>
-                  <label className="field">
-                    <span className="field__label">Cassa che usi (facoltativo)</span>
-                    <input className="input" value={cassa} onChange={(e) => setCassa(e.target.value)} placeholder="Es. Zucchetti, Scloby…" />
-                  </label>
-                  <label className="field">
-                    <span className="field__label">Email</span>
-                    <input className="input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="nome@locale.it" autoComplete="email" required />
-                  </label>
-                  <label className="field">
-                    <span className="field__label">Telefono (facoltativo)</span>
-                    <input className="input" type="tel" value={telefono} onChange={(e) => setTelefono(e.target.value)} placeholder="+39 333 1234567" autoComplete="tel" />
-                  </label>
+              <form key="form" onSubmit={onSubmit} className="wiz">
+                <div className="wiz__progress" aria-hidden="true">
+                  {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
+                    <span key={i} className={`wiz__seg${i <= step ? ' is-done' : ''}`} />
+                  ))}
                 </div>
+                <p className="wiz__count">
+                  Passo {step + 1} di {TOTAL_STEPS}
+                </p>
 
-                <label className="field">
-                  <span className="field__label">Qualcosa su di te (facoltativo)</span>
-                  <textarea className="input" value={messaggio} onChange={(e) => setMessaggio(e.target.value)} placeholder="Es. bar con brunch, 8 persone in squadra, magazzino su Excel." rows={3} />
-                </label>
+                <div className="wiz__stage">
+                  <AnimatePresence mode="wait" custom={dir} initial={false}>
+                    <motion.div
+                      key={step}
+                      custom={dir}
+                      variants={variants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{ duration: 0.32, ease: EASE_MODAL }}
+                      className="wiz__step"
+                    >
+                      {step === 0 && (
+                        <fieldset className="wiz__fs">
+                          <legend className="wiz__q">Parlaci del tuo locale</legend>
+                          <div className="wiz__group">
+                            <label className="field">
+                              <span className="field__label">Nome del locale</span>
+                              <input
+                                className="input"
+                                value={locale}
+                                onChange={(e) => setLocale(e.target.value)}
+                                placeholder="Caffè Centrale"
+                                autoFocus
+                                required
+                              />
+                            </label>
+                            <label className="field">
+                              <span className="field__label">Città (facoltativo)</span>
+                              <input
+                                className="input"
+                                value={citta}
+                                onChange={(e) => setCitta(e.target.value)}
+                                placeholder="Roma"
+                              />
+                            </label>
+                          </div>
+                        </fieldset>
+                      )}
+
+                      {step === 1 && (
+                        <fieldset className="wiz__fs">
+                          <legend className="wiz__q">Cosa usi oggi, e dove si perde tempo</legend>
+                          <div className="wiz__group">
+                            <label className="field">
+                              <span className="field__label">Cassa che usi (facoltativo)</span>
+                              <input
+                                className="input"
+                                value={cassa}
+                                onChange={(e) => setCassa(e.target.value)}
+                                placeholder="Es. Zucchetti, Scloby…"
+                              />
+                            </label>
+                            <label className="field">
+                              <span className="field__label">Facoltativo, ma ci aiuta molto</span>
+                              <textarea
+                                className="input"
+                                value={messaggio}
+                                onChange={(e) => setMessaggio(e.target.value)}
+                                placeholder="Es. bar con brunch, 8 persone in squadra, magazzino su Excel."
+                                rows={4}
+                              />
+                            </label>
+                          </div>
+                        </fieldset>
+                      )}
+
+                      {step === 2 && (
+                        <fieldset className="wiz__fs">
+                          <legend className="wiz__q">Dove ti ricontattiamo?</legend>
+                          <div className="wiz__group">
+                            <label className="field">
+                              <span className="field__label">Nome e cognome</span>
+                              <input
+                                className="input"
+                                value={nome}
+                                onChange={(e) => setNome(e.target.value)}
+                                placeholder="Mario Rossi"
+                                autoComplete="name"
+                                required
+                              />
+                            </label>
+                            <label className="field">
+                              <span className="field__label">Email</span>
+                              <input
+                                className="input"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="nome@locale.it"
+                                autoComplete="email"
+                                required
+                              />
+                            </label>
+                            <label className="field">
+                              <span className="field__label">Telefono (facoltativo)</span>
+                              <input
+                                className="input"
+                                type="tel"
+                                value={telefono}
+                                onChange={(e) => setTelefono(e.target.value)}
+                                placeholder="+39 333 1234567"
+                                autoComplete="tel"
+                              />
+                            </label>
+
+                            <label className="wiz-consent">
+                              <input
+                                type="checkbox"
+                                checked={privacy}
+                                onChange={(e) => setPrivacy(e.target.checked)}
+                                required
+                              />
+                              <span>
+                                Ho letto e accetto la{' '}
+                                <a href={PRIVACY_URL} target="_blank" rel="noopener noreferrer">
+                                  Privacy Policy
+                                </a>
+                                . Usiamo i dati solo per ricontattarti.
+                              </span>
+                            </label>
+                          </div>
+                        </fieldset>
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
 
                 {/* honeypot */}
                 <input
@@ -177,28 +311,34 @@ export default function CtaRisto() {
                   style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }}
                 />
 
-                <label className="wiz-consent">
-                  <input type="checkbox" checked={privacy} onChange={(e) => setPrivacy(e.target.checked)} required />
-                  <span>
-                    Ho letto e accetto la{' '}
-                    <a href={PRIVACY_URL} target="_blank" rel="noopener noreferrer">
-                      Privacy Policy
-                    </a>
-                    . Usiamo i dati solo per ricontattarti.
-                  </span>
-                </label>
+                <div className="wiz__nav">
+                  {step > 0 ? (
+                    <button type="button" className="btn btn--ghost wiz__back" onClick={() => go(-1)}>
+                      <ArrowLeft size={16} strokeWidth={2.2} />
+                      Indietro
+                    </button>
+                  ) : (
+                    <span />
+                  )}
 
-                <button
-                  className="btn btn--primary"
-                  type="submit"
-                  disabled={!canSend || status === 'sending'}
-                  style={{ width: '100%', justifyContent: 'center' }}
-                >
-                  {status === 'sending' ? 'Invio…' : 'Prenota la demo'}
-                </button>
+                  {step < TOTAL_STEPS - 1 ? (
+                    <button type="submit" className="btn btn--primary wiz__next" disabled={!canNext}>
+                      Continua
+                      <ArrowRight size={16} strokeWidth={2.2} />
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="btn btn--primary wiz__next"
+                      disabled={!canNext || status === 'sending'}
+                    >
+                      {status === 'sending' ? 'Invio…' : 'Prenota la demo'}
+                    </button>
+                  )}
+                </div>
 
                 {status === 'error' && (
-                  <p className="t-small" style={{ fontSize: 13, color: 'var(--neg)' }}>
+                  <p className="t-small" style={{ fontSize: 13, color: 'var(--neg)', marginTop: 4 }}>
                     Ops, l'invio non è andato a buon fine. Scrivici a{' '}
                     <a href="mailto:info@rush-ai.it" style={{ color: 'inherit', textDecoration: 'underline' }}>
                       info@rush-ai.it

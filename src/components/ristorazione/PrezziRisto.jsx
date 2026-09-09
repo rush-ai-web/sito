@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Banknote,
   Boxes,
@@ -11,6 +12,7 @@ import {
   Ban,
   Users,
   FileCheck,
+  ArrowRight,
 } from 'lucide-react';
 import { Section, Head } from '../ui';
 import { EASE_MODAL } from '../../lib/motion';
@@ -21,7 +23,7 @@ const INCLUSO = [
   { Icon: CalendarClock, label: 'Turni' },
   { Icon: ScanLine, label: 'Fatture' },
   { Icon: Wallet, label: 'Cassa' },
-  { Icon: FileBarChart, label: 'Riepilogo di come va il locale, fatto per bene' },
+  { Icon: FileBarChart, label: 'Riepilogo e report del tuo locale' },
 ];
 
 /* stessa struttura "come funziona" della home, riformulata sui vantaggi
@@ -50,6 +52,8 @@ const VANTAGGI = [
 ];
 
 export default function PrezziRisto() {
+  const [yearly, setYearly] = useState(true);
+
   return (
     <Section id="prezzi" large>
       <Head
@@ -74,17 +78,56 @@ export default function PrezziRisto() {
         >
           <span className="prezzi2__frame-glow" aria-hidden="true" />
           <div className="prezzi2__card">
+            <div className="prezzi-toggle">
+              {[
+                { id: false, label: 'Mensile' },
+                { id: true, label: 'Annuale', tag: '13% di sconto' },
+              ].map(({ id, label, tag }) => (
+                <button
+                  key={String(id)}
+                  type="button"
+                  className={`prezzi-toggle__btn${yearly === id ? ' is-active' : ''}`}
+                  onClick={() => setYearly(id)}
+                  aria-pressed={yearly === id}
+                >
+                  {tag && <span className="prezzi-toggle__tag">{tag}</span>}
+                  {yearly === id && (
+                    <motion.span
+                      layoutId="prezzi-risto-pill"
+                      className="prezzi-toggle__pill"
+                      transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                    />
+                  )}
+                  <span className="prezzi-toggle__label">{label}</span>
+                </button>
+              ))}
+            </div>
+
             <div className="prezzi2__price-block">
               <span className="prezzi-price__from">a partire da</span>
               <div className="prezzi-price" style={{ alignItems: 'flex-end', gap: 4 }}>
-                <span className="prezzi-price__num prezzi-price__num--lg">300</span>
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={yearly ? 'y' : 'm'}
+                    className="prezzi-price__num prezzi-price__num--lg"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    transition={{ duration: 0.2, ease: EASE_MODAL }}
+                  >
+                    {yearly ? '300' : '349'}
+                  </motion.span>
+                </AnimatePresence>
                 <span className="prezzi-price__unit">€ / mese</span>
               </div>
-              <p className="prezzi-sub">il gestionale del locale, operativo da subito</p>
+              <p className="prezzi-sub">
+                {yearly ? 'fatturato annualmente · minimo 12 mesi' : 'fatturato ogni mese'}
+              </p>
             </div>
 
             <span className="prezzi2__divider" aria-hidden="true" />
 
+            <p className="prezzi2__incluso-label">Incluso:</p>
             <ul className="prezzi-features">
               {INCLUSO.map(({ Icon, label }) => (
                 <li key={label}>
@@ -97,7 +140,13 @@ export default function PrezziRisto() {
             </ul>
 
             <p className="prezzi2__variabile">
-              Il prezzo varia in base alla complessità del locale.
+              Il prezzo varia in base alla complessità del locale. I moduli aggiuntivi (marketing,
+              prenotazioni, ADV, social…) hanno un costo a parte —{' '}
+              <a href="#prodotto" className="prezzi2__variabile-link">
+                vedi nel dettaglio cosa include il canone
+                <ArrowRight size={13} strokeWidth={2.2} />
+              </a>
+              .
             </p>
 
             <a href="#contatti" className="btn btn--primary prezzi-cta">

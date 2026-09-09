@@ -1089,7 +1089,7 @@ main {
   --nav-bg: rgba(10, 10, 10, 0.97);
   --nav-ink: #f5f5f7;
   --nav-line: rgba(255, 255, 255, 0.10);
-  --nav-muted: #c5c5c5;
+  --nav-muted: #e1e1e1;
   --nav-shadow: 0 2px 20px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
@@ -4252,8 +4252,8 @@ textarea.input::-webkit-scrollbar {
   --surface: #1d1d1f;
   --surface-top: #242426;
   --text: #f5f5f7;
-  --text-2: #c5c5c5;
-  --text-3: #c5c5c5;
+  --text-2: #e1e1e1;
+  --text-3: #e1e1e1;
   --chip-bg: #29292c;
   --chip-ink: #f5f5f7;
   --hairline: rgba(255, 255, 255, 0.18);
@@ -5634,6 +5634,23 @@ textarea.input::-webkit-scrollbar {
   font-size: 12px;
 }
 
+.prezzi2__incluso-label {
+  margin: 0 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.prezzi2__variabile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
 .prezzi2__card .prezzi-cta {
   margin-top: 20px;
 }
@@ -5642,14 +5659,16 @@ textarea.input::-webkit-scrollbar {
 .prezzi2__card .prezzi-price__from,
 .prezzi2__card .prezzi-sub,
 .prezzi2__card .prezzi-price__unit,
-.prezzi2__card .prezzi2__variabile {
-  color: #c5c5c5;
+.prezzi2__card .prezzi2__variabile,
+.prezzi2__card .prezzi2__incluso-label {
+  color: #e1e1e1;
 }
 
 :root[data-theme='dark'] .prezzi2__card .prezzi-price__from,
 :root[data-theme='dark'] .prezzi2__card .prezzi-sub,
 :root[data-theme='dark'] .prezzi2__card .prezzi-price__unit,
-:root[data-theme='dark'] .prezzi2__card .prezzi2__variabile {
+:root[data-theme='dark'] .prezzi2__card .prezzi2__variabile,
+:root[data-theme='dark'] .prezzi2__card .prezzi2__incluso-label {
   color: #3b3b3d;
 }
 
@@ -5716,7 +5735,7 @@ textarea.input::-webkit-scrollbar {
 }
 
 .prezzi2__card .prezzi-toggle__btn {
-  color: #c5c5c5;
+  color: #e1e1e1;
   flex: 1;
   justify-content: center;
 }
@@ -6619,12 +6638,26 @@ textarea.input::-webkit-scrollbar {
   border-radius: 15px 15px 4px 15px;
   max-width: 80%;
 }
-.rh-chat__msg--a .rh-chat__bubble {
+.rh-chat__msg--a .rh-chat__bubble,
+.rh-chat__msg--alert .rh-chat__bubble {
   background: var(--chip-bg);
   color: var(--text);
   border: 1px solid var(--hairline);
   border-radius: 15px 15px 15px 4px;
   max-width: 84%;
+}
+.rh-chat__msg--alert .rh-chat__bubble {
+  background: color-mix(in srgb, var(--accent) 8%, var(--chip-bg));
+  border-color: color-mix(in srgb, var(--accent) 24%, var(--hairline));
+}
+.rh-chat__flag {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
 }
 .rh-chat__bubble {
   padding: 12px 15px;
@@ -6635,7 +6668,8 @@ textarea.input::-webkit-scrollbar {
   color: inherit;
   font-weight: 700;
 }
-.rh-chat__msg--a .rh-chat__bubble strong {
+.rh-chat__msg--a .rh-chat__bubble strong,
+.rh-chat__msg--alert .rh-chat__bubble strong {
   color: var(--accent);
 }
 .rh-chat__ai {

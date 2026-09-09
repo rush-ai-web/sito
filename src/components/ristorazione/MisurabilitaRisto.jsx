@@ -1,15 +1,15 @@
 import { motion } from 'framer-motion';
-import { Gauge, Megaphone, MousePointerClick, CalendarCheck, MapPin, Ticket, Eye } from 'lucide-react';
+import { Gauge, Globe, Megaphone, MousePointerClick, CalendarCheck, MapPin, Ticket } from 'lucide-react';
 import { Section, Head } from '../ui';
 import { EASE_MODAL, inView } from '../../lib/motion';
 
 const METRICHE = [
+  { icon: Globe, lab: 'Visite al sito', v: '2.140', sub: 'e cosa hanno cercato di più' },
   { icon: Megaphone, lab: 'Promo utilizzate', v: '340', sub: 'Aperitivo del giovedì' },
   { icon: MousePointerClick, lab: 'Click da ADV', v: '1.240', sub: 'Google Ads, ultimi 30 giorni' },
   { icon: CalendarCheck, lab: 'Prenotazioni da ADV', v: '86', sub: 'generate dalle campagne' },
   { icon: MapPin, lab: 'Richieste indicazioni', v: '412', sub: 'da Google Maps' },
   { icon: Ticket, lab: 'Coupon scaricati', v: '210', sub: 'dalle promozioni attive' },
-  { icon: Eye, lab: 'Visualizzazioni profilo', v: '3.680', sub: 'Google Business, ultimo mese' },
 ];
 
 export default function MisurabilitaRisto() {
@@ -21,8 +21,9 @@ export default function MisurabilitaRisto() {
         title={<>Non promesse. Numeri, uno per uno</>}
         sub={
           <>
-            Fai una promozione? Sai in tempo reale quante persone l'hanno usata. Fai pubblicità?
-            Sai quanti hanno cliccato, quanti hanno prenotato, quanti sono passati a chiedere
+            Hai il sito web? Sai quante persone l'hanno visitato e cosa cercavano. Fai una
+            promozione? Sai in tempo reale quante persone l'hanno usata. Fai pubblicità? Sai
+            quanti hanno cliccato, quanti hanno prenotato, quanti sono passati a chiedere
             indicazioni. <strong>Ogni euro investito nella crescita del locale lascia un numero,
             non un atto di fede.</strong>
           </>
