@@ -149,7 +149,7 @@ export default function PrezziRisto() {
             </a>
 
             <a href="#prodotto" className="prezzi2__detail-link">
-              Vedi nel dettaglio cosa include il canone
+              Vedi nel dettaglio cosa include il canone base
               <ChevronDown size={14} strokeWidth={2.2} />
             </a>
           </div>
@@ -179,12 +179,6 @@ export default function PrezziRisto() {
             ))}
           </div>
 
-          <p className="prezzi2__note">
-            Il gestionale tiene tutto sotto controllo; marketing, prenotazioni, ADV e social
-            lavorano ogni giorno per portarti clienti nuovi, non solo per registrare quelli che
-            arrivano da soli. Il prezzo varia in base ai moduli che vuoi aggiungere e a eventuali
-            automazioni o funzioni particolari fatte su misura per il tuo locale.
-          </p>
           <p className="prezzi2__note">
             Il prezzo dei moduli aggiuntivi è <strong>su preventivo</strong>: così paghi solo le
             funzioni che ti servono davvero, e{' '}

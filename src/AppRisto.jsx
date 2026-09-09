@@ -29,7 +29,7 @@ const FOOTER_COLUMNS = [
     [
       ['Tutte le funzioni', '#funzioni'],
       ['Il core', '#prodotto'],
-      ['La chat AI', '#chat'],
+      ['Rush AI', '#chat'],
     ],
   ],
   [
