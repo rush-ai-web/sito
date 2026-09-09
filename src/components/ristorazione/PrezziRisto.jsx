@@ -11,7 +11,8 @@ import {
   Ban,
   Users,
   FileCheck,
-  ArrowRight,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react';
 import { Section, Head } from '../ui';
 import { EASE_MODAL } from '../../lib/motion';
@@ -146,7 +147,7 @@ export default function PrezziRisto() {
 
             <a href="#funzioni" className="prezzi2__detail-link prezzi2__detail-link--up">
               Rivedi i moduli aggiuntivi
-              <ArrowRight size={14} strokeWidth={2.2} />
+              <ArrowUp size={14} strokeWidth={2.2} />
             </a>
 
             <a href="#contatti" className="btn btn--primary prezzi-cta">
@@ -155,7 +156,7 @@ export default function PrezziRisto() {
 
             <a href="#prodotto" className="prezzi2__detail-link">
               Vedi nel dettaglio cosa include il canone base
-              <ArrowRight size={14} strokeWidth={2.2} />
+              <ArrowDown size={14} strokeWidth={2.2} />
             </a>
           </div>
         </motion.div>
