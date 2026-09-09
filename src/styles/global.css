@@ -6780,41 +6780,24 @@ textarea.input::-webkit-scrollbar {
    badge a tinta morbida usati nelle sezioni di questa pagina. */
 .risto-orange .icon-tile,
 .risto-orange .rh-metrics__ic,
-.risto-orange .rh-strategy__ic,
 .risto-orange .prezzi-feat-ic {
   background: var(--accent);
   color: var(--text);
 }
 
-/* --- Moduli opzionali: catalogo di card singole --- */
-.rh-mods {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-.rh-mod-tile {
-  display: flex;
-  flex-direction: column;
-}
-
-@media (max-width: 960px) {
-  .rh-mods {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-@media (max-width: 640px) {
-  .rh-mods {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* Scrollbar arancione solo sulla pagina /ristorazione (marcata via
-   body.risto-orange-page in ristorazione.html): lo scroll della
-   finestra non eredita --accent dallo scope .risto-orange interno,
-   quindi va forzato qui a livello di documento. */
+   .risto-orange-page su <html> e <body> in ristorazione.html): lo
+   scroll della finestra non eredita --accent dallo scope .risto-orange
+   interno, quindi va forzato qui a livello di documento. La regola
+   universale "* { scrollbar-color: var(--accent) ... }" imposta un
+   valore esplicito anche su <html>, che altrimenti vincerebbe
+   sull'ereditarietà da <body> - va quindi sovrascritta esplicitamente
+   anche lì, non solo su <body>. */
+html.risto-orange-page,
 body.risto-orange-page {
   scrollbar-color: #ff642f transparent;
 }
+html.risto-orange-page::-webkit-scrollbar-thumb,
 body.risto-orange-page::-webkit-scrollbar-thumb {
   background: #ff642f;
 }
@@ -6832,17 +6815,17 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
 .rh-fx-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  align-items: center;
+  align-items: stretch;
   gap: 12px;
 }
 .rh-fx-tile {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  align-items: flex-start;
   width: 100%;
+  height: 100%;
   text-align: left;
-  padding: 12px 16px;
+  padding: 16px;
   border-radius: 14px;
   background: var(--chip-bg);
   border: 1px solid var(--hairline);
@@ -6859,12 +6842,23 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
 }
 .rh-fx-tile .icon-tile {
   flex: none;
+  margin-bottom: 10px;
 }
 .rh-fx-tile__t {
   font-size: 13.5px;
   font-weight: 600;
   line-height: 1.3;
   color: var(--text);
+}
+.rh-fx-tile__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: auto;
+  padding-top: 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--accent);
 }
 
 .rh-fx-modal {
@@ -6913,14 +6907,9 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   color: var(--text);
 }
 .rh-fx-note {
-  margin: 30px auto 0;
+  margin: 24px auto 0;
   max-width: 52ch;
   text-align: center;
-  font-size: clamp(19px, 2.1vw, 23px);
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.35;
-  color: var(--text-2);
 }
 .rh-fx-note strong {
   color: var(--text);
@@ -7047,66 +7036,3 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   }
 }
 
-/* --- Prezzi ristorazione: card del canone in cima, centrata --- */
-.rh-price-frame {
-  max-width: 460px;
-  margin: 0 auto;
-}
-
-/* pannello strategia, sotto la card: i moduli visti sopra sono
-   opzionali, il canone base basta da solo. */
-.rh-strategy {
-  max-width: 640px;
-  margin: 28px auto 0;
-  padding: 26px 28px;
-  border-radius: 16px;
-  background: color-mix(in srgb, var(--accent) 7%, var(--chip-bg));
-  border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--hairline));
-}
-.rh-strategy__ic {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  margin-bottom: 14px;
-  border-radius: 11px;
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
-  color: var(--accent);
-}
-.rh-strategy__lead {
-  margin: 0 0 14px;
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--text);
-}
-.rh-strategy__note {
-  margin: 0 0 16px;
-  font-size: 13.5px;
-  line-height: 1.55;
-  color: var(--text-2);
-}
-.rh-strategy__note strong {
-  color: var(--text);
-}
-.rh-strategy__link {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--accent);
-}
-
-.rh-adv-list {
-  max-width: 640px;
-  margin: 22px auto 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 24px;
-  row-gap: 10px;
-}
-@media (max-width: 640px) {
-  .rh-adv-list {
-    grid-template-columns: 1fr;
-  }
-}

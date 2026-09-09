@@ -11,7 +11,6 @@ import FunzioniRisto from './components/ristorazione/FunzioniRisto';
 import CoreRisto from './components/ristorazione/CoreRisto';
 import ChatRisto from './components/ristorazione/ChatRisto';
 import MisurabilitaRisto from './components/ristorazione/MisurabilitaRisto';
-import ModuliRisto from './components/ristorazione/ModuliRisto';
 import PrezziRisto from './components/ristorazione/PrezziRisto';
 import FaqRisto from './components/ristorazione/FaqRisto';
 import CtaRisto from './components/ristorazione/CtaRisto';
@@ -20,7 +19,6 @@ import CtaRisto from './components/ristorazione/CtaRisto';
    pagina hanno id diversi: qui sovrascriviamo i link con quelli giusti. */
 const NAV_LINKS = [
   ['Funzioni', '#funzioni'],
-  ['Moduli', '#moduli'],
   ['Prezzi', '#prezzi'],
   ['FAQ', '#faq'],
 ];
@@ -32,7 +30,6 @@ const FOOTER_COLUMNS = [
       ['Tutte le funzioni', '#funzioni'],
       ['Il core', '#prodotto'],
       ['La chat AI', '#chat'],
-      ['Moduli opzionali', '#moduli'],
     ],
   ],
   [
@@ -110,11 +107,10 @@ export default function AppRisto() {
 
               <HeroRisto />
               <FunzioniRisto />
-              <CoreRisto />
               <ChatRisto />
               <MisurabilitaRisto />
-              <ModuliRisto />
               <PrezziRisto />
+              <CoreRisto />
               <FaqRisto />
               <CtaRisto />
             </main>
