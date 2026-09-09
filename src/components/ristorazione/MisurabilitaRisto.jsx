@@ -19,12 +19,17 @@ export default function MisurabilitaRisto() {
         icon={Gauge}
         label="Risultati misurabili"
         title={<>Non promesse. Numeri, uno per uno</>}
+        className="head--wide-summary"
         sub={
           <>
             <strong>Hai il sito web?</strong> Sai quante persone l'hanno visitato e cosa
-            cercavano. <strong>Fai una promozione?</strong> Sai in tempo reale quante persone
-            l'hanno usata. <strong>Fai pubblicità?</strong> Sai quanti hanno cliccato, quanti
-            hanno prenotato, quanti sono passati a chiedere indicazioni.
+            cercavano.
+            <br />
+            <strong>Fai una promozione?</strong> Sai in tempo reale quante persone l'hanno usata.
+            <br />
+            <strong>Fai pubblicità?</strong> Sai quanti hanno cliccato, quanti hanno prenotato,
+            quanti sono passati a chiedere indicazioni.
+            <br />
             <br />
             <strong>Ogni euro investito nella crescita del locale lascia un numero, non un atto
             di fede.</strong>
