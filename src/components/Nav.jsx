@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, Menu, X } from 'lucide-react';
+import { ArrowRight, Menu, UtensilsCrossed, X } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
 
 /* variante ristorazione: stesso lockup, logo con R arancione al posto
@@ -25,7 +25,7 @@ const LOGO_SETS = {
 function LogoMark({ variant = 'default' }) {
   const set = LOGO_SETS[variant] || LOGO_SETS.default;
   return (
-    <span className="nav__logo-wrap">
+    <span className={`nav__logo-wrap${variant === 'ristorazione' ? ' nav__logo-wrap--ristorazione' : ''}`}>
       <img
         src={set.dark.src}
         srcSet={set.dark.srcSet}
@@ -45,6 +45,11 @@ function LogoMark({ variant = 'default' }) {
         height="200"
         className="nav__logo-img nav__logo-img--on-light"
       />
+      {variant === 'ristorazione' ? (
+        <span className="risto-brand-icon risto-brand-icon--nav" aria-hidden="true">
+          <UtensilsCrossed size={15} strokeWidth={2.2} />
+        </span>
+      ) : null}
     </span>
   );
 }

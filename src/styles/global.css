@@ -1136,6 +1136,12 @@ main {
   margin-left: 6px;
 }
 
+.nav__logo-wrap--ristorazione {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
 .nav__logo-img {
   grid-area: 1 / 1;
   height: 24px;
@@ -1347,8 +1353,13 @@ main {
 /* logo Rush centrato sopra al titolo, al posto dell'eyebrow testuale */
 .hero__logo-eyebrow {
   display: flex;
+  align-items: center;
   justify-content: center;
   margin: 0 0 36px;
+}
+
+.hero__logo-eyebrow--risto {
+  gap: 14px;
 }
 
 .hero__logo-img {
@@ -4027,6 +4038,54 @@ textarea.input::-webkit-scrollbar {
   border-left: 1.5px solid var(--hairline-strong);
 }
 
+/* Segno verticale Ristorazione: stesso arancione delle altre icone del
+   prodotto, con una luce interna che gli dà una finitura lucida. */
+.risto-brand-icon {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: var(--r-pill);
+  color: #111113;
+  background: linear-gradient(135deg, #ff8759 0%, #ff642f 45%, #cc4a1f 100%);
+  border: 1px solid color-mix(in srgb, #cc4a1f 48%, transparent);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.74),
+    inset 0 -5px 10px rgba(96, 28, 5, 0.2),
+    0 4px 14px -4px color-mix(in srgb, #ff642f 55%, transparent);
+}
+
+.risto-brand-icon::before {
+  content: '';
+  position: absolute;
+  width: 70%;
+  height: 44%;
+  top: 5%;
+  left: 15%;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.72), transparent);
+  opacity: 0.68;
+  pointer-events: none;
+}
+
+.risto-brand-icon svg {
+  position: relative;
+  z-index: 1;
+}
+
+.risto-brand-icon--nav {
+  width: 30px;
+  height: 30px;
+}
+
+.risto-brand-icon--hero {
+  width: 40px;
+  height: 40px;
+}
+
 .risto2__kpi {
   position: relative;
   z-index: 1;
@@ -5592,6 +5651,12 @@ textarea.input::-webkit-scrollbar {
   background: rgba(255, 255, 255, 0.1);
 }
 
+.prezzi2__divider--links {
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
 :root[data-theme='dark'] .prezzi2__divider {
   background: rgba(0, 0, 0, 0.08);
 }
@@ -6551,15 +6616,19 @@ textarea.input::-webkit-scrollbar {
   text-align: center;
   border: 1px solid var(--hairline);
 }
-.rh-quad__c--good {
+.rh-quad__c--star {
   color: var(--pos);
   background: color-mix(in srgb, var(--pos) 12%, transparent);
 }
-.rh-quad__c--mid {
-  color: var(--text-2);
-  background: var(--chip-bg);
+.rh-quad__c--puzzle {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
-.rh-quad__c--bad {
+.rh-quad__c--horse {
+  color: var(--warn);
+  background: color-mix(in srgb, var(--warn) 12%, transparent);
+}
+.rh-quad__c--dog {
   color: var(--neg);
   background: color-mix(in srgb, var(--neg) 10%, transparent);
 }
@@ -6604,20 +6673,49 @@ textarea.input::-webkit-scrollbar {
 /* sfumatura bassa condivisa: un alone morbido in accento dietro al
    fondo di ogni mini-viz, così le sei card del core restano coerenti
    anche se ognuna mostra un widget diverso */
-.buildcard__viz::before {
+.risto-orange #prodotto .buildcard__viz::before {
   content: '';
   position: absolute;
   left: -26px;
   right: -26px;
-  bottom: -40px;
-  height: 130px;
+  bottom: -22px;
+  height: 144px;
   background: radial-gradient(
     60% 100% at 50% 100%,
-    color-mix(in srgb, var(--accent) 22%, transparent) 0%,
-    transparent 70%
+    color-mix(in srgb, var(--accent) 24%, transparent) 0%,
+    transparent 72%
   );
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
+}
+
+/* Nella pagina Ristorazione ogni widget resta sollevato dal bordo basso:
+   la grafica non viene tagliata e la sfumatura rimane visibile dietro. */
+.risto-orange #prodotto .buildcard__viz {
+  isolation: isolate;
+  padding-bottom: 24px;
+}
+
+.risto-orange #prodotto .buildcard__viz > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 720px) {
+  .risto-orange .hero__logo-eyebrow--risto {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .risto-brand-icon--hero {
+    width: 34px;
+    height: 34px;
+  }
+
+  .risto-orange #prodotto .buildcard__viz {
+    padding-bottom: 20px;
+  }
 }
 
 /* Core: striscia "e c'è di più" */
@@ -7116,4 +7214,3 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
     grid-template-columns: 1fr;
   }
 }
-

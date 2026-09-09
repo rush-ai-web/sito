@@ -60,7 +60,13 @@ export default function PrezziRisto() {
       <Head
         icon={Banknote}
         label="Prezzi"
-        title="Il canone copre l'operatività. La strategia fa la differenza"
+        title={
+          <>
+            Il canone copre l'operatività.
+            <br />
+            La strategia fa la differenza
+          </>
+        }
         sub={
           <>
             <strong>Un canone chiaro</strong>, che tiene in piedi il locale ogni giorno. Il vero
@@ -138,6 +144,8 @@ export default function PrezziRisto() {
                 </li>
               ))}
             </ul>
+
+            <span className="prezzi2__divider prezzi2__divider--links" aria-hidden="true" />
 
             <a href="#funzioni" className="prezzi2__detail-link prezzi2__detail-link--up">
               <ChevronUp size={14} strokeWidth={2.2} />

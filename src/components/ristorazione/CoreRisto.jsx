@@ -55,7 +55,7 @@ function BuildCard({ icon, title, desc, accent = false, wide = false, children }
 }
 
 /* ── mini-viz: ogni card ha il suo widget, ma tutte condividono la stessa
-   sfumatura bassa in accento sul fondo (vedi .buildcard__viz::after) ── */
+   sfumatura bassa in accento sul fondo (vedi .buildcard__viz::before) ── */
 function VizIncassi() {
   const bars = [52, 61, 48, 72, 66, 88, 79];
   return (
@@ -121,10 +121,10 @@ function VizFornitori() {
 
 function VizMenu() {
   const cells = [
-    { t: 'Stelle', c: 'good' },
-    { t: 'Puzzle', c: 'mid' },
-    { t: 'Cavalli', c: 'mid' },
-    { t: 'Cani', c: 'bad' },
+    { t: 'Stelle', c: 'star' },
+    { t: 'Puzzle', c: 'puzzle' },
+    { t: 'Cavalli da tiro', c: 'horse' },
+    { t: 'Cani', c: 'dog' },
   ];
   return (
     <div className="rh-quad">
@@ -198,7 +198,7 @@ export default function CoreRisto() {
           <VizFornitori />
         </BuildCard>
 
-        <BuildCard icon={ChefHat} title="Ricette, food cost & menu" desc="Costo materie prime per piatto aggiornato a ogni fattura, margini reali e menu engineering: stelle, puzzle, cavalli e cani, in automatico.">
+        <BuildCard icon={ChefHat} title="Ricette, food cost & menu" desc="Costo materie prime per piatto aggiornato a ogni fattura, margini reali e menu engineering: stelle, puzzle, cavalli da tiro e cani, in automatico.">
           <VizMenu />
         </BuildCard>
 

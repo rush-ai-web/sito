@@ -48,7 +48,7 @@ export default function ChatRisto() {
       <Head
         icon={Sparkles}
         label="Rush AI"
-        title={<>Non solo risposte. Rush AI segnala e consiglia da sola</>}
+        title={<>Intelligenza artificiale applicata davvero: analizza, segnala e consiglia</>}
         sub={
           <>
             Chiedi come parli e ti risponde con i numeri veri, ma non aspetta che tu chieda:{' '}

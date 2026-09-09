@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, UtensilsCrossed } from 'lucide-react';
 import { fadeUp, EASE_MODAL } from '../../lib/motion';
 import HeroSceneRisto from './HeroSceneRisto';
 
@@ -9,7 +9,7 @@ export default function HeroRisto() {
       <span className="hero__aurora" aria-hidden="true" />
 
       <div className="wrap hero__wrap">
-        <motion.div className="hero__logo-eyebrow" variants={fadeUp} custom={0} initial="hidden" animate="show">
+        <motion.div className="hero__logo-eyebrow hero__logo-eyebrow--risto" variants={fadeUp} custom={0} initial="hidden" animate="show">
           <img
             src="./rush-logo-orange.webp"
             alt="Logo Rush Ristorazione"
@@ -25,6 +25,9 @@ export default function HeroRisto() {
             height="200"
             className="hero__logo-img hero__logo-img--d"
           />
+          <span className="risto-brand-icon risto-brand-icon--hero" aria-hidden="true">
+            <UtensilsCrossed size={19} strokeWidth={2.15} />
+          </span>
         </motion.div>
 
         <motion.h1 className="hero__title" variants={fadeUp} custom={1} initial="hidden" animate="show">
