@@ -46,7 +46,7 @@ const FUNZIONI = [
   {
     icon: ScanLine,
     t: 'Fatture',
-    d: "Le fatture elettroniche arrivano via SDI e diventano da sole carico di magazzino; quelle cartacee bastano una foto, l'OCR legge articoli e prezzi e li abbina ai prodotti giusti. Zero doppio inserimento tra commercialista e gestionale del locale.",
+    d: "Le fatture elettroniche arrivano da sole e diventano carico di magazzino; per quelle cartacee basta una foto: l'intelligenza artificiale legge articoli e prezzi e li abbina ai prodotti giusti. Zero doppio inserimento tra commercialista e gestionale del locale.",
   },
   {
     icon: TrendingUp,
@@ -132,12 +132,11 @@ export default function FunzioniRisto() {
       <Head
         icon={LayoutGrid}
         label="Tutto in un posto"
-        title={<>Automatizzato e su misura per il tuo locale</>}
+        title={<>Automatizzato e su misura<br />per il tuo locale</>}
         sub={
           <>
             Non un gestionale e poi il resto sparso altrove: <strong>tutto quello che serve per
-            mandare avanti e far crescere il locale vive nello stesso sistema.</strong> Tocca una
-            voce per vedere cosa fa.
+            mandare avanti e far crescere il locale vive nello stesso sistema.</strong>
           </>
         }
       />

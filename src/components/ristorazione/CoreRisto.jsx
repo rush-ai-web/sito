@@ -89,7 +89,7 @@ function VizMagazzino() {
 }
 
 function VizFatture() {
-  const steps = ['Inquadra', 'OCR + AI', 'Conferma', 'Carico'];
+  const steps = ['Inquadra', 'Lettura AI', 'Conferma', 'Carico'];
   return (
     <div className="rh-flow">
       {steps.map((s, i) => (
@@ -190,7 +190,7 @@ export default function CoreRisto() {
           <VizMagazzino />
         </BuildCard>
 
-        <BuildCard icon={ScanLine} title="Fatture con una foto" desc="Le elettroniche arrivano da sole via SDI. Le cartacee le scatti col telefono: OCR + AI estraggono i dati, tu confermi, il magazzino si aggiorna." accent>
+        <BuildCard icon={ScanLine} title="Fatture con una foto" desc="Le fatture elettroniche arrivano da sole. Le cartacee le fotografi: l'intelligenza artificiale legge articoli e prezzi, tu confermi e il magazzino si aggiorna." accent>
           <VizFatture />
         </BuildCard>
 

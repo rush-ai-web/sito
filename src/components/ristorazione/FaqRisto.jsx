@@ -27,7 +27,7 @@ const FAQ_DATA = {
     },
     {
       q: 'Le fatture cartacee come le gestisco?',
-      a: "Le scatti col telefono. OCR e AI estraggono fornitore, prodotti e importi, tu confermi in pochi secondi e il magazzino si aggiorna. Le fatture elettroniche invece arrivano da sole via SDI.",
+      a: "Le fotografi col telefono. L'intelligenza artificiale legge fornitore, prodotti e importi, tu confermi in pochi secondi e il magazzino si aggiorna. Le fatture elettroniche invece arrivano da sole.",
     },
   ],
   avvio: [

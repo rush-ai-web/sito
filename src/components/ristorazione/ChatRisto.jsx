@@ -49,6 +49,7 @@ export default function ChatRisto() {
         icon={Sparkles}
         label="Rush AI"
         title={<>Intelligenza artificiale applicata davvero: analizza, segnala e consiglia</>}
+        className="head--chat-risto"
         sub={
           <>
             Chiedi come parli e ti risponde con i numeri veri, ma non aspetta che tu chieda:{' '}

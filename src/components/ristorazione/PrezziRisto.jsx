@@ -7,13 +7,11 @@ import {
   CalendarClock,
   ScanLine,
   Wallet,
-  FileBarChart,
   Headphones,
   Ban,
   Users,
   FileCheck,
-  ChevronUp,
-  ChevronDown,
+  ArrowRight,
 } from 'lucide-react';
 import { Section, Head } from '../ui';
 import { EASE_MODAL } from '../../lib/motion';
@@ -24,7 +22,6 @@ const INCLUSO = [
   { Icon: CalendarClock, label: 'Turni' },
   { Icon: ScanLine, label: 'Fatture' },
   { Icon: Wallet, label: 'Cassa' },
-  { Icon: FileBarChart, label: 'Riepilogo e report del tuo locale' },
 ];
 
 /* stessa struttura "come funziona" della home, riformulata sui vantaggi
@@ -148,8 +145,8 @@ export default function PrezziRisto() {
             <span className="prezzi2__divider prezzi2__divider--links" aria-hidden="true" />
 
             <a href="#funzioni" className="prezzi2__detail-link prezzi2__detail-link--up">
-              <ChevronUp size={14} strokeWidth={2.2} />
               Rivedi i moduli aggiuntivi
+              <ArrowRight size={14} strokeWidth={2.2} />
             </a>
 
             <a href="#contatti" className="btn btn--primary prezzi-cta">
@@ -158,7 +155,7 @@ export default function PrezziRisto() {
 
             <a href="#prodotto" className="prezzi2__detail-link">
               Vedi nel dettaglio cosa include il canone base
-              <ChevronDown size={14} strokeWidth={2.2} />
+              <ArrowRight size={14} strokeWidth={2.2} />
             </a>
           </div>
         </motion.div>
