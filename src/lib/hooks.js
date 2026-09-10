@@ -97,6 +97,7 @@ export function useSmoothScroll(enabled = true) {
       smoothTouch: false,
       touchMultiplier: 1.5,
       wheelMultiplier: 1,
+      overscroll: false,
     });
 
     let rafId;

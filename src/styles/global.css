@@ -31,6 +31,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  overscroll-behavior-y: none;
 }
 
 /* ---- Lenis: smooth scroll stile Framer ----
@@ -4121,17 +4122,6 @@ textarea.input::-webkit-scrollbar {
   height: 28px;
   object-fit: contain;
   display: block;
-}
-
-.risto2__brand-seg {
-  font-family: var(--ff-body);
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--risto-word, #ff642f);
-  padding-left: 10px;
-  border-left: 1.5px solid var(--hairline-strong);
 }
 
 /* Segno verticale Ristorazione: stesso arancione delle altre icone del
