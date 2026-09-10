@@ -13,6 +13,7 @@ import ChatRisto from './components/ristorazione/ChatRisto';
 import MisurabilitaRisto from './components/ristorazione/MisurabilitaRisto';
 import PrezziRisto from './components/ristorazione/PrezziRisto';
 import FaqRisto from './components/ristorazione/FaqRisto';
+import AvvioRisto from './components/ristorazione/AvvioRisto';
 import CtaRisto from './components/ristorazione/CtaRisto';
 
 /* Nav e Footer sono condivisi con la home, ma le sezioni di questa
@@ -37,6 +38,7 @@ const FOOTER_COLUMNS = [
     [
       ['Risultati misurabili', '#misurabilita'],
       ['Prezzi', '#prezzi'],
+      ['Come iniziamo', '#avvio'],
       ['FAQ', '#faq'],
       ['Tutto Rush', '/'],
     ],
@@ -112,6 +114,7 @@ export default function AppRisto() {
               <PrezziRisto />
               <CoreRisto />
               <FaqRisto />
+              <AvvioRisto />
               <CtaRisto />
             </main>
             <Footer logoVariant="ristorazione" columns={FOOTER_COLUMNS} />

@@ -76,6 +76,7 @@ html.lenis body {
 #ristorazione,
 #principi,
 #faq,
+#avvio,
 #contatti {
   overflow-x: clip;
   overflow-y: visible;
@@ -7247,5 +7248,84 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
 @media (max-width: 480px) {
   .rh-metrics__grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   Ristorazione - Come iniziamo (onboarding a 4 passi)
+   ============================================================ */
+.onb {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 44px;
+}
+
+.onb__step {
+  position: relative;
+  padding: 22px 18px 20px;
+  border-radius: 16px;
+  background-image: var(--card-vig);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: var(--sh-1);
+}
+
+.onb__step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 40px;
+  right: -20px;
+  width: 20px;
+  height: 2px;
+  background: var(--hairline-strong);
+}
+
+.onb__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.onb__num {
+  margin-left: auto;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--hairline-strong);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.onb__t {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.onb__d {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-2);
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .onb {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 28px;
+  }
+  .onb__step:nth-child(2)::after {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .onb {
+    grid-template-columns: 1fr;
+  }
+  .onb__step::after {
+    display: none;
   }
 }
