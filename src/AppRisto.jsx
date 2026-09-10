@@ -21,6 +21,7 @@ import CtaRisto from './components/ristorazione/CtaRisto';
 const NAV_LINKS = [
   ['Funzioni', '#funzioni'],
   ['Prezzi', '#prezzi'],
+  ['Come lavoriamo', '#avvio'],
   ['FAQ', '#faq'],
 ];
 
@@ -38,7 +39,7 @@ const FOOTER_COLUMNS = [
     [
       ['Risultati misurabili', '#misurabilita'],
       ['Prezzi', '#prezzi'],
-      ['Come iniziamo', '#avvio'],
+      ['Come lavoriamo', '#avvio'],
       ['FAQ', '#faq'],
       ['Tutto Rush', '/'],
     ],
@@ -113,8 +114,8 @@ export default function AppRisto() {
               <MisurabilitaRisto />
               <PrezziRisto />
               <CoreRisto />
-              <FaqRisto />
               <AvvioRisto />
+              <FaqRisto />
               <CtaRisto />
             </main>
             <Footer logoVariant="ristorazione" columns={FOOTER_COLUMNS} />

@@ -37,10 +37,13 @@ function inlineCss() {
       /* la pagina che "possiede" il chunk CSS ha il <link> e lo sostituiamo;
          le altre pagine (con cssCodeSplit:false Vite non vi inietta il link)
          ricevono lo <style> iniettato prima di </head>. */
-      if (linkRe.test(html)) {
-        return html.replace(linkRe, styleTag);
-      }
-      return html.replace('</head>', `${styleTag}</head>`);
+      const transformed = linkRe.test(html)
+        ? html.replace(linkRe, styleTag)
+        : html.replace('</head>', `${styleTag}</head>`);
+
+      /* Vite conserva i fine-riga dell'HTML sorgente: normalizzarli qui
+         rende la build docs identica su Windows e Linux. */
+      return transformed.replace(/\r\n?/g, '\n');
     },
   };
 }

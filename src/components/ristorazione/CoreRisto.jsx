@@ -20,9 +20,7 @@ import { EASE_MODAL, inView } from '../../lib/motion';
 
 const inViewOnce = { once: true, amount: 0.3 };
 
-/* lucide-react non ha un'icona cavallo: profilo disegnato a mano,
-   stesso stile a tratto (round cap/join) delle altre icone lucide. */
-function HorseIcon({ size = 14, strokeWidth = 2 }) {
+function HorseIcon({ size = 15, strokeWidth = 1.75 }) {
   return (
     <svg
       width={size}
@@ -33,10 +31,14 @@ function HorseIcon({ size = 14, strokeWidth = 2 }) {
       strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
+      className="lucide lucide-chess-knight"
+      aria-hidden="true"
     >
-      <path d="M8 21v-4.2c0-.9.4-1.7 1-2.3l1.5-1.4V8.6a5.6 5.6 0 0 1 5.6-5.6c1.2 0 2 .7 2.6 1.7l.8 1.3 2 .7a.9.9 0 0 1 0 1.7l-2 .7v2.6c0 2.6-1.3 4.6-3.7 5.8L15 21" />
-      <path d="M10.5 9.2c1 0 2 .4 2.7 1.2" />
-      <circle cx="16.7" cy="6.3" r=".6" fill="currentColor" stroke="none" />
+      <path d="M5 20a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z" />
+      <path d="M16.5 18c1-2 2.5-5 2.5-9a7 7 0 0 0-7-7H6.635a1 1 0 0 0-.768 1.64L7 5l-2.32 5.802a2 2 0 0 0 .95 2.526l2.87 1.456" />
+      <path d="m15 5 1.425-1.425" />
+      <path d="m17 8 1.53-1.53" />
+      <path d="M9.713 12.185 7 18" />
     </svg>
   );
 }
