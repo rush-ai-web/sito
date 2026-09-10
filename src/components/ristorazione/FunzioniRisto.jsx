@@ -5,7 +5,7 @@ import {
   ArrowRight,
   Boxes,
   BellRing,
-  CalendarClock,
+  UsersRound,
   ScanLine,
   TrendingUp,
   Megaphone,
@@ -31,6 +31,7 @@ const FUNZIONI = [
   {
     icon: Boxes,
     t: 'Magazzino',
+    featured: true,
     content: (
       <>
         <p>
@@ -72,7 +73,7 @@ const FUNZIONI = [
     ),
   },
   {
-    icon: CalendarClock,
+    icon: UsersRound,
     t: 'Gestione personale',
     content: (
       <>
@@ -118,6 +119,7 @@ const FUNZIONI = [
   {
     icon: TrendingUp,
     t: 'Costi e ricavi',
+    featured: true,
     content: (
       <>
         <p>
@@ -160,6 +162,7 @@ const FUNZIONI = [
   {
     icon: Globe,
     t: 'Sito web',
+    featured: true,
     content: (
       <>
         <p>
@@ -283,6 +286,7 @@ const FUNZIONI = [
   {
     icon: Share2,
     t: 'Social, video e foto',
+    featured: true,
     content: (
       <>
         <p>
@@ -372,9 +376,13 @@ const FUNZIONI = [
   },
 ];
 
+const ORDERED_FUNZIONI = [...FUNZIONI].sort(
+  (a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)),
+);
+
 export default function FunzioniRisto() {
   const [openIdx, setOpenIdx] = useState(null);
-  const active = openIdx !== null ? FUNZIONI[openIdx] : null;
+  const active = openIdx !== null ? ORDERED_FUNZIONI[openIdx] : null;
 
   useEffect(() => {
     if (openIdx === null) return;
@@ -404,11 +412,11 @@ export default function FunzioniRisto() {
       />
 
       <div className="rh-fx-grid">
-        {FUNZIONI.map(({ icon: Icon, t }, i) => (
+        {ORDERED_FUNZIONI.map(({ icon: Icon, t, featured }, i) => (
           <motion.button
             type="button"
             key={t}
-            className="rh-fx-tile"
+            className={`rh-fx-tile${featured ? ' is-featured' : ''}`}
             onClick={() => setOpenIdx(i)}
             initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
