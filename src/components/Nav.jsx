@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, Menu, UtensilsCrossed, X } from 'lucide-react';
+import { ArrowRight, Menu, Moon, Sun, UtensilsCrossed, X } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
 
 /* variante ristorazione: stesso lockup, logo con R arancione al posto
@@ -72,7 +72,7 @@ function ContactLink({ className = '', onClick }) {
   );
 }
 
-export default function Nav({ logoVariant = 'default', links = LINKS }) {
+export default function Nav({ logoVariant = 'default', links = LINKS, theme, onToggleTheme }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { scrollY } = useScroll();
   /* wide at the top (almost full screen), shrinks to a compact pill on scroll */
@@ -98,6 +98,7 @@ export default function Nav({ logoVariant = 'default', links = LINKS }) {
   }, [mobileOpen]);
 
   const closeMobile = () => setMobileOpen(false);
+  const ThemeIcon = theme === 'dark' ? Sun : Moon;
 
   return (
     <motion.header
@@ -122,6 +123,17 @@ export default function Nav({ logoVariant = 'default', links = LINKS }) {
 
         <ContactLink />
 
+        {onToggleTheme ? (
+          <button
+            type="button"
+            className="nav__mobile-theme"
+            aria-label={theme === 'dark' ? 'Passa al tema chiaro' : 'Passa al tema scuro'}
+            onClick={onToggleTheme}
+          >
+            <ThemeIcon size={21} strokeWidth={1.8} />
+          </button>
+        ) : null}
+
         <button
           type="button"
           className="nav__menu-toggle"
@@ -140,21 +152,22 @@ export default function Nav({ logoVariant = 'default', links = LINKS }) {
             id="nav-mobile-menu"
             className="nav__mobile-panel"
             aria-label="Navigazione mobile"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: EASE_MODAL }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.34, ease: EASE_MODAL }}
           >
             <div className="nav__mobile-inner">
+              <span className="nav__mobile-eyebrow">Navigazione</span>
               {links.map(([label, href], index) => (
                 <motion.a
                   key={href}
                   className="nav__mobile-link"
                   href={href}
                   onClick={closeMobile}
-                  initial={{ opacity: 0, y: -5 }}
+                  initial={{ opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.24, delay: 0.04 + index * 0.035, ease: EASE_MODAL }}
+                  transition={{ duration: 0.4, delay: 0.09 + index * 0.055, ease: EASE_MODAL }}
                 >
                   {label}
                 </motion.a>

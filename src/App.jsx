@@ -44,7 +44,7 @@ export default function App() {
       {!visible ? <BootScreen /> : null}
       {prepared ? (
         <div className={`site-shell${visible ? ' is-visible' : ''}`} aria-hidden={visible ? undefined : true}>
-      <Nav />
+      <Nav theme={theme} onToggleTheme={toggleTheme} />
       <main>
         {/* aurora curata: composizione variata per regione, mai fasci in fila
             fissa. Vive dentro <main> così scorre col contenuto. */}

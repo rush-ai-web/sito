@@ -1266,6 +1266,7 @@ main {
 }
 
 .nav__menu-toggle,
+.nav__mobile-theme,
 .nav__mobile-panel {
   display: none;
 }
@@ -3638,14 +3639,29 @@ textarea.input::-webkit-scrollbar {
   .orbit {
     display: none;
   }
-  /* Header mobile: pillola compatta e pannello agganciato sotto. */
+  /* Header mobile: il menu aperto diventa una pagina a schermo intero;
+     la pillola resta in primo piano come barra di controllo. */
   html.nav-menu-open,
   html.nav-menu-open body {
     overflow: hidden;
   }
+  html.nav-menu-open .tsw,
+  html.nav-menu-open .fab,
+  html.nav-menu-open .back-to-top {
+    opacity: 0 !important;
+    visibility: hidden;
+    pointer-events: none;
+  }
   .nav {
     width: calc(100% - 28px) !important;
     max-width: 430px;
+  }
+  .nav.is-open {
+    top: 0;
+    z-index: 200;
+    width: 100% !important;
+    max-width: none;
+    height: 100dvh;
   }
   .nav__links {
     display: none;
@@ -3667,51 +3683,104 @@ textarea.input::-webkit-scrollbar {
     cursor: pointer;
     transition: background var(--d-hover) var(--e-out);
   }
+  .nav__mobile-theme {
+    place-items: center;
+    margin-left: auto;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid var(--nav-line);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--nav-ink) 4%, transparent);
+    color: var(--nav-ink);
+    cursor: pointer;
+  }
+  .nav.is-open .nav__mobile-theme {
+    display: grid;
+  }
+  .nav.is-open .nav__menu-toggle {
+    margin-left: 0;
+    border: 1px solid var(--nav-line);
+    background: color-mix(in srgb, var(--nav-ink) 4%, transparent);
+  }
   .nav__menu-toggle:hover {
     background: color-mix(in srgb, var(--nav-ink) 9%, transparent);
   }
-  .nav__mobile-panel {
-    display: block;
+  .nav.is-open .nav__pill {
     position: absolute;
-    z-index: 0;
-    top: 0;
-    left: 0;
-    right: 0;
+    z-index: 2;
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    width: auto;
+    max-width: 430px;
+    margin-inline: auto;
+    border-color: var(--nav-line);
+    box-shadow: var(--nav-shadow);
+  }
+  .nav__mobile-panel {
+    display: flex;
+    position: absolute;
+    z-index: 1;
+    inset: 0;
     overflow: hidden;
-    border: 1px solid var(--nav-line);
-    border-radius: 29px;
+    border: 0;
+    border-radius: 0;
     background: var(--nav-bg);
     color: var(--nav-ink);
-    box-shadow: var(--nav-shadow);
-    -webkit-backdrop-filter: saturate(160%) blur(24px);
-    backdrop-filter: saturate(160%) blur(24px);
+    box-shadow: none;
+    isolation: isolate;
+  }
+  .nav__mobile-panel::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background:
+      radial-gradient(circle at 18% 28%, color-mix(in srgb, var(--accent) 17%, transparent), transparent 34%),
+      radial-gradient(circle at 86% 72%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 32%);
+    opacity: 0.72;
   }
   .nav__mobile-inner {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
-    padding: 76px 20px 22px;
+    justify-content: center;
+    width: 100%;
+    min-height: 100%;
+    gap: 12px;
+    padding: 112px 24px 52px;
+  }
+  .nav__mobile-eyebrow {
+    margin-bottom: 13px;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 760;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
   .nav__mobile-link {
-    width: 100%;
-    padding: 10px 16px;
+    width: auto;
+    padding: 8px 18px;
     border-radius: var(--r-pill);
     color: var(--nav-ink);
-    font-size: 15px;
-    font-weight: 500;
+    font-size: clamp(30px, 9vw, 42px);
+    font-weight: 620;
+    letter-spacing: -0.04em;
+    line-height: 1.08;
     text-align: center;
+    transition: color var(--d-hover) var(--e-out), transform var(--d-hover) var(--e-out);
   }
-  .nav__mobile-link:hover {
-    background: color-mix(in srgb, var(--nav-ink) 8%, transparent);
+  .nav__mobile-link:hover,
+  .nav__mobile-link:focus-visible {
+    color: var(--accent);
+    transform: translateX(4px);
   }
   .nav__mobile-cta.btn--hero.nav__cta {
     display: inline-flex;
-    margin-top: 10px;
-  }
-  .nav.is-open .nav__pill {
-    border-color: transparent;
-    box-shadow: none;
+    min-width: 190px;
+    justify-content: center;
+    margin-top: 22px;
   }
 }
 
