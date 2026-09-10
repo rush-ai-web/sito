@@ -7154,6 +7154,16 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   translate: 0 -2px;
   box-shadow: var(--sh-1);
 }
+/* in dark l'ombra nera di --sh-1 si perde sullo sfondo già scuro: qui
+   il sollevamento in hover usa un bagliore bianco, visibile davvero. */
+:root[data-theme='dark'] .rh-fx-tile:hover {
+  box-shadow: 0 1px 2px rgba(255, 255, 255, 0.08), 0 20px 40px -14px rgba(255, 255, 255, 0.2);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .rh-fx-tile:hover {
+    box-shadow: 0 1px 2px rgba(255, 255, 255, 0.08), 0 20px 40px -14px rgba(255, 255, 255, 0.2);
+  }
+}
 .rh-fx-tile .icon-tile {
   flex: none;
   margin-bottom: 10px;
