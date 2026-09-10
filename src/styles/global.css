@@ -64,10 +64,10 @@ html.lenis body {
 /* Le sezioni lasciano uscire i bulb in verticale ma non possono creare
    scroll orizzontale. Evitiamo content-visibility qui: altezze intrinseche
    diverse tra le sezioni causavano correzioni visibili durante lo scroll. */
-/* #contatti resta fuori: è sempre l'ultima sezione prima del footer, e
-   lasciare che il suo bulb sanguini in verticale senza nulla sotto a
-   coprirlo crea spazio vuoto in fondo alla pagina - qui il bulb resta
-   tagliato dalla regola overflow:hidden di base. */
+/* #contatti è l'ultima sezione prima del footer: il bulb che sanguina
+   verso il basso finisce dietro al footer (background opaco, sopra
+   nell'ordine del DOM) quindi resta coperto senza aggiungere spazio
+   vuoto in fondo alla pagina. */
 #problema,
 #soluzione,
 #prodotto,
@@ -75,7 +75,8 @@ html.lenis body {
 #metodo,
 #ristorazione,
 #principi,
-#faq {
+#faq,
+#contatti {
   overflow-x: clip;
   overflow-y: visible;
 }

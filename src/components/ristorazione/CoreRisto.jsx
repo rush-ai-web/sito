@@ -13,13 +13,33 @@ import {
   FileSpreadsheet,
   Star,
   Puzzle as PuzzleIcon,
-  Flame,
   Anvil,
 } from 'lucide-react';
 import { Section, Head, IconTile } from '../ui';
 import { EASE_MODAL, inView } from '../../lib/motion';
 
 const inViewOnce = { once: true, amount: 0.3 };
+
+/* lucide-react non ha un'icona cavallo: profilo disegnato a mano,
+   stesso stile a tratto (round cap/join) delle altre icone lucide. */
+function HorseIcon({ size = 14, strokeWidth = 2 }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M8 21v-4.2c0-.9.4-1.7 1-2.3l1.5-1.4V8.6a5.6 5.6 0 0 1 5.6-5.6c1.2 0 2 .7 2.6 1.7l.8 1.3 2 .7a.9.9 0 0 1 0 1.7l-2 .7v2.6c0 2.6-1.3 4.6-3.7 5.8L15 21" />
+      <path d="M10.5 9.2c1 0 2 .4 2.7 1.2" />
+      <circle cx="16.7" cy="6.3" r=".6" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
 
 function BuildCard({ icon, title, desc, accent = false, wide = false, children }) {
   const ref = useRef(null);
@@ -127,7 +147,7 @@ function VizMenu() {
   const cells = [
     { t: 'Stelle', c: 'stella', icon: Star },
     { t: 'Puzzle', c: 'puzzle', icon: PuzzleIcon },
-    { t: 'Cavalli', c: 'cavallo', icon: Flame },
+    { t: 'Cavalli', c: 'cavallo', icon: HorseIcon },
     { t: 'Incudini', c: 'incudine', icon: Anvil },
   ];
   return (
