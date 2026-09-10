@@ -5,9 +5,8 @@ import { Section, Head, IconTile } from '../ui';
 import { EASE_MODAL, inView } from '../../lib/motion';
 
 const STEP_DURATION = 1900;
-const ROUTE_DURATION = (STEP_DURATION * 4) / 1000;
-const ROUTE_OFFSETS = [0, -0.333, -0.667, -1, -1];
-const ROUTE_TIMES = [0, 0.25, 0.5, 0.75, 1];
+const DESKTOP_ROUTE_PROGRESS = [0, 0.339, 0.67, 1];
+const MOBILE_ROUTE_PROGRESS = [0, 1 / 3, 2 / 3, 1];
 
 const PASSI = [
   {
@@ -68,11 +67,10 @@ export default function AvvioRisto() {
           />
           <motion.path
             className="onb__route-pulse"
-            pathLength="1"
             d="M 460 110 H 750 Q 770 110 770 130 V 350 Q 770 370 750 370 H 250 Q 230 370 230 390 V 610 Q 230 630 250 630 H 750 Q 770 630 770 650 V 870 Q 770 890 750 890 H 540"
             initial={false}
-            animate={reduceMotion ? { strokeDashoffset: 0 } : { strokeDashoffset: ROUTE_OFFSETS }}
-            transition={reduceMotion ? undefined : { duration: ROUTE_DURATION, times: ROUTE_TIMES, repeat: Infinity, ease: 'linear' }}
+            animate={{ pathLength: reduceMotion ? 0 : DESKTOP_ROUTE_PROGRESS[activeStep] }}
+            transition={reduceMotion ? { duration: 0 } : { duration: 0.58, ease: EASE_MODAL }}
           />
         </svg>
 
@@ -80,11 +78,10 @@ export default function AvvioRisto() {
           <path className="onb__route-base" d="M 26 80 L 26 920" />
           <motion.path
             className="onb__route-pulse"
-            pathLength="1"
             d="M 26 80 L 26 920"
             initial={false}
-            animate={reduceMotion ? { strokeDashoffset: 0 } : { strokeDashoffset: ROUTE_OFFSETS }}
-            transition={reduceMotion ? undefined : { duration: ROUTE_DURATION, times: ROUTE_TIMES, repeat: Infinity, ease: 'linear' }}
+            animate={{ pathLength: reduceMotion ? 0 : MOBILE_ROUTE_PROGRESS[activeStep] }}
+            transition={reduceMotion ? { duration: 0 } : { duration: 0.58, ease: EASE_MODAL }}
           />
         </svg>
 
@@ -98,7 +95,6 @@ export default function AvvioRisto() {
               viewport={inView}
               transition={{ duration: 0.55, ease: EASE_MODAL, delay: i * 0.08 }}
             >
-              <span className="onb__node" aria-hidden="true" />
               <div className="onb__meta">
                 <IconTile icon={Icon} size="sm" />
                 <span className="onb__kicker">Passo {i + 1}</span>

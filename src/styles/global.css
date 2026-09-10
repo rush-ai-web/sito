@@ -7315,7 +7315,6 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
 .onb__route-pulse {
   stroke: var(--accent);
   stroke-width: 3;
-  stroke-dasharray: 0.13 0.87;
   filter: drop-shadow(0 0 7px color-mix(in srgb, var(--accent) 58%, transparent));
 }
 
@@ -7364,35 +7363,6 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
 
 .onb__step.is-active::after {
   opacity: 1;
-}
-
-.onb__node {
-  position: absolute;
-  z-index: 3;
-  top: 50%;
-  width: 14px;
-  height: 14px;
-  border: 3px solid var(--bg);
-  border-radius: 50%;
-  background: var(--hairline-strong);
-  box-shadow: 0 0 0 1px var(--hairline-strong);
-  transform: translateY(-50%);
-  transition:
-    background-color 320ms var(--e-modal),
-    box-shadow 320ms var(--e-modal);
-}
-
-.onb__step:nth-child(odd) .onb__node {
-  right: -7px;
-}
-
-.onb__step:nth-child(even) .onb__node {
-  left: -7px;
-}
-
-.onb__step.is-active .onb__node {
-  background: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent), 0 0 18px 7px var(--accent-soft);
 }
 
 .onb__meta {
@@ -7485,12 +7455,6 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
     border-radius: 8px 24px 24px 24px;
   }
 
-  .onb__step:nth-child(odd) .onb__node,
-  .onb__step:nth-child(even) .onb__node {
-    right: auto;
-    left: -33px;
-  }
-
   .onb__step:nth-child(even) .onb__num,
   .onb__num {
     right: 18px;
@@ -7519,7 +7483,6 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
 @media (prefers-reduced-motion: reduce) {
   .onb__step,
   .onb__step::after,
-  .onb__node,
   .onb__step .icon-tile,
   .onb__num {
     transition: none;
