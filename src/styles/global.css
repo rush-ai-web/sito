@@ -7169,28 +7169,84 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
 }
 
 .rh-fx-modal {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 22px;
+  display: block;
+  width: min(100%, 680px);
+  max-height: min(78svh, 720px);
+  padding: 26px;
   position: relative;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
-.rh-fx-modal__body {
+.rh-fx-modal-scrim {
+  place-items: center;
+  padding-block: 24px;
+}
+.rh-fx-modal__head {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding-top: 2px;
-  padding-right: 22px;
+  align-items: center;
+  gap: 14px;
+  padding-right: 42px;
 }
-.rh-fx-modal__body strong {
-  font-size: 16px;
+.rh-fx-modal__head .icon-tile {
+  flex: 0 0 auto;
+}
+.rh-fx-modal__head strong {
+  font-size: 18px;
   font-weight: 700;
+  line-height: 1.25;
   color: var(--text);
 }
+.rh-fx-modal__body {
+  display: block;
+  margin-top: 18px;
+  padding: 0;
+}
 .rh-fx-modal__body p {
-  font-size: 14px;
-  line-height: 1.55;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.65;
   color: var(--text-2);
+}
+.rh-fx-modal__body p + p,
+.rh-fx-modal__body p + ul,
+.rh-fx-modal__body ul + p {
+  margin-top: 13px;
+}
+.rh-fx-modal__body ul {
+  display: grid;
+  gap: 8px;
+  margin: 13px 0 0;
+  padding-left: 20px;
+  color: var(--text-2);
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+.rh-fx-modal__body li::marker {
+  color: var(--accent);
+}
+.rh-fx-modal__body strong {
+  color: var(--text);
+  font-weight: 680;
+}
+.rh-fx-modal__body u {
+  text-decoration-color: color-mix(in srgb, var(--accent) 62%, transparent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+.rh-fx-modal__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 16px;
+  color: var(--accent);
+  font-size: 14.5px;
+  font-weight: 650;
+}
+.rh-fx-modal__link svg {
+  transition: transform var(--d-hover) var(--e-out);
+}
+.rh-fx-modal__link:hover svg {
+  transform: translateX(3px);
 }
 .rh-fx-modal__close {
   position: absolute;
@@ -7267,6 +7323,24 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
     margin: 0;
     padding: 0;
     font-size: 13px;
+  }
+  .rh-fx-modal-scrim {
+    padding: 16px;
+  }
+  .rh-fx-modal {
+    width: 100%;
+    max-height: calc(100svh - 32px);
+    padding: 20px;
+  }
+  .rh-fx-modal__head {
+    gap: 12px;
+    padding-right: 36px;
+  }
+  .rh-fx-modal__head strong {
+    font-size: 18px;
+  }
+  .rh-fx-modal__body {
+    margin-top: 16px;
   }
 }
 
