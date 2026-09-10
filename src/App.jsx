@@ -91,9 +91,9 @@ export default function App() {
         {/* scuro */}
         <Cta />
       </main>
-      <Footer />
       <Fab />
       <ThemeSwitch theme={theme} onToggle={toggleTheme} />
+      <Footer />
         </div>
       ) : null}
     </ThemeCtx.Provider>

@@ -118,9 +118,9 @@ export default function AppRisto() {
               <FaqRisto />
               <CtaRisto />
             </main>
-            <Footer logoVariant="ristorazione" columns={FOOTER_COLUMNS} />
             <Fab />
             <ThemeSwitch theme={theme} onToggle={toggleTheme} />
+            <Footer logoVariant="ristorazione" columns={FOOTER_COLUMNS} />
           </div>
         ) : null}
       </div>
