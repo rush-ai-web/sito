@@ -158,7 +158,6 @@ export default function Nav({ logoVariant = 'default', links = LINKS, theme, onT
             transition={{ duration: 0.34, ease: EASE_MODAL }}
           >
             <div className="nav__mobile-inner">
-              <span className="nav__mobile-eyebrow">Navigazione</span>
               {links.map(([label, href], index) => (
                 <motion.a
                   key={href}
