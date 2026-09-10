@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Compass, PhoneCall, UploadCloud, GraduationCap, CheckCircle2 } from 'lucide-react';
 import { Section, Head, IconTile } from '../ui';
-import { EASE_MODAL, inView } from '../../lib/motion';
+import { EASE_MODAL } from '../../lib/motion';
 
 const STEP_DURATION = 1900;
 const DESKTOP_ROUTE_PROGRESS = [0, 0.339, 0.67, 1];
@@ -87,22 +87,17 @@ export default function AvvioRisto() {
 
         <div className="onb__steps">
           {PASSI.map(({ icon: Icon, t, d }, i) => (
-            <motion.article
+            <article
               className={`onb__step${activeStep === i ? ' is-active' : ''}`}
               key={t}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={inView}
-              transition={{ duration: 0.55, ease: EASE_MODAL, delay: i * 0.08 }}
             >
               <div className="onb__meta">
                 <IconTile icon={Icon} size="sm" />
-                <span className="onb__kicker">Passo {i + 1}</span>
+                <h3 className="onb__t">{t}</h3>
               </div>
-              <h3 className="onb__t">{t}</h3>
               <p className="onb__d">{d}</p>
               <span className="onb__num" aria-hidden="true">{i + 1}</span>
-            </motion.article>
+            </article>
           ))}
         </div>
       </div>

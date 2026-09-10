@@ -7449,14 +7449,6 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   box-shadow: var(--sh-1), 0 0 0 4px var(--accent-soft);
 }
 
-.onb__kicker {
-  color: var(--text-3);
-  font-size: 11px;
-  font-weight: 760;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-
 .onb__num {
   position: absolute;
   top: 24px;
@@ -7484,6 +7476,10 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   font-weight: 720;
   letter-spacing: -0.025em;
   line-height: 1.18;
+}
+
+.onb__meta .onb__t {
+  margin: 0;
 }
 
 .onb__d {
