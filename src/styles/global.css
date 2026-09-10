@@ -4286,7 +4286,7 @@ textarea.input::-webkit-scrollbar {
   top: 50%;
   width: 68px;
   height: 68px;
-  border: 1px solid color-mix(in srgb, var(--accent) 64%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 58%, var(--problem-icon-border));
   border-radius: 50%;
   background: transparent;
   opacity: 0;
@@ -4537,6 +4537,23 @@ textarea.input::-webkit-scrollbar {
    vignetta della guida, mai un gradiente lineare */
 .frame {
   background-image: var(--card-vig);
+}
+
+/* Le tre card Problema chiedono un bordo più netto del resto delle
+   superfici: scuro sul tema chiaro, luminoso sul tema scuro. */
+.problem-card {
+  --problem-card-border: rgba(29, 29, 31, 0.34);
+  --problem-icon-border: rgba(29, 29, 31, 0.42);
+  border-color: var(--problem-card-border);
+}
+
+.problem-card .card-deco::after {
+  border-color: var(--problem-icon-border);
+}
+
+:root[data-theme='dark'] .problem-card {
+  --problem-card-border: rgba(255, 255, 255, 0.3);
+  --problem-icon-border: rgba(255, 255, 255, 0.38);
 }
 
 /* ============================================================
@@ -7324,8 +7341,8 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
 
 .onb__step:nth-child(even) {
   justify-self: end;
-  padding-right: 28px;
-  padding-left: 76px;
+  padding-right: 76px;
+  padding-left: 28px;
   border-radius: 8px 26px 26px 26px;
 }
 
@@ -7385,26 +7402,12 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   margin-bottom: 18px;
 }
 
-.onb__icon {
-  display: inline-grid;
-  width: 42px;
-  height: 42px;
-  place-items: center;
-  flex: 0 0 auto;
-  border: 1px solid var(--hairline-strong);
-  border-radius: 50%;
-  color: var(--text);
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-  transition:
-    color 320ms var(--e-modal),
-    border-color 320ms var(--e-modal),
-    background-color 320ms var(--e-modal);
+.onb__step .icon-tile {
+  transition: box-shadow 320ms var(--e-modal);
 }
 
-.onb__step.is-active .onb__icon {
-  color: var(--accent);
-  border-color: color-mix(in srgb, var(--accent) 52%, transparent);
-  background: var(--accent-soft);
+.onb__step.is-active .icon-tile {
+  box-shadow: var(--sh-1), 0 0 0 4px var(--accent-soft);
 }
 
 .onb__kicker {
@@ -7426,11 +7429,6 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   letter-spacing: -0.06em;
   line-height: 1;
   transition: color 320ms var(--e-modal);
-}
-
-.onb__step:nth-child(even) .onb__num {
-  right: auto;
-  left: 22px;
 }
 
 .onb__step.is-active .onb__num {
@@ -7516,17 +7514,13 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
     margin-bottom: 15px;
   }
 
-  .onb__icon {
-    width: 38px;
-    height: 38px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .onb__step,
   .onb__step::after,
   .onb__node,
-  .onb__icon,
+  .onb__step .icon-tile,
   .onb__num {
     transition: none;
   }
