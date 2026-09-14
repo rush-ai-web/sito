@@ -212,7 +212,6 @@ export default function CtaRisto() {
                                 value={locale}
                                 onChange={(e) => setLocale(e.target.value)}
                                 placeholder="Caffè Centrale"
-                                autoFocus
                                 required
                               />
                             </label>
