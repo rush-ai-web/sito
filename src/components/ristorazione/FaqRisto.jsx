@@ -253,7 +253,7 @@ export const FAQ_DATA = {
 };
 
 import ReadableFaq from '../ReadableFaq';
-export default function FaqRisto() { return <ReadableFaq data={FAQ_DATA} restaurant />; }
+export default function FaqRisto() { return <ReadableFaq data={FAQ_DATA} categories={CATEGORIES} restaurant />; }
 
 export function LegacyFaqRisto() {
   const cats = Object.keys(CATEGORIES);

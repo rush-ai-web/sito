@@ -88,7 +88,7 @@ export const FAQ_DATA = {
 };
 
 import ReadableFaq from './ReadableFaq';
-export default function Faq() { return <ReadableFaq data={FAQ_DATA} />; }
+export default function Faq() { return <ReadableFaq data={FAQ_DATA} categories={CATEGORIES} />; }
 
 export function LegacyFaq() {
   const cats = Object.keys(CATEGORIES);

@@ -13,8 +13,8 @@ try {
     assert(words >= 300, 'At least 300 words must be in the initial HTML');
     const ids = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]));
     for (const [, id] of main.matchAll(/href="#([^"]+)"/g)) assert(ids.has(id), `Broken anchor: ${id}`);
-    assert(main.includes('https://www.w3.org/TR/dwbp/'));
-    assert(main.includes('https://www.nist.gov/itl/ai-risk-management-framework'));
+    assert(main.includes('aria-label="Categorie FAQ"'));
+    assert(!main.includes('Dati e AI: riferimenti per approfondire'));
     const path = `docs/${file}`;
     let document = await readFile(path, 'utf8');
     const description = document.match(/name="description"\s+content="([^"]+)"/)?.[1];

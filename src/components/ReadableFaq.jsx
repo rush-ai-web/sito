@@ -1,18 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { HelpCircle } from 'lucide-react';
+import { Head, Section } from './ui';
 
-export default function ReadableFaq({ data, restaurant = false }) {
-  return <section id="faq" className="section faq-sec"><div className="wrap">
-    <h2 className="t-sec">{restaurant ? 'Domande sul gestionale per bar e ristoranti' : 'Domande sui sistemi su misura e sulle automazioni'}</h2>
-    <p className="t-body" style={{ marginBlock: 24 }}>
-      {restaurant ? <>Scopri le <a href="#funzioni">funzioni per il locale</a>, confronta i <a href="#prezzi">prezzi</a> e approfondisci il <a href="#avvio">percorso di attivazione</a>. Per esigenze di altri settori visita i <a href="/">sistemi su misura Rush</a>.</> : <>Approfondisci il <a href="#metodo">metodo di lavoro</a>, consulta i <a href="#prezzi">costi del progetto</a> e scopri un’applicazione concreta con <a href="/ristorazione">Rush Ristorazione</a>.</>}
-    </p>
-    <div className="faq-list faq-list__inner">
-      {Object.values(data).flat().map(({ q, a }) => <details className="faq-item" key={q}>
-        <summary className="faq-item__head"><h3 className="faq-item__q">{q}</h3><span aria-hidden="true">+</span></summary>
-        <div className="faq-item__body"><p className="faq-item__a">{a}</p></div>
-      </details>)}
+export default function ReadableFaq({ data, categories, restaurant = false }) {
+  const keys = Object.keys(categories);
+  const [selected, setSelected] = useState(keys[0]);
+  const prefix = restaurant ? 'faq-risto' : 'faq-home';
+  function onKeyDown(event, index) {
+    let next;
+    if (event.key === 'ArrowRight') next = (index + 1) % keys.length;
+    else if (event.key === 'ArrowLeft') next = (index + keys.length - 1) % keys.length;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = keys.length - 1;
+    else return;
+    event.preventDefault();
+    setSelected(keys[next]);
+    document.getElementById(`${prefix}-tab-${keys[next]}`)?.focus();
+  }
+  return <Section id="faq" large className="faq-sec">
+    <Head icon={HelpCircle} label="Domande frequenti"
+      title={restaurant ? 'Quello che vorresti sapere prima di scegliere' : 'Le domande che ci fate più spesso'}
+      sub={restaurant ? 'Costi, tempi, affidabilità e lavoro quotidiano: le risposte utili prima di portare un nuovo sistema nel locale.' : 'Le risposte in due righe. Se ne hai altre, ci sentiamo direttamente.'} />
+    <div className="faq-tabs" role="tablist" aria-label="Categorie FAQ">
+      {keys.map((key, index) => <button key={key} type="button" role="tab"
+        id={`${prefix}-tab-${key}`} aria-controls={`${prefix}-panel-${key}`}
+        aria-selected={selected === key} tabIndex={selected === key ? 0 : -1}
+        className={`faq-tab${selected === key ? ' is-sel' : ''}`}
+        onClick={() => setSelected(key)} onKeyDown={event => onKeyDown(event, index)}>
+        {selected === key && <motion.span className="faq-tab__bg" layoutId={`${prefix}-tab-bg`} transition={{ duration: 0.25 }} />}
+        <span className="faq-tab__t">{categories[key]}</span>
+      </button>)}
     </div>
-    <h3 className="t-card" style={{ marginTop: 36 }}>Dati e AI: riferimenti per approfondire</h3>
-    <p className="t-body" style={{ marginTop: 16 }}>Per valutare un progetto è utile capire come vengono descritti e condivisi i dati: le <a href="https://www.w3.org/TR/dwbp/">buone pratiche W3C sui dati</a> affrontano qualità, provenienza e interoperabilità. Per l’intelligenza artificiale, il <a href="https://www.nist.gov/itl/ai-risk-management-framework">framework NIST sulla gestione dei rischi AI</a> offre un riferimento per valutarne affidabilità e limiti. Sono risorse di approfondimento, non certificazioni di Rush.</p>
-  </div></section>;
+    <div className="faq-list">
+      {keys.map(key => <div key={key} role="tabpanel" id={`${prefix}-panel-${key}`}
+        aria-labelledby={`${prefix}-tab-${key}`} hidden={selected !== key}
+        style={selected !== key ? { display: 'none' } : undefined} className="faq-list__inner">
+        {data[key].map(({ q, a }) => <details className="faq-item" key={q}>
+          <summary className="faq-item__head"><h3 className="faq-item__q">{q}</h3><span aria-hidden="true">+</span></summary>
+          <div className="faq-item__body"><p className="faq-item__a">{a}</p></div>
+        </details>)}
+      </div>)}
+    </div>
+    <p className="t-body" style={{ marginTop: 28, textAlign: 'center' }}>
+      {restaurant ? <>Scopri le <a href="#funzioni">funzioni per il locale</a>, confronta i <a href="#prezzi">prezzi</a> e approfondisci il <a href="#avvio">percorso di attivazione</a>.</> : <>Approfondisci il <a href="#metodo">metodo di lavoro</a>, consulta i <a href="#prezzi">costi del progetto</a> o <a href="#contatti">parlaci delle tue esigenze</a>.</>}
+    </p>
+  </Section>;
 }
