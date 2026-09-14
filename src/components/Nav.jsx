@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, Menu, Moon, Sun, UtensilsCrossed, X } from 'lucide-react';
+import { ArrowRight, Menu, UtensilsCrossed, X } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
 
 /* variante ristorazione: stesso lockup, logo con R arancione al posto
@@ -72,7 +72,7 @@ function ContactLink({ className = '', onClick }) {
   );
 }
 
-export default function Nav({ logoVariant = 'default', links = LINKS, theme, onToggleTheme }) {
+export default function Nav({ logoVariant = 'default', links = LINKS }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { scrollY } = useScroll();
   /* wide at the top (almost full screen), shrinks to a compact pill on scroll */
@@ -98,8 +98,6 @@ export default function Nav({ logoVariant = 'default', links = LINKS, theme, onT
   }, [mobileOpen]);
 
   const closeMobile = () => setMobileOpen(false);
-  const ThemeIcon = theme === 'dark' ? Sun : Moon;
-
   return (
     <motion.header
       className={`nav${mobileOpen ? ' is-open' : ''}`}
@@ -122,17 +120,6 @@ export default function Nav({ logoVariant = 'default', links = LINKS, theme, onT
         </nav>
 
         <ContactLink />
-
-        {onToggleTheme ? (
-          <button
-            type="button"
-            className="nav__mobile-theme"
-            aria-label={theme === 'dark' ? 'Passa al tema chiaro' : 'Passa al tema scuro'}
-            onClick={onToggleTheme}
-          >
-            <ThemeIcon size={21} strokeWidth={1.8} />
-          </button>
-        ) : null}
 
         <button
           type="button"

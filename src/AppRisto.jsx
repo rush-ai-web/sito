@@ -92,7 +92,7 @@ export default function AppRisto() {
         {!visible ? <BootWrap /> : null}
         {prepared ? (
           <div className={`site-shell${visible ? ' is-visible' : ''}`} aria-hidden={visible ? undefined : true}>
-            <Nav logoVariant="ristorazione" links={NAV_LINKS} theme={theme} onToggleTheme={toggleTheme} />
+            <Nav logoVariant="ristorazione" links={NAV_LINKS} />
             <main>
               {/* aurora curata: vive dietro alle sezioni e scorre col contenuto */}
               <div className="aurora" aria-hidden="true">
