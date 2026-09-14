@@ -3240,7 +3240,8 @@ main {
   box-shadow: var(--sh-2);
   cursor: pointer;
   appearance: none;
-  transition: box-shadow 0.2s ease, opacity 0.2s ease;
+  transition: box-shadow 0.2s ease;
+  will-change: transform, opacity;
 }
 
 :root[data-theme='dark'] .back-to-top {

@@ -67,22 +67,27 @@ export default function Fab() {
 
   return (
     <>
-      <AnimatePresence>
-        {showBackToTop && (
-          <motion.button
-            type="button"
-            className="back-to-top"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            initial={{ opacity: 0, y: 10, scale: 0.92 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.92 }}
-            transition={{ duration: 0.22, ease: EASE_MODAL }}
-            aria-label="Torna all'inizio della pagina"
-          >
-            <ArrowUp size={19} strokeWidth={2.1} aria-hidden="true" />
-          </motion.button>
-        )}
-      </AnimatePresence>
+      <motion.button
+        type="button"
+        className="back-to-top"
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        initial={false}
+        animate={showBackToTop
+          ? { opacity: 1, y: 0, scale: 1, visibility: 'visible' }
+          : { opacity: 0, y: 14, scale: 0.88, visibility: 'hidden' }}
+        transition={{
+          opacity: { duration: 0.34, ease: EASE_MODAL },
+          y: { duration: 0.42, ease: EASE_MODAL },
+          scale: { duration: 0.42, ease: EASE_MODAL },
+          visibility: { delay: showBackToTop ? 0 : 0.42 },
+        }}
+        style={{ pointerEvents: showBackToTop ? 'auto' : 'none' }}
+        tabIndex={showBackToTop ? 0 : -1}
+        aria-hidden={!showBackToTop}
+        aria-label="Torna all'inizio della pagina"
+      >
+        <ArrowUp size={19} strokeWidth={2.1} aria-hidden="true" />
+      </motion.button>
 
       <motion.button
         className="fab"
