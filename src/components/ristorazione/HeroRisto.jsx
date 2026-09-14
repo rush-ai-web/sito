@@ -31,7 +31,7 @@ export default function HeroRisto() {
         </motion.div>
 
         <motion.h1 className="hero__title" variants={fadeUp} custom={1} initial="hidden" animate="show">
-          Sistema operativo AI per <span className="hero-accent">bar e ristoranti</span>.
+          Sistema operativo AI per <span className="hero-accent">bar e ristoranti</span>
         </motion.h1>
 
         <motion.p className="hero__note" variants={fadeUp} custom={2} initial="hidden" animate="show">

@@ -1,8 +1,36 @@
 import { createContext, forwardRef, useContext } from 'react';
 import { motion } from 'framer-motion';
 import { fadeUp, inView, stagger } from '../lib/motion';
+import { useIsMobile } from '../lib/hooks';
 
 export const ThemeCtx = createContext('light');
+const SectionMotionCtx = createContext('up');
+
+const MOBILE_MOTION_BY_SECTION = {
+  problema: 'static',
+  misurabilita: 'static',
+  confronto: 'static',
+  soluzione: 'left',
+  funzioni: 'left',
+  metodo: 'left',
+  avvio: 'left',
+  ecosistema: 'right',
+  chat: 'right',
+  ristorazione: 'right',
+  prezzi: 'right',
+};
+
+const mobileReveal = {
+  up: fadeUp,
+  left: {
+    hidden: { opacity: 0, x: -28 },
+    show: (i = 0) => ({ opacity: 1, x: 0, transition: { duration: 0.56, ease: [0.16, 1, 0.3, 1], delay: i * 0.045 } }),
+  },
+  right: {
+    hidden: { opacity: 0, x: 28 },
+    show: (i = 0) => ({ opacity: 1, x: 0, transition: { duration: 0.56, ease: [0.16, 1, 0.3, 1], delay: i * 0.045 } }),
+  },
+};
 
 /* ------------------------------------------------------------
    Section - fascia di pagina.
@@ -38,11 +66,14 @@ export function Section({
 
   const wantsShine = className.includes('section--shine');
 
+  const mobileMotion = MOBILE_MOTION_BY_SECTION[id] || 'up';
   return (
-    <section id={id} data-tone={dark ? 'dark' : 'light'} className={`section ${fx} ${className}`}>
-      {wantsShine ? <span className="section-shine" aria-hidden="true" /> : null}
-      <div className="wrap">{children}</div>
-    </section>
+    <SectionMotionCtx.Provider value={mobileMotion}>
+      <section id={id} data-tone={dark ? 'dark' : 'light'} className={`section ${fx} ${className}`}>
+        {wantsShine ? <span className="section-shine" aria-hidden="true" /> : null}
+        <div className="wrap">{children}</div>
+      </section>
+    </SectionMotionCtx.Provider>
   );
 }
 
@@ -74,12 +105,15 @@ export function Head({ icon, label, title, sub, left = false, className = '', ch
 /* Reveal - comparsa allo scroll, una sola volta */
 export function Reveal({ i = 0, as = 'div', className = '', children, ...rest }) {
   const M = motion[as] || motion.div;
+  const isMobile = useIsMobile();
+  const profile = useContext(SectionMotionCtx);
+  const isStatic = isMobile && profile === 'static';
   return (
     <M
       className={className}
-      variants={fadeUp}
+      variants={isMobile ? mobileReveal[profile] || fadeUp : fadeUp}
       custom={i}
-      initial="hidden"
+      initial={isStatic ? false : 'hidden'}
       whileInView="show"
       viewport={inView}
       {...rest}
@@ -92,11 +126,13 @@ export function Reveal({ i = 0, as = 'div', className = '', children, ...rest })
 /* Group - contenitore che scagliona i figli */
 export function Group({ delay = 0, each = 0.07, as = 'div', className = '', children, ...rest }) {
   const M = motion[as] || motion.div;
+  const isMobile = useIsMobile();
+  const profile = useContext(SectionMotionCtx);
   return (
     <M
       className={className}
       variants={stagger(delay, each)}
-      initial="hidden"
+      initial={isMobile && profile === 'static' ? false : 'hidden'}
       whileInView="show"
       viewport={inView}
       {...rest}
@@ -111,8 +147,10 @@ export function Group({ delay = 0, each = 0.07, as = 'div', className = '', chil
    vero per far partire il conteggio quando entra in viewport. */
 export const Item = forwardRef(function Item({ as = 'div', className = '', children, ...rest }, ref) {
   const M = motion[as] || motion.div;
+  const isMobile = useIsMobile();
+  const profile = useContext(SectionMotionCtx);
   return (
-    <M ref={ref} className={className} variants={fadeUp} {...rest}>
+    <M ref={ref} className={className} variants={isMobile ? mobileReveal[profile] || fadeUp : fadeUp} {...rest}>
       {children}
     </M>
   );
@@ -123,8 +161,10 @@ export const Item = forwardRef(function Item({ as = 'div', className = '', child
    creava un contesto di impilamento che spegneva il bagliore.
    Qui FM resta responsabile solo della comparsa allo scroll. */
 export const LiftCard = forwardRef(function LiftCard({ className = '', children, ...rest }, ref) {
+  const isMobile = useIsMobile();
+  const profile = useContext(SectionMotionCtx);
   return (
-    <motion.div ref={ref} className={`${className} card--hover`} variants={fadeUp} {...rest}>
+    <motion.div ref={ref} className={`${className} card--hover`} variants={isMobile ? mobileReveal[profile] || fadeUp : fadeUp} {...rest}>
       {children}
     </motion.div>
   );
