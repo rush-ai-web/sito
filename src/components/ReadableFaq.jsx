@@ -1,7 +1,24 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useId, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { HelpCircle } from 'lucide-react';
 import { Head, Section } from './ui';
+
+function FaqItem({ q, a }) {
+  const [open, setOpen] = useState(false);
+  const reduce = useReducedMotion();
+  const id = useId();
+  return <div className={`faq-item${open ? ' is-open' : ''}`}>
+    <h3 style={{ margin: 0 }}><button className="faq-item__head" type="button" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>
+      <span className="faq-item__q">{q}</span><motion.span aria-hidden="true" animate={{ rotate: open ? 45 : 0 }}>+</motion.span>
+    </button></h3>
+    <motion.div id={id} className="faq-item__body" initial={false}
+      animate={{ height: open ? 'auto' : 0, opacity: open ? 1 : 0 }}
+      transition={{ duration: reduce ? 0 : 0.28, ease: [0.16, 1, 0.3, 1] }}
+      aria-hidden={!open} inert={!open ? '' : undefined}>
+      <p className="faq-item__a">{a}</p>
+    </motion.div>
+  </div>;
+}
 
 export default function ReadableFaq({ data, categories, restaurant = false }) {
   const keys = Object.keys(categories);
@@ -36,10 +53,7 @@ export default function ReadableFaq({ data, categories, restaurant = false }) {
       {keys.map(key => <div key={key} role="tabpanel" id={`${prefix}-panel-${key}`}
         aria-labelledby={`${prefix}-tab-${key}`} hidden={selected !== key}
         style={selected !== key ? { display: 'none' } : undefined} className="faq-list__inner">
-        {data[key].map(({ q, a }) => <details className="faq-item" key={q}>
-          <summary className="faq-item__head"><h3 className="faq-item__q">{q}</h3><span aria-hidden="true">+</span></summary>
-          <div className="faq-item__body"><p className="faq-item__a">{a}</p></div>
-        </details>)}
+        {data[key].map(item => <FaqItem key={item.q} {...item} />)}
       </div>)}
     </div>
     <p className="t-body" style={{ marginTop: 28, textAlign: 'center' }}>

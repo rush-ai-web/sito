@@ -183,7 +183,7 @@ export function confirmHtml({ nome }) {
           </tr>
           <tr>
             <td style="padding:18px 30px 26px;border-top:1px solid rgba(255,255,255,.1);">
-              <p style="margin:0;font-size:12px;line-height:1.5;color:#9a9a9e;">Rush — la software house che costruisce il tuo gestionale su misura, con AI integrata.</p>
+              <p style="margin:0;font-size:12px;line-height:1.5;color:#9a9a9e;">Rush — la software house che costruisce il tuo sistema operativo su misura, con AI integrata.</p>
             </td>
           </tr>
         </table>

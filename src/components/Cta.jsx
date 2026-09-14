@@ -30,7 +30,7 @@ const AUDIENCES = [
     id: 'progetto',
     icon: Rocket,
     t: 'Ho un progetto',
-    d: 'Voglio un gestionale su misura per la mia attività.',
+    d: 'Voglio un sistema operativo su misura per la mia attività.',
   },
   {
     id: 'partner',
@@ -150,7 +150,7 @@ export default function Cta() {
   const contestoPlaceholder =
     aud === 'partner'
       ? 'Sono consulente e seguo una ventina di aziende: vorrei capire se ha senso proporlo.'
-      : 'Gestionale legacy per gli ordini, magazzino su Excel, presenze su carta. Perdiamo tempo nei doppi inserimenti.';
+      : 'Sistema operativo legacy per gli ordini, magazzino su Excel, presenze su carta. Perdiamo tempo nei doppi inserimenti.';
 
   return (
     <Section id="contatti" large grid>
@@ -166,7 +166,7 @@ export default function Cta() {
             Raccontaci come lavori oggi.
           </Item>
           <Item as="p" className="t-body">
-            Il primo incontro serve a capire se un gestionale su misura ha senso per te - e, se non
+            Il primo incontro serve a capire se un sistema operativo su misura ha senso per te - e, se non
             ce l'ha, te lo diciamo. Pochi passaggi e ti ricontattiamo con un'idea concreta di
             perimetro, tempi e costi.
           </Item>

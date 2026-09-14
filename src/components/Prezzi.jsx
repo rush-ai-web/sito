@@ -14,7 +14,7 @@ import { Section, Head } from './ui';
 import { EASE_MODAL } from '../lib/motion';
 
 const INCLUSO = [
-  { Icon: SlidersHorizontal, label: 'Gestionale personalizzato sui tuoi processi' },
+  { Icon: SlidersHorizontal, label: 'Sistema operativo personalizzato sui tuoi processi' },
   { Icon: Sparkles,          label: 'AI base integrata nel flusso' },
   { Icon: Monitor,           label: 'Dashboard operativa' },
   { Icon: Users,             label: 'Formazione del team' },
@@ -29,7 +29,7 @@ const COME_FUNZIONA = [
   {
     Icon: SlidersHorizontal,
     t: 'Configurazione iniziale',
-    d: 'Costruiamo il sistema sui tuoi processi reali. Gestionale personalizzato e AI base sono incluse.',
+    d: 'Costruiamo il sistema sui tuoi processi reali. Sistema operativo personalizzato e AI base sono incluse.',
   },
   {
     Icon: Workflow,
@@ -171,7 +171,7 @@ export default function Prezzi() {
           </div>
 
           <p className="prezzi2__note">
-            Il canone copre analisi, configurazione iniziale, gestionale personalizzato e AI base; automazioni e integrazioni complesse custom si aggiungono su preventivo.
+            Il canone copre analisi, configurazione iniziale, sistema operativo personalizzato e AI base; automazioni e integrazioni complesse custom si aggiungono su preventivo.
           </p>
         </motion.div>
       </div>

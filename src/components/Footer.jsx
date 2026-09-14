@@ -5,7 +5,7 @@ const COLONNE = [
   [
     'Cosa facciamo',
     [
-      ['Gestionali su misura', '#prodotto'],
+      ['Sistemi operativi su misura', '#prodotto'],
       ['Automazioni', '#prodotto'],
       ['AI integrata', '#prodotto'],
       ['Integrazioni', '#prodotto'],
@@ -72,7 +72,7 @@ export default function Footer({ logoVariant = 'default', columns = COLONNE }) {
               itemProp="description"
               style={{ marginTop: 16, maxWidth: 320 }}
             >
-              Costruiamo il gestionale su misura per la tua azienda: dati sempre aggiornati, lavoro
+              Costruiamo il sistema operativo su misura per la tua azienda: dati sempre aggiornati, lavoro
               ripetitivo automatizzato e AI integrata dove serve davvero.
             </p>
           </div>

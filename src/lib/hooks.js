@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { animate, useInView, useMotionValue, useReducedMotion } from 'framer-motion';
 import Lenis from 'lenis';
+import { warmupScroll } from './warmup';
 import { EASE_MODAL } from './motion';
 
 const BOOT_TIMEOUT_MS = 1800;
@@ -25,6 +26,7 @@ function preloadImage(src) {
    subito e le varianti Ristorazione usate più avanti. Il timeout evita che
    una risorsa guasta possa mai bloccare la pagina. */
 export function useAppReady() {
+  useEffect(warmupScroll, []);
   const [ready, setReady] = useState(true);
 
   useEffect(() => {

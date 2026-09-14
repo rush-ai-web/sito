@@ -75,7 +75,7 @@ function DrawPath({ d, delay = 0, width = 1.5, dash, reduce, ...rest }) {
   );
 }
 
-/* ── A · Gestionale su misura: i moduli che accendi tu ── */
+/* ── A · Sistema operativo su misura: i moduli che accendi tu ── */
 const CFG = [
   { Icon: Wallet, name: 'Cassa' },
   { Icon: Boxes, name: 'Magazzino' },
@@ -328,7 +328,7 @@ export default function Prodotto() {
         title={<>Un solo sistema al posto di sei strumenti scollegati</>}
         sub={
           <>
-            Tutto quello che oggi vive in gestionali diversi, fogli di calcolo e messaggi torna in un posto solo - <strong>e resta aggiornato da solo.</strong>
+            Tutto quello che oggi vive in sistemi operativi diversi, fogli di calcolo e messaggi torna in un posto solo - <strong>e resta aggiornato da solo.</strong>
           </>
         }
       />
@@ -336,7 +336,7 @@ export default function Prodotto() {
       <div className="build">
         <BuildCard
           icon={Blocks}
-          title="Gestionale su misura"
+          title="Sistema operativo su misura"
           desc="Anagrafiche, ordini, magazzino, documenti, presenze: i moduli che ti servono, con i campi e le regole della tua azienda. Nessun compromesso su come lavori."
         >
           <VizModuli reduce={reduce} />
@@ -353,7 +353,7 @@ export default function Prodotto() {
         <BuildCard
           icon={Sparkles}
           title="AI integrata nel flusso"
-          desc="Legge i documenti, controlla le anomalie, risponde alle domande sui tuoi dati. Non un chatbot appiccicato sopra: un livello dentro al gestionale."
+          desc="Legge i documenti, controlla le anomalie, risponde alle domande sui tuoi dati. Non un chatbot appiccicato sopra: un livello dentro al sistema operativo."
           accent
         >
           <VizAI reduce={reduce} />
@@ -371,7 +371,7 @@ export default function Prodotto() {
         <BuildCard
           icon={Plug}
           title="Si collega a quello che hai già"
-          desc="Cassa, e-commerce, fatturazione elettronica, banca, fornitori. Il gestionale nuovo non cancella gli strumenti che funzionano: li mette in fila."
+          desc="Cassa, e-commerce, fatturazione elettronica, banca, fornitori. Il sistema operativo nuovo non cancella gli strumenti che funzionano: li mette in fila."
         >
           <VizLink reduce={reduce} />
         </BuildCard>

@@ -12,7 +12,7 @@ export function render(restaurant) {
     html: renderToString(restaurant ? <AppRisto /> : <App />),
     schema: { '@context': 'https://schema.org', '@graph': [
       { '@type': 'Organization', '@id': 'https://rush-ai.it/#organization', name: 'Rush', url: 'https://rush-ai.it/', logo: 'https://rush-ai.it/favicon.png' },
-      { '@type': 'WebPage', '@id': `${url}#webpage`, url, name: restaurant ? 'Gestionale AI per bar e ristoranti' : 'Gestionali su misura, automazioni e AI', dateModified: '2026-09-14', inLanguage: 'it-IT' },
+      { '@type': 'WebPage', '@id': `${url}#webpage`, url, name: restaurant ? 'Sistema operativo AI per bar e ristoranti' : 'Sistemi operativi su misura, automazioni e AI', dateModified: '2026-09-14', inLanguage: 'it-IT' },
       { '@type': 'FAQPage', '@id': `${url}#faq`, mainEntity: Object.values(data).flat().map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: renderToStaticMarkup(<>{a}</>).replace(/<[^>]+>/g, '') } })) },
     ] },
   };

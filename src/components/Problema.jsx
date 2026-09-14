@@ -6,7 +6,7 @@ const PUNTI = [
   {
     icon: Unplug,
     t: 'Software che non parlano tra loro',
-    d: 'Gestionale, magazzino, fatturazione, presenze: quattro sistemi, quattro anagrafiche, nessuna che coincide. Ogni riconciliazione è manuale.',
+    d: 'Sistema operativo, magazzino, fatturazione, presenze: quattro sistemi, quattro anagrafiche, nessuna che coincide. Ogni riconciliazione è manuale.',
   },
   {
     icon: FileWarning,
@@ -30,7 +30,7 @@ export default function Problema() {
         label="Il problema"
         title={
           <>
-            I gestionali standard costringono l'azienda ad adattarsi al software
+            I sistemi operativi standard costringono l'azienda ad adattarsi al software
           </>
         }
         sub={

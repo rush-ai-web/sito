@@ -81,7 +81,7 @@ export const FAQ_DATA = {
           ricette e particolarità operative. Al collegamento, all’importazione e alla
           configurazione pensiamo noi. Dopo il controllo iniziale, la maggior parte dei dati si
           aggiorna automaticamente: <strong>non devi diventare il data entry del tuo
-          gestionale</strong>.
+          sistema operativo</strong>.
         </>
       ),
     },
@@ -168,7 +168,7 @@ export const FAQ_DATA = {
       ),
     },
     {
-      q: 'Sito, pubblicità e social sono compresi nel gestionale?',
+      q: 'Sito, pubblicità e social sono compresi nel sistema operativo?',
       a: (
         <>
           Sono servizi e moduli complementari, definiti a preventivo. Il vantaggio è che possono
@@ -210,7 +210,7 @@ export const FAQ_DATA = {
           Le informazioni sensibili sono separate dalle schermate operative e protette da
           permessi dedicati, blocco automatico e modalità privacy. Il dipendente accede alla sua
           area e consulta solo turni, ore e richieste che lo riguardano; responsabili e titolare
-          hanno livelli diversi. In questo modo <strong>non basta avere accesso al gestionale per
+          hanno livelli diversi. In questo modo <strong>non basta avere accesso al sistema operativo per
           vedere tutto</strong>.
         </>
       ),

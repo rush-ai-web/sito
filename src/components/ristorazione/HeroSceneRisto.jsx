@@ -24,7 +24,7 @@ const logoLight = `${import.meta.env.BASE_URL}rush-logo-orange.webp`;
 const logoDark = `${import.meta.env.BASE_URL}rush-logo-orange-dark.webp`;
 
 /* stesso menu della dashboard home, ma con marketing e prenotazioni al
-   posto di ordini/report: il gestionale del locale segue anche la
+   posto di ordini/report: il sistema operativo del locale segue anche la
    crescita, non solo l'operatività. */
 const NAV = [
   { icon: LayoutDashboard, t: 'Dashboard' },

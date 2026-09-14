@@ -26,7 +26,7 @@ const PASSI = [
   {
     icon: RefreshCw,
     t: 'Evoluzione continua',
-    d: "L'azienda cambia e il gestionale la segue: nuovi moduli, nuove automazioni, nuove integrazioni quando servono.",
+    d: "L'azienda cambia e il sistema operativo la segue: nuovi moduli, nuove automazioni, nuove integrazioni quando servono.",
     side: 'right',
   },
 ];

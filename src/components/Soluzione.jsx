@@ -34,7 +34,7 @@ const ORBIT = [
     id: 3,
     icon: Workflow,
     t: 'Automazioni al posto\ndel lavoro manuale',
-    body: 'Registrazioni, riordini, promemoria e conciliazioni girano da soli. Tu decidi, il gestionale esegue.',
+    body: 'Registrazioni, riordini, promemoria e conciliazioni girano da soli. Tu decidi, il sistema operativo esegue.',
     related: [2, 4],
   },
   {
@@ -120,7 +120,7 @@ function SoluzioneMobile() {
       <Head
         icon={Lightbulb}
         label="La soluzione"
-        title={<>Un gestionale disegnato attorno a come lavori</>}
+        title={<>Un sistema operativo disegnato attorno a come lavori</>}
         sub={SOLUTION_SUB}
       />
 
@@ -306,7 +306,7 @@ function SoluzioneDesktop() {
           <Head
             icon={Lightbulb}
             label="La soluzione"
-            title={<>Un gestionale disegnato attorno a come lavori</>}
+            title={<>Un sistema operativo disegnato attorno a come lavori</>}
             sub={SOLUTION_SUB}
           />
         </div>

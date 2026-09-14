@@ -5,7 +5,7 @@ import HeroScene from './HeroScene';
 import { wordUp, fadeUp, EASE_MODAL } from '../lib/motion';
 
 /* prima riga del titolo, fissa */
-const L1 = ['Il', 'tuo', 'gestionale', 'su', 'misura,'];
+const L1 = ['Il', 'tuo', 'sistema operativo', 'su', 'misura,'];
 
 /* seconda riga che ruota: copre AI + posto unico + automazione + risultato.
    Ogni frase ha un'icona che le sta accanto per farla riconoscere subito. */
@@ -17,9 +17,9 @@ const ROTATE = [
 ];
 
 /* la riga alta di categorie */
-const COSE = ['Gestionali su misura', 'Automazioni end-to-end', 'AI dentro al flusso'];
+const COSE = ['Sistemi operativi su misura', 'Automazioni end-to-end', 'AI dentro al flusso'];
 
-/* cosa cambia quando il gestionale è tuo: ciò che cala e ciò che cresce. */
+/* cosa cambia quando il sistema operativo è tuo: ciò che cala e ciò che cresce. */
 const OUTCOMES = [
   { sign: '−', t: 'Tempo perso' },
   { sign: '+', t: 'Margine' },
@@ -33,7 +33,7 @@ const OUTCOMES = [
 
 export function OutcomeTicker() {
   return (
-    <div className="ticker" aria-label="Cosa cambia con un gestionale su misura">
+    <div className="ticker" aria-label="Cosa cambia con un sistema operativo su misura">
       <div className="ticker__track">
         {[0, 1].map((copy) => (
           <div className="ticker__group" key={copy} aria-hidden={copy === 1}>
@@ -206,7 +206,7 @@ export default function Hero() {
           />
         </motion.div>
 
-        <h1 className="hero__title" aria-label="Il tuo gestionale su misura, con AI integrata">
+        <h1 className="hero__title" aria-label="Il tuo sistema operativo su misura, con AI integrata">
           <span className="hero__line">
             {L1.slice(0, 3).map((w, i) => <Word key={w + i} w={w} i={i} />)}
             <span className="hero__br" aria-hidden="true" />
@@ -224,7 +224,7 @@ export default function Hero() {
           initial="hidden"
           animate="show"
         >
-          <strong>Il gestionale si adatta alla tua azienda, non il contrario.</strong>{' '}
+          <strong>Il sistema operativo si adatta alla tua azienda, non il contrario.</strong>{' '}
           <br className="hero-note-break" />
           Collega processi e strumenti e automatizza il lavoro ripetitivo.
         </motion.p>

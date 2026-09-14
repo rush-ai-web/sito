@@ -29,7 +29,7 @@ export default function Settori() {
     <section data-tone="light" className="section section--strip">
       <div className="wrap">
         <Reveal as="p" className="t-label" style={{ textAlign: 'center', marginBottom: 28 }}>
-          Costruiamo gestionali per
+          Costruiamo sistemi operativi per
         </Reveal>
       </div>
 

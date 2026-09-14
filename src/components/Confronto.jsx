@@ -14,7 +14,7 @@ const RIGHE = [
     vals: [true, 'partial', 'partial', false] },
   { label: 'Prezzo accessibile per una PMI',
     vals: [true, true, false, true] },
-  { label: 'AI integrata nel gestionale',
+  { label: 'AI integrata nel sistema operativo',
     vals: [true, 'partial', false, false] },
   { label: 'Delivery in massimo 8 settimane',
     vals: [true, true, false, 'partial'] },

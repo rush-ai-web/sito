@@ -7223,9 +7223,17 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
     0 0 30px color-mix(in srgb, var(--accent) 20%, transparent);
 }
 .rh-fx-modal-scrim {
+  z-index: 10000;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   place-items: center;
   padding-block: 24px;
 }
+
+.risto2__cta-row .risto-discover { color: #111; }
+.risto2__cta-row .risto-discover .btn__badge { background: #111; color: #ff8759; }
+.faq-item__head { font-size: 17px; font-weight: 600; }
+.faq-item.is-open { border-color: var(--accent); }
 .rh-fx-modal__head {
   display: flex;
   align-items: center;

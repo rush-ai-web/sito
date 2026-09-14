@@ -47,7 +47,7 @@ export default function Ristorazione() {
           <Pill icon={UtensilsCrossed}>Un esempio: Rush Ristorazione</Pill>
 
           <h2 className="t-sec" style={{ marginTop: 16 }}>
-            Il gestionale perfetto per bar e ristoranti
+            Il sistema operativo perfetto per bar e ristoranti
           </h2>
 
           <p className="t-body" style={{ marginTop: 14 }}>
@@ -68,7 +68,7 @@ export default function Ristorazione() {
           </ul>
 
           <div className="risto2__cta-row">
-            <a className="btn btn--accent btn--hero" href="./ristorazione.html">
+            <a className="btn btn--accent btn--hero risto-discover" href="./ristorazione.html">
               Scopri Rush Ristorazione
               <span className="btn__badge" aria-hidden="true">
                 <ArrowRight size={18} strokeWidth={2} />
@@ -106,7 +106,7 @@ export default function Ristorazione() {
           <div className="risto2__kpi">
             <span className="t-label">Pensato per crescere</span>
             <p className="t-body" style={{ marginTop: 10 }}>
-              Un bar, un ristorante e una panineria? Non tre login separati: un unico gestionale
+              Un bar, un ristorante e una panineria? Non tre login separati: un unico sistema operativo
               con più sedi, dove il titolare vede tutto e ogni responsabile solo la sua.
             </p>
           </div>

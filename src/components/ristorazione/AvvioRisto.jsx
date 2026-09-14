@@ -27,7 +27,7 @@ const PASSI = [
   {
     icon: CheckCircle2,
     t: 'Sei operativo, restiamo vicini',
-    d: 'Nei primi giorni monitoriamo insieme che tutto torni: cassa, magazzino, turni. Poi il gestionale lavora da solo.',
+    d: 'Nei primi giorni monitoriamo insieme che tutto torni: cassa, magazzino, turni. Poi il sistema operativo lavora da solo.',
   },
 ];
 

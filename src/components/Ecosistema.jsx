@@ -16,7 +16,7 @@ import { useIsMobile } from '../lib/hooks';
 /* ------------------------------------------------------------
    Ecosistema - il diagramma "tutto in un unico posto".
    Cinque sistemi frammentati a sinistra convergono nel nodo
-   Rush AI, che alimenta un unico gestionale su misura a destra.
+   Rush AI, che alimenta un unico sistema operativo su misura a destra.
    Le coordinate vivono in un sistema condiviso (viewBox 1160×520):
    sia i tracciati SVG sia le card HTML leggono gli stessi numeri,
    così le linee toccano sempre le card, a qualunque scala.
@@ -65,7 +65,7 @@ function EcosistemaDesktop() {
         className="head--wide-copy"
         icon={Boxes}
         label="Un unico posto"
-        title={<>Tutti i tuoi sistemi in un solo gestionale</>}
+        title={<>Tutti i tuoi sistemi in un solo sistema operativo</>}
         sub={
           <>
             <span className="head-copy-line">Cassa, magazzino, personale, ordini, fatturazione: oggi vivono in strumenti separati che non si parlano.</span>
@@ -249,7 +249,7 @@ function EcosistemaMobile() {
         className="head--wide-copy"
         icon={Boxes}
         label="Un unico posto"
-        title={<>Tutti i tuoi sistemi in un solo gestionale</>}
+        title={<>Tutti i tuoi sistemi in un solo sistema operativo</>}
         sub={
           <>
             <span className="head-copy-line">Cassa, magazzino, personale, ordini, fatturazione: oggi vivono in strumenti separati che non si parlano.</span>

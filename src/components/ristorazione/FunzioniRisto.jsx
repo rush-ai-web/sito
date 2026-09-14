@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   LayoutGrid,
@@ -24,7 +25,7 @@ import { Section, Head, IconTile } from '../ui';
 import { DUR, EASE_MODAL, inView } from '../../lib/motion';
 
 /* tutto quello che Rush Ristorazione fa, in un'unica griglia: il
-   gestionale e la strategia intorno, allo stesso livello. Presentiamo
+   sistema operativo e la strategia intorno, allo stesso livello. Presentiamo
    il perimetro completo, senza distinguere cosa è già pronto e cosa no.
    Ogni voce spiega il problema reale che risolve, non solo la funzione. */
 const FUNZIONI = [
@@ -214,7 +215,7 @@ const FUNZIONI = [
           e accompagnare il cliente verso una prenotazione.
         </p>
         <p>
-          Le risposte non sono improvvisate: si basano sulle informazioni del tuo gestionale —
+          Le risposte non sono improvvisate: si basano sulle informazioni del tuo sistema operativo —
           orari, menu, disponibilità, servizi e regole del locale — per mantenere un tono
           coerente. <strong>Meno occasioni perse durante il servizio</strong>, senza chiedere a
           chi è in sala di interrompere continuamente il lavoro.
@@ -362,7 +363,7 @@ const FUNZIONI = [
       <>
         <p>
           Un solo menu da aggiornare, disponibile nelle lingue utili al tuo pubblico. Modifichi
-          piatti, prezzi, ingredienti o disponibilità nel gestionale e mantieni tutte le versioni
+          piatti, prezzi, ingredienti o disponibilità nel sistema operativo e mantieni tutte le versioni
           allineate, senza ristampare ogni volta o correggere file separati.
         </p>
         <p>
@@ -388,12 +389,22 @@ export default function FunzioniRisto() {
     if (openIdx === null) return;
     const onKey = (e) => {
       if (e.key === 'Escape') setOpenIdx(null);
+      if (e.key === 'Tab') {
+        const nodes = [...document.querySelectorAll('.rh-fx-modal a[href], .rh-fx-modal button')];
+        const first = nodes[0], last = nodes[nodes.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+      }
     };
     window.addEventListener('keydown', onKey);
+    const previousOverflow = document.body.style.overflow;
+    const trigger = document.activeElement;
     document.body.style.overflow = 'hidden';
+    document.querySelector('.rh-fx-modal__close')?.focus();
     return () => {
       window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = '';
+      document.body.style.overflow = previousOverflow;
+      trigger?.focus();
     };
   }, [openIdx]);
 
@@ -405,7 +416,7 @@ export default function FunzioniRisto() {
         title={<>Automatizzato e su misura<br />per il tuo locale</>}
         sub={
           <>
-            Non un gestionale e poi il resto sparso altrove: <strong>tutto quello che serve per
+            Non un sistema operativo e poi il resto sparso altrove: <strong>tutto quello che serve per
             mandare avanti e far crescere il locale vive nello stesso sistema.</strong>
           </>
         }
@@ -438,10 +449,11 @@ export default function FunzioniRisto() {
         non un pacchetto fisso uguale per tutti.
       </p>
 
-      <AnimatePresence>
+      {typeof document !== 'undefined' && createPortal(<AnimatePresence>
         {active && (
           <motion.div
-            className="palette__scrim rh-fx-modal-scrim"
+            className="palette__scrim rh-fx-modal-scrim risto-orange"
+            data-lenis-prevent="true"
             onClick={() => setOpenIdx(null)}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -456,6 +468,7 @@ export default function FunzioniRisto() {
               exit={{ opacity: 0, y: -10, scale: 0.985 }}
               transition={{ duration: DUR.modal, ease: EASE_MODAL }}
               role="dialog"
+              aria-modal="true"
               aria-label={active.t}
             >
               <div className="rh-fx-modal__head">
@@ -476,7 +489,7 @@ export default function FunzioniRisto() {
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>, document.body)}
     </Section>
   );
 }
