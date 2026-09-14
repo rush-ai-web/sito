@@ -12,7 +12,7 @@ import {
 import { EASE_MODAL, floatIn, wordUp } from '../lib/motion';
 import { IconTile } from './ui';
 
-const TITOLO = 'Il cervello che manca al tuo gestionale';
+const TITOLO = 'Gestionale AI per bar e ristoranti che collega tutti i tuoi dati';
 
 /* i sistemi che il locale ha già, disposti attorno al titolo */
 const SISTEMI = [
@@ -102,6 +102,18 @@ export default function Hero() {
             Non ti chiediamo di buttare la cassa che usi da anni. Rush mette in dialogo i sistemi
             che hai già — cassa, fatture, magazzino, contabilità — e ci aggiunge sopra un layer di
             intelligenza artificiale che trasforma dati sparsi in decisioni.
+          </motion.p>
+
+          <motion.p
+            className="t-small hero__context"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: EASE_MODAL, delay: 0.48 }}
+          >
+            Scopri <a className="text-link" href="#prodotto">come funziona Rush</a>, quali
+            vantaggi offre nel <a className="text-link" href="#ristorazione">controllo di un
+            ristorante</a> e le risposte alle <a className="text-link" href="#faq">domande
+            frequenti</a> su integrazioni, dati e attivazione.
           </motion.p>
 
           <motion.div

@@ -9,6 +9,7 @@ import Principi from './components/Principi';
 import Ristorazione from './components/Ristorazione';
 import Metodo from './components/Metodo';
 import Visione from './components/Visione';
+import Faq from './components/Faq';
 import Cta from './components/Cta';
 import Footer from './components/Footer';
 import Fab from './components/Fab';
@@ -28,6 +29,7 @@ export default function App() {
         <Ristorazione />
         <Metodo />
         <Visione />
+        <Faq />
         <Cta />
       </main>
       <Footer />

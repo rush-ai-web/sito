@@ -18,6 +18,7 @@ const COLONNE = [
       ['Come lavoriamo', '#metodo'],
       ['Visione', '#visione'],
       ['La prova: ristorazione', '#ristorazione'],
+      ['Domande frequenti', '#faq'],
     ],
   ],
   [

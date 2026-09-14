@@ -8,6 +8,7 @@ const LINKS = [
   ['Cos’è Rush', '#prodotto'],
   ['Come pensa', '#principi'],
   ['La prova', '#ristorazione'],
+  ['FAQ', '#faq'],
 ];
 
 export default function Nav({ theme, onToggleTheme }) {

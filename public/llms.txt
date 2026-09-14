@@ -1,0 +1,17 @@
+# Rush
+
+> Rush è un gestionale AI per bar e ristoranti che collega cassa, fatture, magazzino, ricettario e contabilità per trasformare dati sparsi in informazioni verificabili.
+
+## Contenuti principali
+
+- [Come funziona Rush](https://rush-ai-web.github.io/sito/#prodotto): collegamento, comprensione e risposta sui dati del locale.
+- [Vantaggi operativi](https://rush-ai-web.github.io/sito/#vantaggi): controllo di margini, prezzi fornitori e magazzino.
+- [Applicazione nella ristorazione](https://rush-ai-web.github.io/sito/#ristorazione): casi d'uso e moduli dedicati.
+- [Metodo di attivazione](https://rush-ai-web.github.io/sito/#metodo): mappatura, collegamento e miglioramento progressivo.
+- [Domande frequenti](https://rush-ai-web.github.io/sito/#faq): integrazioni, sicurezza dei dati e accesso anticipato.
+
+## Note
+
+- I numeri e i nomi dei fornitori mostrati nella demo sono esempi illustrativi.
+- Il form di accesso anticipato richiede una verifica manuale dei sistemi usati dal locale.
+- Lingua principale: italiano.
