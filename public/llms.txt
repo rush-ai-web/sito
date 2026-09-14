@@ -29,6 +29,11 @@ Il canone parte da 299 EUR al mese con fatturazione trimestrale. Sono inclusi an
 
 ## Risorse
 
+- [Sistemi su misura per PMI](https://rush-ai.it/): gestionali, automazioni e AI per diversi settori.
+- [Rush Ristorazione](https://rush-ai.it/ristorazione): il verticale per bar e ristoranti.
+- [FAQ sui sistemi su misura](https://rush-ai.it/#faq)
+- [FAQ ristorazione](https://rush-ai.it/ristorazione#faq)
+
 - [Sitemap XML](https://rush-ai.it/sitemap.xml)
 - [Direttive robots](https://rush-ai.it/robots.txt)
 - [Repository del sito](https://github.com/rush-ai-web/sito)

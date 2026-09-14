@@ -22,7 +22,7 @@ import ThemeSwitch from './components/ThemeSwitch';
 export default function App() {
   const [theme, toggleTheme] = useTheme();
   const prepared = useAppReady();
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   useSmoothScroll(visible);
 
   useEffect(() => {

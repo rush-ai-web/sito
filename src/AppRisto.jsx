@@ -67,7 +67,7 @@ function BootWrap() {
 export default function AppRisto() {
   const [theme, toggleTheme] = useTheme();
   const prepared = useAppReady();
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   useSmoothScroll(visible);
 
   useEffect(() => {

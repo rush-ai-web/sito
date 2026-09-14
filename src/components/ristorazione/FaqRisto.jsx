@@ -11,7 +11,7 @@ const CATEGORIES = {
   dati: 'Dati e supporto',
 };
 
-const FAQ_DATA = {
+export const FAQ_DATA = {
   scelta: [
     {
       q: 'Ho già cassa, commercialista e software per le prenotazioni: cosa cambia davvero?',
@@ -252,7 +252,10 @@ const FAQ_DATA = {
   ],
 };
 
-export default function FaqRisto() {
+import ReadableFaq from '../ReadableFaq';
+export default function FaqRisto() { return <ReadableFaq data={FAQ_DATA} restaurant />; }
+
+export function LegacyFaqRisto() {
   const cats = Object.keys(CATEGORIES);
   const [sel, setSel] = useState(cats[0]);
 

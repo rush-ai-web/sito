@@ -25,10 +25,11 @@ function preloadImage(src) {
    subito e le varianti Ristorazione usate più avanti. Il timeout evita che
    una risorsa guasta possa mai bloccare la pagina. */
 export function useAppReady() {
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
+    document.getElementById('root')?.removeAttribute('data-prerender');
     let timeoutId;
 
     const fontTasks = document.fonts
@@ -141,7 +142,7 @@ export function useTheme() {
       : 'light';
 
   const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem('rush-theme');
+    const saved = typeof window === 'undefined' ? null : window.localStorage.getItem('rush-theme');
     /* se l'utente ha scelto a mano si rispetta, altrimenti si segue il sistema */
     return saved === 'light' || saved === 'dark' ? saved : systemTheme();
   });
@@ -160,7 +161,7 @@ export function useTheme() {
   /* NB: qui NON salviamo su localStorage, altrimenti il primo render
      "congelerebbe" il tema di sistema come se fosse una scelta manuale.
      Il salvataggio avviene solo nel toggle sotto. */
-  useLayoutEffect(() => {
+  (typeof window === 'undefined' ? useEffect : useLayoutEffect)(() => {
     document.documentElement.setAttribute('data-theme', theme);
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute('content', theme === 'dark' ? '#17171A' : '#FAFAF9');
@@ -192,7 +193,7 @@ export function useCountUp(target, { dec = 0, duration = 1.5 } = {}) {
   const seen = useInView(ref, { once: true, amount: 0.35 });
   const reduce = useReducedMotion();
   const mv = useMotionValue(0);
-  const [text, setText] = useState(() => fmt(reduce ? target : 0, dec));
+  const [text, setText] = useState(() => fmt(typeof window === 'undefined' || reduce ? target : 0, dec));
 
   useEffect(() => {
     if (!seen) return;

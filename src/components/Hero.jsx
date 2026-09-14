@@ -60,7 +60,7 @@ function Word({ w, i }) {
         initial="hidden"
         animate="show"
       >
-        {w}
+      {w}{' '}
       </motion.span>
     </span>
   );
@@ -206,7 +206,7 @@ export default function Hero() {
           />
         </motion.div>
 
-        <h1 className="hero__title">
+        <h1 className="hero__title" aria-label="Il tuo gestionale su misura, con AI integrata">
           <span className="hero__line">
             {L1.slice(0, 3).map((w, i) => <Word key={w + i} w={w} i={i} />)}
             <span className="hero__br" aria-hidden="true" />

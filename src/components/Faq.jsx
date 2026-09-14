@@ -12,7 +12,7 @@ const CATEGORIES = {
   tecnologia: 'AI e tecnologia',
 };
 
-const FAQ_DATA = {
+export const FAQ_DATA = {
   prodotto: [
     {
       q: 'Che tipo di gestionali costruite?',
@@ -87,7 +87,10 @@ const FAQ_DATA = {
   ],
 };
 
-export default function Faq() {
+import ReadableFaq from './ReadableFaq';
+export default function Faq() { return <ReadableFaq data={FAQ_DATA} />; }
+
+export function LegacyFaq() {
   const cats = Object.keys(CATEGORIES);
   const [sel, setSel] = useState(cats[0]);
 
