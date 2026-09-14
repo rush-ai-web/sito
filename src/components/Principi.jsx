@@ -5,7 +5,7 @@ const PRINCIPI = [
   {
     icon: Code2,
     t: 'Scriviamo il software, non lo rivendiamo',
-    d: 'Il sistema operativo è nostro dalla prima riga. Quando serve una modifica non si apre un ticket a un fornitore terzo: si fa.',
+    d: 'Il sistema è nostro dalla prima riga. Quando serve una modifica non si apre un ticket a un fornitore terzo: si fa.',
   },
   {
     icon: KeyRound,
@@ -30,7 +30,7 @@ const PRINCIPI = [
   {
     icon: Fingerprint,
     t: 'Un sistema riconoscibile',
-    d: "Stessa interfaccia dal sistema operativo all'app dei dipendenti. Chi impara una schermata le sa usare tutte.",
+    d: "Stessa interfaccia dal sistema all'app dei dipendenti. Chi impara una schermata le sa usare tutte.",
   },
 ];
 

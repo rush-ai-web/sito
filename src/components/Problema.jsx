@@ -6,7 +6,7 @@ const PUNTI = [
   {
     icon: Unplug,
     t: 'Software che non parlano tra loro',
-    d: 'Sistema operativo, magazzino, fatturazione, presenze: quattro sistemi, quattro anagrafiche, nessuna che coincide. Ogni riconciliazione è manuale.',
+    d: 'Sistema, magazzino, fatturazione, presenze: quattro sistemi, quattro anagrafiche, nessuna che coincide. Ogni riconciliazione è manuale.',
   },
   {
     icon: FileWarning,

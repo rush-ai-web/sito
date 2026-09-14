@@ -25,7 +25,7 @@ import { Section, Head, IconTile } from '../ui';
 import { DUR, EASE_MODAL, inView } from '../../lib/motion';
 
 /* tutto quello che Rush Ristorazione fa, in un'unica griglia: il
-   sistema operativo e la strategia intorno, allo stesso livello. Presentiamo
+   sistema e la strategia intorno, allo stesso livello. Presentiamo
    il perimetro completo, senza distinguere cosa è già pronto e cosa no.
    Ogni voce spiega il problema reale che risolve, non solo la funzione. */
 const FUNZIONI = [
@@ -215,7 +215,7 @@ const FUNZIONI = [
           e accompagnare il cliente verso una prenotazione.
         </p>
         <p>
-          Le risposte non sono improvvisate: si basano sulle informazioni del tuo sistema operativo —
+          Le risposte non sono improvvisate: si basano sulle informazioni del tuo sistema —
           orari, menu, disponibilità, servizi e regole del locale — per mantenere un tono
           coerente. <strong>Meno occasioni perse durante il servizio</strong>, senza chiedere a
           chi è in sala di interrompere continuamente il lavoro.
@@ -363,7 +363,7 @@ const FUNZIONI = [
       <>
         <p>
           Un solo menu da aggiornare, disponibile nelle lingue utili al tuo pubblico. Modifichi
-          piatti, prezzi, ingredienti o disponibilità nel sistema operativo e mantieni tutte le versioni
+          piatti, prezzi, ingredienti o disponibilità nel sistema e mantieni tutte le versioni
           allineate, senza ristampare ogni volta o correggere file separati.
         </p>
         <p>
@@ -413,10 +413,10 @@ export default function FunzioniRisto() {
       <Head
         icon={LayoutGrid}
         label="Tutto in un posto"
-        title={<>Automatizzato e su misura<br />per il tuo locale</>}
+        title={<>Automatizzato e su misura{' '}<br className="desktop-title-break" />per il tuo locale</>}
         sub={
           <>
-            Non un sistema operativo e poi il resto sparso altrove: <strong>tutto quello che serve per
+            Non un sistema e poi il resto sparso altrove: <strong>tutto quello che serve per
             mandare avanti e far crescere il locale vive nello stesso sistema.</strong>
           </>
         }

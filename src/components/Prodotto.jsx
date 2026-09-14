@@ -353,7 +353,7 @@ export default function Prodotto() {
         <BuildCard
           icon={Sparkles}
           title="AI integrata nel flusso"
-          desc="Legge i documenti, controlla le anomalie, risponde alle domande sui tuoi dati. Non un chatbot appiccicato sopra: un livello dentro al sistema operativo."
+          desc="Legge i documenti, controlla le anomalie, risponde alle domande sui tuoi dati. Non un chatbot appiccicato sopra: un livello dentro al sistema."
           accent
         >
           <VizAI reduce={reduce} />
@@ -371,7 +371,7 @@ export default function Prodotto() {
         <BuildCard
           icon={Plug}
           title="Si collega a quello che hai già"
-          desc="Cassa, e-commerce, fatturazione elettronica, banca, fornitori. Il sistema operativo nuovo non cancella gli strumenti che funzionano: li mette in fila."
+          desc="Cassa, e-commerce, fatturazione elettronica, banca, fornitori. Il nuovo sistema non cancella gli strumenti che funzionano: li mette in fila."
         >
           <VizLink reduce={reduce} />
         </BuildCard>

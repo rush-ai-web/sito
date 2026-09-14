@@ -19,12 +19,12 @@ export const FAQ_DATA = {
       a: "Costruiamo sistemi operativi su misura per PMI italiane: cassa, magazzino, fatturazione elettronica, ordini, presenze, CRM, produzione. Il perimetro si decide insieme partendo dai tuoi processi reali, non da un template.",
     },
     {
-      q: 'Cosa succede al sistema operativo che uso oggi?',
+      q: 'Cosa succede al sistema che uso oggi?',
       a: "Non lo cancelliamo: nella fase di analisi mappiamo cosa fa oggi ogni strumento, cosa vale la pena conservare e cosa può essere sostituito. Rush si integra con l'esistente e lo sostituisce solo dove porta un vantaggio chiaro.",
     },
     {
       q: 'Posso aggiungere funzionalità dopo?',
-      a: "Sì. Il sistema operativo evolve con l'azienda: aggiungiamo moduli, campi, automazioni e report nel tempo. Non paghi mai un piano superiore per sbloccare cose che ti servivano davvero.",
+      a: "Sì. Il sistema evolve con l'azienda: aggiungiamo moduli, campi, automazioni e report nel tempo. Non paghi mai un piano superiore per sbloccare cose che ti servivano davvero.",
     },
     {
       q: 'Funziona sia da desktop che da mobile?',
@@ -34,11 +34,11 @@ export const FAQ_DATA = {
   processo: [
     {
       q: 'Quanto tempo ci vuole per partire?',
-      a: "Un primo modulo operativo è tipicamente pronto in 4-8 settimane dall'analisi. Non aspetti mesi prima di vedere qualcosa: rilasciamo per moduli, così cominci ad usare il sistema operativo mentre il resto si costruisce.",
+      a: "Un primo modulo operativo è tipicamente pronto in 4-8 settimane dall'analisi. Non aspetti mesi prima di vedere qualcosa: rilasciamo per moduli, così cominci ad usare il sistema mentre il resto si costruisce.",
     },
     {
       q: 'Come funziona la fase di analisi?',
-      a: "Passiamo del tempo con te e con chi userà il sistema operativo ogni giorno. Guardiamo come lavorate oggi, dove perdete tempo, quali dati non tornano. Da lì definiamo insieme le priorità e i moduli.",
+      a: "Passiamo del tempo con te e con chi userà il sistema ogni giorno. Guardiamo come lavorate oggi, dove perdete tempo, quali dati non tornano. Da lì definiamo insieme le priorità e i moduli.",
     },
     {
       q: 'Dovete stravolgere i miei processi?',
@@ -51,7 +51,7 @@ export const FAQ_DATA = {
   ],
   costi: [
     {
-      q: 'Come funziona il costo del sistema operativo?',
+      q: 'Come funziona il costo del sistema?',
       a: "Canone mensile fisso e chiaro, che copre uso, hosting, aggiornamenti e supporto. Nessun extra nascosto, nessun rincaro a sorpresa: sai sempre quanto paghi.",
     },
     {
@@ -60,7 +60,7 @@ export const FAQ_DATA = {
     },
     {
       q: 'Che tipo di supporto è incluso?',
-      a: "Supporto continuo via chat ed email con tempi di risposta impegnativi, sessioni periodiche per raccogliere feedback e piccoli aggiustamenti gratuiti. Non chiami un call center: parli direttamente con chi ha costruito il tuo sistema operativo.",
+      a: "Supporto continuo via chat ed email con tempi di risposta impegnativi, sessioni periodiche per raccogliere feedback e piccoli aggiustamenti gratuiti. Non chiami un call center: parli direttamente con chi ha costruito il tuo sistema.",
     },
     {
       q: "Posso vedere una demo prima di decidere?",
@@ -69,8 +69,8 @@ export const FAQ_DATA = {
   ],
   tecnologia: [
     {
-      q: "L'AI cosa fa esattamente nel sistema operativo?",
-      a: "Legge i tuoi dati e risponde con numeri veri: 'chi mi ha alzato i prezzi', 'quali clienti stanno rallentando', 'quanto ho perso su questo articolo'. Non è un chatbot appiccicato - è agganciato al database del tuo sistema operativo.",
+      q: "L'AI cosa fa esattamente nel sistema?",
+      a: "Legge i tuoi dati e risponde con numeri veri: 'chi mi ha alzato i prezzi', 'quali clienti stanno rallentando', 'quanto ho perso su questo articolo'. Non è un chatbot appiccicato - è agganciato al database del tuo sistema.",
     },
     {
       q: "I miei dati sono al sicuro?",

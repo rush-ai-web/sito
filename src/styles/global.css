@@ -7230,6 +7230,10 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   padding-block: 24px;
 }
 
+@media (max-width: 720px) {
+  .desktop-title-break { display: none; }
+}
+
 :root[data-theme='light'] .risto2__cta-row .risto-discover { color: #111; }
 :root[data-theme='light'] .risto2__cta-row .risto-discover .btn__badge { background: #111; color: #ff8759; }
 .faq-item__head { font-size: 17px; font-weight: 600; }

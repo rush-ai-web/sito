@@ -224,7 +224,7 @@ export default function Hero() {
           initial="hidden"
           animate="show"
         >
-          <strong>Il sistema operativo si adatta alla tua azienda, non il contrario.</strong>{' '}
+          <strong>Il sistema si adatta alla tua azienda, non il contrario.</strong>{' '}
           <br className="hero-note-break" />
           Collega processi e strumenti e automatizza il lavoro ripetitivo.
         </motion.p>

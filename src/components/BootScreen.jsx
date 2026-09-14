@@ -3,7 +3,7 @@
    un'etichetta che si accende lettera per lettera - stessa idea di
    un loader "AI typing", ma nei colori e nel font del brand. */
 export default function BootScreen({
-  label = 'Prepariamo il tuo sistema operativo',
+  label = 'Prepariamo il tuo sistema',
   ariaLabel = 'Caricamento del sito Rush',
   logoLight = './rush-logo-192.png',
   logoDark = './rush-logo-dark-192.png',

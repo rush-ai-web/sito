@@ -47,7 +47,7 @@ export default function Ristorazione() {
           <Pill icon={UtensilsCrossed}>Un esempio: Rush Ristorazione</Pill>
 
           <h2 className="t-sec" style={{ marginTop: 16 }}>
-            Il sistema operativo perfetto per bar e ristoranti
+            Il sistema perfetto per bar e ristoranti
           </h2>
 
           <p className="t-body" style={{ marginTop: 14 }}>
@@ -106,7 +106,7 @@ export default function Ristorazione() {
           <div className="risto2__kpi">
             <span className="t-label">Pensato per crescere</span>
             <p className="t-body" style={{ marginTop: 10 }}>
-              Un bar, un ristorante e una panineria? Non tre login separati: un unico sistema operativo
+              Un bar, un ristorante e una panineria? Non tre login separati: un unico sistema
               con più sedi, dove il titolare vede tutto e ogni responsabile solo la sua.
             </p>
           </div>
