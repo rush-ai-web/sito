@@ -3418,7 +3418,7 @@ main {
   position: fixed;
   top: 0;
   right: 0;
-  bottom: 0;
+  height: 100dvh;
   z-index: 91;
   width: min(420px, 100vw);
   display: flex;
@@ -3558,6 +3558,27 @@ main {
   line-height: 1.5;
 }
 
+.chat-panel__msg p {
+  margin: 0 0 8px;
+}
+.chat-panel__msg p:last-child {
+  margin-bottom: 0;
+}
+.chat-panel__msg strong {
+  font-weight: 700;
+}
+.chat-panel__msg ul,
+.chat-panel__msg ol {
+  margin: 4px 0 8px;
+  padding-left: 20px;
+}
+.chat-panel__msg li {
+  margin-bottom: 4px;
+}
+.chat-panel__msg li:last-child {
+  margin-bottom: 0;
+}
+
 .chat-panel__msg--user {
   align-self: flex-end;
   background: var(--accent);
@@ -3615,7 +3636,7 @@ main {
 
 .chat-panel__foot {
   flex: none;
-  padding: 14px 20px 18px;
+  padding: 14px 20px calc(18px + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--hairline);
 }
 
@@ -3633,7 +3654,9 @@ main {
   border: 1px solid var(--hairline-strong);
   background: var(--chip-bg);
   color: var(--text);
-  font-size: 14px;
+  /* 16px minimo: sotto questa soglia iOS Safari forza lo zoom della pagina
+     quando l'input riceve il focus, causando l'effetto "sgranato/zoomato" */
+  font-size: 16px;
   outline: none;
 }
 .chat-panel__input:focus {

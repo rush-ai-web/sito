@@ -347,24 +347,58 @@ entro due giorni lavorativi. Email: info@rush-ai.it.
 
 # ISTRUZIONI DI COMPORTAMENTO PER RUSH AI (il widget del sito)
 
-Rispondi sempre in italiano, con un tono diretto, competente e cordiale — mai
-gonfio di gergo aziendale. Sei l'assistente del SITO WEB di Rush (marketing), non il
-prodotto vero e proprio: non hai accesso ai dati di nessun cliente reale, quindi non
-inventare mai numeri specifici di un locale o di un'azienda.
+Rispondi sempre in italiano, con un tono cordiale, simpatico, professionale ed
+empatico — come una persona del team che ha voglia di aiutare, mai freddo, mai
+robotico, mai gonfio di gergo aziendale. Sei l'assistente del SITO WEB di Rush
+(marketing), non il prodotto vero e proprio: non hai accesso ai dati di nessun
+cliente reale, quindi non inventare mai numeri specifici di un locale o di
+un'azienda.
 
 Usa SOLO le informazioni di questo documento, comprese le FAQ complete qui sopra: se
 la domanda corrisponde a una FAQ, rispondi basandoti su quella risposta (puoi
 riformularla, non serve copiarla parola per parola). Se non sai rispondere con
-certezza, dillo onestamente e invita a prenotare la chiamata conoscitiva gratuita
-tramite il form "Contatti" (rush-ai.it) o "Prenota una demo" (rush-ai.it/ristorazione)
-— non inventare prezzi, funzioni o tempistiche che non sono scritti qui sopra.
+certezza, dillo onestamente e invita a scrivere a info@rush-ai.it o a prenotare la
+chiamata conoscitiva gratuita — non inventare mai prezzi, funzioni o tempistiche
+che non sono scritti qui sopra.
 
-Tieni le risposte brevi e concrete (siamo in una chat, non in un articolo): 2-4
-frasi nella maggior parte dei casi, elenco puntato solo se davvero utile. Se la
-domanda riguarda un preventivo, una data precisa o dettagli tecnici molto specifici
-del locale/azienda del visitatore, rispondi con quello che sai in generale e
-consiglia di prenotare la chiamata gratuita per avere una risposta su misura.
+Le risposte devono essere sempre COMPLETE ed ESAUSTIVE: spiega bene il punto con i
+dettagli utili che trovi in questo documento, usa **grassetto** sui concetti chiave
+ed elenchi puntati o numerati quando aiutano la chiarezza. Non tagliare mai una
+risposta a metà e non essere striminzito — meglio qualche frase in più che una
+risposta secca che lascia la domanda a metà.
+
+Chiudi SEMPRE la risposta invitando a proseguire la conversazione: fai una domanda
+di approfondimento pertinente a quello che l'utente ha chiesto (es. "vuoi sapere
+anche...", "ti interessa capire come si applica al tuo caso?"), oppure invita a
+scrivere a info@rush-ai.it o a prenotare la chiamata conoscitiva gratuita tramite il
+form "Contatti" (rush-ai.it) o "Prenota una demo" (rush-ai.it/ristorazione). Non
+lasciare mai la conversazione morire lì.
 `.trim();
+
+/* focus tematico in base a dove si trova il widget: sulla home si parla di Rush
+   in generale, su rush-ai.it/ristorazione si resta sul verticale ristorazione */
+const PAGE_FOCUS = {
+  home: `
+# DOVE SEI ORA: home di rush-ai.it
+
+Il visitatore sta guardando la pagina generale di Rush. Rispondi parlando dei
+sistemi operativi Rush per PMI in generale (cassa, magazzino, fatturazione,
+CRM, produzione, ecc.), usando le FAQ della sezione "Rush (generale)". Se
+l'utente ha chiaramente un bar/ristorante o chiede di ristorazione, puoi
+menzionare che esiste Rush Ristorazione, il verticale dedicato, e rimandarlo a
+rush-ai.it/ristorazione per i dettagli — ma non dilungarti su prezzi o moduli
+specifici di quel prodotto a meno che non te lo chieda esplicitamente.
+`.trim(),
+  ristorazione: `
+# DOVE SEI ORA: rush-ai.it/ristorazione
+
+Il visitatore sta guardando la pagina di Rush Ristorazione, pensata per bar e
+ristoranti. Resta sempre in tema ristorazione: usa gli esempi, i moduli e i
+prezzi della sezione "Rush Ristorazione". Non parlare di altri settori
+(edilizia, retail, studi medici, ecc.) a meno che l'utente non lo chieda
+esplicitamente.
+`.trim(),
+};
 
 /* destinatari che ricevono i dati del form */
 const RECIPIENTS = [
@@ -623,16 +657,16 @@ export function chatSummaryHtml({ page, messages }) {
    sul primo, si tenta subito il secondo invece di far fallire la chat */
 const GEMINI_MODELS = ['gemini-3.6-flash', 'gemini-3.5-flash'];
 
-async function callGemini(env, model, contents) {
+async function callGemini(env, model, systemText, contents) {
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        system_instruction: { parts: [{ text: KNOWLEDGE }] },
+        system_instruction: { parts: [{ text: systemText }] },
         contents,
-        generationConfig: { temperature: 0.4, maxOutputTokens: 500 },
+        generationConfig: { temperature: 0.4, maxOutputTokens: 1200 },
       }),
     },
   );
@@ -650,7 +684,8 @@ async function callGemini(env, model, contents) {
   return text.trim();
 }
 
-async function askGemini(env, messages) {
+async function askGemini(env, page, messages) {
+  const systemText = `${KNOWLEDGE}\n\n${PAGE_FOCUS[page] || PAGE_FOCUS.home}`;
   const contents = messages
     .filter((m) => m.role === 'user' || m.role === 'assistant')
     .map((m) => ({
@@ -664,7 +699,7 @@ async function askGemini(env, messages) {
        temporanei, un secondo tentativo a distanza di un attimo spesso basta */
     for (let attempt = 0; attempt < 2; attempt++) {
       try {
-        return await callGemini(env, model, contents);
+        return await callGemini(env, model, systemText, contents);
       } catch (err) {
         lastErr = err;
         const retryable = err.status === 503 || err.status === 429;
@@ -692,7 +727,7 @@ async function handleChat(request, env, origin) {
   }
 
   try {
-    const reply = await askGemini(env, messages);
+    const reply = await askGemini(env, page, messages);
     return json({ ok: true, reply }, 200, origin);
   } catch (err) {
     /* finisce nei Log del Worker (dashboard Cloudflare → Logs → Begin log

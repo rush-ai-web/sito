@@ -15,6 +15,82 @@ const LOGO = {
   ristorazione: { light: './rush-logo-orange.webp', dark: './rush-logo-orange-dark.webp' },
 };
 
+/* mini-markdown per le risposte AI: **grassetto**, elenchi puntati/numerati e
+   paragrafi — niente librerie esterne, basta quello che Gemini produce davvero */
+function formatBold(line, keyPrefix) {
+  const parts = line.split(/(\*\*[^*]+\*\*)/g).filter(Boolean);
+  return parts.map((part, i) =>
+    part.startsWith('**') && part.endsWith('**') ? (
+      <strong key={`${keyPrefix}-${i}`}>{part.slice(2, -2)}</strong>
+    ) : (
+      <span key={`${keyPrefix}-${i}`}>{part}</span>
+    ),
+  );
+}
+
+function renderMessage(text) {
+  const lines = String(text || '').replace(/\r\n/g, '\n').split('\n');
+  const blocks = [];
+  let para = [];
+  let list = null; // { type: 'ul' | 'ol', items: [] }
+
+  const flushPara = () => {
+    if (para.length) {
+      blocks.push({ type: 'p', text: para.join(' ') });
+      para = [];
+    }
+  };
+  const flushList = () => {
+    if (list) {
+      blocks.push(list);
+      list = null;
+    }
+  };
+
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) {
+      flushPara();
+      flushList();
+      continue;
+    }
+    const numbered = line.match(/^\d+[.)]\s+(.*)/);
+    const bulleted = line.match(/^[-*•]\s+(.*)/);
+    if (numbered) {
+      flushPara();
+      if (!list || list.type !== 'ol') {
+        flushList();
+        list = { type: 'ol', items: [] };
+      }
+      list.items.push(numbered[1]);
+    } else if (bulleted) {
+      flushPara();
+      if (!list || list.type !== 'ul') {
+        flushList();
+        list = { type: 'ul', items: [] };
+      }
+      list.items.push(bulleted[1]);
+    } else {
+      flushList();
+      para.push(line);
+    }
+  }
+  flushPara();
+  flushList();
+
+  return blocks.map((block, bi) => {
+    if (block.type === 'p') return <p key={bi}>{formatBold(block.text, bi)}</p>;
+    const Tag = block.type;
+    return (
+      <Tag key={bi}>
+        {block.items.map((item, ii) => (
+          <li key={ii}>{formatBold(item, `${bi}-${ii}`)}</li>
+        ))}
+      </Tag>
+    );
+  });
+}
+
 const SUGGESTS = {
   home: [
     'Come funziona il metodo di lavoro?',
@@ -265,7 +341,7 @@ export default function Fab({ page = 'home' }) {
               ) : (
                 messages.map((m, i) => (
                   <div key={i} className={`chat-panel__msg chat-panel__msg--${m.role}`}>
-                    {m.content}
+                    {m.role === 'assistant' ? renderMessage(m.content) : m.content}
                   </div>
                 ))
               )}
