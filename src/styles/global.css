@@ -3172,6 +3172,15 @@ main {
    ThemeSwitch - pulsante circolare fisso in basso a sinistra,
    stessa altezza del FAB (47px). Icona sola: luna in light, sole in dark.
    ============================================================ */
+/* con la chat aperta il toggle chiaro/scuro e il FAB restano dietro il
+   pannello (z-index 110 > 91) e si vedono comunque: li nascondiamo */
+html.chat-open .tsw,
+html.chat-open .fab {
+  opacity: 0 !important;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .tsw {
   position: fixed;
   bottom: 22px;

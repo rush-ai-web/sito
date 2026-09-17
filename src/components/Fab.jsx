@@ -164,8 +164,10 @@ export default function Fab({ page = 'home' }) {
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
+    document.documentElement.classList.toggle('chat-open', open);
     return () => {
       document.body.style.overflow = '';
+      document.documentElement.classList.remove('chat-open');
     };
   }, [open]);
 
@@ -190,6 +192,15 @@ export default function Fab({ page = 'home' }) {
       fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true }).catch(() => {});
     }
   }, [messages, page]);
+
+  /* se la conversazione resta ferma 5 minuti (nessun nuovo messaggio, chat
+     magari ancora aperta ma dimenticata lì) mandiamo comunque il riepilogo:
+     non serve aspettare che l'utente chiuda o cambi pagina */
+  useEffect(() => {
+    if (!hasUserMessageRef.current) return undefined;
+    const t = setTimeout(sendSummary, 5 * 60 * 1000);
+    return () => clearTimeout(t);
+  }, [messages, sendSummary]);
 
   /* rete di sicurezza: se l'utente chiude la scheda invece di premere la X */
   useEffect(() => {
