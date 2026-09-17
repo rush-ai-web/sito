@@ -657,11 +657,13 @@ export function chatSummaryHtml({ page, messages }) {
    di sistema porta l'unica fonte di verità (costante KNOWLEDGE): a Gemini è
    vietato inventare prezzi o funzioni che non ci sono.
    ------------------------------------------------------------------ */
-/* modello principale + due riserve: se Google è sovraccarico (503) sul primo,
-   si passa subito al successivo invece di far fallire la chat. Tre modelli
-   diversi hanno pool di capacità separati, quindi un sovraccarico su tutti e
-   tre insieme è estremamente raro anche nei picchi di traffico globale */
-const GEMINI_MODELS = ['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-3.7-flash'];
+/* usiamo gli ALIAS stabili mantenuti da Google, non nomi di versione fissi:
+   - gemini-flash-latest      → punta sempre al Flash stabile del momento
+   - gemini-flash-lite-latest → variante più leggera, meno soggetta a picchi
+   Così non si rischia mai un "modello non trovato" quando Google ritira una
+   vecchia versione: gli alias vengono aggiornati da loro. Se il primo è
+   sovraccarico si passa al secondo. */
+const GEMINI_MODELS = ['gemini-flash-latest', 'gemini-flash-lite-latest'];
 
 /* ogni tentativo ha un tetto massimo di attesa: durante un sovraccarico
    Google a volte non fallisce subito, resta "appeso" a lungo prima di
