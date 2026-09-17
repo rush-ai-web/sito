@@ -3446,13 +3446,6 @@ html.chat-open body {
   background-color: var(--bg);
   border-left: 1px solid var(--hairline-strong);
   box-shadow: var(--sh-3);
-  /* quando compare la tastiera, il layout viewport (e quindi 100dvh) si
-     restringe: con interactive-widget=resizes-content il browser lo fa in
-     automatico, questa transizione lo rende un movimento fluido invece di
-     uno scatto istantaneo. Niente JS/VisualViewport: lasciamo fare al
-     browser, che non entra in conflitto con lo scroll-to-focus nativo di
-     iOS (la causa dello sfarfallio visto nel video). */
-  transition: height 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .chat-panel__head {
@@ -3511,6 +3504,10 @@ html.chat-open body {
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   padding: 18px 20px;
+  /* spazio riservato al footer, che ora è fuori dal flusso (position:
+     absolute) per poter salire con la tastiera senza mai far ricalcolare
+     l'altezza della lista: questo padding tiene i messaggi sopra di lui */
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -3663,9 +3660,19 @@ html.chat-open body {
 }
 
 .chat-panel__foot {
-  flex: none;
+  /* fuori dal flusso flex: la lista sopra non si ricalcola mai quando
+     questo si sposta. Ancorato in fondo al pannello, sale SOLO lui quando
+     compare la tastiera (vedi --kb-inset, impostato in Fab.jsx via
+     VisualViewport), con una transizione fluida sul transform. */
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   padding: 14px 20px calc(18px + env(safe-area-inset-bottom, 0px));
+  background-color: var(--bg);
   border-top: 1px solid var(--hairline);
+  transform: translateY(calc(-1 * var(--kb-inset, 0px)));
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .chat-panel__row {

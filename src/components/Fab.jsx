@@ -182,6 +182,26 @@ export default function Fab({ page = 'home' }) {
     };
   }, [open]);
 
+  /* pannello e lista messaggi restano fissi (niente interactive-widget, niente
+     ridimensionamento del layout): solo il footer si sposta, di quanto la
+     tastiera copre lo schermo, via --kb-inset. Solo 'resize' (non 'scroll'),
+     per non litigare con l'eventuale scroll-to-focus nativo del browser. */
+  useEffect(() => {
+    if (!open || !window.visualViewport) return undefined;
+    const vv = window.visualViewport;
+    const root = document.documentElement;
+    const update = () => {
+      const inset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+      root.style.setProperty('--kb-inset', `${inset}px`);
+    };
+    update();
+    vv.addEventListener('resize', update);
+    return () => {
+      vv.removeEventListener('resize', update);
+      root.style.removeProperty('--kb-inset');
+    };
+  }, [open]);
+
 
   useEffect(() => {
     const el = listRef.current;

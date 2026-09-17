@@ -763,7 +763,16 @@ async function handleChat(request, env, origin) {
        stream) così la causa reale è visibile senza dover aprire gli
        strumenti sviluppatore del browser. */
     console.error('handleChat failed:', err);
-    return json({ ok: false, error: 'AI non disponibile', detail: String(err) }, 502, origin);
+    /* mai un errore a schermo: se anche tutti i modelli falliscono (rete
+       di Google giù, chiave scaduta, ecc.) rispondiamo comunque con un
+       messaggio caldo, coerente col brand — per l'utente è una risposta
+       come le altre, non un errore tecnico */
+    const contact = page === 'ristorazione' ? 'il form "Prenota una demo"' : 'il form "Contatti"';
+    const fallback =
+      'In questo momento sto avendo qualche difficoltà a elaborare una risposta precisa. ' +
+      `Nel frattempo scrivici a info@rush-ai.it, oppure usa ${contact} sul sito: ti rispondiamo di persona il prima possibile. ` +
+      'Vuoi provare a riformulare la domanda in un altro modo?';
+    return json({ ok: true, reply: fallback }, 200, origin);
   }
 }
 
