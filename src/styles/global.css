@@ -3435,9 +3435,13 @@ html.chat-open body {
 
 .chat-panel {
   position: fixed;
+  /* top+bottom (non height:100dvh): ancorato al viewport di layout, che la
+     tastiera NON restringe. Con 100dvh il pannello si rimpiccioliva quando
+     appariva la tastiera (dvh è dinamico), sembrando "scendere dall'alto".
+     Così invece resta immobile e sale solo il footer (--kb-inset). */
   top: 0;
+  bottom: 0;
   right: 0;
-  height: 100dvh;
   z-index: 91;
   width: min(420px, 100vw);
   display: flex;

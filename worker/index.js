@@ -666,8 +666,10 @@ const GEMINI_MODELS = ['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-3.7-flash
 /* ogni tentativo ha un tetto massimo di attesa: durante un sovraccarico
    Google a volte non fallisce subito, resta "appeso" a lungo prima di
    rispondere — senza questo timeout la chat sembra bloccata a scrivere
-   per sempre invece di passare al modello successivo */
-const GEMINI_TIMEOUT_MS = 12000;
+   per sempre invece di passare al modello successivo. Tenuto largo (25s)
+   perché l'obiettivo è che una risposta arrivi SEMPRE, anche lenta,
+   piuttosto che scattare troppo presto su un altro tentativo */
+const GEMINI_TIMEOUT_MS = 25000;
 
 async function callGemini(env, model, systemText, contents) {
   const controller = new AbortController();
@@ -726,16 +728,20 @@ async function askGemini(env, page, messages) {
       parts: [{ text: String(m.content || '').slice(0, 4000) }],
     }));
 
-  /* un tentativo per modello, con timeout: tre modelli diversi valgono già
-     come "retry" su pool di capacità separati, non serve raddoppiare anche
-     i tentativi sullo stesso modello (allungherebbe solo l'attesa) */
+  /* obiettivo: una risposta arriva SEMPRE. Facciamo due giri completi su
+     tutti e tre i modelli (6 tentativi in totale), con una breve pausa tra
+     un giro e l'altro per dare tempo a Google di riprendersi da un picco.
+     Solo se davvero tutti e 6 falliscono si arriva al fallback. */
   let lastErr;
-  for (const model of GEMINI_MODELS) {
-    try {
-      return await callGemini(env, model, systemText, contents);
-    } catch (err) {
-      lastErr = err;
+  for (let round = 0; round < 2; round++) {
+    for (const model of GEMINI_MODELS) {
+      try {
+        return await callGemini(env, model, systemText, contents);
+      } catch (err) {
+        lastErr = err;
+      }
     }
+    if (round === 0) await new Promise((r) => setTimeout(r, 600));
   }
   throw lastErr;
 }

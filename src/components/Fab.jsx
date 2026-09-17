@@ -288,7 +288,7 @@ export default function Fab({ page = 'home' }) {
        suo timeout interno, questo è solo la rete di sicurezza finale perché
        la chat non resti a "scrivere" all'infinito in nessun caso */
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 45000);
+    const timeout = setTimeout(() => controller.abort(), 70000);
 
     try {
       const res = await fetch(`${CONTACT_ENDPOINT}/chat`, {
