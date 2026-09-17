@@ -619,18 +619,13 @@ export function chatSummaryHtml({ page, messages }) {
    di sistema porta l'unica fonte di verità (costante KNOWLEDGE): a Gemini è
    vietato inventare prezzi o funzioni che non ci sono.
    ------------------------------------------------------------------ */
-const GEMINI_MODEL = 'gemini-3.6-flash';
+/* modello principale + riserva più leggera: se Google è sovraccarico (503)
+   sul primo, si tenta subito il secondo invece di far fallire la chat */
+const GEMINI_MODELS = ['gemini-3.6-flash', 'gemini-3.5-flash-lite'];
 
-async function askGemini(env, messages) {
-  const contents = messages
-    .filter((m) => m.role === 'user' || m.role === 'assistant')
-    .map((m) => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: String(m.content || '').slice(0, 4000) }],
-    }));
-
+async function callGemini(env, model, contents) {
   const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${env.GEMINI_API_KEY}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -644,13 +639,41 @@ async function askGemini(env, messages) {
 
   if (!res.ok) {
     const detail = await res.text();
-    throw new Error(`Gemini error ${res.status}: ${detail}`);
+    const err = new Error(`Gemini error ${res.status}: ${detail}`);
+    err.status = res.status;
+    throw err;
   }
 
   const data = await res.json();
   const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('') || '';
   if (!text.trim()) throw new Error('Gemini: risposta vuota');
   return text.trim();
+}
+
+async function askGemini(env, messages) {
+  const contents = messages
+    .filter((m) => m.role === 'user' || m.role === 'assistant')
+    .map((m) => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: String(m.content || '').slice(0, 4000) }],
+    }));
+
+  let lastErr;
+  for (const model of GEMINI_MODELS) {
+    /* un solo retry per modello: i sovraccarichi (503) sono quasi sempre
+       temporanei, un secondo tentativo a distanza di un attimo spesso basta */
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        return await callGemini(env, model, contents);
+      } catch (err) {
+        lastErr = err;
+        const retryable = err.status === 503 || err.status === 429;
+        if (!retryable) break;
+        if (attempt === 0) await new Promise((r) => setTimeout(r, 400));
+      }
+    }
+  }
+  throw lastErr;
 }
 
 /* POST /chat — { page: 'home'|'ristorazione', messages: [{role, content}] } */
