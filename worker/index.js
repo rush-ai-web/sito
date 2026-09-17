@@ -619,7 +619,7 @@ export function chatSummaryHtml({ page, messages }) {
    di sistema porta l'unica fonte di verità (costante KNOWLEDGE): a Gemini è
    vietato inventare prezzi o funzioni che non ci sono.
    ------------------------------------------------------------------ */
-const GEMINI_MODEL = 'gemini-2.5-flash';
+const GEMINI_MODEL = 'gemini-3.6-flash';
 
 async function askGemini(env, messages) {
   const contents = messages
