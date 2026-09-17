@@ -52,7 +52,7 @@ export default function ChatRisto() {
         className="head--chat-risto"
         sub={
           <>
-            Chiedi come parli e ti risponde con i numeri veri, ma non aspetta che tu chieda:{' '}
+            Le parli come parleresti a una persona e ti risponde con i numeri veri, ma non aspetta che tu chieda:{' '}
             <strong>accede da sola a fatture, magazzino, vendite, cassa, ricette e personale,
             li analizza e ti avvisa se qualcosa non torna</strong>, con un consiglio pronto,
             prima ancora che tu te ne accorga.

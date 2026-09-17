@@ -68,9 +68,14 @@ export function useAppReady() {
 
 /* ---------- Viewport: mobile vs desktop ---------- */
 export function useIsMobile(query = '(max-width: 760px)') {
-  const [is, setIs] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia(query).matches,
-  );
+  /* Parte sempre da false, uguale al render lato server: la pagina è
+     prerenderizzata senza window, quindi calcolare il match subito sul
+     client (prima che l'effect corregga il valore) produce un mismatch
+     tra il markup statico e il primo render idratato. Su schermi piccoli
+     questo faceva "lampeggiare" gli elementi animati allo scroll: il
+     valore giusto arriva un istante dopo il paint iniziale, prima che
+     l'utente possa notare la differenza. */
+  const [is, setIs] = useState(false);
   useEffect(() => {
     const mq = window.matchMedia(query);
     const on = () => setIs(mq.matches);

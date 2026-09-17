@@ -24,7 +24,7 @@ const COLONNE = [
     'Contatti',
     [
       ['Parliamo del tuo progetto', '#contatti'],
-      ['info@rush.it', 'mailto:info@rush.it'],
+      ['info@rush-ai.it', 'mailto:info@rush-ai.it'],
     ],
   ],
 ];
@@ -55,7 +55,7 @@ export default function Footer({ logoVariant = 'default', columns = COLONNE }) {
         itemProp="logo"
         href="https://rush-ai.it/favicon.png"
       />
-      <meta itemProp="email" content="info@rush.it" />
+      <meta itemProp="email" content="info@rush-ai.it" />
       <div className="wrap">
         <div className="footer__grid">
           <div>
