@@ -3446,6 +3446,11 @@ html.chat-open body {
   background-color: var(--bg);
   border-left: 1px solid var(--hairline-strong);
   box-shadow: var(--sh-3);
+  /* la tastiera mobile non deve mai ridimensionare/far scattare tutto il
+     pannello: solo questo padding si muove (vedi Fab.jsx, VisualViewport),
+     così l'input sale in modo fluido mentre il resto resta fermo */
+  padding-bottom: var(--kb-inset, 0px);
+  transition: padding-bottom 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .chat-panel__head {

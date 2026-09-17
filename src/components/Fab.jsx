@@ -182,6 +182,28 @@ export default function Fab({ page = 'home' }) {
     };
   }, [open]);
 
+  /* quando compare la tastiera, spostiamo solo il "fondo" del pannello (via
+     --kb-inset, un padding-bottom con transizione) invece di far
+     ridimensionare di scatto tutto il pannello: il pannello resta fermo,
+     solo l'area di scrittura sale in modo fluido. */
+  useEffect(() => {
+    if (!open || !window.visualViewport) return undefined;
+    const vv = window.visualViewport;
+    const root = document.documentElement;
+    const update = () => {
+      const inset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+      root.style.setProperty('--kb-inset', `${inset}px`);
+    };
+    update();
+    vv.addEventListener('resize', update);
+    vv.addEventListener('scroll', update);
+    return () => {
+      vv.removeEventListener('resize', update);
+      vv.removeEventListener('scroll', update);
+      root.style.removeProperty('--kb-inset');
+    };
+  }, [open]);
+
   useEffect(() => {
     const el = listRef.current;
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
