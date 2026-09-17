@@ -1,24 +1,43 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUp, Sparkles, X } from 'lucide-react';
 import { DUR, EASE_MODAL } from '../lib/motion';
 import { useHotkey } from '../lib/hooks';
+import { ThemeCtx } from './ui';
 
 /* stesso endpoint del form di contatto: /chat e /chat-summary vivono
    sullo stesso Worker, vedi worker/index.js e worker/README.md. */
 const CONTACT_ENDPOINT =
   import.meta.env.VITE_CONTACT_ENDPOINT || 'https://rush-contact.withered-voice-c323.workers.dev';
 
-const WELCOME = {
-  role: 'assistant',
-  content:
-    "Ciao! Sono Rush AI: chiedimi pure come funziona il sistema, i prezzi o i tempi. Rispondo in base a quello che c'è scritto su questo sito.",
+const LOGO = {
+  home: { light: './rush-logo.png', dark: './rush-logo-dark.png' },
+  ristorazione: { light: './rush-logo-orange.webp', dark: './rush-logo-orange-dark.webp' },
+};
+
+const SUGGESTS = {
+  home: [
+    'Come funziona il metodo di lavoro?',
+    'Quanto costa un sistema su misura?',
+    'Quanto tempo serve per partire?',
+    'Come garantite la sicurezza dei dati?',
+  ],
+  ristorazione: [
+    'Quanto costa Rush Ristorazione?',
+    'Funziona con la cassa che uso già?',
+    'Cosa è incluso nel canone base?',
+    'Posso vedere una demo senza impegno?',
+  ],
 };
 
 export default function Fab({ page = 'home' }) {
+  const theme = useContext(ThemeCtx);
+  const logoSrc = LOGO[page]?.[theme === 'dark' ? 'dark' : 'light'] || LOGO.home.light;
+  const suggests = SUGGESTS[page] || SUGGESTS.home;
+
   const [open, setOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const [messages, setMessages] = useState([WELCOME]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -114,9 +133,9 @@ export default function Fab({ page = 'home' }) {
     sendSummary();
   };
 
-  const send = async (e) => {
-    e.preventDefault();
-    const text = input.trim();
+  const send = async (e, suggested) => {
+    e?.preventDefault();
+    const text = (suggested ?? input).trim();
     if (!text || loading) return;
 
     hasUserMessageRef.current = true;
@@ -209,9 +228,10 @@ export default function Fab({ page = 'home' }) {
             aria-label="Chiedi a Rush"
           >
             <div className="chat-panel__head">
-              <span className="chat-panel__title">
-                <Sparkles size={16} strokeWidth={2} />
-                Rush AI
+              <span className="chat-panel__brand">
+                <Sparkles size={15} strokeWidth={2} className="chat-panel__brand-ic" />
+                <img src={logoSrc} alt="Rush" className="chat-panel__brand-logo" />
+                <span className="chat-panel__brand-ai">AI</span>
               </span>
               <button type="button" className="chat-panel__close" onClick={closeChat} aria-label="Chiudi">
                 <X size={18} strokeWidth={2.1} />
@@ -219,11 +239,36 @@ export default function Fab({ page = 'home' }) {
             </div>
 
             <div className="chat-panel__list" ref={listRef}>
-              {messages.map((m, i) => (
-                <div key={i} className={`chat-panel__msg chat-panel__msg--${m.role}`}>
-                  {m.content}
+              {messages.length === 0 ? (
+                <div className="chat-panel__empty">
+                  <span className="chat-panel__empty-ic" aria-hidden="true">
+                    <Sparkles size={26} strokeWidth={1.75} />
+                  </span>
+                  <h3 className="chat-panel__empty-t">Cosa vuoi sapere?</h3>
+                  <p className="chat-panel__empty-d">
+                    Scrivi una domanda in italiano normale: rispondo in base a quello che trovi su
+                    questo sito.
+                  </p>
+                  <div className="chat-panel__suggests">
+                    {suggests.map((s) => (
+                      <button
+                        type="button"
+                        key={s}
+                        className="chat-panel__suggest"
+                        onClick={(e) => send(e, s)}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              ))}
+              ) : (
+                messages.map((m, i) => (
+                  <div key={i} className={`chat-panel__msg chat-panel__msg--${m.role}`}>
+                    {m.content}
+                  </div>
+                ))
+              )}
               {loading && (
                 <div className="chat-panel__msg chat-panel__msg--assistant chat-panel__msg--typing">
                   <span className="chat-panel__dots" aria-hidden="true">
