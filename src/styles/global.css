@@ -3181,6 +3181,16 @@ html.chat-open .fab {
   pointer-events: none;
 }
 
+/* blocco scroll dello sfondo: su mobile il solo overflow:hidden sul body
+   spesso non basta (iOS continua a far scrollare la pagina sotto il dito),
+   quindi blocchiamo anche l'html */
+html.chat-open,
+html.chat-open body {
+  overflow: hidden;
+  height: 100%;
+  overscroll-behavior: none;
+}
+
 .tsw {
   position: fixed;
   bottom: 22px;
@@ -3491,6 +3501,8 @@ html.chat-open .fab {
 .chat-panel__list {
   flex: 1;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   padding: 18px 20px;
   display: flex;
   flex-direction: column;
