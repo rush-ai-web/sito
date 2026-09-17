@@ -653,9 +653,11 @@ export function chatSummaryHtml({ page, messages }) {
    di sistema porta l'unica fonte di verità (costante KNOWLEDGE): a Gemini è
    vietato inventare prezzi o funzioni che non ci sono.
    ------------------------------------------------------------------ */
-/* modello principale + riserva più leggera: se Google è sovraccarico (503)
-   sul primo, si tenta subito il secondo invece di far fallire la chat */
-const GEMINI_MODELS = ['gemini-3.6-flash', 'gemini-3.5-flash'];
+/* modello principale + due riserve: se Google è sovraccarico (503) sul primo,
+   si passa subito al successivo invece di far fallire la chat. Tre modelli
+   diversi hanno pool di capacità separati, quindi un sovraccarico su tutti e
+   tre insieme è estremamente raro anche nei picchi di traffico globale */
+const GEMINI_MODELS = ['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-3.7-flash'];
 
 async function callGemini(env, model, systemText, contents) {
   const res = await fetch(
