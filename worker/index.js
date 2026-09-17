@@ -621,7 +621,7 @@ export function chatSummaryHtml({ page, messages }) {
    ------------------------------------------------------------------ */
 /* modello principale + riserva più leggera: se Google è sovraccarico (503)
    sul primo, si tenta subito il secondo invece di far fallire la chat */
-const GEMINI_MODELS = ['gemini-3.6-flash', 'gemini-3.5-flash-lite'];
+const GEMINI_MODELS = ['gemini-3.6-flash', 'gemini-3.5-flash'];
 
 async function callGemini(env, model, contents) {
   const res = await fetch(
