@@ -152,10 +152,10 @@ export default function Fab({ page = 'home' }) {
         body: JSON.stringify({ page, messages: next }),
       });
       const data = await res.json();
-      if (!res.ok || !data.ok) throw new Error(data.error || 'errore');
+      if (!res.ok || !data.ok) throw new Error(data.detail || data.error || 'errore sconosciuto');
       setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
-    } catch {
-      setError(true);
+    } catch (err) {
+      setError(err?.message || String(err));
     } finally {
       setLoading(false);
     }
@@ -280,6 +280,7 @@ export default function Fab({ page = 'home' }) {
                 <div className="chat-panel__msg chat-panel__msg--assistant chat-panel__msg--error">
                   Non riesco a rispondere in questo momento. Scrivici a{' '}
                   <a href="mailto:info@rush-ai.it">info@rush-ai.it</a> oppure usa il form di contatto.
+                  <span className="chat-panel__msg-detail">{error}</span>
                 </div>
               )}
             </div>
