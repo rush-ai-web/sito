@@ -3446,11 +3446,13 @@ html.chat-open body {
   background-color: var(--bg);
   border-left: 1px solid var(--hairline-strong);
   box-shadow: var(--sh-3);
-  /* la tastiera mobile non deve mai ridimensionare/far scattare tutto il
-     pannello: solo questo padding si muove (vedi Fab.jsx, VisualViewport),
-     così l'input sale in modo fluido mentre il resto resta fermo */
-  padding-bottom: var(--kb-inset, 0px);
-  transition: padding-bottom 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  /* quando compare la tastiera, il layout viewport (e quindi 100dvh) si
+     restringe: con interactive-widget=resizes-content il browser lo fa in
+     automatico, questa transizione lo rende un movimento fluido invece di
+     uno scatto istantaneo. Niente JS/VisualViewport: lasciamo fare al
+     browser, che non entra in conflitto con lo scroll-to-focus nativo di
+     iOS (la causa dello sfarfallio visto nel video). */
+  transition: height 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .chat-panel__head {
