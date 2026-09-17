@@ -3679,6 +3679,7 @@ html.chat-open body {
      quando l'input riceve il focus, causando l'effetto "sgranato/zoomato" */
   font-size: 16px;
   outline: none;
+  touch-action: manipulation;
 }
 .chat-panel__input:focus {
   border-color: var(--accent);

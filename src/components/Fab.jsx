@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUp, Sparkles, X } from 'lucide-react';
 import { DUR, EASE_MODAL } from '../lib/motion';
-import { useHotkey } from '../lib/hooks';
+import { useHotkey, useIsMobile } from '../lib/hooks';
 import { ThemeCtx } from './ui';
 
 /* stesso endpoint del form di contatto: /chat e /chat-summary vivono
@@ -110,6 +110,8 @@ export default function Fab({ page = 'home' }) {
   const theme = useContext(ThemeCtx);
   const logoSrc = LOGO[page]?.[theme === 'dark' ? 'dark' : 'light'] || LOGO.home.light;
   const suggests = SUGGESTS[page] || SUGGESTS.home;
+  /* stessa soglia del CSS mobile del pannello (@media max-width: 560px) */
+  const isMobile = useIsMobile('(max-width: 560px)');
 
   const [open, setOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -215,6 +217,17 @@ export default function Fab({ page = 'home' }) {
     };
   }, [sendSummary]);
 
+  /* iOS Safari a volte resta "zoomato" sulla pagina dopo che l'input perde il
+     focus e la tastiera si chiude: forzare per un istante maximum-scale=1 e
+     poi ripristinare il viewport originale sistema lo zoom residuo */
+  const resetIosZoom = () => {
+    const viewport = document.querySelector('meta[name="viewport"]');
+    if (!viewport) return;
+    const original = viewport.getAttribute('content');
+    viewport.setAttribute('content', `${original}, maximum-scale=1`);
+    setTimeout(() => viewport.setAttribute('content', original), 350);
+  };
+
   const closeChat = () => {
     setOpen(false);
     sendSummary();
@@ -315,9 +328,9 @@ export default function Fab({ page = 'home' }) {
           <motion.aside
             className="chat-panel"
             onClick={(e) => e.stopPropagation()}
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
+            initial={isMobile ? { y: '100%' } : { x: '100%' }}
+            animate={isMobile ? { y: 0 } : { x: 0 }}
+            exit={isMobile ? { y: '100%' } : { x: '100%' }}
             transition={{ duration: 0.38, ease: EASE_MODAL }}
             role="dialog"
             aria-modal="true"
@@ -389,8 +402,9 @@ export default function Fab({ page = 'home' }) {
                   placeholder="Scrivi una domanda…"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
+                  onBlur={resetIosZoom}
                   disabled={loading}
-                  autoFocus
+                  autoFocus={!isMobile}
                 />
                 <button type="submit" className="chat-panel__send" disabled={loading || !input.trim()} aria-label="Invia">
                   <ArrowUp size={16} strokeWidth={2.4} />
