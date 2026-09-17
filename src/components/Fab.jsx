@@ -232,18 +232,27 @@ export default function Fab({ page = 'home' }) {
     setError(false);
     setLoading(true);
 
+    /* tetto massimo di attesa lato browser: il Worker prova più modelli con un
+       suo timeout interno, questo è solo la rete di sicurezza finale perché
+       la chat non resti a "scrivere" all'infinito in nessun caso */
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 45000);
+
     try {
       const res = await fetch(`${CONTACT_ENDPOINT}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ page, messages: next }),
+        signal: controller.signal,
       });
       const data = await res.json();
       if (!res.ok || !data.ok) throw new Error(data.detail || data.error || 'errore sconosciuto');
       setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
     } catch (err) {
-      setError(err?.message || String(err));
+      const isTimeout = err?.name === 'AbortError';
+      setError(isTimeout ? 'Tempo di attesa scaduto' : err?.message || String(err));
     } finally {
+      clearTimeout(timeout);
       setLoading(false);
     }
   };

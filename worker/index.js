@@ -659,31 +659,51 @@ export function chatSummaryHtml({ page, messages }) {
    tre insieme è estremamente raro anche nei picchi di traffico globale */
 const GEMINI_MODELS = ['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-3.7-flash'];
 
+/* ogni tentativo ha un tetto massimo di attesa: durante un sovraccarico
+   Google a volte non fallisce subito, resta "appeso" a lungo prima di
+   rispondere — senza questo timeout la chat sembra bloccata a scrivere
+   per sempre invece di passare al modello successivo */
+const GEMINI_TIMEOUT_MS = 12000;
+
 async function callGemini(env, model, systemText, contents) {
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        system_instruction: { parts: [{ text: systemText }] },
-        contents,
-        generationConfig: { temperature: 0.4, maxOutputTokens: 1200 },
-      }),
-    },
-  );
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: systemText }] },
+          contents,
+          generationConfig: { temperature: 0.4, maxOutputTokens: 1200 },
+        }),
+        signal: controller.signal,
+      },
+    );
 
-  if (!res.ok) {
-    const detail = await res.text();
-    const err = new Error(`Gemini error ${res.status}: ${detail}`);
-    err.status = res.status;
+    if (!res.ok) {
+      const detail = await res.text();
+      const err = new Error(`Gemini error ${res.status}: ${detail}`);
+      err.status = res.status;
+      throw err;
+    }
+
+    const data = await res.json();
+    const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('') || '';
+    if (!text.trim()) throw new Error('Gemini: risposta vuota');
+    return text.trim();
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      const timeoutErr = new Error(`Gemini timeout dopo ${GEMINI_TIMEOUT_MS}ms (${model})`);
+      timeoutErr.status = 503; // trattato come sovraccarico: si passa al modello successivo
+      throw timeoutErr;
+    }
     throw err;
+  } finally {
+    clearTimeout(timeout);
   }
-
-  const data = await res.json();
-  const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('') || '';
-  if (!text.trim()) throw new Error('Gemini: risposta vuota');
-  return text.trim();
 }
 
 async function askGemini(env, page, messages) {
@@ -695,19 +715,15 @@ async function askGemini(env, page, messages) {
       parts: [{ text: String(m.content || '').slice(0, 4000) }],
     }));
 
+  /* un tentativo per modello, con timeout: tre modelli diversi valgono già
+     come "retry" su pool di capacità separati, non serve raddoppiare anche
+     i tentativi sullo stesso modello (allungherebbe solo l'attesa) */
   let lastErr;
   for (const model of GEMINI_MODELS) {
-    /* un solo retry per modello: i sovraccarichi (503) sono quasi sempre
-       temporanei, un secondo tentativo a distanza di un attimo spesso basta */
-    for (let attempt = 0; attempt < 2; attempt++) {
-      try {
-        return await callGemini(env, model, systemText, contents);
-      } catch (err) {
-        lastErr = err;
-        const retryable = err.status === 503 || err.status === 429;
-        if (!retryable) break;
-        if (attempt === 0) await new Promise((r) => setTimeout(r, 400));
-      }
+    try {
+      return await callGemini(env, model, systemText, contents);
+    } catch (err) {
+      lastErr = err;
     }
   }
   throw lastErr;
