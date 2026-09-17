@@ -227,6 +227,15 @@ export default function Fab({ page = 'home' }) {
     };
   }, [sendSummary]);
 
+  /* la primissima volta che un input riceve il focus in una pagina, Safari a
+     volte scrolla comunque la pagina sotto (anche col pannello fisso) prima
+     di "imparare" il layout: le volte successive non lo fa più. Riportiamo
+     subito lo scroll a 0 per eliminare quel primo scatto isolato. */
+  const pinScrollOnFocus = () => {
+    window.scrollTo(0, 0);
+    requestAnimationFrame(() => window.scrollTo(0, 0));
+  };
+
   /* iOS Safari a volte resta "zoomato" sulla pagina dopo che l'input perde il
      focus e la tastiera si chiude: forzare per un istante maximum-scale=1 e
      poi ripristinare il viewport originale sistema lo zoom residuo */
@@ -412,6 +421,7 @@ export default function Fab({ page = 'home' }) {
                   placeholder="Scrivi una domanda…"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
+                  onFocus={pinScrollOnFocus}
                   onBlur={resetIosZoom}
                   disabled={loading}
                   autoFocus={!isMobile}

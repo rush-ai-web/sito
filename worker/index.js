@@ -681,7 +681,14 @@ async function callGemini(env, model, systemText, contents) {
         body: JSON.stringify({
           system_instruction: { parts: [{ text: systemText }] },
           contents,
-          generationConfig: { temperature: 0.4, maxOutputTokens: 1200 },
+          generationConfig: {
+            temperature: 0.4,
+            maxOutputTokens: 2000,
+            /* niente "ragionamento" interno: per rispondere a domande sul
+               sito non serve, e su alcuni modelli quei token nascosti
+               mangiavano budget alla risposta vera facendola troncare */
+            thinkingConfig: { thinkingBudget: 0 },
+          },
         }),
         signal: controller.signal,
       },
