@@ -1,12 +1,19 @@
 /**
- * Rush — endpoint contatti (Cloudflare Worker).
+ * Rush — endpoint contatti + chat AI (Cloudflare Worker).
  *
- * Riceve i dati del form dal sito (statico, su GitHub Pages) e invia
- * l'email con Resend ai destinatari del team. La API key di Resend vive
- * come "secret" del Worker (RESEND_API_KEY) e non è MAI esposta al browser.
+ * Tre funzioni sotto lo stesso Worker:
+ *  - POST /            → form di contatto (invariato), invia l'email con Resend.
+ *  - POST /chat        → risponde alle domande di "Chiedi a Rush" usando Gemini,
+ *                        con il contenuto del sito come unica fonte (knowledge.js).
+ *  - POST /chat-summary → a fine conversazione, invia un riepilogo via email agli
+ *                        stessi destinatari del form.
+ *
+ * Le chiavi (RESEND_API_KEY, GEMINI_API_KEY) vivono come "secret" del Worker
+ * e non sono MAI esposte al browser.
  *
  * Deploy: vedi worker/README.md
  */
+import { KNOWLEDGE } from './knowledge.js';
 
 /* destinatari che ricevono i dati del form */
 const RECIPIENTS = [
@@ -194,9 +201,177 @@ export function confirmHtml({ nome }) {
 </html>`;
 }
 
+/* ------------------------------------------------------------------
+   Riepilogo di una conversazione con "Chiedi a Rush" (widget chat).
+   Stesso stile scuro delle altre email, transcript in ordine.
+   ------------------------------------------------------------------ */
+export function chatSummaryHtml({ page, messages }) {
+  const rows = messages
+    .map(
+      (m) => `
+    <tr>
+      <td style="padding:0 0 3px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:${m.role === 'user' ? '#8aa4e6' : '#9a9a9e'};">${m.role === 'user' ? 'Visitatore' : 'Rush AI'}</td>
+    </tr>
+    <tr>
+      <td style="padding:0 0 18px;font-size:14.5px;line-height:1.55;color:#f5f5f7;">${esc(m.content).replace(/\n/g, '<br>')}</td>
+    </tr>`,
+    )
+    .join('');
+
+  return `<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="supported-color-schemes" content="dark light">
+<title>Riepilogo chat — Chiedi a Rush</title>
+<style>
+  [data-ogsc] .rush-bar { background-color: #17171a !important; }
+</style>
+</head>
+<body style="margin:0;padding:0;background:#0e0e10;">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Riepilogo di una conversazione con Chiedi a Rush (${esc(page)})</div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0e0e10;padding:28px 16px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#1d1d1f;border:1px solid rgba(255,255,255,.12);border-radius:18px;overflow:hidden;">
+          <tr>
+            <td align="center" bgcolor="#17171a" class="rush-bar" style="background-color:#17171a;padding:24px;">
+              <img src="https://rush-ai.it/rush-logo-dark.png" alt="Rush" height="26" style="height:26px;width:auto;display:block;">
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:30px 30px 8px;">
+              <p style="margin:0 0 4px;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:#8aa4e6;font-weight:700;">Riepilogo chat · Chiedi a Rush</p>
+              <h1 style="margin:0 0 24px;font-size:22px;line-height:1.25;color:#ffffff;font-weight:700;">Pagina: ${esc(page)}</h1>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                ${rows}
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:18px 30px 26px;border-top:1px solid rgba(255,255,255,.1);">
+              <p style="margin:0;font-size:12px;line-height:1.5;color:#9a9a9e;">Email automatica generata dal widget "Chiedi a Rush" su rush-ai.it. Il visitatore resta anonimo salvo che l'abbia scritto lui stesso in chat.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
+/* ------------------------------------------------------------------
+   Chiamata a Gemini (Google AI Studio, piano gratuito). Il messaggio
+   di sistema porta l'unica fonte di verità (knowledge.js): a Gemini è
+   vietato inventare prezzi o funzioni che non ci sono.
+   ------------------------------------------------------------------ */
+const GEMINI_MODEL = 'gemini-2.5-flash';
+
+async function askGemini(env, messages) {
+  const contents = messages
+    .filter((m) => m.role === 'user' || m.role === 'assistant')
+    .map((m) => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: String(m.content || '').slice(0, 4000) }],
+    }));
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${env.GEMINI_API_KEY}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: KNOWLEDGE }] },
+        contents,
+        generationConfig: { temperature: 0.4, maxOutputTokens: 500 },
+      }),
+    },
+  );
+
+  if (!res.ok) {
+    const detail = await res.text();
+    throw new Error(`Gemini error ${res.status}: ${detail}`);
+  }
+
+  const data = await res.json();
+  const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('') || '';
+  if (!text.trim()) throw new Error('Gemini: risposta vuota');
+  return text.trim();
+}
+
+/* POST /chat — { page: 'home'|'ristorazione', messages: [{role, content}] } */
+async function handleChat(request, env, origin) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ ok: false, error: 'Body non valido' }, 400, origin);
+  }
+
+  const page = body.page === 'ristorazione' ? 'ristorazione' : 'home';
+  const messages = Array.isArray(body.messages) ? body.messages.slice(-20) : [];
+  if (!messages.length) {
+    return json({ ok: false, error: 'Nessun messaggio' }, 422, origin);
+  }
+
+  try {
+    const reply = await askGemini(env, messages);
+    return json({ ok: true, reply }, 200, origin);
+  } catch (err) {
+    return json({ ok: false, error: 'AI non disponibile', detail: String(err) }, 502, origin);
+  }
+}
+
+/* POST /chat-summary — { page, messages: [{role, content}] }, inviato quando la
+   chat si chiude o alla chiusura della pagina (sendBeacon). Fire-and-forget dal
+   client: qui rispondiamo comunque 200 anche se l'invio interno fallisce, per
+   non far vedere errori a un beacon che nessuno leggerà. */
+async function handleChatSummary(request, env, origin) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ ok: false }, 400, origin);
+  }
+
+  const page = body.page === 'ristorazione' ? 'ristorazione' : 'home';
+  const messages = (Array.isArray(body.messages) ? body.messages : [])
+    .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && String(m.content || '').trim())
+    .slice(-40);
+
+  /* nessun messaggio dell'utente = niente da riassumere (es. ha aperto e chiuso) */
+  if (!messages.some((m) => m.role === 'user')) {
+    return json({ ok: true }, 200, origin);
+  }
+
+  try {
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: FROM,
+        to: RECIPIENTS,
+        subject: `Riepilogo chat "Chiedi a Rush" — ${page}`,
+        html: chatSummaryHtml({ page, messages }),
+      }),
+    });
+  } catch {
+    /* fire-and-forget: non blocchiamo mai il client per questo */
+  }
+
+  return json({ ok: true }, 200, origin);
+}
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
+    const { pathname } = new URL(request.url);
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: corsHeaders(origin) });
@@ -204,6 +379,11 @@ export default {
     if (request.method !== 'POST') {
       return json({ ok: false, error: 'Method not allowed' }, 405, origin);
     }
+
+    /* nuove route: chat AI e relativo riepilogo. Il form di contatto resta
+       sulla root per non rompere chi già punta a CONTACT_ENDPOINT senza path. */
+    if (pathname === '/chat') return handleChat(request, env, origin);
+    if (pathname === '/chat-summary') return handleChatSummary(request, env, origin);
 
     let body;
     try {

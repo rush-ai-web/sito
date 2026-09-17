@@ -118,7 +118,7 @@ export default function AppRisto() {
               <FaqRisto />
               <CtaRisto />
             </main>
-            <Fab />
+            <Fab page="ristorazione" />
             <ThemeSwitch theme={theme} onToggle={toggleTheme} />
             <Footer logoVariant="ristorazione" columns={FOOTER_COLUMNS} />
           </div>

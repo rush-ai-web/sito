@@ -1,20 +1,32 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowUp, Package, Receipt, Search, Sparkles, Users } from 'lucide-react';
+import { ArrowUp, Sparkles, X } from 'lucide-react';
 import { DUR, EASE_MODAL } from '../lib/motion';
 import { useHotkey } from '../lib/hooks';
-import { IconTile } from './ui';
 
-/* risultati con icona + valore, come nella guida ai componenti */
-const RISULTATI = [
-  { icon: Receipt, t: 'Fattura Distillerie Rossi · 12 mag', v: '€892' },
-  { icon: Package, t: 'Campari 1L - magazzino', v: '2 pz' },
-  { icon: Users, t: 'Marco Bernardini - ore di maggio', v: '142h' },
-];
+/* stesso endpoint del form di contatto: /chat e /chat-summary vivono
+   sullo stesso Worker, vedi worker/index.js e worker/README.md. */
+const CONTACT_ENDPOINT =
+  import.meta.env.VITE_CONTACT_ENDPOINT || 'https://rush-contact.withered-voice-c323.workers.dev';
 
-export default function Fab() {
+const WELCOME = {
+  role: 'assistant',
+  content:
+    "Ciao! Sono Rush AI: chiedimi pure come funziona il sistema, i prezzi o i tempi. Rispondo in base a quello che c'è scritto su questo sito.",
+};
+
+export default function Fab({ page = 'home' }) {
   const [open, setOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [messages, setMessages] = useState([WELCOME]);
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  const listRef = useRef(null);
+  const summarySentRef = useRef(false);
+  const hasUserMessageRef = useRef(false);
+
   const set = useCallback((v) => setOpen(v), []);
   useHotkey(set);
 
@@ -23,9 +35,6 @@ export default function Fab() {
     let triggerTop = Number.POSITIVE_INFINITY;
 
     const measure = () => {
-      /* sulla home il trigger è l'inizio della sezione Ristorazione; sulle
-         pagine che non la hanno (es. /ristorazione stessa) usiamo metà
-         dell'altezza scrollabile della pagina, come richiesto. */
       const section = document.getElementById('ristorazione');
       if (section) {
         triggerTop = section.getBoundingClientRect().top + window.scrollY - window.innerHeight;
@@ -65,6 +74,74 @@ export default function Fab() {
     };
   }, [open]);
 
+  useEffect(() => {
+    const el = listRef.current;
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+  }, [messages, loading]);
+
+  /* invia il riepilogo una sola volta, solo se c'è stato almeno un
+     messaggio dell'utente - fire-and-forget, non deve mai bloccare la UI */
+  const sendSummary = useCallback(() => {
+    if (summarySentRef.current || !hasUserMessageRef.current) return;
+    summarySentRef.current = true;
+    const payload = JSON.stringify({
+      page,
+      messages: messages.filter((m) => m.role === 'user' || m.role === 'assistant'),
+    });
+    const url = `${CONTACT_ENDPOINT}/chat-summary`;
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(url, new Blob([payload], { type: 'application/json' }));
+    } else {
+      fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true }).catch(() => {});
+    }
+  }, [messages, page]);
+
+  /* rete di sicurezza: se l'utente chiude la scheda invece di premere la X */
+  useEffect(() => {
+    const onHide = () => {
+      if (document.visibilityState === 'hidden') sendSummary();
+    };
+    window.addEventListener('pagehide', onHide);
+    document.addEventListener('visibilitychange', onHide);
+    return () => {
+      window.removeEventListener('pagehide', onHide);
+      document.removeEventListener('visibilitychange', onHide);
+    };
+  }, [sendSummary]);
+
+  const closeChat = () => {
+    setOpen(false);
+    sendSummary();
+  };
+
+  const send = async (e) => {
+    e.preventDefault();
+    const text = input.trim();
+    if (!text || loading) return;
+
+    hasUserMessageRef.current = true;
+    const next = [...messages, { role: 'user', content: text }];
+    setMessages(next);
+    setInput('');
+    setError(false);
+    setLoading(true);
+
+    try {
+      const res = await fetch(`${CONTACT_ENDPOINT}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ page, messages: next }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data.error || 'errore');
+      setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <motion.button
@@ -98,7 +175,6 @@ export default function Fab() {
         whileHover={{ opacity: 0.9 }}
         aria-label="Chiedi a Rush"
       >
-        {/* raggio di luce che ruota dietro al contenuto */}
         <span className="fab__glow" aria-hidden="true" />
         <span className="fab__inner">
           <Sparkles size={18} strokeWidth={1.75} />
@@ -109,58 +185,78 @@ export default function Fab() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="palette__scrim"
-            onClick={() => setOpen(false)}
+            className="chat-scrim"
+            onClick={closeChat}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: DUR.pop, ease: EASE_MODAL }}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {open && (
+          <motion.aside
+            className="chat-panel"
+            onClick={(e) => e.stopPropagation()}
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ duration: 0.38, ease: EASE_MODAL }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Chiedi a Rush"
           >
-            <motion.div
-              className="palette"
-              onClick={(e) => e.stopPropagation()}
-              initial={{ opacity: 0, y: -14, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.985 }}
-              transition={{ duration: DUR.modal, ease: EASE_MODAL }}
-              role="dialog"
-              aria-label="Chiedi a Rush"
-            >
-              <div className="palette__field">
-                <Search size={18} strokeWidth={1.75} style={{ color: 'var(--text-3)' }} />
-                <input autoFocus placeholder="quanto ho speso in Campari" />
-                <span className="chip" style={{ height: 26, fontSize: 11 }}>
-                  ESC
-                </span>
-              </div>
+            <div className="chat-panel__head">
+              <span className="chat-panel__title">
+                <Sparkles size={16} strokeWidth={2} />
+                Rush AI
+              </span>
+              <button type="button" className="chat-panel__close" onClick={closeChat} aria-label="Chiudi">
+                <X size={18} strokeWidth={2.1} />
+              </button>
+            </div>
 
-              {RISULTATI.map((r, i) => (
-                <motion.div
-                  key={r.t}
-                  className="palette__row"
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.28, ease: EASE_MODAL, delay: 0.08 + i * 0.05 }}
-                >
-                  <IconTile icon={r.icon} size="sm" ghost />
-                  <span style={{ fontSize: 15 }}>{r.t}</span>
-                  <b className="num">{r.v}</b>
-                </motion.div>
+            <div className="chat-panel__list" ref={listRef}>
+              {messages.map((m, i) => (
+                <div key={i} className={`chat-panel__msg chat-panel__msg--${m.role}`}>
+                  {m.content}
+                </div>
               ))}
+              {loading && (
+                <div className="chat-panel__msg chat-panel__msg--assistant chat-panel__msg--typing">
+                  <span className="chat-panel__dots" aria-hidden="true">
+                    <i /><i /><i />
+                  </span>
+                </div>
+              )}
+              {error && (
+                <div className="chat-panel__msg chat-panel__msg--assistant chat-panel__msg--error">
+                  Non riesco a rispondere in questo momento. Scrivici a{' '}
+                  <a href="mailto:info@rush-ai.it">info@rush-ai.it</a> oppure usa il form di contatto.
+                </div>
+              )}
+            </div>
 
-              <div
-                className="palette__row"
-                style={{ gap: 9, color: 'var(--text-3)', fontSize: 13.5 }}
-              >
-                <span className="dots" aria-hidden="true">
-                  <i />
-                  <i />
-                  <i />
-                </span>
-                Anteprima dimostrativa - nella dashboard risponde sui tuoi dati.
+            <form className="chat-panel__foot" onSubmit={send}>
+              <div className="chat-panel__row">
+                <input
+                  type="text"
+                  className="chat-panel__input"
+                  placeholder="Scrivi una domanda…"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  disabled={loading}
+                  autoFocus
+                />
+                <button type="submit" className="chat-panel__send" disabled={loading || !input.trim()} aria-label="Invia">
+                  <ArrowUp size={16} strokeWidth={2.4} />
+                </button>
               </div>
-            </motion.div>
-          </motion.div>
+              <p className="chat-panel__hint">Le risposte si basano sui contenuti del sito.</p>
+            </form>
+          </motion.aside>
         )}
       </AnimatePresence>
     </>

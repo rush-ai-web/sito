@@ -91,7 +91,7 @@ export default function App() {
         {/* scuro */}
         <Cta />
       </main>
-      <Fab />
+      <Fab page="home" />
       <ThemeSwitch theme={theme} onToggle={toggleTheme} />
       <Footer />
         </div>
