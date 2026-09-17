@@ -104,8 +104,8 @@ o costruire l'automazione.
 
 D: Chi lavora sul progetto?
 R: Un team piccolo e stabile: un referente unico che conosce il progetto
-dall'inizio, sviluppatori senior, e chi conosce il settore del cliente. Non si passa
-mai da account manager diversi ad ogni telefonata.
+dall'inizio, sviluppatori dedicati, e chi conosce il settore del cliente. Non si
+passa mai da account manager diversi ad ogni telefonata.
 
 ### Costi e supporto
 

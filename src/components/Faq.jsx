@@ -46,7 +46,7 @@ export const FAQ_DATA = {
     },
     {
       q: 'Chi lavora sul progetto?',
-      a: "Un team piccolo e stabile: un referente unico che conosce il tuo progetto dall'inizio, sviluppatori senior, e chi conosce il tuo settore. Non passi mai da account manager diversi ad ogni telefonata.",
+      a: "Un team piccolo e stabile: un referente unico che conosce il tuo progetto dall'inizio, sviluppatori dedicati e chi conosce il tuo settore. Non passi mai da account manager diversi ad ogni telefonata.",
     },
   ],
   costi: [
