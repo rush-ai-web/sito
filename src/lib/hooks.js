@@ -106,6 +106,10 @@ export function useSmoothScroll(enabled = true) {
       touchMultiplier: 1.5,
       wheelMultiplier: 1,
       overscroll: false,
+      /* la chat (e qualunque altro pannello scrollabile al suo interno) deve
+         scrollare nativamente: senza questa esclusione Lenis intercetta la
+         rotella anche lì e lo scroll interno non si muove mai. */
+      prevent: (node) => !!node.closest('.chat-panel__list'),
     });
 
     let rafId;

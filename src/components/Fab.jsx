@@ -56,7 +56,16 @@ function renderMessage(text) {
     }
     const numbered = line.match(/^\d+[.)]\s+(.*)/);
     const bulleted = line.match(/^[-*•]\s+(.*)/);
-    if (numbered) {
+    /* rete di sicurezza: se il modello mette comunque un titolo Markdown
+       (#, ##, ###...) lo trattiamo come un paragrafo in grassetto invece di
+       mostrare i cancelletti a schermo */
+    const heading = line.match(/^#{1,6}\s+(.*)/);
+    if (heading) {
+      flushPara();
+      flushList();
+      para.push(`**${heading[1]}**`);
+      flushPara();
+    } else if (numbered) {
       flushPara();
       if (!list || list.type !== 'ol') {
         flushList();
