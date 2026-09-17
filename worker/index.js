@@ -672,6 +672,10 @@ async function handleChat(request, env, origin) {
     const reply = await askGemini(env, messages);
     return json({ ok: true, reply }, 200, origin);
   } catch (err) {
+    /* finisce nei Log del Worker (dashboard Cloudflare → Logs → Begin log
+       stream) così la causa reale è visibile senza dover aprire gli
+       strumenti sviluppatore del browser. */
+    console.error('handleChat failed:', err);
     return json({ ok: false, error: 'AI non disponibile', detail: String(err) }, 502, origin);
   }
 }
