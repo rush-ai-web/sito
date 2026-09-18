@@ -383,6 +383,7 @@ form "Contatti" (rush-ai.it) o "Prenota una demo" (rush-ai.it/ristorazione). Non
 lasciare mai la conversazione morire lì.
 `.trim();
 
+
 /* focus tematico in base a dove si trova il widget: sulla home si parla di Rush
    in generale, su rush-ai.it/ristorazione si resta sul verticale ristorazione */
 const PAGE_FOCUS = {
@@ -407,6 +408,38 @@ prezzi della sezione "Rush Ristorazione". Non parlare di altri settori
 esplicitamente.
 `.trim(),
 };
+
+/* ------------------------------------------------------------------
+   Base di conoscenza tagliata per pagina.
+
+   Mandare KNOWLEDGE per intero a ogni domanda costava da solo ~6.000 token,
+   cioè ESATTAMENTE il budget token/minuto del piano gratuito Groq: bastava
+   una domanda per bruciare il minuto, e la seconda falliva sempre. Da qui il
+   messaggio di riserva che compariva "a caso" ma in realtà seguiva un ritmo
+   preciso. Ora ogni pagina riceve solo la sua parte: la home non si porta
+   dietro tutte le FAQ della ristorazione e viceversa.
+   ------------------------------------------------------------------ */
+const KB = (() => {
+  const iFaqGen = KNOWLEDGE.indexOf('## FAQ complete — Rush (generale');
+  const iRisto = KNOWLEDGE.indexOf('# RUSH RISTORAZIONE');
+  const iRules = KNOWLEDGE.indexOf('# ISTRUZIONI DI COMPORTAMENTO');
+  /* se una sezione venisse rinominata, meglio mandare tutto che mandare
+     un testo troncato a metà: si perde l'ottimizzazione, non la correttezza */
+  if (iFaqGen < 0 || iRisto < 0 || iRules < 0) return null;
+  return {
+    intro: KNOWLEDGE.slice(0, iFaqGen).trim(),
+    faqGenerali: KNOWLEDGE.slice(iFaqGen, iRisto).trim(),
+    ristorazione: KNOWLEDGE.slice(iRisto, iRules).trim(),
+    rules: KNOWLEDGE.slice(iRules).trim(),
+  };
+})();
+
+function systemFor(page) {
+  const focus = PAGE_FOCUS[page] || PAGE_FOCUS.home;
+  if (!KB) return `${KNOWLEDGE}\n\n${focus}`;
+  const body = page === 'ristorazione' ? KB.ristorazione : KB.faqGenerali;
+  return [KB.intro, body, KB.rules, focus].join('\n\n');
+}
 
 /* destinatari che ricevono i dati del form */
 const RECIPIENTS = [
@@ -781,12 +814,14 @@ async function fetchWithTimeout(url, options, label) {
 }
 
 async function askAI(env, page, messages) {
-  const systemText = `${KNOWLEDGE}\n\n${PAGE_FOCUS[page] || PAGE_FOCUS.home}`;
+  const systemText = systemFor(page);
   const chatMessages = messages
     .filter((m) => m.role === 'user' || m.role === 'assistant')
     .map((m) => ({
       role: m.role === 'assistant' ? 'assistant' : 'user',
-      content: String(m.content || '').slice(0, 4000),
+      /* le risposte dell'assistente sono lunghe: troncarle tiene basso il
+         conto dei token per richiesta, che è ciò che fa scattare i limiti */
+      content: String(m.content || '').slice(0, 1500),
     }));
 
   /* salta i provider per cui manca la chiave, invece di sprecare tentativi */
@@ -826,7 +861,10 @@ async function handleChat(request, env, origin) {
   }
 
   const page = body.page === 'ristorazione' ? 'ristorazione' : 'home';
-  const messages = Array.isArray(body.messages) ? body.messages.slice(-20) : [];
+  /* solo gli ultimi scambi: bastano per il filo del discorso e tengono il
+     conto dei token per richiesta molto più basso (era il vero motivo per
+     cui le conversazioni lunghe finivano sempre nel messaggio di riserva) */
+  const messages = Array.isArray(body.messages) ? body.messages.slice(-8) : [];
   if (!messages.length) {
     return json({ ok: false, error: 'Nessun messaggio' }, 422, origin);
   }
