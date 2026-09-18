@@ -778,15 +778,9 @@ async function handleChat(request, env, origin) {
        stream) così la causa reale è visibile senza dover aprire gli
        strumenti sviluppatore del browser. */
     console.error('handleChat failed:', err);
-    /* mai un errore a schermo: se anche tutti i modelli falliscono (rete
-       di Google giù, chiave scaduta, ecc.) rispondiamo comunque con un
-       messaggio caldo, coerente col brand — per l'utente è una risposta
-       come le altre, non un errore tecnico */
-    const contact = page === 'ristorazione' ? 'il form "Prenota una demo"' : 'il form "Contatti"';
-    const fallback =
-      'In questo momento sto avendo qualche difficoltà a elaborare una risposta precisa. ' +
-      `Nel frattempo scrivici a info@rush-ai.it, oppure usa ${contact} sul sito: ti rispondiamo di persona il prima possibile. ` +
-      'Vuoi provare a riformulare la domanda in un altro modo?';
+    /* mostriamo l'errore tecnico vero (temporaneo, per capire perché falliva
+       ancora): niente più messaggio "caldo" generico che nascondeva la causa */
+    const fallback = `Errore: ${String(err?.message || err)}`;
     /* degraded:true dice al sito di NON includere questo messaggio nella
        cronologia mandata indietro al modello nei turni successivi: senza
        questo, il modello "vedeva" il proprio finto messaggio di errore nella
