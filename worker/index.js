@@ -733,12 +733,13 @@ async function askAI(env, page, messages) {
       content: String(m.content || '').slice(0, 4000),
     }));
 
-  /* obiettivo: aspettare di più piuttosto che arrendersi. Due giri completi
-     sulle tre famiglie di modelli (quote indipendenti) = fino a 6 tentativi,
-     con una pausa tra i giri che rispetta il "retry-after" di Groq se
-     presente. Solo se falliscono davvero tutti e 6 si arriva al fallback. */
+  /* obiettivo: il chatbot deve rispondere SEMPRE, non arrendersi al primo
+     intoppo. Tre giri completi sui due modelli (quote indipendenti) = fino
+     a 6 tentativi, con una pausa fra un giro e l'altro che rispetta il
+     "retry-after" di Groq quando lo indica. Il fallback si vede solo se
+     falliscono davvero tutti e 6 i tentativi. */
   let lastErr;
-  for (let round = 0; round < 2; round++) {
+  for (let round = 0; round < 3; round++) {
     for (const model of GROQ_MODELS) {
       try {
         return await callGroq(env, model, systemText, chatMessages);
@@ -746,8 +747,8 @@ async function askAI(env, page, messages) {
         lastErr = err;
       }
     }
-    if (round === 0) {
-      const wait = Math.min(lastErr?.retryAfterMs || 1000, 4000);
+    if (round < 2) {
+      const wait = Math.min(lastErr?.retryAfterMs || 1200, 5000);
       await new Promise((r) => setTimeout(r, wait));
     }
   }
