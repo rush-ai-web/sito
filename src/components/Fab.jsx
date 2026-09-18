@@ -183,31 +183,29 @@ export default function Fab({ page = 'home' }) {
   }, [open]);
 
   /* il pannello segue la porzione REALE visibile dello schermo: altezza
-     (--vvh) E posizione (--vv-top). Su Safari, quando compare la tastiera,
-     la "finestra visibile" (visual viewport) a volte non si limita a
-     accorciarsi ma si SPOSTA anche (offsetTop > 0) — es. al secondo tocco,
-     quando Safari fa un pan che al primo tocco non serviva. 'resize' da
-     solo non basta: il pan è un evento 'scroll' del visual viewport, va
-     ascoltato anche quello (con requestAnimationFrame per restare fluido,
-     senza il vecchio problema di "shimmy" — qui aggiorna la posizione vera
-     del pannello, non un offset accumulato via transform). */
+     (--vvh) E posizione (--vv-top). Mentre la tastiera anima l'apertura,
+     Safari manda diversi eventi resize/scroll con valori INTERMEDI prima di
+     assestarsi su quello finale — applicandoli tutti subito si vede un
+     "doppio scatto" (va su, poi torna al posto giusto). Aspettiamo che i
+     valori smettano di cambiare per un breve istante prima di applicarli,
+     così si vede solo la posizione finale corretta, mai quelle intermedie. */
   useEffect(() => {
     if (!open || !window.visualViewport) return undefined;
     const vv = window.visualViewport;
     const root = document.documentElement;
-    let raf = 0;
+    let settle = 0;
     const update = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
+      clearTimeout(settle);
+      settle = setTimeout(() => {
         root.style.setProperty('--vvh', `${vv.height}px`);
         root.style.setProperty('--vv-top', `${vv.offsetTop}px`);
-      });
+      }, 60);
     };
     update();
     vv.addEventListener('resize', update);
     vv.addEventListener('scroll', update);
     return () => {
-      cancelAnimationFrame(raf);
+      clearTimeout(settle);
       vv.removeEventListener('resize', update);
       vv.removeEventListener('scroll', update);
       root.style.removeProperty('--vvh');

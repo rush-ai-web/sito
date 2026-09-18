@@ -3443,6 +3443,9 @@ html.chat-open body {
   top: var(--vv-top, 0px);
   right: 0;
   height: var(--vvh, 100dvh);
+  /* rete di sicurezza: se restano piccoli aggiustamenti dopo il debounce in
+     Fab.jsx, questi li rende un movimento morbido invece di uno scatto */
+  transition: top 0.18s ease-out, height 0.18s ease-out;
   z-index: 91;
   width: min(420px, 100vw);
   display: flex;
