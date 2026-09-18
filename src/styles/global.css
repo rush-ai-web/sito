@@ -3435,13 +3435,13 @@ html.chat-open body {
 
 .chat-panel {
   position: fixed;
-  top: 0;
+  /* top e height seguono la porzione di schermo REALMENTE visibile
+     (--vv-top/--vvh, impostate via VisualViewport in Fab.jsx): su Safari il
+     visual viewport a volte non solo si accorcia ma si sposta (offsetTop),
+     e un pannello ancorato a top:0 fisso restava disallineato, lasciando
+     spazio vuoto in fondo allo schermo. Così resta sempre incollato. */
+  top: var(--vv-top, 0px);
   right: 0;
-  /* altezza = porzione di schermo REALMENTE visibile (--vvh, impostata via
-     VisualViewport in Fab.jsx). Con top:0 fisso, quando compare la tastiera
-     l'altezza si accorcia dal basso: header fermo in cima, il footer (nel
-     normale flusso flex, in fondo alla colonna) resta sempre appena sopra
-     la tastiera senza bisogno di spostarlo a mano. */
   height: var(--vvh, 100dvh);
   z-index: 91;
   width: min(420px, 100vw);

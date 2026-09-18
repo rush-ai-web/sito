@@ -182,21 +182,29 @@ export default function Fab({ page = 'home' }) {
     };
   }, [open]);
 
-  /* il pannello segue l'altezza REALE visibile dello schermo (--vvh), non
-     100dvh: con top:0 fisso, quando la tastiera compare l'altezza si
-     accorcia dal basso — header fermo in cima, footer sempre appena sopra
-     la tastiera. Solo 'resize' (non 'scroll', che segue anche il pan
-     nativo del viewport e causava un piccolo "shimmy" visibile). */
+  /* il pannello segue la porzione REALE visibile dello schermo: altezza
+     (--vvh) E posizione (--vv-top). Su Safari, quando compare la tastiera,
+     la "finestra visibile" (visual viewport) a volte non si limita a
+     accorciarsi ma si sposta anche (offsetTop > 0) — un pannello ancorato
+     solo con top:0 resta fermo alla vecchia posizione e lascia uno spazio
+     vuoto in fondo, esattamente il sintomo visto su Safari. Aggiornando
+     anche la posizione il pannello resta sempre incollato allo schermo
+     davvero visibile. Solo 'resize' (non 'scroll', che causava uno
+     "shimmy" seguendo il pan nativo del viewport). */
   useEffect(() => {
     if (!open || !window.visualViewport) return undefined;
     const vv = window.visualViewport;
     const root = document.documentElement;
-    const update = () => root.style.setProperty('--vvh', `${vv.height}px`);
+    const update = () => {
+      root.style.setProperty('--vvh', `${vv.height}px`);
+      root.style.setProperty('--vv-top', `${vv.offsetTop}px`);
+    };
     update();
     vv.addEventListener('resize', update);
     return () => {
       vv.removeEventListener('resize', update);
       root.style.removeProperty('--vvh');
+      root.style.removeProperty('--vv-top');
     };
   }, [open]);
 
