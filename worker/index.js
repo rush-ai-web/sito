@@ -660,10 +660,13 @@ export function chatSummaryHtml({ page, messages }) {
    Il messaggio di sistema porta l'unica fonte di verità (KNOWLEDGE +
    PAGE_FOCUS): al modello è vietato inventare prezzi o funzioni.
    ------------------------------------------------------------------ */
-/* modello principale: Llama 3.3 70B (ottima qualità e ottimo italiano);
-   riserva: Llama 3.1 8B (super veloce, limiti giornalieri molto alti). Se
-   il primo è sovraccarico o ha esaurito la quota, si passa al secondo. */
-const GROQ_MODELS = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant'];
+/* modelli attualmente disponibili sul piano gratuito Groq (i vecchi Llama
+   3.x sono stati ritirati dal free tier a giugno 2026):
+   - openai/gpt-oss-120b → qualità migliore + tempo di prima risposta più
+     basso in assoluto (~0.74s), ottimo italiano
+   - openai/gpt-oss-20b  → il più veloce in assoluto (~1000 token/s), riserva
+   Se il principale è sovraccarico o esaurisce la quota, si passa al secondo. */
+const GROQ_MODELS = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b'];
 
 /* tetto di attesa per tentativo: Groq è velocissimo, se non risponde entro
    questo tempo c'è un problema e conviene passare al modello successivo */
@@ -684,6 +687,10 @@ async function callGroq(env, model, systemText, chatMessages) {
         messages: [{ role: 'system', content: systemText }, ...chatMessages],
         temperature: 0.4,
         max_tokens: 1200,
+        /* i modelli gpt-oss hanno un "ragionamento" interno: al minimo per
+           rispondere veloce a domande sul sito (non serve ragionare a lungo),
+           e il testo del ragionamento non finisce nella risposta all'utente */
+        reasoning_effort: 'low',
       }),
       signal: controller.signal,
     });
