@@ -185,24 +185,31 @@ export default function Fab({ page = 'home' }) {
   /* il pannello segue la porzione REALE visibile dello schermo: altezza
      (--vvh) E posizione (--vv-top). Su Safari, quando compare la tastiera,
      la "finestra visibile" (visual viewport) a volte non si limita a
-     accorciarsi ma si sposta anche (offsetTop > 0) — un pannello ancorato
-     solo con top:0 resta fermo alla vecchia posizione e lascia uno spazio
-     vuoto in fondo, esattamente il sintomo visto su Safari. Aggiornando
-     anche la posizione il pannello resta sempre incollato allo schermo
-     davvero visibile. Solo 'resize' (non 'scroll', che causava uno
-     "shimmy" seguendo il pan nativo del viewport). */
+     accorciarsi ma si SPOSTA anche (offsetTop > 0) — es. al secondo tocco,
+     quando Safari fa un pan che al primo tocco non serviva. 'resize' da
+     solo non basta: il pan è un evento 'scroll' del visual viewport, va
+     ascoltato anche quello (con requestAnimationFrame per restare fluido,
+     senza il vecchio problema di "shimmy" — qui aggiorna la posizione vera
+     del pannello, non un offset accumulato via transform). */
   useEffect(() => {
     if (!open || !window.visualViewport) return undefined;
     const vv = window.visualViewport;
     const root = document.documentElement;
+    let raf = 0;
     const update = () => {
-      root.style.setProperty('--vvh', `${vv.height}px`);
-      root.style.setProperty('--vv-top', `${vv.offsetTop}px`);
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        root.style.setProperty('--vvh', `${vv.height}px`);
+        root.style.setProperty('--vv-top', `${vv.offsetTop}px`);
+      });
     };
     update();
     vv.addEventListener('resize', update);
+    vv.addEventListener('scroll', update);
     return () => {
+      cancelAnimationFrame(raf);
       vv.removeEventListener('resize', update);
+      vv.removeEventListener('scroll', update);
       root.style.removeProperty('--vvh');
       root.style.removeProperty('--vv-top');
     };
