@@ -173,39 +173,45 @@ export default function Fab({ page = 'home' }) {
     };
   }, []);
 
+  /* blocco scroll "vero" per iOS: overflow:hidden da solo NON basta — Safari
+     scrolla comunque la pagina sotto quando un input dentro un elemento
+     fixed prende il focus (è per questo che si vedeva "il resto" scattare
+     dall'alto). Bloccando il body con position:fixed lo scroll nativo non
+     ha proprio più nulla da spostare: tecnica standard di "scroll lock". */
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
-    document.documentElement.classList.toggle('chat-open', open);
+    if (!open) return undefined;
+    const scrollY = window.scrollY;
+    const body = document.body;
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.left = '0';
+    body.style.right = '0';
+    document.documentElement.classList.add('chat-open');
     return () => {
-      document.body.style.overflow = '';
+      body.style.position = '';
+      body.style.top = '';
+      body.style.left = '';
+      body.style.right = '';
       document.documentElement.classList.remove('chat-open');
+      window.scrollTo(0, scrollY);
     };
   }, [open]);
 
-  /* il pannello segue in tempo reale la porzione di schermo VISIBILE: la sua
-     altezza (--vvh) = altezza del visual viewport, aggiornata su ogni
-     resize/scroll. Con top:0 fisso, quando appare la tastiera l'altezza si
-     accorcia dal basso — header fermo in cima, footer sempre appena sopra la
-     tastiera. Seguendo il viewport reale del browser non ci sono scatti. */
+  /* quanto la tastiera copre lo schermo, per spostare SOLO il footer (vedi
+     --kb-inset in CSS): pannello e lista non cambiano mai dimensione. */
   useEffect(() => {
     if (!open || !window.visualViewport) return undefined;
     const vv = window.visualViewport;
     const root = document.documentElement;
-    let raf = 0;
     const update = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        root.style.setProperty('--vvh', `${vv.height}px`);
-      });
+      const inset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+      root.style.setProperty('--kb-inset', `${inset}px`);
     };
     update();
     vv.addEventListener('resize', update);
-    vv.addEventListener('scroll', update);
     return () => {
-      cancelAnimationFrame(raf);
       vv.removeEventListener('resize', update);
-      vv.removeEventListener('scroll', update);
-      root.style.removeProperty('--vvh');
+      root.style.removeProperty('--kb-inset');
     };
   }, [open]);
 

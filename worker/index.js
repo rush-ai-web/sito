@@ -699,6 +699,9 @@ async function callGroq(env, model, systemText, chatMessages) {
       const detail = await res.text();
       const err = new Error(`Groq error ${res.status}: ${detail}`);
       err.status = res.status;
+      /* sui 429 (troppe richieste) Groq spesso dice quanto aspettare */
+      const retryAfter = res.headers.get('retry-after');
+      if (retryAfter) err.retryAfterMs = Number(retryAfter) * 1000;
       throw err;
     }
 
@@ -730,7 +733,10 @@ async function askAI(env, page, messages) {
   /* due giri completi sui modelli (Groq risponde in meno di un secondo, quindi
      anche 4 tentativi restano rapidi): copre i fallimenti sporadici — un
      limite di richieste al minuto momentaneo o un errore di rete passeggero —
-     con una breve pausa tra i giri. Solo se falliscono tutti si va al fallback. */
+     con una pausa tra i giri. Modelli diversi hanno quote separate, quindi
+     passare da un modello all'altro spesso basta da solo; se anche quello
+     torna un 429 con "retry-after" rispettiamo quel tempo (con un tetto,
+     per non far aspettare l'utente troppo a lungo). */
   let lastErr;
   for (let round = 0; round < 2; round++) {
     for (const model of GROQ_MODELS) {
@@ -740,7 +746,10 @@ async function askAI(env, page, messages) {
         lastErr = err;
       }
     }
-    if (round === 0) await new Promise((r) => setTimeout(r, 500));
+    if (round === 0) {
+      const wait = Math.min(lastErr?.retryAfterMs || 700, 4000);
+      await new Promise((r) => setTimeout(r, wait));
+    }
   }
   throw lastErr;
 }
