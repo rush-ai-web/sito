@@ -237,8 +237,10 @@ export default function Fab({ page = 'home' }) {
   }, [messages, loading]);
 
   /* invia il riepilogo una sola volta, solo se c'è stato almeno un
-     messaggio dell'utente - fire-and-forget, non deve mai bloccare la UI */
-  const sendSummary = useCallback(() => {
+     messaggio dell'utente - fire-and-forget, non deve mai bloccare la UI.
+     `unloading` = la pagina si sta chiudendo davvero (solo lì serve
+     sendBeacon, che è l'unica cosa che sopravvive alla chiusura). */
+  const sendSummary = useCallback((unloading = false) => {
     if (summarySentRef.current || !hasUserMessageRef.current) return;
     summarySentRef.current = true;
     const payload = JSON.stringify({
@@ -246,11 +248,26 @@ export default function Fab({ page = 'home' }) {
       messages: messages.filter((m) => m.role === 'user' || m.role === 'assistant'),
     });
     const url = `${CONTACT_ENDPOINT}/chat-summary`;
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(url, new Blob([payload], { type: 'application/json' }));
-    } else {
-      fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true }).catch(() => {});
+
+    if (unloading && navigator.sendBeacon) {
+      /* il Blob DEVE essere text/plain: application/json non è fra i tipi
+         "semplici" per il CORS, quindi richiederebbe una richiesta di
+         autorizzazione preliminare che sendBeacon non sa fare — il browser
+         scartava tutto in silenzio (e sendBeacon restituiva comunque true,
+         quindi non si vedeva alcun errore). Il Worker legge il JSON dal
+         corpo a prescindere da come è etichettato. */
+      navigator.sendBeacon(url, new Blob([payload], { type: 'text/plain;charset=UTF-8' }));
+      return;
     }
+
+    /* chat chiusa con la X o inattività: la pagina è ancora viva, quindi
+       una fetch normale è più affidabile (CORS gestito correttamente) */
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: payload,
+      keepalive: true,
+    }).catch(() => {});
   }, [messages, page]);
 
   /* se la conversazione resta ferma 5 minuti (nessun nuovo messaggio, chat
@@ -258,14 +275,15 @@ export default function Fab({ page = 'home' }) {
      non serve aspettare che l'utente chiuda o cambi pagina */
   useEffect(() => {
     if (!hasUserMessageRef.current) return undefined;
-    const t = setTimeout(sendSummary, 5 * 60 * 1000);
+    const t = setTimeout(() => sendSummary(), 5 * 60 * 1000);
     return () => clearTimeout(t);
   }, [messages, sendSummary]);
 
-  /* rete di sicurezza: se l'utente chiude la scheda invece di premere la X */
+  /* rete di sicurezza: se l'utente chiude la scheda invece di premere la X.
+     Qui la pagina sta sparendo davvero, quindi serve sendBeacon (true). */
   useEffect(() => {
     const onHide = () => {
-      if (document.visibilityState === 'hidden') sendSummary();
+      if (document.visibilityState === 'hidden') sendSummary(true);
     };
     window.addEventListener('pagehide', onHide);
     document.addEventListener('visibilitychange', onHide);
