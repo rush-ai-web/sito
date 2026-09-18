@@ -6,13 +6,14 @@
  *
  * Tre funzioni sotto lo stesso Worker:
  *  - POST /            → form di contatto (invariato), invia l'email con Resend.
- *  - POST /chat        → risponde alle domande di "Chiedi a Rush" usando Gemini,
- *                        con il contenuto del sito come unica fonte (KNOWLEDGE qui
- *                        sotto — comprese tutte le FAQ di entrambe le pagine).
+ *  - POST /chat        → risponde alle domande di "Chiedi a Rush" usando Groq
+ *                        (Llama 3.3 70B), con il contenuto del sito come unica
+ *                        fonte (KNOWLEDGE qui sotto — comprese tutte le FAQ di
+ *                        entrambe le pagine).
  *  - POST /chat-summary → a fine conversazione, invia un riepilogo via email agli
  *                        stessi destinatari del form.
  *
- * Le chiavi (RESEND_API_KEY, GEMINI_API_KEY) vivono come "secret" del Worker
+ * Le chiavi (RESEND_API_KEY, GROQ_API_KEY) vivono come "secret" del Worker
  * e non sono MAI esposte al browser.
  *
  * Deploy: vedi worker/README.md
@@ -653,66 +654,55 @@ export function chatSummaryHtml({ page, messages }) {
 }
 
 /* ------------------------------------------------------------------
-   Chiamata a Gemini (Google AI Studio, piano gratuito). Il messaggio
-   di sistema porta l'unica fonte di verità (costante KNOWLEDGE): a Gemini è
-   vietato inventare prezzi o funzioni che non ci sono.
+   Chiamata a Groq (GroqCloud, piano gratuito, nessuna carta richiesta).
+   Groq gira su hardware dedicato (LPU): le risposte arrivano in una
+   frazione del tempo di Gemini. API compatibile con lo standard OpenAI.
+   Il messaggio di sistema porta l'unica fonte di verità (KNOWLEDGE +
+   PAGE_FOCUS): al modello è vietato inventare prezzi o funzioni.
    ------------------------------------------------------------------ */
-/* usiamo gli ALIAS stabili mantenuti da Google, non nomi di versione fissi:
-   - gemini-flash-latest      → punta sempre al Flash stabile del momento
-   - gemini-flash-lite-latest → variante più leggera, meno soggetta a picchi
-   Così non si rischia mai un "modello non trovato" quando Google ritira una
-   vecchia versione: gli alias vengono aggiornati da loro. Se il primo è
-   sovraccarico si passa al secondo. */
-const GEMINI_MODELS = ['gemini-flash-latest', 'gemini-flash-lite-latest'];
+/* modello principale: Llama 3.3 70B (ottima qualità e ottimo italiano);
+   riserva: Llama 3.1 8B (super veloce, limiti giornalieri molto alti). Se
+   il primo è sovraccarico o ha esaurito la quota, si passa al secondo. */
+const GROQ_MODELS = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant'];
 
-/* ogni tentativo ha un tetto massimo di attesa: durante un sovraccarico
-   Google a volte non fallisce subito, resta "appeso" a lungo prima di
-   rispondere — senza questo timeout la chat sembra bloccata a scrivere
-   per sempre invece di passare al modello successivo. Tenuto largo (25s)
-   perché l'obiettivo è che una risposta arrivi SEMPRE, anche lenta,
-   piuttosto che scattare troppo presto su un altro tentativo */
-const GEMINI_TIMEOUT_MS = 25000;
+/* tetto di attesa per tentativo: Groq è velocissimo, se non risponde entro
+   questo tempo c'è un problema e conviene passare al modello successivo */
+const GROQ_TIMEOUT_MS = 15000;
 
-async function callGemini(env, model, systemText, contents) {
+async function callGroq(env, model, systemText, chatMessages) {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
+  const timeout = setTimeout(() => controller.abort(), GROQ_TIMEOUT_MS);
   try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: systemText }] },
-          contents,
-          generationConfig: {
-            temperature: 0.4,
-            maxOutputTokens: 2000,
-            /* niente "ragionamento" interno: per rispondere a domande sul
-               sito non serve, e su alcuni modelli quei token nascosti
-               mangiavano budget alla risposta vera facendola troncare */
-            thinkingConfig: { thinkingBudget: 0 },
-          },
-        }),
-        signal: controller.signal,
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${env.GROQ_API_KEY}`,
       },
-    );
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'system', content: systemText }, ...chatMessages],
+        temperature: 0.4,
+        max_tokens: 1200,
+      }),
+      signal: controller.signal,
+    });
 
     if (!res.ok) {
       const detail = await res.text();
-      const err = new Error(`Gemini error ${res.status}: ${detail}`);
+      const err = new Error(`Groq error ${res.status}: ${detail}`);
       err.status = res.status;
       throw err;
     }
 
     const data = await res.json();
-    const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('') || '';
-    if (!text.trim()) throw new Error('Gemini: risposta vuota');
+    const text = data?.choices?.[0]?.message?.content || '';
+    if (!text.trim()) throw new Error('Groq: risposta vuota');
     return text.trim();
   } catch (err) {
     if (err.name === 'AbortError') {
-      const timeoutErr = new Error(`Gemini timeout dopo ${GEMINI_TIMEOUT_MS}ms (${model})`);
-      timeoutErr.status = 503; // trattato come sovraccarico: si passa al modello successivo
+      const timeoutErr = new Error(`Groq timeout dopo ${GROQ_TIMEOUT_MS}ms (${model})`);
+      timeoutErr.status = 503;
       throw timeoutErr;
     }
     throw err;
@@ -721,29 +711,24 @@ async function callGemini(env, model, systemText, contents) {
   }
 }
 
-async function askGemini(env, page, messages) {
+async function askAI(env, page, messages) {
   const systemText = `${KNOWLEDGE}\n\n${PAGE_FOCUS[page] || PAGE_FOCUS.home}`;
-  const contents = messages
+  const chatMessages = messages
     .filter((m) => m.role === 'user' || m.role === 'assistant')
     .map((m) => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: String(m.content || '').slice(0, 4000) }],
+      role: m.role === 'assistant' ? 'assistant' : 'user',
+      content: String(m.content || '').slice(0, 4000),
     }));
 
-  /* obiettivo: una risposta arriva SEMPRE. Facciamo due giri completi su
-     tutti e tre i modelli (6 tentativi in totale), con una breve pausa tra
-     un giro e l'altro per dare tempo a Google di riprendersi da un picco.
-     Solo se davvero tutti e 6 falliscono si arriva al fallback. */
+  /* si prova ogni modello; con Groq che risponde in meno di un secondo un
+     solo giro basta e avanza — se entrambi falliscono si va al fallback */
   let lastErr;
-  for (let round = 0; round < 2; round++) {
-    for (const model of GEMINI_MODELS) {
-      try {
-        return await callGemini(env, model, systemText, contents);
-      } catch (err) {
-        lastErr = err;
-      }
+  for (const model of GROQ_MODELS) {
+    try {
+      return await callGroq(env, model, systemText, chatMessages);
+    } catch (err) {
+      lastErr = err;
     }
-    if (round === 0) await new Promise((r) => setTimeout(r, 600));
   }
   throw lastErr;
 }
@@ -764,7 +749,7 @@ async function handleChat(request, env, origin) {
   }
 
   try {
-    const reply = await askGemini(env, page, messages);
+    const reply = await askAI(env, page, messages);
     return json({ ok: true, reply }, 200, origin);
   } catch (err) {
     /* finisce nei Log del Worker (dashboard Cloudflare → Logs → Begin log

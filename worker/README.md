@@ -5,13 +5,13 @@ Un solo Worker, tre funzioni, **un solo file** (`index.js`, nessun import):
 - `POST /` — form di contatto: riceve i dati e invia l'email con **Resend** ai
   destinatari del team (comportamento invariato).
 - `POST /chat` — risponde alle domande del widget "Chiedi a Rush" sul sito,
-  usando **Gemini** (piano gratuito di Google AI Studio) e il contenuto reale
-  delle pagine — comprese tutte le FAQ — come unica fonte (costante
-  `KNOWLEDGE` in cima a `index.js`).
+  usando **Groq** (piano gratuito, modello Llama 3.3 70B — velocissimo) e il
+  contenuto reale delle pagine — comprese tutte le FAQ — come unica fonte
+  (costante `KNOWLEDGE` in cima a `index.js`).
 - `POST /chat-summary` — a chat chiusa, invia un riepilogo della conversazione
   via email agli stessi destinatari del form.
 
-Le chiavi (Resend, Gemini) restano segrete lato server: non finiscono mai nel
+Le chiavi (Resend, Groq) restano segrete lato server: non finiscono mai nel
 browser.
 
 Destinatari attuali (modificabili in `index.js`, costante `RECIPIENTS`):
@@ -26,10 +26,11 @@ uno nuovo.
 
 ## Opzione A — senza terminale, tutto dal browser (consigliata)
 
-1. **Crea la API key gratuita di Gemini**
-   - Vai su https://aistudio.google.com/apikey e accedi con un account Google
-   - *Create API key* → copia la chiave (inizia con `AIza...`). Tienila a
-     portata, serve tra un minuto.
+1. **Crea la API key gratuita di Groq**
+   - Vai su https://console.groq.com/keys e accedi (basta un account Google,
+     nessuna carta di credito richiesta)
+   - *Create API Key* → copia la chiave (inizia con `gsk_...`). Tienila a
+     portata, serve tra un minuto (non la rivedrai più dopo aver chiuso).
 
 2. **Apri il Worker nella dashboard Cloudflare**
    - Vai su https://dash.cloudflare.com e accedi con l'account con cui è
@@ -38,13 +39,15 @@ uno nuovo.
      della versione della dashboard)
    - Clicca sul Worker esistente (si chiama `rush-contact` o simile)
 
-3. **Aggiungi la chiave Gemini come secret**
+3. **Aggiungi la chiave Groq come secret**
    - Nella pagina del Worker apri la scheda **Impostazioni** (*Settings*)
    - Cerca la sezione **Variabili e Secret** (*Variables and Secrets* /
      *Environment Variables*)
-   - Clicca **Aggiungi** (*Add*): come nome scrivi `GEMINI_API_KEY`, come tipo
+   - Clicca **Aggiungi** (*Add*): come nome scrivi `GROQ_API_KEY`, come tipo
      scegli **Secret/Encrypt** (non "Text" in chiaro), incolla la chiave
-     `AIza...` copiata prima, poi **Salva**
+     `gsk_...` copiata prima, poi **Salva**
+   - Se prima avevi un secret `GEMINI_API_KEY`, puoi lasciarlo o rimuoverlo:
+     ora non viene più usato.
    - Se il Worker non ha già un secret `RESEND_API_KEY` (il form di contatto
      smetterebbe di funzionare), aggiungilo allo stesso modo con la tua
      chiave Resend
@@ -65,7 +68,7 @@ sito: `/chat` e `/chat-summary` vivono sullo stesso indirizzo già in uso.
 
 Serve un account **Cloudflare** (gratuito) e **Node.js** installato.
 
-1. Crea le due chiavi come nell'Opzione A (Resend e Gemini)
+1. Crea le due chiavi come nell'Opzione A (Resend e Groq)
 2. Login su Cloudflare (dalla cartella `worker/`):
    ```bash
    cd worker
@@ -74,7 +77,7 @@ Serve un account **Cloudflare** (gratuito) e **Node.js** installato.
 3. Salva le chiavi come secret del Worker:
    ```bash
    npx wrangler secret put RESEND_API_KEY
-   npx wrangler secret put GEMINI_API_KEY
+   npx wrangler secret put GROQ_API_KEY
    ```
    Incolla la chiave richiesta quando la chiede (una per comando).
 4. Pubblica il Worker:
@@ -82,10 +85,11 @@ Serve un account **Cloudflare** (gratuito) e **Node.js** installato.
    npx wrangler deploy
    ```
 
-Il piano gratuito di Gemini basta ampiamente per un widget di chat su un
-sito: se in futuro il traffico crescesse molto, su
-[ai.google.dev/pricing](https://ai.google.dev/pricing) trovi le soglie e i
-prezzi a consumo per passare al piano a pagamento.
+Il piano gratuito di Groq basta ampiamente per un widget di chat su un
+sito (nessuna carta richiesta): il modello principale `llama-3.3-70b-versatile`
+ha circa 1.000 richieste/giorno, con fallback automatico su
+`llama-3.1-8b-instant` (limiti molto più alti) se si esaurisce. Le soglie
+aggiornate sono su [console.groq.com](https://console.groq.com).
 
 ## Dominio personalizzato (opzionale)
 
