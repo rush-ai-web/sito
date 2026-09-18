@@ -661,16 +661,20 @@ export function chatSummaryHtml({ page, messages }) {
    PAGE_FOCUS): al modello è vietato inventare prezzi o funzioni.
    ------------------------------------------------------------------ */
 /* modelli attualmente disponibili sul piano gratuito Groq (i vecchi Llama
-   3.x sono stati ritirati dal free tier a giugno 2026):
-   - openai/gpt-oss-120b → qualità migliore + tempo di prima risposta più
-     basso in assoluto (~0.74s), ottimo italiano
-   - openai/gpt-oss-20b  → il più veloce in assoluto (~1000 token/s), riserva
-   Se il principale è sovraccarico o esaurisce la quota, si passa al secondo. */
-const GROQ_MODELS = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b'];
+   3.x sono stati ritirati dal free tier a giugno 2026). Tre famiglie diverse
+   (OpenAI, Qwen) hanno quote/rate-limit separati: se una è sotto pressione
+   per troppe richieste ravvicinate, le altre due restano libere.
+   - openai/gpt-oss-120b → qualità migliore + prima risposta più veloce in
+     assoluto (~0.74s), ottimo italiano
+   - openai/gpt-oss-20b  → il più veloce in assoluto (~1000 token/s)
+   - qwen/qwen3-32b      → terza riserva, famiglia di modelli indipendente */
+const GROQ_MODELS = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'qwen/qwen3-32b'];
 
 /* tetto di attesa per tentativo: Groq è velocissimo, se non risponde entro
-   questo tempo c'è un problema e conviene passare al modello successivo */
-const GROQ_TIMEOUT_MS = 15000;
+   questo tempo c'è un problema e conviene passare al modello successivo.
+   Tenuto moderato (10s) perché con 3 modelli x 2 giri = 6 tentativi
+   possibili, e l'obiettivo è aspettare di più piuttosto che arrendersi */
+const GROQ_TIMEOUT_MS = 10000;
 
 async function callGroq(env, model, systemText, chatMessages) {
   const controller = new AbortController();
@@ -730,13 +734,10 @@ async function askAI(env, page, messages) {
       content: String(m.content || '').slice(0, 4000),
     }));
 
-  /* due giri completi sui modelli (Groq risponde in meno di un secondo, quindi
-     anche 4 tentativi restano rapidi): copre i fallimenti sporadici — un
-     limite di richieste al minuto momentaneo o un errore di rete passeggero —
-     con una pausa tra i giri. Modelli diversi hanno quote separate, quindi
-     passare da un modello all'altro spesso basta da solo; se anche quello
-     torna un 429 con "retry-after" rispettiamo quel tempo (con un tetto,
-     per non far aspettare l'utente troppo a lungo). */
+  /* obiettivo: aspettare di più piuttosto che arrendersi. Due giri completi
+     sulle tre famiglie di modelli (quote indipendenti) = fino a 6 tentativi,
+     con una pausa tra i giri che rispetta il "retry-after" di Groq se
+     presente. Solo se falliscono davvero tutti e 6 si arriva al fallback. */
   let lastErr;
   for (let round = 0; round < 2; round++) {
     for (const model of GROQ_MODELS) {
@@ -747,7 +748,7 @@ async function askAI(env, page, messages) {
       }
     }
     if (round === 0) {
-      const wait = Math.min(lastErr?.retryAfterMs || 700, 4000);
+      const wait = Math.min(lastErr?.retryAfterMs || 1000, 4000);
       await new Promise((r) => setTimeout(r, wait));
     }
   }
@@ -786,7 +787,11 @@ async function handleChat(request, env, origin) {
       'In questo momento sto avendo qualche difficoltà a elaborare una risposta precisa. ' +
       `Nel frattempo scrivici a info@rush-ai.it, oppure usa ${contact} sul sito: ti rispondiamo di persona il prima possibile. ` +
       'Vuoi provare a riformulare la domanda in un altro modo?';
-    return json({ ok: true, reply: fallback }, 200, origin);
+    /* degraded:true dice al sito di NON includere questo messaggio nella
+       cronologia mandata indietro al modello nei turni successivi: senza
+       questo, il modello "vedeva" il proprio finto messaggio di errore nella
+       conversazione e si confondeva, mettendosi a parlare di bug a caso */
+    return json({ ok: true, reply: fallback, degraded: true }, 200, origin);
   }
 }
 

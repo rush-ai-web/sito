@@ -3435,13 +3435,14 @@ html.chat-open body {
 
 .chat-panel {
   position: fixed;
-  /* top+bottom fissi, MAI ricalcolati: né dvh (dinamico) né il visual
-     viewport entrano in gioco qui. L'intero pannello — header e lista
-     comprese — resta sempre esattamente uguale. Solo il footer (fuori dal
-     flusso, vedi sotto) si sposta in base alla tastiera. */
   top: 0;
-  bottom: 0;
   right: 0;
+  /* altezza = porzione di schermo REALMENTE visibile (--vvh, impostata via
+     VisualViewport in Fab.jsx). Con top:0 fisso, quando compare la tastiera
+     l'altezza si accorcia dal basso: header fermo in cima, il footer (nel
+     normale flusso flex, in fondo alla colonna) resta sempre appena sopra
+     la tastiera senza bisogno di spostarlo a mano. */
+  height: var(--vvh, 100dvh);
   z-index: 91;
   width: min(420px, 100vw);
   display: flex;
@@ -3508,10 +3509,6 @@ html.chat-open body {
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   padding: 18px 20px;
-  /* spazio riservato al footer, che è fuori dal flusso (position: absolute)
-     per potersi spostare senza mai far ricalcolare la lista: questo
-     padding tiene i messaggi sopra di lui quando è a riposo */
-  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -3664,18 +3661,14 @@ html.chat-open body {
 }
 
 .chat-panel__foot {
-  /* fuori dal flusso flex: pannello e lista sopra non si ricalcolano MAI
-     quando questo si sposta. Ancorato in fondo, sale SOLO lui quando compare
-     la tastiera (--kb-inset, impostato in Fab.jsx via VisualViewport). */
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  /* nel normale flusso flex, in fondo alla colonna. Poiché l'altezza del
+     pannello segue --vvh (la porzione di schermo davvero visibile), il
+     footer sta sempre appena sopra la tastiera senza doverlo spostare a
+     mano — nessun conflitto con lo scroll-to-focus nativo del browser. */
+  flex: none;
   padding: 14px 20px calc(18px + env(safe-area-inset-bottom, 0px));
   background-color: var(--bg);
   border-top: 1px solid var(--hairline);
-  transform: translateY(calc(-1 * var(--kb-inset, 0px)));
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .chat-panel__row {

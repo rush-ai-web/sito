@@ -173,45 +173,30 @@ export default function Fab({ page = 'home' }) {
     };
   }, []);
 
-  /* blocco scroll "vero" per iOS: overflow:hidden da solo NON basta — Safari
-     scrolla comunque la pagina sotto quando un input dentro un elemento
-     fixed prende il focus (è per questo che si vedeva "il resto" scattare
-     dall'alto). Bloccando il body con position:fixed lo scroll nativo non
-     ha proprio più nulla da spostare: tecnica standard di "scroll lock". */
   useEffect(() => {
-    if (!open) return undefined;
-    const scrollY = window.scrollY;
-    const body = document.body;
-    body.style.position = 'fixed';
-    body.style.top = `-${scrollY}px`;
-    body.style.left = '0';
-    body.style.right = '0';
-    document.documentElement.classList.add('chat-open');
+    document.body.style.overflow = open ? 'hidden' : '';
+    document.documentElement.classList.toggle('chat-open', open);
     return () => {
-      body.style.position = '';
-      body.style.top = '';
-      body.style.left = '';
-      body.style.right = '';
+      document.body.style.overflow = '';
       document.documentElement.classList.remove('chat-open');
-      window.scrollTo(0, scrollY);
     };
   }, [open]);
 
-  /* quanto la tastiera copre lo schermo, per spostare SOLO il footer (vedi
-     --kb-inset in CSS): pannello e lista non cambiano mai dimensione. */
+  /* il pannello segue l'altezza REALE visibile dello schermo (--vvh), non
+     100dvh: con top:0 fisso, quando la tastiera compare l'altezza si
+     accorcia dal basso — header fermo in cima, footer sempre appena sopra
+     la tastiera. Solo 'resize' (non 'scroll', che segue anche il pan
+     nativo del viewport e causava un piccolo "shimmy" visibile). */
   useEffect(() => {
     if (!open || !window.visualViewport) return undefined;
     const vv = window.visualViewport;
     const root = document.documentElement;
-    const update = () => {
-      const inset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
-      root.style.setProperty('--kb-inset', `${inset}px`);
-    };
+    const update = () => root.style.setProperty('--vvh', `${vv.height}px`);
     update();
     vv.addEventListener('resize', update);
     return () => {
       vv.removeEventListener('resize', update);
-      root.style.removeProperty('--kb-inset');
+      root.style.removeProperty('--vvh');
     };
   }, [open]);
 
@@ -301,18 +286,27 @@ export default function Fab({ page = 'home' }) {
        suo timeout interno, questo è solo la rete di sicurezza finale perché
        la chat non resti a "scrivere" all'infinito in nessun caso */
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 70000);
+    const timeout = setTimeout(() => controller.abort(), 90000);
+
+    /* i messaggi "degraded" (il testo di riserva quando l'AI ha fallito)
+       non vanno rimandati indietro come contesto: il modello li "vedrebbe"
+       nella cronologia e si confonderebbe, mettendosi a parlare a caso di
+       errori/bug invece di rispondere alla domanda reale */
+    const context = next.filter((m) => !m.degraded);
 
     try {
       const res = await fetch(`${CONTACT_ENDPOINT}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ page, messages: next }),
+        body: JSON.stringify({ page, messages: context }),
         signal: controller.signal,
       });
       const data = await res.json();
       if (!res.ok || !data.ok) throw new Error(data.detail || data.error || 'errore sconosciuto');
-      setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', content: data.reply, degraded: !!data.degraded },
+      ]);
     } catch (err) {
       const isTimeout = err?.name === 'AbortError';
       setError(isTimeout ? 'Tempo di attesa scaduto' : err?.message || String(err));
