@@ -661,14 +661,13 @@ export function chatSummaryHtml({ page, messages }) {
    PAGE_FOCUS): al modello è vietato inventare prezzi o funzioni.
    ------------------------------------------------------------------ */
 /* modelli attualmente disponibili sul piano gratuito Groq (i vecchi Llama
-   3.x sono stati ritirati dal free tier a giugno 2026). Tre famiglie diverse
-   (OpenAI, Qwen) hanno quote/rate-limit separati: se una è sotto pressione
-   per troppe richieste ravvicinate, le altre due restano libere.
+   3.x sono stati ritirati dal free tier a giugno 2026; qwen/qwen3-32b
+   provato come terza riserva ma non è abilitato su questo account —
+   Groq risponde 404 "model_not_found", quindi tolto).
    - openai/gpt-oss-120b → qualità migliore + prima risposta più veloce in
      assoluto (~0.74s), ottimo italiano
-   - openai/gpt-oss-20b  → il più veloce in assoluto (~1000 token/s)
-   - qwen/qwen3-32b      → terza riserva, famiglia di modelli indipendente */
-const GROQ_MODELS = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'qwen/qwen3-32b'];
+   - openai/gpt-oss-20b  → il più veloce in assoluto (~1000 token/s), riserva */
+const GROQ_MODELS = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b'];
 
 /* tetto di attesa per tentativo: Groq è velocissimo, se non risponde entro
    questo tempo c'è un problema e conviene passare al modello successivo.
@@ -778,9 +777,15 @@ async function handleChat(request, env, origin) {
        stream) così la causa reale è visibile senza dover aprire gli
        strumenti sviluppatore del browser. */
     console.error('handleChat failed:', err);
-    /* mostriamo l'errore tecnico vero (temporaneo, per capire perché falliva
-       ancora): niente più messaggio "caldo" generico che nascondeva la causa */
-    const fallback = `Errore: ${String(err?.message || err)}`;
+    /* mai un errore a schermo: se anche tutti i modelli falliscono (rete
+       giù, quota esaurita, ecc.) rispondiamo comunque con un messaggio
+       caldo, coerente col brand — per l'utente è una risposta come le
+       altre, non un errore tecnico */
+    const contact = page === 'ristorazione' ? 'il form "Prenota una demo"' : 'il form "Contatti"';
+    const fallback =
+      'In questo momento sto avendo qualche difficoltà a elaborare una risposta precisa. ' +
+      `Nel frattempo scrivici a info@rush-ai.it, oppure usa ${contact} sul sito: ti rispondiamo di persona il prima possibile. ` +
+      'Vuoi provare a riformulare la domanda in un altro modo?';
     /* degraded:true dice al sito di NON includere questo messaggio nella
        cronologia mandata indietro al modello nei turni successivi: senza
        questo, il modello "vedeva" il proprio finto messaggio di errore nella
