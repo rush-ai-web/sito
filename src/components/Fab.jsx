@@ -173,39 +173,56 @@ export default function Fab({ page = 'home' }) {
     };
   }, []);
 
+  /* Il problema di fondo su iOS: quando un input dentro un elemento fixed
+     prende il focus, Safari SPOSTA la pagina per "portarlo in vista". Un
+     elemento fixed è ancorato alla pagina, quindi si sposta con lei: ecco
+     la chat che schizza in alto lasciando il vuoto sotto. Non si corregge
+     inseguendola dopo (si vede sempre il fotogramma sbagliato): si blocca
+     la pagina con position:fixed, così Safari non ha nulla da spostare e
+     il pannello parte e resta già nel punto giusto. */
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
-    document.documentElement.classList.toggle('chat-open', open);
+    if (!open) return undefined;
+    const body = document.body;
+    const scrollY = window.scrollY;
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.left = '0';
+    body.style.right = '0';
+    body.style.width = '100%';
+    document.documentElement.classList.add('chat-open');
     return () => {
-      document.body.style.overflow = '';
+      body.style.position = '';
+      body.style.top = '';
+      body.style.left = '';
+      body.style.right = '';
+      body.style.width = '';
       document.documentElement.classList.remove('chat-open');
+      window.scrollTo(0, scrollY);
     };
   }, [open]);
 
-  /* il pannello segue la porzione REALE visibile dello schermo: altezza
-     (--vvh) E posizione (--vv-top). Mentre la tastiera anima l'apertura,
-     Safari manda diversi eventi resize/scroll con valori INTERMEDI prima di
-     assestarsi su quello finale — applicandoli tutti subito si vede un
-     "doppio scatto" (va su, poi torna al posto giusto). Aspettiamo che i
-     valori smettano di cambiare per un breve istante prima di applicarli,
-     così si vede solo la posizione finale corretta, mai quelle intermedie. */
+  /* con la pagina bloccata, l'unica cosa che resta da seguire è QUANTO la
+     tastiera restringe lo schermo. Aggiornamento immediato (nessun ritardo,
+     nessuna transizione): così l'altezza del pannello si accorcia in
+     sincrono con l'animazione della tastiera, senza posizioni intermedie
+     sbagliate né correzioni visibili dopo. */
   useEffect(() => {
     if (!open || !window.visualViewport) return undefined;
     const vv = window.visualViewport;
     const root = document.documentElement;
-    let settle = 0;
+    let raf = 0;
     const update = () => {
-      clearTimeout(settle);
-      settle = setTimeout(() => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
         root.style.setProperty('--vvh', `${vv.height}px`);
         root.style.setProperty('--vv-top', `${vv.offsetTop}px`);
-      }, 60);
+      });
     };
     update();
     vv.addEventListener('resize', update);
     vv.addEventListener('scroll', update);
     return () => {
-      clearTimeout(settle);
+      cancelAnimationFrame(raf);
       vv.removeEventListener('resize', update);
       vv.removeEventListener('scroll', update);
       root.style.removeProperty('--vvh');
@@ -257,15 +274,6 @@ export default function Fab({ page = 'home' }) {
       document.removeEventListener('visibilitychange', onHide);
     };
   }, [sendSummary]);
-
-  /* la primissima volta che un input riceve il focus in una pagina, Safari a
-     volte scrolla comunque la pagina sotto (anche col pannello fisso) prima
-     di "imparare" il layout: le volte successive non lo fa più. Riportiamo
-     subito lo scroll a 0 per eliminare quel primo scatto isolato. */
-  const pinScrollOnFocus = () => {
-    window.scrollTo(0, 0);
-    requestAnimationFrame(() => window.scrollTo(0, 0));
-  };
 
   /* iOS Safari a volte resta "zoomato" sulla pagina dopo che l'input perde il
      focus e la tastiera si chiude: forzare per un istante maximum-scale=1 e
@@ -461,7 +469,6 @@ export default function Fab({ page = 'home' }) {
                   placeholder="Scrivi una domanda…"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onFocus={pinScrollOnFocus}
                   onBlur={resetIosZoom}
                   disabled={loading}
                   autoFocus={!isMobile}
