@@ -30,11 +30,10 @@ const KPI = [
     d: 'Inserimenti manuali eliminati sui documenti in ingresso grazie alla lettura automatica: meno sviste, meno correzioni.',
   },
   {
-    label: 'Visibilità',
-    to: 1,
-    prefix: '<',
-    suffix: ' min',
-    d: 'Ritardo con cui un dato entra nel sistema e diventa leggibile in dashboard. L’azienda a colpo d’occhio, in tempo reale.',
+    label: 'Fine mese',
+    to: 0,
+    suffix: ' giorni',
+    d: 'Giorni di attesa per avere i numeri: zero. Non si aspetta il report di fine mese, i conti si aggiornano mentre l’azienda lavora.',
   },
 ];
 

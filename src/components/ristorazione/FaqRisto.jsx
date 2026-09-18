@@ -136,8 +136,8 @@ export const FAQ_DATA = {
       q: 'Quanto costa?',
       a: (
         <>
-          Il canone base parte da <strong>261 € al mese con fatturazione annuale</strong> oppure
-          da <strong>300 € al mese con fatturazione trimestrale</strong>. I moduli aggiuntivi
+          Il canone base parte da <strong>300 € al mese con fatturazione annuale</strong> oppure
+          da <strong>350 € al mese con fatturazione trimestrale</strong>. I moduli aggiuntivi
           sono quotati in base a ciò che serve davvero al locale; attivandone più di uno, il
           canone unitario si riduce. Prima di iniziare ricevi un perimetro chiaro, con ciò che è
           incluso e ciò che non lo è.

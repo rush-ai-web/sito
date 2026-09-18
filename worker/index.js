@@ -189,8 +189,8 @@ che sale, uno scarto insolito, un fornitore che alza i prezzi) prima ancora che
 venga chiesto.
 
 ## Prezzi Rush Ristorazione
-Canone base a partire da 261 €/mese con fatturazione annuale (minimo 12 mesi),
-oppure 300 €/mese con fatturazione trimestrale. Include gestione magazzino,
+Canone base a partire da 300 €/mese con fatturazione annuale (minimo 12 mesi),
+oppure 350 €/mese con fatturazione trimestrale. Include gestione magazzino,
 fornitori, turni, fatture, cassa. I moduli aggiuntivi sono quotati a preventivo in
 base a quello che serve davvero al locale.
 
@@ -278,7 +278,7 @@ l'eccezione entra così nello stesso flusso, senza ricopiare tutto a mano.
 ### Costi e risultati
 
 D: Quanto costa?
-R: Il canone base parte da 261 € al mese con fatturazione annuale oppure da 300 €
+R: Il canone base parte da 300 € al mese con fatturazione annuale oppure da 350 €
 al mese con fatturazione trimestrale. I moduli aggiuntivi sono quotati in base a
 ciò che serve davvero al locale; attivandone più di uno, il canone unitario si
 riduce. Prima di iniziare si riceve un perimetro chiaro, con ciò che è incluso e

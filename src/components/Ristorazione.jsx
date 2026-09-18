@@ -11,10 +11,13 @@ const VANTAGGI = [
   { icon: Megaphone, t: 'Marketing, promozioni e fidelizzazione clienti dallo stesso sistema' },
 ];
 
+/* volutamente diverse dai vantaggi elencati a sinistra: lì il "cosa ci
+   guadagni", qui funzioni concrete che non sono già citate */
 const INCLUSO = [
-  'Import automatico delle fatture fornitore',
-  'Costing FIFO su ogni ricetta',
-  'App per timbrature e turni dello staff',
+  'Fatture cartacee registrate con una foto',
+  'Avviso quando un fornitore alza i prezzi',
+  'Menu engineering: quali piatti spingere',
+  'Timbrature con QR e richieste ferie',
 ];
 
 export default function Ristorazione() {
@@ -104,10 +107,11 @@ export default function Ristorazione() {
           </div>
 
           <div className="risto2__kpi">
-            <span className="t-label">Pensato per crescere</span>
+            <span className="t-label">Il cuore del sistema</span>
             <p className="t-body" style={{ marginTop: 10 }}>
-              Un bar, un ristorante e una panineria? Non tre login separati: un unico sistema
-              con più sedi, dove il titolare vede tutto e ogni responsabile solo la sua.
+              Cassa, fatture, magazzino, ricette e turni smettono di essere strumenti
+              scollegati e iniziano a parlarsi: ogni fattura che entra aggiorna il magazzino
+              e ricalcola il margine reale dei piatti.
             </p>
           </div>
 

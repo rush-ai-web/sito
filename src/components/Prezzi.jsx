@@ -109,7 +109,7 @@ export default function Prezzi() {
                     exit={{ opacity: 0, y: 10 }}
                     transition={{ duration: 0.2, ease: EASE_MODAL }}
                   >
-                    {yearly ? '261' : '300'}
+                    {yearly ? '300' : '350'}
                   </motion.span>
                 </AnimatePresence>
                 <span className="prezzi-price__unit">€ / mese</span>
