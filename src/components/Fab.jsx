@@ -182,23 +182,30 @@ export default function Fab({ page = 'home' }) {
     };
   }, [open]);
 
-  /* pannello e lista messaggi restano fissi (niente interactive-widget, niente
-     ridimensionamento del layout): solo il footer si sposta, di quanto la
-     tastiera copre lo schermo, via --kb-inset. Solo 'resize' (non 'scroll'),
-     per non litigare con l'eventuale scroll-to-focus nativo del browser. */
+  /* il pannello segue in tempo reale la porzione di schermo VISIBILE: la sua
+     altezza (--vvh) = altezza del visual viewport, aggiornata su ogni
+     resize/scroll. Con top:0 fisso, quando appare la tastiera l'altezza si
+     accorcia dal basso — header fermo in cima, footer sempre appena sopra la
+     tastiera. Seguendo il viewport reale del browser non ci sono scatti. */
   useEffect(() => {
     if (!open || !window.visualViewport) return undefined;
     const vv = window.visualViewport;
     const root = document.documentElement;
+    let raf = 0;
     const update = () => {
-      const inset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
-      root.style.setProperty('--kb-inset', `${inset}px`);
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        root.style.setProperty('--vvh', `${vv.height}px`);
+      });
     };
     update();
     vv.addEventListener('resize', update);
+    vv.addEventListener('scroll', update);
     return () => {
+      cancelAnimationFrame(raf);
       vv.removeEventListener('resize', update);
-      root.style.removeProperty('--kb-inset');
+      vv.removeEventListener('scroll', update);
+      root.style.removeProperty('--vvh');
     };
   }, [open]);
 

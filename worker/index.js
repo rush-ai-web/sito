@@ -727,15 +727,20 @@ async function askAI(env, page, messages) {
       content: String(m.content || '').slice(0, 4000),
     }));
 
-  /* si prova ogni modello; con Groq che risponde in meno di un secondo un
-     solo giro basta e avanza — se entrambi falliscono si va al fallback */
+  /* due giri completi sui modelli (Groq risponde in meno di un secondo, quindi
+     anche 4 tentativi restano rapidi): copre i fallimenti sporadici — un
+     limite di richieste al minuto momentaneo o un errore di rete passeggero —
+     con una breve pausa tra i giri. Solo se falliscono tutti si va al fallback. */
   let lastErr;
-  for (const model of GROQ_MODELS) {
-    try {
-      return await callGroq(env, model, systemText, chatMessages);
-    } catch (err) {
-      lastErr = err;
+  for (let round = 0; round < 2; round++) {
+    for (const model of GROQ_MODELS) {
+      try {
+        return await callGroq(env, model, systemText, chatMessages);
+      } catch (err) {
+        lastErr = err;
+      }
     }
+    if (round === 0) await new Promise((r) => setTimeout(r, 500));
   }
   throw lastErr;
 }
