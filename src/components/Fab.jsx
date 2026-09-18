@@ -440,7 +440,7 @@ export default function Fab({ page = 'home' }) {
               )}
             </div>
 
-            <form className="chat-panel__foot" onSubmit={send}>
+            <form className="chat-panel__foot" onSubmit={send} autoComplete="off">
               <div className="chat-panel__row">
                 <input
                   type="text"
@@ -452,6 +452,16 @@ export default function Fab({ page = 'home' }) {
                   onBlur={resetIosZoom}
                   disabled={loading}
                   autoFocus={!isMobile}
+                  /* niente barra password/carta/indirizzo sopra la tastiera:
+                     senza questi hint il browser pensa che il campo possa
+                     servire per l'autofill e apre quella barra, che copre
+                     l'input e sembra farlo "sparire" */
+                  name="chat-message"
+                  autoComplete="off"
+                  autoCorrect="on"
+                  spellCheck="false"
+                  data-lpignore="true"
+                  data-1p-ignore="true"
                 />
                 <button type="submit" className="chat-panel__send" disabled={loading || !input.trim()} aria-label="Invia">
                   <ArrowUp size={16} strokeWidth={2.4} />
