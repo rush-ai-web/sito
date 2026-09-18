@@ -6,15 +6,18 @@
  *
  * Tre funzioni sotto lo stesso Worker:
  *  - POST /            → form di contatto (invariato), invia l'email con Resend.
- *  - POST /chat        → risponde alle domande di "Chiedi a Rush" usando Groq
- *                        (Llama 3.3 70B), con il contenuto del sito come unica
- *                        fonte (KNOWLEDGE qui sotto — comprese tutte le FAQ di
- *                        entrambe le pagine).
+ *  - POST /chat        → risponde alle domande di "Chiedi a Rush" con il
+ *                        contenuto del sito come unica fonte (KNOWLEDGE qui
+ *                        sotto — comprese tutte le FAQ di entrambe le pagine).
+ *                        Usa due provider in cascata: prima Groq (velocissimo),
+ *                        poi Gemini come rete di sicurezza — quote separate,
+ *                        quindi se uno è al limite risponde l'altro.
  *  - POST /chat-summary → a fine conversazione, invia un riepilogo via email agli
  *                        stessi destinatari del form.
  *
- * Le chiavi (RESEND_API_KEY, GROQ_API_KEY) vivono come "secret" del Worker
- * e non sono MAI esposte al browser.
+ * Le chiavi (RESEND_API_KEY, GROQ_API_KEY, GEMINI_API_KEY) vivono come
+ * "secret" del Worker e non sono MAI esposte al browser. Se manca una delle
+ * due chiavi AI, quel provider viene semplicemente saltato.
  *
  * Deploy: vedi worker/README.md
  */
@@ -654,67 +657,120 @@ export function chatSummaryHtml({ page, messages }) {
 }
 
 /* ------------------------------------------------------------------
-   Chiamata a Groq (GroqCloud, piano gratuito, nessuna carta richiesta).
-   Groq gira su hardware dedicato (LPU): le risposte arrivano in una
-   frazione del tempo di Gemini. API compatibile con lo standard OpenAI.
-   Il messaggio di sistema porta l'unica fonte di verità (KNOWLEDGE +
-   PAGE_FOCUS): al modello è vietato inventare prezzi o funzioni.
-   ------------------------------------------------------------------ */
-/* modelli attualmente disponibili sul piano gratuito Groq (i vecchi Llama
-   3.x sono stati ritirati dal free tier a giugno 2026; qwen/qwen3-32b
-   provato come terza riserva ma non è abilitato su questo account —
-   Groq risponde 404 "model_not_found", quindi tolto).
-   - openai/gpt-oss-120b → qualità migliore + prima risposta più veloce in
-     assoluto (~0.74s), ottimo italiano
-   - openai/gpt-oss-20b  → il più veloce in assoluto (~1000 token/s), riserva */
-const GROQ_MODELS = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b'];
+   Chiamate AI, con DUE PROVIDER DIVERSI in cascata.
 
-/* tetto di attesa per tentativo: Groq è velocissimo, se non risponde entro
-   questo tempo c'è un problema e conviene passare al modello successivo.
-   Tenuto moderato (10s) perché con 3 modelli x 2 giri = 6 tentativi
-   possibili, e l'obiettivo è aspettare di più piuttosto che arrendersi */
-const GROQ_TIMEOUT_MS = 10000;
+   La chiave del "non deve mai fallire" è questa: Groq e Gemini sono due
+   aziende diverse, con quote e limiti del tutto indipendenti. Se Groq
+   esaurisce il suo limite di richieste al minuto, Gemini non ne sa nulla
+   ed è comunque disponibile (e viceversa). Cambiare solo modello dentro
+   lo stesso fornitore non bastava, perché il limite è per account.
+
+   Ordine: prima Groq (risposte in meno di un secondo), poi Gemini come
+   rete di sicurezza. Il messaggio di sistema porta l'unica fonte di
+   verità (KNOWLEDGE + PAGE_FOCUS): vietato inventare prezzi o funzioni.
+   ------------------------------------------------------------------ */
+
+/* tetto di attesa per singolo tentativo. Con 4 destinazioni x 2 giri = 8
+   tentativi possibili, 8s ciascuno restano abbondantemente dentro il
+   limite di attesa del sito (90s). In pratica un tentativo che fallisce
+   lo fa quasi sempre subito (limite superato), non per timeout. */
+const AI_TIMEOUT_MS = 8000;
+
+/* la cascata completa, in ordine di preferenza */
+const AI_TARGETS = [
+  /* Groq: velocissimo (hardware dedicato). I vecchi Llama 3.x sono usciti
+     dal piano gratuito a giugno 2026, questi sono gli attuali. */
+  { provider: 'groq', model: 'openai/gpt-oss-120b' },
+  { provider: 'groq', model: 'openai/gpt-oss-20b' },
+  /* Gemini: quota totalmente separata da Groq. Alias "-latest" mantenuti
+     da Google, così non si rompono quando ritirano una vecchia versione. */
+  { provider: 'gemini', model: 'gemini-flash-latest' },
+  { provider: 'gemini', model: 'gemini-flash-lite-latest' },
+];
+
+/* trasforma un errore HTTP in un Error con status e, sui 429, quanto
+   aspettare secondo il provider stesso */
+function httpError(label, res, detail) {
+  const err = new Error(`${label} error ${res.status}: ${detail}`);
+  err.status = res.status;
+  const retryAfter = res.headers.get('retry-after');
+  if (retryAfter) err.retryAfterMs = Number(retryAfter) * 1000;
+  return err;
+}
 
 async function callGroq(env, model, systemText, chatMessages) {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), GROQ_TIMEOUT_MS);
-  try {
-    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+  const res = await fetchWithTimeout('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${env.GROQ_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model,
+      messages: [{ role: 'system', content: systemText }, ...chatMessages],
+      temperature: 0.4,
+      max_tokens: 1200,
+      /* i modelli gpt-oss hanno un "ragionamento" interno: al minimo per
+         rispondere veloce a domande sul sito (non serve ragionare a lungo),
+         e il testo del ragionamento non finisce nella risposta all'utente */
+      reasoning_effort: 'low',
+    }),
+  }, `Groq ${model}`);
+
+  if (!res.ok) throw httpError('Groq', res, await res.text());
+
+  const data = await res.json();
+  const text = data?.choices?.[0]?.message?.content || '';
+  if (!text.trim()) throw new Error('Groq: risposta vuota');
+  return text.trim();
+}
+
+async function callGemini(env, model, systemText, chatMessages) {
+  /* Gemini usa un formato diverso da quello stile OpenAI: il ruolo
+     dell'assistente si chiama "model" e il testo sta dentro "parts" */
+  const contents = chatMessages.map((m) => ({
+    role: m.role === 'assistant' ? 'model' : 'user',
+    parts: [{ text: m.content }],
+  }));
+
+  const res = await fetchWithTimeout(
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`,
+    {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${env.GROQ_API_KEY}`,
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model,
-        messages: [{ role: 'system', content: systemText }, ...chatMessages],
-        temperature: 0.4,
-        max_tokens: 1200,
-        /* i modelli gpt-oss hanno un "ragionamento" interno: al minimo per
-           rispondere veloce a domande sul sito (non serve ragionare a lungo),
-           e il testo del ragionamento non finisce nella risposta all'utente */
-        reasoning_effort: 'low',
+        system_instruction: { parts: [{ text: systemText }] },
+        contents,
+        generationConfig: {
+          temperature: 0.4,
+          maxOutputTokens: 2000,
+          /* niente ragionamento interno: su alcuni modelli quei token
+             nascosti mangiavano budget alla risposta, troncandola */
+          thinkingConfig: { thinkingBudget: 0 },
+        },
       }),
-      signal: controller.signal,
-    });
+    },
+    `Gemini ${model}`,
+  );
 
-    if (!res.ok) {
-      const detail = await res.text();
-      const err = new Error(`Groq error ${res.status}: ${detail}`);
-      err.status = res.status;
-      /* sui 429 (troppe richieste) Groq spesso dice quanto aspettare */
-      const retryAfter = res.headers.get('retry-after');
-      if (retryAfter) err.retryAfterMs = Number(retryAfter) * 1000;
-      throw err;
-    }
+  if (!res.ok) throw httpError('Gemini', res, await res.text());
 
-    const data = await res.json();
-    const text = data?.choices?.[0]?.message?.content || '';
-    if (!text.trim()) throw new Error('Groq: risposta vuota');
-    return text.trim();
+  const data = await res.json();
+  const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('') || '';
+  if (!text.trim()) throw new Error('Gemini: risposta vuota');
+  return text.trim();
+}
+
+/* fetch con tetto di attesa: un provider che resta "appeso" non deve
+   bloccare tutta la cascata, si passa al successivo */
+async function fetchWithTimeout(url, options, label) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), AI_TIMEOUT_MS);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
   } catch (err) {
     if (err.name === 'AbortError') {
-      const timeoutErr = new Error(`Groq timeout dopo ${GROQ_TIMEOUT_MS}ms (${model})`);
+      const timeoutErr = new Error(`${label}: timeout dopo ${AI_TIMEOUT_MS}ms`);
       timeoutErr.status = 503;
       throw timeoutErr;
     }
@@ -733,21 +789,26 @@ async function askAI(env, page, messages) {
       content: String(m.content || '').slice(0, 4000),
     }));
 
-  /* obiettivo: il chatbot deve rispondere SEMPRE, non arrendersi al primo
-     intoppo. Tre giri completi sui due modelli (quote indipendenti) = fino
-     a 6 tentativi, con una pausa fra un giro e l'altro che rispetta il
-     "retry-after" di Groq quando lo indica. Il fallback si vede solo se
-     falliscono davvero tutti e 6 i tentativi. */
+  /* salta i provider per cui manca la chiave, invece di sprecare tentativi */
+  const targets = AI_TARGETS.filter((t) =>
+    t.provider === 'groq' ? !!env.GROQ_API_KEY : !!env.GEMINI_API_KEY,
+  );
+  if (!targets.length) throw new Error('Nessuna chiave AI configurata');
+
+  /* due giri completi su tutta la cascata: perché si arrivi al messaggio
+     di riserva devono fallire ENTRAMBI i provider, due volte di fila. */
   let lastErr;
-  for (let round = 0; round < 3; round++) {
-    for (const model of GROQ_MODELS) {
+  for (let round = 0; round < 2; round++) {
+    for (const { provider, model } of targets) {
       try {
-        return await callGroq(env, model, systemText, chatMessages);
+        return provider === 'groq'
+          ? await callGroq(env, model, systemText, chatMessages)
+          : await callGemini(env, model, systemText, chatMessages);
       } catch (err) {
         lastErr = err;
       }
     }
-    if (round < 2) {
+    if (round === 0) {
       const wait = Math.min(lastErr?.retryAfterMs || 1200, 5000);
       await new Promise((r) => setTimeout(r, wait));
     }

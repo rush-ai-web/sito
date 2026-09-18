@@ -5,14 +5,18 @@ Un solo Worker, tre funzioni, **un solo file** (`index.js`, nessun import):
 - `POST /` — form di contatto: riceve i dati e invia l'email con **Resend** ai
   destinatari del team (comportamento invariato).
 - `POST /chat` — risponde alle domande del widget "Chiedi a Rush" sul sito,
-  usando **Groq** (piano gratuito, modello Llama 3.3 70B — velocissimo) e il
-  contenuto reale delle pagine — comprese tutte le FAQ — come unica fonte
-  (costante `KNOWLEDGE` in cima a `index.js`).
+  usando il contenuto reale delle pagine — comprese tutte le FAQ — come unica
+  fonte (costante `KNOWLEDGE` in cima a `index.js`). Usa **due provider in
+  cascata**: prima **Groq** (piano gratuito, velocissimo), poi **Gemini**
+  (Google AI Studio, piano gratuito) come rete di sicurezza. Sono aziende
+  diverse con quote separate: se uno raggiunge il limite di richieste,
+  risponde l'altro — per questo la chat non resta mai senza risposta.
 - `POST /chat-summary` — a chat chiusa, invia un riepilogo della conversazione
   via email agli stessi destinatari del form.
 
-Le chiavi (Resend, Groq) restano segrete lato server: non finiscono mai nel
-browser.
+Le chiavi (Resend, Groq, Gemini) restano segrete lato server: non finiscono
+mai nel browser. Se una delle due chiavi AI manca, quel provider viene
+semplicemente saltato (la chat continua a funzionare con l'altro).
 
 Destinatari attuali (modificabili in `index.js`, costante `RECIPIENTS`):
 - sebastianmarzola.work@gmail.com
@@ -26,11 +30,14 @@ uno nuovo.
 
 ## Opzione A — senza terminale, tutto dal browser (consigliata)
 
-1. **Crea la API key gratuita di Groq**
-   - Vai su https://console.groq.com/keys e accedi (basta un account Google,
-     nessuna carta di credito richiesta)
-   - *Create API Key* → copia la chiave (inizia con `gsk_...`). Tienila a
-     portata, serve tra un minuto (non la rivedrai più dopo aver chiuso).
+1. **Crea le API key gratuite (servono entrambe)**
+   - **Groq**: https://console.groq.com/keys → accedi (basta un account
+     Google, nessuna carta di credito) → *Create API Key* → copia la chiave
+     (inizia con `gsk_...`). Non la rivedrai più dopo aver chiuso.
+   - **Gemini**: https://aistudio.google.com/apikey → accedi con un account
+     Google → *Create API key* → copia la chiave (inizia con `AIza...`).
+   - Serve l'una come principale e l'altra come riserva: con due provider
+     diversi, se uno raggiunge il limite risponde l'altro.
 
 2. **Apri il Worker nella dashboard Cloudflare**
    - Vai su https://dash.cloudflare.com e accedi con l'account con cui è
@@ -39,15 +46,15 @@ uno nuovo.
      della versione della dashboard)
    - Clicca sul Worker esistente (si chiama `rush-contact` o simile)
 
-3. **Aggiungi la chiave Groq come secret**
+3. **Aggiungi le chiavi come secret**
    - Nella pagina del Worker apri la scheda **Impostazioni** (*Settings*)
    - Cerca la sezione **Variabili e Secret** (*Variables and Secrets* /
      *Environment Variables*)
-   - Clicca **Aggiungi** (*Add*): come nome scrivi `GROQ_API_KEY`, come tipo
-     scegli **Secret/Encrypt** (non "Text" in chiaro), incolla la chiave
-     `gsk_...` copiata prima, poi **Salva**
-   - Se prima avevi un secret `GEMINI_API_KEY`, puoi lasciarlo o rimuoverlo:
-     ora non viene più usato.
+   - Clicca **Aggiungi** (*Add*): nome `GROQ_API_KEY`, tipo
+     **Secret/Encrypt** (non "Text" in chiaro), incolla la chiave `gsk_...`,
+     poi **Salva**
+   - Ripeti per `GEMINI_API_KEY` con la chiave `AIza...` (se ce l'hai già da
+     prima va benissimo, non serve rifarla: ora torna in uso come riserva)
    - Se il Worker non ha già un secret `RESEND_API_KEY` (il form di contatto
      smetterebbe di funzionare), aggiungilo allo stesso modo con la tua
      chiave Resend
@@ -68,7 +75,7 @@ sito: `/chat` e `/chat-summary` vivono sullo stesso indirizzo già in uso.
 
 Serve un account **Cloudflare** (gratuito) e **Node.js** installato.
 
-1. Crea le due chiavi come nell'Opzione A (Resend e Groq)
+1. Crea le chiavi come nell'Opzione A (Resend, Groq e Gemini)
 2. Login su Cloudflare (dalla cartella `worker/`):
    ```bash
    cd worker
@@ -78,6 +85,7 @@ Serve un account **Cloudflare** (gratuito) e **Node.js** installato.
    ```bash
    npx wrangler secret put RESEND_API_KEY
    npx wrangler secret put GROQ_API_KEY
+   npx wrangler secret put GEMINI_API_KEY
    ```
    Incolla la chiave richiesta quando la chiede (una per comando).
 4. Pubblica il Worker:
@@ -85,11 +93,18 @@ Serve un account **Cloudflare** (gratuito) e **Node.js** installato.
    npx wrangler deploy
    ```
 
-Il piano gratuito di Groq basta ampiamente per un widget di chat su un
-sito (nessuna carta richiesta): il modello principale `llama-3.3-70b-versatile`
-ha circa 1.000 richieste/giorno, con fallback automatico su
-`llama-3.1-8b-instant` (limiti molto più alti) se si esaurisce. Le soglie
-aggiornate sono su [console.groq.com](https://console.groq.com).
+I due piani gratuiti bastano ampiamente per un widget di chat su un sito
+(nessuna carta richiesta per nessuno dei due). La cascata completa è:
+
+1. `openai/gpt-oss-120b` su Groq — qualità migliore, prima risposta in ~0,7s
+2. `openai/gpt-oss-20b` su Groq — il più veloce (~1000 token/s)
+3. `gemini-flash-latest` su Gemini — quota separata da Groq
+4. `gemini-flash-lite-latest` su Gemini — ultima riserva
+
+Tutta la cascata viene ripetuta due volte: per vedere il messaggio di
+riserva devono fallire entrambi i provider, due volte di fila. Le soglie
+aggiornate: [console.groq.com](https://console.groq.com) e
+[ai.google.dev/pricing](https://ai.google.dev/pricing).
 
 ## Dominio personalizzato (opzionale)
 
