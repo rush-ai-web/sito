@@ -3181,13 +3181,15 @@ html.chat-open .fab {
   pointer-events: none;
 }
 
-/* blocco scroll dello sfondo: su mobile il solo overflow:hidden sul body
-   spesso non basta (iOS continua a far scrollare la pagina sotto il dito),
-   quindi blocchiamo anche l'html */
-html.chat-open,
-html.chat-open body {
+/* Blocco scroll dello sfondo. Il blocco vero lo fa Fab.jsx mettendo il body
+   in position:fixed con top negativo (= posizione di scroll corrente); qui
+   si toglie solo la barra di scorrimento.
+   ATTENZIONE: niente height/overflow sul BODY. Con position:fixed e top
+   negativo, height:100% + overflow:hidden ritagliavano la pagina a una
+   scatola alta quanto lo schermo ma posizionata fuori schermo: il sito
+   spariva del tutto invece di restare visibile e sfocato dietro la chat. */
+html.chat-open {
   overflow: hidden;
-  height: 100%;
   overscroll-behavior: none;
 }
 
@@ -3428,9 +3430,13 @@ html.chat-open body {
   position: fixed;
   inset: 0;
   z-index: 90;
-  background: color-mix(in srgb, #000 38%, transparent);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
+  /* effetto "vetro smerigliato": il sito dietro resta riconoscibile, solo
+     sfocato. Il velo usa --bg (quindi chiaro in light, scuro in dark) ed è
+     leggero: prima un 38% di nero spegneva tutto, facendo sembrare che gli
+     elementi fossero spariti invece che sfocati. */
+  background: color-mix(in srgb, var(--bg) 40%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  backdrop-filter: blur(16px) saturate(120%);
 }
 
 .chat-panel {

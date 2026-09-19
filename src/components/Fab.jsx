@@ -182,6 +182,18 @@ export default function Fab({ page = 'home' }) {
      il pannello parte e resta già nel punto giusto. */
   useEffect(() => {
     if (!open) return undefined;
+    document.documentElement.classList.add('chat-open');
+    /* Il lock con position:fixed serve SOLO su iOS per il focus dell'input.
+       Su desktop bastano le regole overflow:hidden sull'html: evitiamo così
+       il window.scrollTo di ripristino, che Lenis animerebbe in smooth-scroll
+       facendo sembrare un salto all'hero e ritorno. */
+    const isTouch = typeof window.matchMedia === 'function'
+      && window.matchMedia('(pointer: coarse)').matches;
+    if (!isTouch) {
+      return () => {
+        document.documentElement.classList.remove('chat-open');
+      };
+    }
     const body = document.body;
     const scrollY = window.scrollY;
     body.style.position = 'fixed';
@@ -189,7 +201,6 @@ export default function Fab({ page = 'home' }) {
     body.style.left = '0';
     body.style.right = '0';
     body.style.width = '100%';
-    document.documentElement.classList.add('chat-open');
     return () => {
       body.style.position = '';
       body.style.top = '';
