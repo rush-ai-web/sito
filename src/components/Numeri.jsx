@@ -30,10 +30,10 @@ const KPI = [
     d: 'Inserimenti manuali eliminati sui documenti in ingresso grazie alla lettura automatica: meno sviste, meno correzioni.',
   },
   {
-    label: 'Fine mese',
-    to: 0,
-    suffix: ' giorni',
-    d: 'Giorni di attesa per avere i numeri: zero. Non si aspetta il report di fine mese, i conti si aggiornano mentre l’azienda lavora.',
+    label: 'Dati',
+    to: 100,
+    suffix: '%',
+    d: 'Aggiornati in automatico appena entra un documento: niente più attesa del report di fine mese.',
   },
 ];
 

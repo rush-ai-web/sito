@@ -89,11 +89,11 @@ export function Head({ icon, label, title, sub, left = false, className = '', ch
           <Pill icon={icon}>{label}</Pill>
         </Item>
       ) : null}
-      <Item as="h2" className="t-sec">
+      <Item as="h2" className="t-sec" noMobileMotion>
         {title}
       </Item>
       {sub ? (
-        <Item as="p" className="t-body">
+        <Item as="p" className="t-body" noMobileMotion>
           {sub}
         </Item>
       ) : null}
@@ -145,12 +145,23 @@ export function Group({ delay = 0, each = 0.07, as = 'div', className = '', chil
 /* Item - figlio di Group.
    Inoltra il ref: serve a useCountUp, che deve osservare il nodo
    vero per far partire il conteggio quando entra in viewport. */
-export const Item = forwardRef(function Item({ as = 'div', className = '', children, ...rest }, ref) {
+/* hidden === show: nessun movimento, il figlio resta sempre nel suo
+   stato finale. Serve a spegnere l'animazione (titoli/sottotitoli su
+   mobile) senza staccare l'elemento dalla propagazione delle varianti
+   del Group padre - toglierlo del tutto lascia l'elemento congelato
+   sull'ultimo stato applicato invece di renderlo visibile. */
+const noMotion = { hidden: { opacity: 1, x: 0, y: 0 }, show: { opacity: 1, x: 0, y: 0 } };
+
+export const Item = forwardRef(function Item({ as = 'div', className = '', children, noMobileMotion = false, ...rest }, ref) {
   const M = motion[as] || motion.div;
   const isMobile = useIsMobile();
   const profile = useContext(SectionMotionCtx);
+  /* Titoli e sottotitoli di sezione restano fermi su mobile: niente
+     comparsa animata, per alleggerire lo scroll sui dispositivi più
+     lenti. Il resto del contenuto continua ad animarsi come prima. */
+  const variants = isMobile && noMobileMotion ? noMotion : isMobile ? mobileReveal[profile] || fadeUp : fadeUp;
   return (
-    <M ref={ref} className={className} variants={isMobile ? mobileReveal[profile] || fadeUp : fadeUp} {...rest}>
+    <M ref={ref} className={className} variants={variants} {...rest}>
       {children}
     </M>
   );

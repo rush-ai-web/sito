@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Section, Head } from './ui';
 import { EASE_MODAL } from '../lib/motion';
+import { useIsMobile } from '../lib/hooks';
 
 const INCLUSO = [
   { Icon: SlidersHorizontal, label: 'Sistema personalizzato sui tuoi processi' },
@@ -43,8 +44,22 @@ const COME_FUNZIONA = [
   },
 ];
 
+const FRAME_REVEAL = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_MODAL } },
+};
+const INFO_REVEAL = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_MODAL, delay: 0.1 } },
+};
+/* hidden === show: sulla card prezzi da mobile l'entrata resta ferma,
+   senza staccare whileInView (che lasciato "a metà" congela l'elemento
+   nello stato nascosto invece di mostrarlo). */
+const NO_MOTION = { hidden: { opacity: 1, y: 0 }, show: { opacity: 1, y: 0 } };
+
 export default function Prezzi() {
   const [yearly, setYearly] = useState(true);
+  const isMobile = useIsMobile();
 
   return (
     <Section id="prezzi" large>
@@ -63,10 +78,10 @@ export default function Prezzi() {
         {/* colonna sinistra - prezzo, dentro una cornice animata */}
         <motion.div
           className="prezzi2__frame"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={isMobile ? NO_MOTION : FRAME_REVEAL}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: EASE_MODAL }}
         >
           <span className="prezzi2__frame-glow" aria-hidden="true" />
           <div className="prezzi2__card">
@@ -148,10 +163,10 @@ export default function Prezzi() {
         {/* colonna destra - come funziona */}
         <motion.div
           className="prezzi2__info"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={isMobile ? NO_MOTION : INFO_REVEAL}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: EASE_MODAL, delay: 0.1 }}
         >
           <div className="prezzi2__steps">
             {COME_FUNZIONA.map(({ Icon, t, d }, i) => (

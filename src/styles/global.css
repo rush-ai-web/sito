@@ -499,7 +499,18 @@ main {
 .glow {
   position: absolute;
   border-radius: 50%;
-  will-change: transform;
+}
+
+/* Sui dispositivi più lenti (in genere anche i touch) il blur pesante su
+   una decina di sagome per pagina costa parecchio in compositing: qui lo
+   alleggeriamo senza eliminare l'effetto. */
+@media (max-width: 760px), (pointer: coarse) {
+  .glow.beam {
+    filter: blur(40px);
+  }
+  .glow.haze {
+    filter: blur(56px);
+  }
 }
 
 /* --- forme --- */

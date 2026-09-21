@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { Section, Head } from '../ui';
 import { EASE_MODAL } from '../../lib/motion';
+import { useIsMobile } from '../../lib/hooks';
 
 const INCLUSO = [
   { Icon: Boxes, label: 'Gestione magazzino' },
@@ -50,8 +51,19 @@ const VANTAGGI = [
   },
 ];
 
+const FRAME_REVEAL = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_MODAL } },
+};
+const INFO_REVEAL = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_MODAL, delay: 0.1 } },
+};
+const NO_MOTION = { hidden: { opacity: 1, y: 0 }, show: { opacity: 1, y: 0 } };
+
 export default function PrezziRisto() {
   const [yearly, setYearly] = useState(true);
+  const isMobile = useIsMobile();
 
   return (
     <Section id="prezzi" large>
@@ -76,10 +88,10 @@ export default function PrezziRisto() {
       <div className="prezzi2">
         <motion.div
           className="prezzi2__frame"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={isMobile ? NO_MOTION : FRAME_REVEAL}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: EASE_MODAL }}
         >
           <span className="prezzi2__frame-glow" aria-hidden="true" />
           <div className="prezzi2__card">
@@ -163,10 +175,10 @@ export default function PrezziRisto() {
 
         <motion.div
           className="prezzi2__info"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={isMobile ? NO_MOTION : INFO_REVEAL}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: EASE_MODAL, delay: 0.1 }}
         >
           <div className="prezzi2__steps">
             {VANTAGGI.map(({ Icon, t, d }) => (
