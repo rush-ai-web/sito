@@ -977,6 +977,24 @@
   }
 }
 
+/* ------------------------------------------------------------
+   Mobile: testata (pillola, titolo, sommario) e card prezzi ferme.
+   Il rilevamento JS del mobile (useIsMobile) puo' non attivarsi in
+   tempo per via del prerender/idratazione, lasciando attiva
+   l'animazione d'ingresso desktop. Qui la neutralizziamo via CSS in
+   modo indipendente dal JS: opacity/transform forzati con !important
+   vincono sullo stile inline (normale) applicato da Framer Motion, che
+   quindi non ha piu' nulla da animare. Il resto di ogni sezione
+   continua a rivelarsi allo scroll.
+   ------------------------------------------------------------ */
+@media (max-width: 760px) {
+  .head > *,
+  .prezzi2__frame {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee__track {
     animation: none !important;
