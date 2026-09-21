@@ -7,9 +7,9 @@ export const ThemeCtx = createContext('light');
 const SectionMotionCtx = createContext('up');
 
 const MOBILE_MOTION_BY_SECTION = {
-  problema: 'static',
-  misurabilita: 'static',
-  confronto: 'static',
+  problema: 'left',
+  misurabilita: 'left',
+  confronto: 'right',
   soluzione: 'left',
   funzioni: 'left',
   metodo: 'left',
@@ -85,7 +85,7 @@ export function Head({ icon, label, title, sub, left = false, className = '', ch
   return (
     <Group className={`head ${left ? 'head--left' : ''} ${className}`} each={0.09}>
       {label ? (
-        <Item>
+        <Item noMobileMotion>
           <Pill icon={icon}>{label}</Pill>
         </Item>
       ) : null}

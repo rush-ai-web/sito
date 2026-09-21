@@ -89,7 +89,7 @@ export default function Prezzi() {
             <div className="prezzi-toggle">
               {[
                 { id: false, label: 'Trimestrale' },
-                { id: true,  label: 'Annuale', tag: '13% di sconto' },
+                { id: true,  label: 'Annuale', tag: '14% di sconto' },
               ].map(({ id, label, tag }) => (
                 <button
                   key={String(id)}
