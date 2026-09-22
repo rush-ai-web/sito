@@ -73,7 +73,13 @@ export default function Prezzi() {
             <span className="head-title-line">UN INVESTIMENTO CHIARO</span>
           </>
         }
-        sub="Centralizza il lavoro con un canone definito sul tuo progetto. Sai da subito cosa è incluso e quali funzioni richiedono una valutazione dedicata."
+        sub={
+          <>
+            <strong>Centralizza il lavoro con un canone definito sul tuo progetto.</strong>
+            <br />
+            Sai da subito cosa è incluso e quali funzioni richiedono una valutazione dedicata.
+          </>
+        }
       />
 
       <div className="prezzi2">

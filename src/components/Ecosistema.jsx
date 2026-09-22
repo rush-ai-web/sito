@@ -68,7 +68,7 @@ function EcosistemaDesktop() {
         title={
           <>
             <span className="head-title-line">I TUOI STRUMENTI (E NON SOLO) COLLEGATI</span>
-            <span className="head-title-line">LA TUA ATTIVITÀ, INSIEME</span>
+            <span className="head-title-line">ALLA TUA ATTIVITÀ, INSIEME</span>
           </>
         }
         sub={
@@ -257,7 +257,7 @@ function EcosistemaMobile() {
         title={
           <>
             <span className="head-title-line">I TUOI STRUMENTI (E NON SOLO) COLLEGATI</span>
-            <span className="head-title-line">LA TUA ATTIVITÀ, INSIEME</span>
+            <span className="head-title-line">ALLA TUA ATTIVITÀ, INSIEME</span>
           </>
         }
         sub={

@@ -50,7 +50,7 @@ export default function Confronto() {
   return (
     <Section id="confronto" large>
       <Head
-        className="head--section-spacing head--split-title"
+        className="head--section-spacing head--split-title head--confronto-copy"
         icon={Scale}
         label="Perché RUSH"
         title={
@@ -61,7 +61,9 @@ export default function Confronto() {
         }
         sub={
           <>
-            Collegamenti, AI e supporto diretto, con un investimento pensato per le PMI.{' '}
+            <span className="confronto-copy-lead">
+              Collegamenti, AI e supporto diretto, con un investimento pensato per le PMI.
+            </span>
             <strong>Valuta ciò che conta nel lavoro di ogni giorno.</strong>
           </>
         }
