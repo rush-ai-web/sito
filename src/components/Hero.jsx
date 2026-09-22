@@ -1,25 +1,22 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ArrowDown, Sparkles, Layers, Zap, TrendingUp } from 'lucide-react';
+import { ArrowDown, Sparkles, Link2, Database, Lightbulb } from 'lucide-react';
 import HeroScene from './HeroScene';
 import { wordUp, fadeUp, EASE_MODAL } from '../lib/motion';
 
-/* prima riga del titolo, fissa */
-const L1 = ['Il', 'tuo', 'sistema operativo', 'su', 'misura,'];
+/* titolo principale, fisso */
+const L1 = ['IL', 'TUO', 'CENTRALIZZATORE', 'OPERATIVO'];
 
 /* seconda riga che ruota: copre AI + posto unico + automazione + risultato.
    Ogni frase ha un'icona che le sta accanto per farla riconoscere subito. */
 const ROTATE = [
-  { t: 'con AI integrata', Icon: Sparkles },
-  { t: 'tutto in un posto', Icon: Layers },
-  { t: 'che lavora da solo', Icon: Zap },
-  { t: 'che ti fa crescere', Icon: TrendingUp },
+  { t: 'AI integrata', Icon: Sparkles },
+  { t: 'Collega i tuoi gestionali.', Icon: Link2 },
+  { t: 'Riunisce i tuoi dati.', Icon: Database },
+  { t: 'Dà chiarezza al tuo lavoro.', Icon: Lightbulb },
 ];
 
-/* la riga alta di categorie */
-const COSE = ['Sistemi operativi su misura', 'Automazioni end-to-end', 'AI dentro al flusso'];
-
-/* cosa cambia quando il sistema operativo è tuo: ciò che cala e ciò che cresce. */
+/* cosa cambia quando il centro operativo è tuo: ciò che cala e ciò che cresce. */
 const OUTCOMES = [
   { sign: '−', t: 'Tempo perso' },
   { sign: '+', t: 'Margine' },
@@ -33,7 +30,7 @@ const OUTCOMES = [
 
 export function OutcomeTicker() {
   return (
-    <div className="ticker" aria-label="Cosa cambia con un sistema operativo su misura">
+    <div className="ticker" aria-label="Cosa cambia con un centro operativo su misura">
       <div className="ticker__track">
         {[0, 1].map((copy) => (
           <div className="ticker__group" key={copy} aria-hidden={copy === 1}>
@@ -206,11 +203,9 @@ export default function Hero() {
           />
         </motion.div>
 
-        <h1 className="hero__title" aria-label="Il tuo sistema operativo su misura, con AI integrata">
+        <h1 className="hero__title" aria-label="Il tuo centralizzatore operativo con AI integrata">
           <span className="hero__line">
-            {L1.slice(0, 3).map((w, i) => <Word key={w + i} w={w} i={i} />)}
-            <span className="hero__br" aria-hidden="true" />
-            {L1.slice(3).map((w, i) => <Word key={w + i + 3} w={w} i={i + 3} />)}
+            {L1.map((w, i) => <Word key={w + i} w={w} i={i} />)}
           </span>
           <span className="hero__line hero__line--slot">
             <RotatingSlot />
@@ -224,7 +219,7 @@ export default function Hero() {
           initial="hidden"
           animate="show"
         >
-          <strong>Il sistema si adatta alla tua azienda, non il contrario.</strong>{' '}
+          <strong>Un sistema che si adatta alla tua azienda.</strong>{' '}
           <br className="hero-note-break" />
           Collega processi e strumenti e automatizza il lavoro ripetitivo.
         </motion.p>
@@ -237,7 +232,7 @@ export default function Hero() {
           animate="show"
         >
           <a className="btn btn--hero btn--accent" href="#contatti">
-            Prenota una call
+            Parliamo della tua attività
             <span className="btn__badge">
               <ArrowDown size={16} strokeWidth={2.2} />
             </span>

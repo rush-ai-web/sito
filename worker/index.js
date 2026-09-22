@@ -24,23 +24,21 @@
 const KNOWLEDGE = `
 # RUSH — chi siamo (rush-ai.it)
 
-Rush è una software house italiana che costruisce sistemi operativi su misura per PMI:
-cassa, magazzino, fatturazione elettronica, ordini, presenze, CRM, produzione — con
-automazioni e intelligenza artificiale integrata nel flusso di lavoro, non aggiunta sopra.
+RUSH è un centralizzatore operativo intelligente per PMI. Collega i gestionali e gli
+strumenti già in uso, riunisce i loro dati e organizza i flussi di lavoro in un unico
+ambiente per i diversi reparti, con automazioni e intelligenza artificiale integrate.
 
 Problema che risolviamo: le aziende oggi usano software diversi che non si parlano tra
 loro (nessuna anagrafica coincide), i dati arrivano già vecchi (report di fine mese su
 numeri di settimane prima) e molte ore di lavoro manuale (inserimenti, fogli Excel
 paralleli, copia-incolla) non producono valore.
 
-Come lavoriamo (metodo, circa 8 settimane dal primo incontro alla produzione):
-1. Analisi sul campo — veniamo a vedere come lavorate davvero, dove si perde tempo.
-2. Progetto e prototipo — disegniamo il sistema e mostriamo schermate vere prima di
-   scrivere il codice definitivo.
-3. Sviluppo e messa in linea — costruiamo, importiamo i dati storici, colleghiamo i
-   sistemi esistenti, formiamo il team.
-4. Evoluzione continua — il sistema cresce con l'azienda: nuovi moduli, automazioni,
-   integrazioni quando servono.
+Come lavoriamo (metodo, massimo 8 settimane dal primo incontro al centro operativo):
+1. Capiamo come lavori — analizziamo strumenti, dati e attività dei reparti.
+2. Ti mostriamo come cambia — disegniamo il centro operativo e il prototipo.
+3. Colleghiamo e mettiamo al lavoro — attiviamo le integrazioni, importiamo i dati e
+   formiamo il team.
+4. Cresciamo con l'attività — aggiungiamo funzioni, automazioni e collegamenti.
 
 Prezzi: canone mensile fisso e chiaro, nessuna licenza extra o costo nascosto. Non
 pubblichiamo un listino generico perché il prezzo dipende dal perimetro reale
@@ -48,11 +46,9 @@ pubblichiamo un listino generico perché il prezzo dipende dal perimetro reale
 ~30 minuti) arriva un perimetro con cifra, tempi e contenuto chiari. Se un progetto
 non ha senso per il cliente, lo diciamo apertamente invece di forzare la vendita.
 
-Perché Rush e non altri: software scritto da noi (non rivenduto — le modifiche
-diventano una release, non un ticket a terzi), dati sempre esportabili in formato
-aperto (nessun lock-in), un referente unico che segue il progetto dall'inizio,
-prezzo accessibile per una PMI, AI integrata nel sistema, delivery in media 8
-settimane, supporto diretto via chat/email (non un call center).
+Perché RUSH e non altri: contatto diretto con chi sviluppa, configurazione sui processi,
+preventivo a cifra fissa, investimento accessibile per una PMI, AI integrata nei flussi,
+avvio in massimo 8 settimane, modifiche gestite direttamente dal team e continuità nel tempo.
 
 Settori serviti: ristorazione, produzione, logistica, retail, studi medici, edilizia,
 servizi, artigianato — il prodotto verticale più maturo oggi è Rush Ristorazione
@@ -69,25 +65,23 @@ lavorativi. Email: info@rush-ai.it.
 
 ### Il prodotto
 
-D: Che tipo di sistemi operativi costruite?
-R: Costruiamo sistemi operativi su misura per PMI italiane: cassa, magazzino,
-fatturazione elettronica, ordini, presenze, CRM, produzione. Il perimetro si decide
-insieme partendo dai tuoi processi reali, non da un template.
+D: RUSH è un gestionale?
+R: RUSH è un centralizzatore operativo intelligente. Collega i gestionali e gli
+strumenti già in uso, riunisce i loro dati e organizza i flussi di lavoro in un unico
+ambiente per i diversi reparti dell'attività.
 
-D: Cosa succede al sistema che uso oggi?
-R: Non lo cancelliamo: nella fase di analisi mappiamo cosa fa oggi ogni strumento,
-cosa vale la pena conservare e cosa può essere sostituito. Rush si integra con
-l'esistente e lo sostituisce solo dove porta un vantaggio chiaro.
+D: Devo cambiare i gestionali che uso già?
+R: RUSH nasce per collegarsi agli strumenti già utilizzati. Durante l'analisi
+verifichiamo le integrazioni disponibili e definiamo quali dati e processi portare nel
+centro operativo.
 
-D: Posso aggiungere funzionalità dopo?
-R: Sì. Il sistema evolve con l'azienda: aggiungiamo moduli, campi, automazioni e
-report nel tempo. Non paghi mai un piano superiore per sbloccare cose che ti
-servivano davvero.
+D: Posso aggiungere funzionalità in seguito?
+R: Sì. Il progetto può essere ampliato con nuovi reparti, collegamenti e automazioni.
+Perimetro e costo delle nuove funzioni vengono definiti insieme.
 
-D: Funziona sia da desktop che da mobile?
-R: Sì. L'interfaccia è la stessa in ufficio e in movimento: apri, cerchi, aggiorni,
-senza dover reimparare nulla. Anche dal telefono lavori sui dati veri, non su una
-versione ridotta.
+D: Posso usare RUSH anche da smartphone?
+R: Sì. RUSH è utilizzabile da desktop e da mobile, per consultare le informazioni e
+seguire il lavoro anche quando si è fuori sede.
 
 ### Come lavoriamo
 
@@ -390,9 +384,9 @@ const PAGE_FOCUS = {
   home: `
 # DOVE SEI ORA: home di rush-ai.it
 
-Il visitatore sta guardando la pagina generale di Rush. Rispondi parlando dei
-sistemi operativi Rush per PMI in generale (cassa, magazzino, fatturazione,
-CRM, produzione, ecc.), usando le FAQ della sezione "Rush (generale)". Se
+Il visitatore sta guardando la pagina generale di RUSH. Rispondi parlando del
+centralizzatore operativo per PMI (cassa, magazzino, fatturazione, CRM, produzione,
+ecc.), usando le FAQ della sezione "Rush (generale)". Se
 l'utente ha chiaramente un bar/ristorante o chiede di ristorazione, puoi
 menzionare che esiste Rush Ristorazione, il verticale dedicato, e rimandarlo a
 rush-ai.it/ristorazione per i dettagli — ma non dilungarti su prezzi o moduli
@@ -616,7 +610,7 @@ export function confirmHtml({ nome }) {
           </tr>
           <tr>
             <td style="padding:18px 30px 26px;border-top:1px solid rgba(255,255,255,.1);">
-              <p style="margin:0;font-size:12px;line-height:1.5;color:#9a9a9e;">Rush — la software house che costruisce il tuo sistema operativo su misura, con AI integrata.</p>
+              <p style="margin:0;font-size:12px;line-height:1.5;color:#9a9a9e;">RUSH — il centralizzatore operativo intelligente che collega strumenti, dati e reparti.</p>
             </td>
           </tr>
         </table>

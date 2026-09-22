@@ -29,14 +29,14 @@ const AUDIENCES = [
   {
     id: 'progetto',
     icon: Rocket,
-    t: 'Ho un progetto',
-    d: 'Voglio un sistema su misura per la mia attività.',
+    t: 'La mia attività',
+    d: 'Voglio collegare strumenti e dati per lavorare meglio.',
   },
   {
     id: 'partner',
     icon: Handshake,
     t: 'Voglio collaborare',
-    d: 'Sono un professionista o un partner e voglio lavorare con Rush.',
+    d: 'Sono un professionista o un partner e voglio collaborare con RUSH.',
   },
 ];
 
@@ -163,12 +163,10 @@ export default function Cta() {
             <Pill icon={Mail}>Contatti</Pill>
           </Item>
           <Item as="h2" className="t-sec">
-            Raccontaci come lavori oggi.
+            DOVE PERDI TEMPO OGGI, PUOI RECUPERARE VALORE DOMANI.
           </Item>
           <Item as="p" className="t-body">
-            Il primo incontro serve a capire se un sistema su misura ha senso per te - e, se non
-            ce l'ha, te lo diciamo. Pochi passaggi e ti ricontattiamo con un'idea concreta di
-            perimetro, tempi e costi.
+            Raccontaci quali strumenti usi e quali passaggi rallentano il lavoro. Nel primo incontro valutiamo cosa collegare, dove semplificare e come RUSH può esserti utile. Con un quadro chiaro di attività, tempi e costi.
           </Item>
           <Item as="p" className="t-small" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <LiveDot />
@@ -225,7 +223,7 @@ export default function Cta() {
                   ))}
                 </div>
                 <p className="wiz__count">
-                  Passo {step + 1} di {TOTAL_STEPS}
+                  Modulo — Passo {step + 1} di {TOTAL_STEPS}
                 </p>
 
                 <div className="wiz__stage">
@@ -242,7 +240,7 @@ export default function Cta() {
                     >
                       {step === 0 && (
                         <fieldset className="wiz__fs">
-                          <legend className="wiz__q">Cosa ti porta qui?</legend>
+                          <legend className="wiz__q">Da cosa vuoi partire?</legend>
                           <div className="wiz__cards">
                             {AUDIENCES.map(({ id, icon: Icon, t, d }) => (
                               <button

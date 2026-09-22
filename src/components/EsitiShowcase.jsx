@@ -80,8 +80,8 @@ function SceneDash({ reduce }) {
 /* ── scena 2 · Niente più cose che sfuggono (il sistema vigila) ── */
 const AROWS = [
   { Icon: CalendarClock, t: 'Scadenza F24', s: 'tra 6 giorni', state: 'ok' },
-  { Icon: Boxes, t: 'Scorta caffè', s: 'sotto soglia', state: 'alert' },
-  { Icon: Receipt, t: 'Fattura #182', s: 'registrata da sola', state: 'ok' },
+  { Icon: Boxes, t: 'Scorta caffè', s: 'sotto soglia ·', state: 'alert' },
+  { Icon: Receipt, t: 'Fattura #182', s: 'registrata automaticamente', state: 'ok' },
 ];
 
 function SceneWatch({ reduce }) {
@@ -170,20 +170,20 @@ function SceneAI({ reduce }) {
 const ESITI = [
   {
     icon: Gauge,
-    t: 'L’azienda a colpo d’occhio',
-    d: 'Margini, incassi e scorte sempre aggiornati: sai come stai andando quando vuoi, senza aspettare la chiamata del commercialista.',
+    t: 'Sai dove sta andando la tua attività',
+    d: 'Margini, incassi e scorte nella stessa vista. Colleghi ciò che entra a ciò che spendi e individui le variazioni da approfondire.',
     Scene: SceneDash,
   },
   {
     icon: ShieldCheck,
-    t: 'Niente più cose che sfuggono',
-    d: 'Scadenze, errori e scorte sotto soglia li nota il sistema prima di te. Meno stress da dimenticanze, più notti tranquille.',
+    t: 'Le priorità diventano visibili',
+    d: 'Scadenze in arrivo, scorte sotto soglia e anomalie emergono nel tuo centro operativo. Sai cosa richiede attenzione e puoi organizzare il prossimo passo.',
     Scene: SceneWatch,
   },
   {
     icon: Sparkles,
-    t: 'Testa solo al business',
-    d: 'Prendi le decisioni che contano con l’AI che analizza i numeri insieme a te e ti dice, in chiaro, dove intervenire.',
+    t: 'Più lucidità nelle decisioni',
+    d: 'L’AI ti aiuta a leggere i dati collegati e a capire dove approfondire. Dedichi meno energie a cercare informazioni e più attenzione alle scelte che contano.',
     Scene: SceneAI,
     accent: true,
   },

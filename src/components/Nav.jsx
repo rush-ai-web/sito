@@ -55,7 +55,7 @@ function LogoMark({ variant = 'default' }) {
 }
 
 const LINKS = [
-  ['Servizio', '#soluzione'],
+  ['Come funziona', '#soluzione'],
   ['Metodo', '#metodo'],
   ['Prezzi', '#prezzi'],
   ['FAQ', '#faq'],

@@ -103,7 +103,7 @@ function renderMessage(text) {
 const SUGGESTS = {
   home: [
     'Come funziona il metodo di lavoro?',
-    'Quanto costa un sistema su misura?',
+    'Quanto costa configurare il mio centro operativo?',
     'Quanto tempo serve per partire?',
     'Come garantite la sicurezza dei dati?',
   ],

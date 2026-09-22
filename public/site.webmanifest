@@ -1,7 +1,7 @@
 {
   "name": "Rush",
   "short_name": "Rush",
-  "description": "Sistemi operativi su misura, automazioni e intelligenza artificiale per PMI.",
+  "description": "Il centralizzatore operativo intelligente che collega strumenti, dati e reparti.",
   "lang": "it-IT",
   "start_url": "./",
   "scope": "./",

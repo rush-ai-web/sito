@@ -1,37 +1,37 @@
 # Rush
 
-> Rush crea sistemi operativi su misura per PMI, collegando dati, automazioni e intelligenza artificiale per ridurre errori, costi e lavoro manuale.
+> RUSH è un centralizzatore operativo intelligente per PMI: collega gestionali e strumenti, riunisce i dati e organizza i flussi di lavoro dei reparti in un unico ambiente.
 
 URL canonico: [https://rush-ai.it/](https://rush-ai.it/)
 Lingua: italiano
 Area servita: Italia
 
-## Servizi principali
+## Cosa fa RUSH
 
-- Sistemi operativi personalizzati sui processi reali dell'azienda
+- Centro operativo configurato sui processi reali dell'azienda
 - Collegamento di cassa, magazzino, fatturazione, personale e altri sistemi
 - Automazioni end-to-end per eliminare attività manuali e ripetitive
 - Intelligenza artificiale integrata nei flussi e nei dati aziendali
-- Dashboard operative con dati aggiornati in tempo reale
+- Vista operativa unica con dati organizzati per reparto
 
 ## Metodo
 
-Rush analizza i processi, realizza un prototipo, sviluppa il sistema operativo, importa i dati e forma il team. La prima versione può entrare in produzione entro otto settimane.
+RUSH analizza strumenti, dati e attività dei reparti, realizza un prototipo, attiva le integrazioni, importa i dati necessari e forma il team. La prima versione può entrare nel lavoro quotidiano entro otto settimane.
 
 ## Prezzi
 
-Il canone parte da 299 EUR al mese con fatturazione trimestrale. Sono inclusi analisi, configurazione iniziale, sistema operativo personalizzato e AI base. Automazioni e integrazioni custom complesse sono valutate su preventivo.
+Il canone è definito sul progetto e include analisi, configurazione iniziale, centro operativo personalizzato, dashboard, formazione e AI base. Automazioni complesse e integrazioni personalizzate sono valutate su preventivo.
 
 ## Contatti
 
-- Email: [info@rush.it](mailto:info@rush.it)
+- Email: [info@rush-ai.it](mailto:info@rush-ai.it)
 - Modulo: [Contatta Rush](https://rush-ai.it/#contatti)
 
 ## Risorse
 
-- [Sistemi su misura per PMI](https://rush-ai.it/): sistemi operativi, automazioni e AI per diversi settori.
+- [Centralizzazione operativa per PMI](https://rush-ai.it/): gestionali collegati, dati condivisi, automazioni e AI per diversi settori.
 - [Rush Ristorazione](https://rush-ai.it/ristorazione): il verticale per bar e ristoranti.
-- [FAQ sui sistemi su misura](https://rush-ai.it/#faq)
+- [FAQ su RUSH](https://rush-ai.it/#faq)
 - [FAQ ristorazione](https://rush-ai.it/ristorazione#faq)
 
 - [Sitemap XML](https://rush-ai.it/sitemap.xml)

@@ -15,20 +15,20 @@ const CATEGORIES = {
 export const FAQ_DATA = {
   prodotto: [
     {
-      q: 'Che tipo di sistemi operativi costruite?',
-      a: "Costruiamo sistemi operativi su misura per PMI italiane: cassa, magazzino, fatturazione elettronica, ordini, presenze, CRM, produzione. Il perimetro si decide insieme partendo dai tuoi processi reali, non da un template.",
+      q: 'RUSH è un gestionale?',
+      a: 'RUSH è un centralizzatore operativo intelligente. Collega i gestionali e gli strumenti già in uso, riunisce i loro dati e organizza i flussi di lavoro in un unico ambiente per i diversi reparti della tua attività.',
     },
     {
-      q: 'Cosa succede al sistema che uso oggi?',
-      a: "Non lo cancelliamo: nella fase di analisi mappiamo cosa fa oggi ogni strumento, cosa vale la pena conservare e cosa può essere sostituito. Rush si integra con l'esistente e lo sostituisce solo dove porta un vantaggio chiaro.",
+      q: 'Devo cambiare i gestionali che uso già?',
+      a: 'RUSH nasce per collegarsi agli strumenti che utilizzi. Durante l’analisi verifichiamo le integrazioni disponibili e definiamo quali dati e processi portare nel tuo centro operativo.',
     },
     {
-      q: 'Posso aggiungere funzionalità dopo?',
-      a: "Sì. Il sistema evolve con l'azienda: aggiungiamo moduli, campi, automazioni e report nel tempo. Non paghi mai un piano superiore per sbloccare cose che ti servivano davvero.",
+      q: 'Posso aggiungere funzionalità in seguito?',
+      a: 'Sì. Puoi ampliare il progetto con nuovi reparti, collegamenti e automazioni. Definiamo insieme il perimetro e il costo delle nuove funzioni.',
     },
     {
-      q: 'Funziona sia da desktop che da mobile?',
-      a: "Sì. L'interfaccia è la stessa in ufficio e in movimento: apri, cerchi, aggiorni - senza dover reimparare nulla. Anche dal telefono lavori sui dati veri, non su una versione ridotta.",
+      q: 'Posso usare RUSH anche da smartphone?',
+      a: 'Sì, RUSH è utilizzabile da desktop e da mobile, per consultare le informazioni e seguire il lavoro anche quando sei fuori sede.',
     },
   ],
   processo: [
@@ -99,8 +99,8 @@ export function LegacyFaq() {
       <Head
         icon={HelpCircle}
         label="Domande frequenti"
-        title={<>Le domande che ci fate più spesso</>}
-        sub="Le risposte in due righe. Se ne hai altre, ci sentiamo direttamente."
+        title={<>CAPIAMO COSA PUÒ CAMBIARE NELLA TUA ATTIVITÀ.</>}
+        sub="Dagli strumenti che usi già ai primi passi con RUSH: qui trovi le risposte da cui partire."
       />
 
       <div className="faq-tabs" role="tablist" aria-label="Categorie">

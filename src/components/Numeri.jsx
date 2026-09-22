@@ -15,25 +15,26 @@ const KPI = [
     to: 600,
     prefix: '~',
     suffix: ' ore',
-    d: 'Ore di lavoro manuale che tornano ogni anno a una PMI: in media 12 a settimana, circa 600 l’anno, tolte dai fogli di calcolo.',
+    d: 'Circa 600 ore di lavoro manuale recuperate ogni anno: in media 12 a settimana, da dedicare alle persone, ai clienti e alla crescita dell’attività.',
   },
   {
-    label: 'Consegna',
+    label: 'Avvio',
     to: 8,
     suffix: ' sett.',
-    d: 'Dal primo incontro alla prima versione in produzione, con i tuoi dati veri dentro e i primi numeri che iniziano a girare.',
+    d: 'Dal primo incontro alla prima versione operativa, con i tuoi dati collegati e il team pronto a utilizzarla.',
   },
   {
-    label: 'Errori',
+    label: 'Inserimenti manuali',
     to: 92,
     suffix: '%',
-    d: 'Inserimenti manuali eliminati sui documenti in ingresso grazie alla lettura automatica: meno sviste, meno correzioni.',
+    d: 'Inserimenti manuali eliminati sui documenti in ingresso grazie alla lettura automatica. Meno dati da ricopiare e meno occasioni di errore.',
   },
   {
-    label: 'Dati',
-    to: 100,
-    suffix: '%',
-    d: 'Aggiornati in automatico appena entra un documento: niente più attesa del report di fine mese.',
+    label: 'Visibilità',
+    to: 1,
+    prefix: '<',
+    suffix: ' min',
+    d: 'Dal momento in cui il dato entra in RUSH alla sua visualizzazione in dashboard. Le informazioni diventano subito più facili da consultare.',
   },
 ];
 
@@ -60,8 +61,8 @@ export default function Numeri() {
         className="head--wide-summary"
         icon={TrendingUp}
         label="Risultati"
-        title={<>Quanto lavoro ti toglie, misurato in numeri</>}
-        sub="Ore restituite ogni anno, inserimenti manuali quasi azzerati, dati in dashboard in tempo reale: gli effetti concreti quando un sistema Rush entra in produzione."
+        title={<>MENO TEMPO A RINCORRERE DATI. PIÙ SPAZIO PER GUIDARE L’ATTIVITÀ.</>}
+        sub="Tempo recuperato, meno inserimenti manuali e informazioni più accessibili: il valore della centralizzazione si misura nel lavoro di ogni giorno."
       />
 
       <Group className="stair shimmer-top" each={0.1}>

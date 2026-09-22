@@ -5,10 +5,10 @@ import { Section, Pill, ThemeCtx } from './ui';
 import { EASE_MODAL, inView } from '../lib/motion';
 
 const VANTAGGI = [
-  { icon: Boxes, t: 'Sai sempre cosa hai in magazzino, senza fare l’inventario a mano' },
-  { icon: Coins, t: 'Vedi il margine reale di ogni piatto, non una stima a occhio' },
-  { icon: Users, t: 'Turni e presenze del team, senza fogli Excel e messaggi in chat' },
-  { icon: Megaphone, t: 'Marketing, promozioni e fidelizzazione clienti dallo stesso sistema' },
+  { icon: Boxes, t: 'Controlli le scorte dai dati collegati di acquisto e consumo.' },
+  { icon: Coins, t: 'Leggi il margine di ogni piatto a partire dai costi delle ricette.' },
+  { icon: Users, t: 'Riunisci turni e presenze del team nello stesso ambiente.' },
+  { icon: Megaphone, t: 'Coordini marketing, promozioni e fidelizzazione dal tuo centro operativo.' },
 ];
 
 /* volutamente diverse dai vantaggi elencati a sinistra: lì il "cosa ci
@@ -18,6 +18,9 @@ const INCLUSO = [
   'Avviso quando un fornitore alza i prezzi',
   'Menu engineering: quali piatti spingere',
   'Timbrature con QR e richieste ferie',
+  'Import automatico delle fatture fornitore',
+  'Calcolo dei costi FIFO su ogni ricetta',
+  'App per timbrature e turni dello staff',
 ];
 
 export default function Ristorazione() {
@@ -50,13 +53,11 @@ export default function Ristorazione() {
           <Pill icon={UtensilsCrossed}>Un esempio: Rush Ristorazione</Pill>
 
           <h2 className="t-sec" style={{ marginTop: 16 }}>
-            Il sistema perfetto per bar e ristoranti
+            IL TUO LOCALE LAVORA. TU VEDI DOVE GUADAGNA.
           </h2>
 
           <p className="t-body" style={{ marginTop: 14 }}>
-            Per chi manda avanti il locale, non solo per chi lo tiene in ordine: sai a colpo
-            d'occhio quanto margine fai su ogni piatto, quando un fornitore alza i prezzi e cosa
-            sta per finire in magazzino.
+            RUSH collega i dati di cassa, acquisti, magazzino e personale. Hai un quadro più chiaro del margine sui piatti, degli aumenti dei fornitori e delle scorte da riordinare.
           </p>
 
           <ul className="risto2__list">
@@ -72,7 +73,7 @@ export default function Ristorazione() {
 
           <div className="risto2__cta-row">
             <a className="btn btn--accent btn--hero risto-discover" href="./ristorazione.html">
-              Scopri Rush Ristorazione
+              Scopri RUSH Ristorazione
               <span className="btn__badge" aria-hidden="true">
                 <ArrowRight size={18} strokeWidth={2} />
               </span>
@@ -107,11 +108,9 @@ export default function Ristorazione() {
           </div>
 
           <div className="risto2__kpi">
-            <span className="t-label">Il cuore del sistema</span>
+            <span className="t-label">Più locali, un unico centro operativo</span>
             <p className="t-body" style={{ marginTop: 10 }}>
-              Cassa, fatture, magazzino, ricette e turni smettono di essere strumenti
-              scollegati e iniziano a parlarsi: ogni fattura che entra aggiorna il magazzino
-              e ricalcola il margine reale dei piatti.
+              Un bar, un ristorante e una panineria? Riunisci i dati delle tre attività in RUSH. Tu hai una visione complessiva, ogni responsabile segue la propria sede.
             </p>
           </div>
 

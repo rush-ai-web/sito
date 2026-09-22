@@ -5,18 +5,18 @@ import { useIsMobile } from '../lib/hooks';
 const PUNTI = [
   {
     icon: Unplug,
-    t: 'Software che non parlano tra loro',
-    d: 'Sistema, magazzino, fatturazione, presenze: quattro sistemi, quattro anagrafiche, nessuna che coincide. Ogni riconciliazione è manuale.',
+    t: 'Strumenti separati, lavoro doppio',
+    d: 'Cassa, magazzino, fatturazione, presenze: quattro sistemi, quattro anagrafiche da allineare. Tocca al tuo team ricostruire il quadro, un passaggio alla volta.',
   },
   {
     icon: FileWarning,
-    t: 'Dati che arrivano già vecchi',
-    d: "Report chiusi a fine mese su numeri di tre settimane prima. Quando il problema si vede nel bilancio, è successo e basta: non c'è più niente da correggere.",
+    t: 'I problemi emergono troppo tardi',
+    d: 'A fine mese leggi numeri di tre settimane prima. Nel frattempo i costi sono cambiati e le occasioni per intervenire si sono ridotte.',
   },
   {
     icon: Clock,
-    t: 'Ore di lavoro che nessuno conta',
-    d: 'Inserimenti a mano, fogli Excel paralleli, copia-incolla tra un sistema e l\'altro. Lavoro che costa stipendio e non produce niente.',
+    t: 'Ore che paghi senza accorgertene',
+    d: 'Copia e incolla, fogli Excel paralleli, dati inseriti più volte. Piccole operazioni che si ripetono ogni giorno e sottraggono tempo al lavoro che fa crescere l’attività.',
   },
 ];
 
@@ -30,15 +30,15 @@ export default function Problema() {
         label="Il problema"
         title={
           <>
-            I sistemi operativi standard costringono l'azienda ad adattarsi al software
+            QUANDO I TUOI STRUMENTI NON COMUNICANO, IL LAVORO RICADE SU DI TE.
           </>
         }
         sub={
           <>
-            <strong>Dovrebbe essere il contrario.</strong>
+            <strong>Ogni informazione da rincorrere ha un costo.</strong>
             <br />
             <span className="problem-copy-line">
-              Un sistema che non segue i tuoi processi diventa una tassa quotidiana su chi ci lavora.
+              Dati sparsi, controlli manuali e risposte in ritardo assorbono tempo e rendono più difficile capire dove perdi margine.
             </span>
           </>
         }

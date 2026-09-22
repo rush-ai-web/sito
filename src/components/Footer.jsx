@@ -5,25 +5,21 @@ const COLONNE = [
   [
     'Cosa facciamo',
     [
-      ['Sistemi su misura', '#prodotto'],
+      ['Centralizzazione operativa', '#prodotto'],
       ['Automazioni', '#prodotto'],
-      ['AI integrata', '#prodotto'],
-      ['Integrazioni', '#prodotto'],
     ],
   ],
   [
     'Azienda',
     [
       ['Come lavoriamo', '#metodo'],
-      ['Perché Rush', '#confronto'],
-      ['Risultati', '#numeri'],
-      ['Ristorazione', '#ristorazione'],
+      ['Perché RUSH', '#confronto'],
     ],
   ],
   [
     'Contatti',
     [
-      ['Parliamo del tuo progetto', '#contatti'],
+      ['Parliamo della tua attività', '#contatti'],
       ['info@rush-ai.it', 'mailto:info@rush-ai.it'],
     ],
   ],
@@ -72,8 +68,7 @@ export default function Footer({ logoVariant = 'default', columns = COLONNE }) {
               itemProp="description"
               style={{ marginTop: 16, maxWidth: 320 }}
             >
-              Costruiamo il sistema su misura per la tua azienda: dati sempre aggiornati, lavoro
-              ripetitivo automatizzato e AI integrata dove serve davvero.
+              RUSH è il centralizzatore operativo intelligente che collega i tuoi strumenti, riunisce i dati e semplifica il lavoro di ogni reparto.
             </p>
           </div>
 

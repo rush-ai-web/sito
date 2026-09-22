@@ -28,8 +28,8 @@ const VB_H = 520;
 const MODULES = [
   { icon: CreditCard, t: 'Cassa', d: 'Pagamenti & scontrini', y: 52 },
   { icon: Users, t: 'Personale', d: 'Presenze & turni', y: 148 },
-  { icon: Layers, t: 'Magazzino', d: 'Stock & movimenti', y: 244 },
-  { icon: ClipboardList, t: 'Ordini', d: 'Ciclo attivo & passivo', y: 340 },
+  { icon: Layers, t: 'Magazzino', d: 'Scorte e movimenti', y: 244 },
+  { icon: ClipboardList, t: 'Ordini', d: 'Acquisti e vendite', y: 340 },
   { icon: FileText, t: 'Fatturazione', d: 'Documenti & scadenze', y: 436 },
 ];
 
@@ -64,12 +64,12 @@ function EcosistemaDesktop() {
       <Head
         className="head--wide-copy"
         icon={Boxes}
-        label="Un unico posto"
-        title={<>Tutti i tuoi strumenti in un unico sistema</>}
+        label="Un unico punto di lavoro"
+        title={<>I TUOI GESTIONALI, E NON SOLO, COLLEGATI. LA TUA ATTIVITÀ, INSIEME.</>}
         sub={
           <>
-            <span className="head-copy-line">Cassa, magazzino, personale, ordini, fatturazione: oggi vivono in strumenti separati che non si parlano.</span>
-            <strong className="head-copy-line">Rush li fa convergere in un unico posto, con l'AI che tiene tutto allineato.</strong>
+            <span className="head-copy-line">Cassa, personale, magazzino, ordini e fatturazione: RUSH collega gli strumenti che utilizzi e centralizza i loro flussi di dati.</span>
+            <strong className="head-copy-line">Ogni reparto trova le informazioni che gli servono. Tu hai una visione d’insieme per guidare l’attività.</strong>
           </>
         }
       />
@@ -231,8 +231,8 @@ function EcosistemaDesktop() {
             transition={{ duration: 0.6, ease: EASE_MODAL, delay: 0.95 }}
           >
             <IconTile icon={LayoutDashboard} accent />
-            <b className="eco__dest-t">La tua dashboard</b>
-            <span className="eco__dest-sub">Precompilata, aggiornata al secondo, sempre in ordine.</span>
+            <b className="eco__dest-t">Il tuo centro operativo</b>
+            <span className="eco__dest-sub">Dati collegati e organizzati per reparto. Il quadro dell’attività, in un’unica vista.</span>
           </motion.div>
         </div>
       </div>
@@ -248,12 +248,12 @@ function EcosistemaMobile() {
       <Head
         className="head--wide-copy"
         icon={Boxes}
-        label="Un unico posto"
-        title={<>Tutti i tuoi strumenti in un unico sistema</>}
+        label="Un unico punto di lavoro"
+        title={<>I TUOI GESTIONALI, E NON SOLO, COLLEGATI. LA TUA ATTIVITÀ, INSIEME.</>}
         sub={
           <>
-            <span className="head-copy-line">Cassa, magazzino, personale, ordini, fatturazione: oggi vivono in strumenti separati che non si parlano.</span>
-            <strong className="head-copy-line">Rush li fa convergere in un unico posto, con l'AI che tiene tutto allineato.</strong>
+            <span className="head-copy-line">Cassa, personale, magazzino, ordini e fatturazione: RUSH collega gli strumenti che utilizzi e centralizza i loro flussi di dati.</span>
+            <strong className="head-copy-line">Ogni reparto trova le informazioni che gli servono. Tu hai una visione d’insieme per guidare l’attività.</strong>
           </>
         }
       />
@@ -300,8 +300,8 @@ function EcosistemaMobile() {
 
         <div className="eco-m__dest">
           <IconTile icon={LayoutDashboard} accent />
-          <b className="eco__dest-t">La tua dashboard</b>
-          <span className="eco__dest-sub">Precompilata, aggiornata al secondo, sempre in ordine.</span>
+          <b className="eco__dest-t">Il tuo centro operativo</b>
+          <span className="eco__dest-sub">Dati collegati e organizzati per reparto. Il quadro dell’attività, in un’unica vista.</span>
         </div>
       </div>
     </Section>

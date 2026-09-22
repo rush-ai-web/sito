@@ -6,19 +6,19 @@ import { inView } from '../lib/motion';
 
 /* vals[0] = Rush, [1] = SaaS, [2] = Software house, [3] = Freelance */
 const RIGHE = [
-  { label: 'Supporto diretto con chi sviluppa',
+  { label: 'Contatto diretto con chi sviluppa',
     vals: [true, false, false, true] },
-  { label: 'Software flessibile, adattato ai tuoi processi',
+  { label: 'Configurazione sui tuoi processi',
     vals: [true, false, 'partial', 'partial'] },
-  { label: 'Preventivo a cifra fissa, niente sorprese',
+  { label: 'Preventivo a cifra fissa',
     vals: [true, 'partial', 'partial', false] },
-  { label: 'Prezzo accessibile per una PMI',
+  { label: 'Investimento accessibile per una PMI',
     vals: [true, true, false, true] },
-  { label: 'AI integrata nel sistema',
+  { label: 'AI integrata nei flussi di lavoro',
     vals: [true, 'partial', false, false] },
-  { label: 'Delivery in massimo 8 settimane',
+  { label: 'Avvio in massimo 8 settimane',
     vals: [true, true, false, 'partial'] },
-  { label: 'Modifiche senza ticket a terzi',
+  { label: 'Modifiche gestite direttamente dal team',
     vals: [true, false, false, true] },
   { label: 'Team strutturato e continuità nel tempo',
     vals: [true, true, true, false] },
@@ -51,13 +51,11 @@ export default function Confronto() {
     <Section id="confronto" large>
       <Head
         icon={Scale}
-        label="Perché noi"
-        title="Quello che trovi qui non lo trovi altrove"
+        label="Perché RUSH"
+        title="UN CENTRO OPERATIVO SU MISURA. UN TEAM CHE TI SEGUE."
         sub={
           <>
-            Supporto diretto, software flessibile, prezzo accessibile, AI integrata.
-            <br />
-            <strong>Metti a confronto.</strong>
+            Collegamenti, AI e supporto diretto, con un investimento pensato per le PMI. Valuta ciò che conta nel lavoro di ogni giorno.
           </>
         }
       />

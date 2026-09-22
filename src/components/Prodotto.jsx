@@ -324,11 +324,11 @@ export default function Prodotto() {
     <Section id="prodotto" grid large>
       <Head
         icon={Layers}
-        label="Cosa costruiamo"
-        title={<>Un solo sistema al posto di sei strumenti scollegati</>}
+        label="Cosa puoi fare con RUSH"
+        title={<>DIVERSI STRUMENTI DA COORDINARE. UN UNICO CENTRO DA CUI FARLO.</>}
         sub={
           <>
-            Tutto quello che oggi vive in sistemi operativi diversi, fogli di calcolo e messaggi torna in un posto solo - <strong>e resta aggiornato da solo.</strong>
+            RUSH riunisce i dati dei tuoi strumenti e collega il lavoro dei reparti. Controlli l’attività, segui le priorità e semplifichi le operazioni quotidiane dallo stesso ambiente.
           </>
         }
       />
@@ -336,24 +336,24 @@ export default function Prodotto() {
       <div className="build">
         <BuildCard
           icon={Blocks}
-          title="Sistema operativo su misura"
-          desc="Anagrafiche, ordini, magazzino, documenti, presenze: i moduli che ti servono, con i campi e le regole della tua azienda. Nessun compromesso su come lavori."
+          title="Ogni reparto, nello stesso flusso"
+          desc="Ordini, magazzino, documenti e personale: organizziamo le informazioni attorno ai tuoi processi. Ogni reparto accede ai dati utili al proprio lavoro, dentro un quadro condiviso."
         >
           <VizModuli reduce={reduce} />
         </BuildCard>
 
         <BuildCard
           icon={BarChart3}
-          title="Dati reali, non report morti"
-          desc="Margini, costi, scorte e scadenze aggiornati in continuo. I numeri che contano sono in prima schermata, non in un export da ricostruire ogni volta."
+          title="Vedi dove si forma il tuo margine"
+          desc="Incassi, costi, scorte e scadenze riuniti in una vista operativa. Individui le variazioni da approfondire e capisci dove intervenire, senza ricostruire ogni volta i numeri."
         >
           <VizDati reduce={reduce} />
         </BuildCard>
 
         <BuildCard
           icon={Sparkles}
-          title="AI integrata nel flusso"
-          desc="Legge i documenti, controlla le anomalie, risponde alle domande sui tuoi dati. Non un chatbot appiccicato sopra: un livello dentro al sistema."
+          title="Fai domande. Trova il prossimo passo."
+          desc="L’AI legge i documenti, evidenzia anomalie e risponde sui dati collegati. Chiedi cosa sta cambiando, approfondisci le informazioni e valuta con lei le azioni da intraprendere."
           accent
         >
           <VizAI reduce={reduce} />
@@ -361,8 +361,8 @@ export default function Prodotto() {
 
         <BuildCard
           icon={CalendarClock}
-          title="Automazioni end-to-end"
-          desc="I turni della settimana prossima programmati da soli, documenti che si registrano, soglie che avvisano prima del problema. Il lavoro ripetitivo esce dalla giornata."
+          title="Il lavoro ripetitivo scorre da sé"
+          desc="Registrazione dei documenti, pianificazione dei turni e avvisi sulle scorte: automatizziamo i passaggi concordati, seguendo le regole della tua attività. Il team recupera tempo da dedicare al lavoro."
           wide
         >
           <VizTurni reduce={reduce} />
@@ -370,8 +370,8 @@ export default function Prodotto() {
 
         <BuildCard
           icon={Plug}
-          title="Si collega a quello che hai già"
-          desc="Cassa, e-commerce, fatturazione elettronica, banca, fornitori. Il nuovo sistema non cancella gli strumenti che funzionano: li mette in fila."
+          title="Parti dagli strumenti che usi già"
+          desc="Cassa, e-commerce, fatturazione, banca e fornitori: verifichiamo le integrazioni disponibili e colleghiamo i dati al tuo centro operativo. Continui a valorizzare gli strumenti su cui hai già investito."
         >
           <VizLink reduce={reduce} />
         </BuildCard>

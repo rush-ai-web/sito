@@ -15,8 +15,8 @@ import { EASE_MODAL } from '../lib/motion';
 import { useIsMobile } from '../lib/hooks';
 
 const INCLUSO = [
-  { Icon: SlidersHorizontal, label: 'Sistema personalizzato sui tuoi processi' },
-  { Icon: Sparkles,          label: 'AI base integrata nel flusso' },
+  { Icon: SlidersHorizontal, label: 'Centro operativo configurato sui tuoi processi' },
+  { Icon: Sparkles,          label: 'AI base integrata nei flussi di lavoro' },
   { Icon: Monitor,           label: 'Dashboard operativa' },
   { Icon: Users,             label: 'Formazione del team' },
 ];
@@ -24,23 +24,23 @@ const INCLUSO = [
 const COME_FUNZIONA = [
   {
     Icon: ScanSearch,
-    t: 'Analisi dei processi attuali',
-    d: 'Veniamo a vedere come lavori davvero: flussi, dati, dove si perde tempo. È incluso nel canone.',
+    t: 'Analisi della tua attività',
+    d: 'Studiamo i processi, gli strumenti e i punti in cui si perde tempo. L’analisi è inclusa nel canone e serve a definire le priorità del progetto.',
   },
   {
     Icon: SlidersHorizontal,
-    t: 'Configurazione iniziale',
-    d: 'Costruiamo il sistema sui tuoi processi reali. Sistema personalizzato e AI base sono incluse.',
+    t: 'Configurazione del tuo centro operativo',
+    d: 'Organizziamo RUSH attorno ai tuoi flussi di lavoro. La configurazione iniziale, la personalizzazione prevista e l’AI base sono incluse.',
   },
   {
     Icon: Workflow,
-    t: 'Funzioni avanzate su valutazione',
-    d: "Automazioni complesse, integrazioni custom e AI avanzata si valutano a parte e possono aumentare il preventivo.",
+    t: 'Funzioni avanzate su preventivo',
+    d: 'Automazioni complesse, integrazioni personalizzate e AI avanzata vengono valutate separatamente. Il loro costo viene definito nella proposta.',
   },
   {
     Icon: Rocket,
-    t: 'In produzione in massimo 8 settimane',
-    d: 'In media otto settimane dal via, con i tuoi dati veri dentro. Il canone parte da quel momento.',
+    t: 'Operativo in massimo 8 settimane',
+    d: 'Portiamo la prima versione nel lavoro quotidiano, con i tuoi dati. Il canone parte dalla messa in produzione.',
   },
 ];
 
@@ -66,12 +66,8 @@ export default function Prezzi() {
       <Head
         icon={Banknote}
         label="Prezzi"
-        title="Cifre chiare, nessuna sorpresa"
-        sub={
-          <>
-            <strong>Un canone chiaro</strong>, senza licenze extra o costi nascosti.
-          </>
-        }
+        title="PIÙ CONTROLLO SULL’ATTIVITÀ. UN INVESTIMENTO CHIARO."
+        sub="Centralizza il lavoro con un canone definito sul tuo progetto. Sai da subito cosa è incluso e quali funzioni richiedono una valutazione dedicata."
       />
 
       <div className="prezzi2">
@@ -139,6 +135,7 @@ export default function Prezzi() {
             <span className="prezzi2__divider" aria-hidden="true" />
 
             {/* incluso */}
+            <span className="t-label" style={{ color: 'inherit', marginBottom: 12 }}>Incluso</span>
             <ul className="prezzi-features">
               {INCLUSO.map(({ Icon, label }) => (
                 <li key={label}>
@@ -155,7 +152,7 @@ export default function Prezzi() {
             </p>
 
             <a href="#contatti" className="btn btn--primary prezzi-cta">
-              Parliamone
+              Valutiamo il tuo progetto
             </a>
           </div>
         </motion.div>
@@ -186,7 +183,7 @@ export default function Prezzi() {
           </div>
 
           <p className="prezzi2__note">
-            Il canone copre analisi, configurazione iniziale, sistema personalizzato e AI base; automazioni e integrazioni complesse custom si aggiungono su preventivo.
+            Il canone copre analisi, configurazione iniziale, centro operativo personalizzato e AI base. Automazioni complesse e integrazioni personalizzate si aggiungono su preventivo.
           </p>
         </motion.div>
       </div>

@@ -18,53 +18,53 @@ import { useIsMobile } from '../lib/hooks';
 const ORBIT = [
   {
     id: 1,
-    icon: Blocks,
-    t: 'Costruito sui tuoi\nprocessi reali',
-    body: "Nessun template preconfezionato: i moduli, i campi e i flussi seguono come lavori davvero oggi.",
+    icon: Sparkles,
+    t: 'AI al servizio del\nlavoro quotidiano',
+    body: 'Legge i dati collegati, segnala ciò che richiede attenzione e ti aiuta a trovare il prossimo passo.',
     related: [2, 6],
   },
   {
     id: 2,
-    icon: Activity,
-    t: 'Dati aggiornati\nal secondo',
-    body: 'Ogni movimento - vendita, carico, pagamento - arriva subito nei report. Niente foglio Excel di fine mese.',
+    icon: ShieldCheck,
+    t: 'Costo definito\nsul tuo progetto',
+    body: 'Il perimetro viene concordato prima: sai cosa è incluso e quali funzioni richiedono una valutazione dedicata.',
     related: [1, 3],
   },
   {
     id: 3,
-    icon: Workflow,
-    t: 'Automazioni al posto\ndel lavoro manuale',
-    body: 'Registrazioni, riordini, promemoria e conciliazioni girano da soli. Tu decidi, il sistema esegue.',
+    icon: Smartphone,
+    t: 'Il tuo centro operativo,\nanche da mobile',
+    body: 'Consulta informazioni, priorità e attività da desktop o smartphone, anche quando sei fuori sede.',
     related: [2, 4],
   },
   {
     id: 4,
-    icon: Sparkles,
-    t: 'AI integrata\ndove serve davvero',
-    body: "Non un chatbot appiccicato: l'AI legge i tuoi dati e risponde con numeri veri, non con teorie.",
+    icon: Workflow,
+    t: 'Collegato ai processi\ndella tua attività',
+    body: 'RUSH segue il modo in cui lavorano davvero i tuoi reparti, senza imporre procedure estranee alla tua azienda.',
     related: [3, 5],
   },
   {
     id: 5,
-    icon: ShieldCheck,
-    t: 'Costo fisso,\nnessuna sorpresa',
-    body: 'Canone mensile chiaro e invariabile. Nessun extra nascosto, nessun rincaro: sai sempre quanto paghi.',
+    icon: Blocks,
+    t: 'Dati condivisi\ntra i reparti',
+    body: 'Le informazioni utili passano da un reparto all’altro dentro un quadro comune, aggiornato e accessibile.',
     related: [4, 6],
   },
   {
     id: 6,
-    icon: Smartphone,
-    t: 'Stessa esperienza\nda desktop e mobile',
-    body: "Interfaccia identica in ufficio e in movimento: apri, cerchi, aggiorni - senza doverlo reimparare.",
+    icon: Activity,
+    t: 'Meno passaggi manuali,\npiù tempo utile',
+    body: 'Automazioni e dati collegati riducono copie, controlli ripetitivi e operazioni che rallentano il team.',
     related: [5, 1],
   },
 ];
 
 const SOLUTION_SUB = (
   <>
-    <strong>Partiamo dai tuoi processi, non da un template.</strong>
+    <strong>RUSH collega strumenti, dati e reparti attorno ai tuoi processi.</strong>
     <br className="solution-copy-break" />{' '}
-    Quello che serve c'è, quello che non serve non lo paghi.
+    Partiamo da come lavori per centralizzare le informazioni e automatizzare i passaggi che oggi richiedono il tuo tempo.
   </>
 );
 

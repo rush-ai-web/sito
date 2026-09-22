@@ -7,26 +7,26 @@ import { useIsMobile } from '../lib/hooks';
 const PASSI = [
   {
     icon: Search,
-    t: 'Analisi sul campo',
-    d: 'Veniamo a vedere come lavori davvero: chi fa cosa, dove si perde tempo, quali dati esistono già e dove sono fermi.',
+    t: 'Capiamo come lavori',
+    d: 'Analizziamo strumenti, dati e attività dei reparti. Individuiamo dove le informazioni si fermano e quali passaggi manuali conviene semplificare per primi.',
     side: 'left',
   },
   {
     icon: PenTool,
-    t: 'Progetto e prototipo',
-    d: 'Disegniamo il sistema e ti mostriamo le schermate vere prima di scrivere il codice definitivo. Si corregge lì, non dopo.',
+    t: 'Ti mostriamo come cambia',
+    d: 'Disegniamo il tuo centro operativo e ti mostriamo le schermate del prototipo. Valutiamo insieme come rendere più semplice il lavoro quotidiano.',
     side: 'right',
   },
   {
     icon: Rocket,
-    t: 'Sviluppo e messa in linea',
-    d: 'Costruiamo, importiamo i tuoi dati storici, colleghiamo i sistemi esistenti e formiamo chi lo userà ogni giorno.',
+    t: 'Colleghiamo e mettiamo al lavoro',
+    d: 'Attiviamo le integrazioni concordate, importiamo i dati necessari e formiamo il team. RUSH entra nel lavoro quotidiano con un percorso di avvio definito.',
     side: 'left',
   },
   {
     icon: RefreshCw,
-    t: 'Evoluzione continua',
-    d: "L'azienda cambia e il sistema la segue: nuovi moduli, nuove automazioni, nuove integrazioni quando servono.",
+    t: 'Cresciamo con la tua attività',
+    d: 'Nuovi reparti, nuove esigenze, nuovi strumenti: il tuo centro operativo può evolvere con ulteriori funzioni, automazioni e collegamenti.',
     side: 'right',
   },
 ];
@@ -131,12 +131,12 @@ export default function Metodo() {
       <Head
         icon={GitBranch}
         label="Come lavoriamo"
-        title="Dal primo incontro alla produzione in otto settimane"
+        title="DAL PRIMO INCONTRO AL TUO CENTRO OPERATIVO IN OTTO SETTIMANE."
         sub={
           <>
-            <strong>Niente capitolati da trecento pagine.</strong>
+            <strong>Partiamo dal lavoro che oggi ti costa più tempo.</strong>
             <br />
-            Scegliamo insieme la priorità, la trasformiamo in una prima versione utile e la mettiamo subito al lavoro.
+            Individuiamo la priorità, verifichiamo i collegamenti e realizziamo una prima versione da usare nella tua attività.
           </>
         }
       />
