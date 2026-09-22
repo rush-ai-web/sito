@@ -323,12 +323,12 @@ export default function Prodotto() {
   return (
     <Section id="prodotto" grid large>
       <Head
-        className="head--split-title"
+        className="head--split-title head--prodotto-title"
         icon={Layers}
         label="Cosa puoi fare con RUSH"
         title={
           <>
-            <span className="head-title-line">DIVERSI STRUMENTI DA COORDINARE</span>
+            <span className="head-title-line">DIVERSI STRUMENTI DA COORDINARE,</span>{' '}
             <span className="head-title-line">UN UNICO CENTRO DA CUI FARLO</span>
           </>
         }

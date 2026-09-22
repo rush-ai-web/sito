@@ -205,7 +205,10 @@ export default function Hero() {
 
         <h1 className="hero__title" aria-label="Il centralizzatore operativo che integra l’AI">
           <span className="hero__line">
-            {L1.map((w, i) => <Word key={w + i} w={w} i={i} />)}
+            {L1.map((w, i) => [
+              i === 2 ? <br key="hero-mobile-break" className="hero__mobile-break" /> : null,
+              <Word key={w + i} w={w} i={i} />,
+            ])}
           </span>
           <span className="hero__line hero__line--slot">
             <RotatingSlot />

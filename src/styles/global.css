@@ -1472,6 +1472,10 @@ main {
   display: block;
 }
 
+.hero__mobile-break {
+  display: none;
+}
+
 /* solo la riga statica: più grande della pill */
 .hero__line:not(.hero__line--slot) {
   font-size: clamp(1em, 3.7vw, 1.22em);
@@ -4228,7 +4232,15 @@ textarea.input::-webkit-scrollbar {
 
   /* ---- titolo hero: scala fluida e leggibile sugli schermi stretti ---- */
   .hero__title {
-    font-size: 6.4vw;
+    font-size: clamp(20px, 5.8vw, 24px);
+  }
+
+  .hero__line:not(.hero__line--slot) {
+    line-height: 30px;
+  }
+
+  .hero__mobile-break {
+    display: block;
   }
 
   /* forza "SU MISURA," su una riga a sé: un elemento block tra
@@ -4241,7 +4253,7 @@ textarea.input::-webkit-scrollbar {
 
   /* ---- pill: leggermente più piccola del titolo ma più leggibile ---- */
   .hero__line--slot {
-    font-size: 0.88em;
+    font-size: 0.8em;
     flex-direction: column;
     gap: 0.14em;
     overflow: visible;
@@ -4249,6 +4261,17 @@ textarea.input::-webkit-scrollbar {
   .hero__pill {
     max-width: calc(100vw - 32px);
     box-sizing: border-box;
+    font-size: 1.18em;
+    padding: 0.18em 0.24em;
+  }
+  .hero__pill-in {
+    gap: 0.28em;
+  }
+
+  /* Su mobile il titolo resta una frase continua: nessun ritorno forzato
+     tra le due metà, così il browser distribuisce il testo in modo naturale. */
+  .head--prodotto-title .head-title-line {
+    display: inline;
   }
 
   /* ---- note e CTA: spaziatura più stretta ---- */
