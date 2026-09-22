@@ -5,7 +5,7 @@ import HeroScene from './HeroScene';
 import { wordUp, fadeUp, EASE_MODAL } from '../lib/motion';
 
 /* titolo principale, fisso */
-const L1 = ['IL', 'TUO', 'CENTRALIZZATORE', 'OPERATIVO', 'CHE'];
+const L1 = ['IL', 'TUO', 'CENTRALIZZATORE', 'OPERATIVO'];
 
 /* seconda riga che ruota: copre AI + posto unico + automazione + risultato.
    Ogni frase ha un'icona che le sta accanto per farla riconoscere subito. */
@@ -208,6 +208,9 @@ export default function Hero() {
             {L1.map((w, i) => <Word key={w + i} w={w} i={i} />)}
           </span>
           <span className="hero__line hero__line--slot">
+            <span className="hero__slot-prefix">
+              <Word w="CHE" i={L1.length} />
+            </span>
             <RotatingSlot />
           </span>
         </h1>

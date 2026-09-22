@@ -1464,10 +1464,19 @@ main {
   font-size: 1.22em;
 }
 
-/* la seconda riga: solo respiro sopra */
+/* la seconda riga: "CHE" e la promessa dinamica restano affiancati */
 .hero__line--slot {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.28em;
   margin-top: 0.18em;
+}
+
+.hero__slot-prefix {
+  flex: none;
+  font-size: 1.22em;
+  line-height: 1;
 }
 
 /* la pill: sfondo blu accento pieno, testo bianco puro, contrasto forte */
@@ -4226,7 +4235,9 @@ textarea.input::-webkit-scrollbar {
   /* ---- pill: leggermente più piccola del titolo ma più leggibile ---- */
   .hero__line--slot {
     font-size: 0.88em;
-    overflow: hidden;
+    flex-direction: column;
+    gap: 0.14em;
+    overflow: visible;
   }
   .hero__pill {
     max-width: calc(100vw - 32px);
