@@ -368,10 +368,9 @@ export default function Fab({ page = 'home' }) {
 
   return (
     <>
-      <motion.button
-        type="button"
+      <motion.a
+        href="#home"
         className="back-to-top"
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         initial={false}
         animate={showBackToTop
           ? { opacity: 1, y: 0, scale: 1, visibility: 'visible' }
@@ -388,7 +387,7 @@ export default function Fab({ page = 'home' }) {
         aria-label="Torna all'inizio della pagina"
       >
         <ArrowUp size={19} strokeWidth={2.1} aria-hidden="true" />
-      </motion.button>
+      </motion.a>
 
       <motion.button
         className="fab"
