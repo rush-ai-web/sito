@@ -4219,7 +4219,7 @@ textarea.input::-webkit-scrollbar {
     display: none;
   }
 
-  /* ---- titolo grande: "IL TUO GESTIONALE" riga 1, "SU MISURA," riga 2 ---- */
+  /* ---- titolo hero: scala fluida e leggibile sugli schermi stretti ---- */
   .hero__title {
     font-size: 6.4vw;
   }

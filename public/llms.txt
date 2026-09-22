@@ -20,7 +20,7 @@ RUSH analizza strumenti, dati e attività dei reparti, realizza un prototipo, at
 
 ## Prezzi
 
-Il canone è definito sul progetto e include analisi, configurazione iniziale, centro operativo personalizzato, dashboard, formazione e AI base. Automazioni complesse e integrazioni personalizzate sono valutate su preventivo.
+Il canone parte da 300 € al mese con fatturazione annuale oppure da 350 € al mese con fatturazione trimestrale. È definito sul progetto e include analisi, configurazione iniziale, centro operativo personalizzato, dashboard, formazione e AI base. Automazioni complesse e integrazioni personalizzate sono valutate su preventivo.
 
 ## Contatti
 
@@ -29,7 +29,7 @@ Il canone è definito sul progetto e include analisi, configurazione iniziale, c
 
 ## Risorse
 
-- [Centralizzazione operativa per PMI](https://rush-ai.it/): gestionali collegati, dati condivisi, automazioni e AI per diversi settori.
+- [Centralizzazione operativa per PMI](https://rush-ai.it/): strumenti collegati, dati condivisi, automazioni e AI per diversi settori.
 - [Rush Ristorazione](https://rush-ai.it/ristorazione): il verticale per bar e ristoranti.
 - [FAQ su RUSH](https://rush-ai.it/#faq)
 - [FAQ ristorazione](https://rush-ai.it/ristorazione#faq)

@@ -75,7 +75,7 @@ function DrawPath({ d, delay = 0, width = 1.5, dash, reduce, ...rest }) {
   );
 }
 
-/* ── A · Sistema operativo su misura: i moduli che accendi tu ── */
+/* ── A · Centro operativo su misura: i moduli che accendi tu ── */
 const CFG = [
   { Icon: Wallet, name: 'Cassa' },
   { Icon: Boxes, name: 'Magazzino' },

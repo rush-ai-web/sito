@@ -1,7 +1,7 @@
 {
   "name": "Rush",
   "short_name": "Rush",
-  "description": "Il centralizzatore operativo intelligente che collega strumenti, dati e reparti.",
+  "description": "RUSH è il centralizzatore operativo intelligente che collega strumenti, riunisce dati e semplifica il lavoro di ogni reparto.",
   "lang": "it-IT",
   "start_url": "./",
   "scope": "./",

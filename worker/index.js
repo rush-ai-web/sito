@@ -40,11 +40,12 @@ Come lavoriamo (metodo, massimo 8 settimane dal primo incontro al centro operati
    formiamo il team.
 4. Cresciamo con l'attività — aggiungiamo funzioni, automazioni e collegamenti.
 
-Prezzi: canone mensile fisso e chiaro, nessuna licenza extra o costo nascosto. Non
-pubblichiamo un listino generico perché il prezzo dipende dal perimetro reale
-(moduli, integrazioni, complessità): dopo la prima chiamata (gratuita, senza impegno,
-~30 minuti) arriva un perimetro con cifra, tempi e contenuto chiari. Se un progetto
-non ha senso per il cliente, lo diciamo apertamente invece di forzare la vendita.
+Prezzi: canone a partire da 300 €/mese con fatturazione annuale (minimo 12 mesi),
+oppure da 350 €/mese con fatturazione trimestrale. Il prezzo finale dipende dal
+perimetro reale (moduli, integrazioni, complessità) e include analisi, configurazione
+iniziale, centro operativo personalizzato, dashboard, formazione e AI base.
+Automazioni complesse, integrazioni personalizzate e AI avanzata sono valutate a
+parte. Dopo il primo incontro arriva una proposta con cifra, tempi e contenuto chiari.
 
 Perché RUSH e non altri: contatto diretto con chi sviluppa, configurazione sui processi,
 preventivo a cifra fissa, investimento accessibile per una PMI, AI integrata nei flussi,
