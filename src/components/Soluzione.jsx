@@ -6,7 +6,7 @@ import {
   Activity,
   Workflow,
   Sparkles,
-  ShieldCheck,
+  BadgeEuro,
   Smartphone,
   ChevronDown,
   X,
@@ -25,7 +25,7 @@ const ORBIT = [
   },
   {
     id: 2,
-    icon: ShieldCheck,
+    icon: BadgeEuro,
     t: 'Costo definito\nsul tuo progetto',
     body: 'Il perimetro viene concordato prima: sai cosa è incluso e quali funzioni richiedono una valutazione dedicata.',
     related: [1, 3],

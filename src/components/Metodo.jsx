@@ -131,7 +131,7 @@ export default function Metodo() {
       <Head
         icon={GitBranch}
         label="Come lavoriamo"
-        title="DAL PRIMO INCONTRO AL TUO CENTRO OPERATIVO IN OTTO SETTIMANE."
+        title="DAL PRIMO INCONTRO AL TUO CENTRO OPERATIVO IN OTTO SETTIMANE"
         sub={
           <>
             <strong>Partiamo dal lavoro che oggi ti costa più tempo.</strong>

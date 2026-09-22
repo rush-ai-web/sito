@@ -62,10 +62,15 @@ function EcosistemaDesktop() {
   return (
     <Section id="ecosistema" large>
       <Head
-        className="head--wide-copy"
+        className="head--wide-copy head--split-title"
         icon={Boxes}
         label="Un unico punto di lavoro"
-        title={<>I TUOI GESTIONALI, E NON SOLO, COLLEGATI. LA TUA ATTIVITÀ, INSIEME.</>}
+        title={
+          <>
+            <span className="head-title-line">I TUOI GESTIONALI, E NON SOLO, COLLEGATI</span>
+            <span className="head-title-line">LA TUA ATTIVITÀ, INSIEME</span>
+          </>
+        }
         sub={
           <>
             <span className="head-copy-line">Cassa, personale, magazzino, ordini e fatturazione: RUSH collega gli strumenti che utilizzi e centralizza i loro flussi di dati.</span>
@@ -246,10 +251,15 @@ function EcosistemaMobile() {
   return (
     <Section id="ecosistema" large>
       <Head
-        className="head--wide-copy"
+        className="head--wide-copy head--split-title"
         icon={Boxes}
         label="Un unico punto di lavoro"
-        title={<>I TUOI GESTIONALI, E NON SOLO, COLLEGATI. LA TUA ATTIVITÀ, INSIEME.</>}
+        title={
+          <>
+            <span className="head-title-line">I TUOI GESTIONALI, E NON SOLO, COLLEGATI</span>
+            <span className="head-title-line">LA TUA ATTIVITÀ, INSIEME</span>
+          </>
+        }
         sub={
           <>
             <span className="head-copy-line">Cassa, personale, magazzino, ordini e fatturazione: RUSH collega gli strumenti che utilizzi e centralizza i loro flussi di dati.</span>

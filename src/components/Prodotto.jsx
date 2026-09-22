@@ -323,9 +323,15 @@ export default function Prodotto() {
   return (
     <Section id="prodotto" grid large>
       <Head
+        className="head--split-title"
         icon={Layers}
         label="Cosa puoi fare con RUSH"
-        title={<>DIVERSI STRUMENTI DA COORDINARE. UN UNICO CENTRO DA CUI FARLO.</>}
+        title={
+          <>
+            <span className="head-title-line">DIVERSI STRUMENTI DA COORDINARE</span>
+            <span className="head-title-line">UN UNICO CENTRO DA CUI FARLO</span>
+          </>
+        }
         sub={
           <>
             RUSH riunisce i dati dei tuoi strumenti e collega il lavoro dei reparti. Controlli l’attività, segui le priorità e semplifichi le operazioni quotidiane dallo stesso ambiente.
@@ -352,7 +358,7 @@ export default function Prodotto() {
 
         <BuildCard
           icon={Sparkles}
-          title="Fai domande. Trova il prossimo passo."
+          title="Fai domande. Trova il prossimo passo"
           desc="L’AI legge i documenti, evidenzia anomalie e risponde sui dati collegati. Chiedi cosa sta cambiando, approfondisci le informazioni e valuta con lei le azioni da intraprendere."
           accent
         >

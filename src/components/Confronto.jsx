@@ -50,9 +50,10 @@ export default function Confronto() {
   return (
     <Section id="confronto" large>
       <Head
+        className="head--section-spacing"
         icon={Scale}
         label="Perché RUSH"
-        title="UN CENTRO OPERATIVO SU MISURA. UN TEAM CHE TI SEGUE."
+        title="UN CENTRO OPERATIVO SU MISURA. UN TEAM CHE TI SEGUE"
         sub={
           <>
             Collegamenti, AI e supporto diretto, con un investimento pensato per le PMI. Valuta ciò che conta nel lavoro di ogni giorno.

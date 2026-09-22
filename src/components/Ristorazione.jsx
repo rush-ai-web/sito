@@ -53,7 +53,7 @@ export default function Ristorazione() {
           <Pill icon={UtensilsCrossed}>Un esempio: Rush Ristorazione</Pill>
 
           <h2 className="t-sec" style={{ marginTop: 16 }}>
-            IL TUO LOCALE LAVORA. TU VEDI DOVE GUADAGNA.
+            IL TUO LOCALE LAVORA. TU VEDI DOVE GUADAGNA
           </h2>
 
           <p className="t-body" style={{ marginTop: 14 }}>

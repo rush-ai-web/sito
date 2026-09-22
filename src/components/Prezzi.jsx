@@ -64,9 +64,10 @@ export default function Prezzi() {
   return (
     <Section id="prezzi" large>
       <Head
+        className="head--section-spacing head--pricing-copy"
         icon={Banknote}
         label="Prezzi"
-        title="PIÙ CONTROLLO SULL’ATTIVITÀ. UN INVESTIMENTO CHIARO."
+        title="PIÙ CONTROLLO SULL’ATTIVITÀ. UN INVESTIMENTO CHIARO"
         sub="Centralizza il lavoro con un canone definito sul tuo progetto. Sai da subito cosa è incluso e quali funzioni richiedono una valutazione dedicata."
       />
 

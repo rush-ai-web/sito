@@ -61,7 +61,7 @@ export default function Numeri() {
         className="head--wide-summary"
         icon={TrendingUp}
         label="Risultati"
-        title={<>MENO TEMPO A RINCORRERE DATI. PIÙ SPAZIO PER GUIDARE L’ATTIVITÀ.</>}
+        title={<>MENO TEMPO A RINCORRERE DATI, PIÙ SPAZIO PER GUIDARE L’ATTIVITÀ</>}
         sub="Tempo recuperato, meno inserimenti manuali e informazioni più accessibili: il valore della centralizzazione si misura nel lavoro di ogni giorno."
       />
 

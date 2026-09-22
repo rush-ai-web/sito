@@ -36,8 +36,8 @@ export default function ReadableFaq({ data, categories, restaurant = false }) {
     document.getElementById(`${prefix}-tab-${keys[next]}`)?.focus();
   }
   return <Section id="faq" large className="faq-sec">
-    <Head icon={HelpCircle} label="Domande frequenti"
-      title={restaurant ? 'Quello che vorresti sapere prima di scegliere' : 'CAPIAMO COSA PUÒ CAMBIARE NELLA TUA ATTIVITÀ.'}
+    <Head className={restaurant ? '' : 'head--faq-home'} icon={HelpCircle} label="Domande frequenti"
+      title={restaurant ? 'Quello che vorresti sapere prima di scegliere' : 'CAPIAMO COSA PUÒ CAMBIARE NELLA TUA ATTIVITÀ'}
       sub={restaurant ? 'Costi, tempi, affidabilità e lavoro quotidiano: le risposte utili prima di portare un nuovo sistema nel locale.' : 'Dagli strumenti che usi già ai primi passi con RUSH: qui trovi le risposte da cui partire.'} />
     <div className="faq-tabs" role="tablist" aria-label="Categorie FAQ">
       {keys.map((key, index) => <button key={key} type="button" role="tab"

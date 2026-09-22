@@ -30,7 +30,7 @@ export default function Problema() {
         label="Il problema"
         title={
           <>
-            QUANDO I TUOI STRUMENTI NON COMUNICANO, IL LAVORO RICADE SU DI TE.
+            QUANDO I TUOI STRUMENTI NON COMUNICANO, IL LAVORO RICADE SU DI TE
           </>
         }
         sub={

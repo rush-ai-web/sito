@@ -5,15 +5,15 @@ import HeroScene from './HeroScene';
 import { wordUp, fadeUp, EASE_MODAL } from '../lib/motion';
 
 /* titolo principale, fisso */
-const L1 = ['IL', 'TUO', 'CENTRALIZZATORE', 'OPERATIVO'];
+const L1 = ['IL', 'TUO', 'CENTRALIZZATORE', 'OPERATIVO', 'CHE'];
 
 /* seconda riga che ruota: copre AI + posto unico + automazione + risultato.
    Ogni frase ha un'icona che le sta accanto per farla riconoscere subito. */
 const ROTATE = [
-  { t: 'AI integrata', Icon: Sparkles },
-  { t: 'Collega i tuoi gestionali.', Icon: Link2 },
-  { t: 'Riunisce i tuoi dati.', Icon: Database },
-  { t: 'Dà chiarezza al tuo lavoro.', Icon: Lightbulb },
+  { t: 'integra l’AI', Icon: Sparkles },
+  { t: 'collega i tuoi gestionali', Icon: Link2 },
+  { t: 'riunisce i tuoi dati', Icon: Database },
+  { t: 'dà chiarezza al tuo lavoro', Icon: Lightbulb },
 ];
 
 /* cosa cambia quando il centro operativo è tuo: ciò che cala e ciò che cresce. */
@@ -203,7 +203,7 @@ export default function Hero() {
           />
         </motion.div>
 
-        <h1 className="hero__title" aria-label="Il tuo centralizzatore operativo con AI integrata">
+        <h1 className="hero__title" aria-label="Il tuo centralizzatore operativo che integra l’AI">
           <span className="hero__line">
             {L1.map((w, i) => <Word key={w + i} w={w} i={i} />)}
           </span>

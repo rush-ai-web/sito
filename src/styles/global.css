@@ -363,6 +363,45 @@ h4 {
   display: block;
 }
 
+.head.head--split-title {
+  max-width: 1180px;
+}
+
+.head.head--split-title .t-sec {
+  max-width: none;
+}
+
+.head-title-line {
+  display: block;
+}
+
+.head.head--section-spacing {
+  margin-bottom: calc(var(--s-block) + 12px);
+}
+
+.head.head--pricing-copy {
+  max-width: 1000px;
+}
+
+.head.head--pricing-copy .t-body {
+  max-width: 900px;
+}
+
+.head.head--faq-home {
+  max-width: 1120px;
+}
+
+.head.head--faq-home .t-body {
+  max-width: none;
+}
+
+@media (min-width: 900px) {
+  .head-title-line,
+  .head.head--faq-home .t-body {
+    white-space: nowrap;
+  }
+}
+
 .head.head--wide-summary {
   max-width: 980px;
 }
@@ -1450,7 +1489,7 @@ main {
   /* frasi dinamiche: Inter minuscolo, leggermente ingrandito per
      compensare la minore altezza ottica del lowercase */
   font-family: var(--ff-body);
-  text-transform: lowercase;
+  text-transform: none;
   font-size: 1.28em;
   font-weight: 700;
   letter-spacing: -0.03em;
@@ -4500,6 +4539,7 @@ textarea.input::-webkit-scrollbar {
   display: flex;
   flex-direction: column;
   margin-top: 26px;
+  margin-bottom: 14px;
   padding-top: 24px;
   border-top: 1px solid var(--hairline);
 }
@@ -5013,6 +5053,12 @@ textarea.input::-webkit-scrollbar {
   margin: 0 auto;
 }
 
+@media (min-width: 721px) {
+  .faq-list {
+    min-height: 420px;
+  }
+}
+
 .faq-list__inner {
   display: flex;
   flex-direction: column;
@@ -5137,6 +5183,12 @@ textarea.input::-webkit-scrollbar {
 
 .buildcard--wide {
   grid-column: span 2;
+  min-height: 420px;
+  padding-bottom: 22px;
+}
+
+.buildcard--wide .buildcard__desc {
+  max-width: none;
 }
 
 /* corpo testuale in alto, la scena occupa il fondo */

@@ -97,9 +97,10 @@ export function LegacyFaq() {
   return (
     <Section id="faq" large className="faq-sec">
       <Head
+        className="head--faq-home"
         icon={HelpCircle}
         label="Domande frequenti"
-        title={<>CAPIAMO COSA PUÒ CAMBIARE NELLA TUA ATTIVITÀ.</>}
+        title={<>CAPIAMO COSA PUÒ CAMBIARE NELLA TUA ATTIVITÀ</>}
         sub="Dagli strumenti che usi già ai primi passi con RUSH: qui trovi le risposte da cui partire."
       />
 

@@ -163,7 +163,7 @@ export default function Cta() {
             <Pill icon={Mail}>Contatti</Pill>
           </Item>
           <Item as="h2" className="t-sec">
-            DOVE PERDI TEMPO OGGI, PUOI RECUPERARE VALORE DOMANI.
+            DOVE PERDI TEMPO OGGI, PUOI RECUPERARE VALORE DOMANI
           </Item>
           <Item as="p" className="t-body">
             Raccontaci quali strumenti usi e quali passaggi rallentano il lavoro. Nel primo incontro valutiamo cosa collegare, dove semplificare e come RUSH può esserti utile. Con un quadro chiaro di attività, tempi e costi.

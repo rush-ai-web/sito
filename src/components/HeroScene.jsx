@@ -246,7 +246,7 @@ export default function HeroScene() {
               <div className="dash__scroll">
                 <div className="dash__greet">
                   <h4>Buongiorno, Mario</h4>
-                  <p>· I dati della tua attività, riuniti in un’unica vista.</p>
+                  <p>I dati della tua attività, riuniti in un’unica vista.</p>
                 </div>
 
                 <div className="dash__kpis">
