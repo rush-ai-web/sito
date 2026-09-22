@@ -67,7 +67,7 @@ function EcosistemaDesktop() {
         label="Un unico punto di lavoro"
         title={
           <>
-            <span className="head-title-line">I TUOI GESTIONALI, E NON SOLO, COLLEGATI</span>
+            <span className="head-title-line">I TUOI STRUMENTI (E NON SOLO) COLLEGATI</span>
             <span className="head-title-line">LA TUA ATTIVITÀ, INSIEME</span>
           </>
         }
@@ -256,7 +256,7 @@ function EcosistemaMobile() {
         label="Un unico punto di lavoro"
         title={
           <>
-            <span className="head-title-line">I TUOI GESTIONALI, E NON SOLO, COLLEGATI</span>
+            <span className="head-title-line">I TUOI STRUMENTI (E NON SOLO) COLLEGATI</span>
             <span className="head-title-line">LA TUA ATTIVITÀ, INSIEME</span>
           </>
         }

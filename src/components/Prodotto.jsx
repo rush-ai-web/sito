@@ -334,7 +334,8 @@ export default function Prodotto() {
         }
         sub={
           <>
-            RUSH riunisce i dati dei tuoi strumenti e collega il lavoro dei reparti. Controlli l’attività, segui le priorità e semplifichi le operazioni quotidiane dallo stesso ambiente.
+            <strong>RUSH riunisce i dati dei tuoi strumenti e collega il lavoro dei reparti.</strong>{' '}
+            Controlli l’attività, segui le priorità e semplifichi le operazioni quotidiane dallo stesso ambiente.
           </>
         }
       />

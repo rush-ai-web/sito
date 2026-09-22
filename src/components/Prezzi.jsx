@@ -64,10 +64,15 @@ export default function Prezzi() {
   return (
     <Section id="prezzi" large>
       <Head
-        className="head--section-spacing head--pricing-copy"
+        className="head--section-spacing head--pricing-copy head--split-title"
         icon={Banknote}
         label="Prezzi"
-        title="PIÙ CONTROLLO SULL’ATTIVITÀ. UN INVESTIMENTO CHIARO"
+        title={
+          <>
+            <span className="head-title-line">PIÙ CONTROLLO SULL’ATTIVITÀ.</span>
+            <span className="head-title-line">UN INVESTIMENTO CHIARO</span>
+          </>
+        }
         sub="Centralizza il lavoro con un canone definito sul tuo progetto. Sai da subito cosa è incluso e quali funzioni richiedono una valutazione dedicata."
       />
 

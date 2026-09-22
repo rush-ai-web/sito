@@ -5202,6 +5202,13 @@ textarea.input::-webkit-scrollbar {
   max-width: none;
 }
 
+/* Nella home, la card larga dei turni ha un po' più respiro sopra su desktop. */
+@media (min-width: 621px) {
+  body:not(.risto-orange-page) #prodotto .buildcard--wide {
+    padding-top: 34px;
+  }
+}
+
 /* corpo testuale in alto, la scena occupa il fondo */
 .buildcard__body {
   position: relative;
