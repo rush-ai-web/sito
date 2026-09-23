@@ -450,8 +450,7 @@ export default function Fab({ page = 'home' }) {
                   </span>
                   <h3 className="chat-panel__empty-t">Cosa vuoi sapere?</h3>
                   <p className="chat-panel__empty-d">
-                    Chiedimi quello che vuoi su Rush: rispondo usando i contenuti di questo
-                    sito.
+                    Chiedimi quello che vuoi su Rush.
                   </p>
                   <div className="chat-panel__suggests">
                     {suggests.map((s) => (
