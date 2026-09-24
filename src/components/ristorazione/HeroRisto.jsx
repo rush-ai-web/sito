@@ -35,7 +35,11 @@ export default function HeroRisto() {
         </motion.h1>
 
         <motion.p className="hero__note" variants={fadeUp} custom={2} initial="hidden" animate="show">
-          <strong>Collega gli strumenti che usi già. Vedi il locale nel suo insieme.</strong>{' '}
+          <strong>
+            Collega gli strumenti che usi già.{' '}
+            <br className="hero-note-mobile-break" />
+            Vedi il locale nel suo insieme.
+          </strong>{' '}
           <br className="hero-note-break" />
           RUSH collega cassa, acquisti, magazzino e personale, aiutandoti a controllare costi e
           margini con il supporto dell’AI. Puoi integrare anche prenotazioni, sito e marketing.

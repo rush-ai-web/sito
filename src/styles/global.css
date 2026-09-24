@@ -6972,8 +6972,10 @@ textarea.input::-webkit-scrollbar {
 /* Hero ristorazione: separa promessa e dettaglio soltanto su mobile. */
 .hero-note-break { display: none; }
 .hero-note-break.hero-note-break--home { display: block; }
+.hero-note-mobile-break { display: none; }
 @media (max-width: 720px) {
   .hero-note-break { display: block; }
+  .hero-note-mobile-break { display: block; }
 }
 
 /* ---- Tablet (portrait): 721–1024px ---- */
