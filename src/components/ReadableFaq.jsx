@@ -37,8 +37,8 @@ export default function ReadableFaq({ data, categories, restaurant = false }) {
   }
   return <Section id="faq" large className="faq-sec">
     <Head className={restaurant ? '' : 'head--faq-home'} icon={HelpCircle} label="Domande frequenti"
-      title={restaurant ? 'Quello che vorresti sapere prima di scegliere' : 'CAPIAMO COSA PUÒ CAMBIARE NELLA TUA ATTIVITÀ'}
-      sub={restaurant ? 'Costi, tempi, affidabilità e lavoro quotidiano: le risposte utili prima di portare un nuovo sistema nel locale.' : 'Dagli strumenti che usi già ai primi passi con RUSH: qui trovi le risposte da cui partire.'} />
+      title={restaurant ? 'Le risposte per capire se RUSH fa per il tuo locale.' : 'CAPIAMO COSA PUÒ CAMBIARE NELLA TUA ATTIVITÀ'}
+      sub={restaurant ? 'Strumenti già in uso, costi, avvio e lavoro quotidiano: chiarisci i punti che contano prima di scegliere.' : 'Dagli strumenti che usi già ai primi passi con RUSH: qui trovi le risposte da cui partire.'} />
     <div className="faq-tabs" role="tablist" aria-label="Categorie FAQ">
       {keys.map((key, index) => <button key={key} type="button" role="tab"
         id={`${prefix}-tab-${key}`} aria-controls={`${prefix}-panel-${key}`}
@@ -57,7 +57,7 @@ export default function ReadableFaq({ data, categories, restaurant = false }) {
       </div>)}
     </div>
     <p className="t-body" style={{ marginTop: 28, textAlign: 'center' }}>
-      {restaurant ? <>Scopri le <a href="#funzioni">funzioni per il locale</a>, confronta i <a href="#prezzi">prezzi</a> e approfondisci il <a href="#avvio">percorso di attivazione</a>.</> : <>Scopri <a href="#metodo">come partiamo</a>, consulta i <a href="#prezzi">prezzi</a> o <a href="#contatti">raccontaci quali strumenti utilizzi</a>.</>}
+      {restaurant ? <>Esplora le <a href="#funzioni">funzioni</a>, confronta i <a href="#prezzi">piani</a> o scopri <a href="#avvio">come partiamo dal tuo locale</a>.</> : <>Scopri <a href="#metodo">come partiamo</a>, consulta i <a href="#prezzi">prezzi</a> o <a href="#contatti">raccontaci quali strumenti utilizzi</a>.</>}
     </p>
   </Section>;
 }

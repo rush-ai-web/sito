@@ -188,9 +188,9 @@ function VizTurni() {
 
 /* voci core minori, in una striscia compatta sotto al bento */
 const ALTRO = [
-  { Icon: Trophy, t: 'Performance camerieri', d: 'scontrino medio, upselling e classifiche dai dati cassa' },
-  { Icon: MessageSquareText, t: 'Dashboard + chat AI', d: 'sei KPI in home e una barra AI che risponde su tutto' },
-  { Icon: FileSpreadsheet, t: 'Report per il commercialista', d: 'pacchetto mensile, registro fatture, chiusure cassa' },
+  { Icon: Trophy, t: 'Vendite per addetto', d: 'Scontrino medio e vendite aggiuntive dai dati di cassa disponibili.' },
+  { Icon: MessageSquareText, t: 'Dashboard e chat AI', d: 'Sei KPI in apertura e domande sui dati collegati.' },
+  { Icon: FileSpreadsheet, t: 'Documenti per il commercialista', d: 'Riepiloghi mensili, registro fatture e chiusure di cassa in un export ordinato.' },
 ];
 
 export default function CoreRisto() {
@@ -198,38 +198,39 @@ export default function CoreRisto() {
     <Section id="prodotto" grid large>
       <Head
         icon={LayoutGrid}
-        label="Il core · sempre incluso"
-        title={<>Tutto il locale in un posto solo, aggiornato da sé</>}
+        label="La base operativa · sempre inclusa"
+        title={<>I numeri del locale, collegati.{' '}<br />Il lavoro quotidiano, più semplice.</>}
         sub={
           <>
-            Le funzioni che Rush fa <strong>sempre</strong>, comprese nel canone base. I moduli
-            extra si accendono quando servono.
+            La base operativa riunisce i dati di cassa, fatture, magazzino e personale nei
+            collegamenti previsti dal progetto. Da qui controlli ciò che accade e segui le
+            priorità del locale.
           </>
         }
       />
 
       <div className="build">
-        <BuildCard icon={Wallet} title="Registra costi e incassi" desc="Si collega alla tua cassa e alle fatture in arrivo: incassi e spese si registrano da soli, così sai sempre quanto guadagni davvero, non a fine mese.">
+        <BuildCard icon={Wallet} title="Costi e incassi nella stessa vista" desc="I dati della cassa e delle fatture collegate confluiscono in RUSH. Confronti incassi e costi registrati senza ricostruirli ogni volta tra strumenti diversi.">
           <VizIncassi />
         </BuildCard>
 
-        <BuildCard icon={Boxes} title="Magazzino automatico" desc="Si carica dalle fatture e si scarica dalle vendite. Soglie minime, alert e scarti a fine inventario per stanare furti e sprechi.">
+        <BuildCard icon={Boxes} title="Magazzino collegato al servizio" desc="Le fatture alimentano i carichi, vendite e ricette registrano i consumi. Soglie e confronti con l’inventario segnalano scorte basse e differenze da verificare.">
           <VizMagazzino />
         </BuildCard>
 
-        <BuildCard icon={ScanLine} title="Fatture con una foto" desc="Le fatture elettroniche arrivano da sole. Le cartacee le fotografi: l'intelligenza artificiale legge articoli e prezzi, tu confermi e il magazzino si aggiorna." accent>
+        <BuildCard icon={ScanLine} title="Dalla fattura ai dati utili" desc="Le fatture elettroniche arrivano dal collegamento attivo. Per quelle cartacee scatti una foto: l’AI legge articoli e prezzi, controlli e confermi, poi il magazzino si aggiorna." accent>
           <VizFatture />
         </BuildCard>
 
-        <BuildCard icon={TrendingUp} title="Fornitori & prezzi" desc="Rush confronta ogni riga fattura con lo storico e ti avvisa quando un fornitore alza i prezzi oltre soglia. Con bozza d'ordine pronta.">
+        <BuildCard icon={TrendingUp} title="I rincari diventano visibili" desc="Confronti i prezzi in fattura con lo storico e ricevi avvisi sulle variazioni oltre soglia. Hai i documenti da controllare e puoi preparare la prossima proposta d’ordine.">
           <VizFornitori />
         </BuildCard>
 
-        <BuildCard icon={ChefHat} title="Ricette, food cost & menu" desc="Costo materie prime per piatto aggiornato a ogni fattura, margini reali e menu engineering: stelle, puzzle, cavalli e incudini, in automatico.">
+        <BuildCard icon={ChefHat} title="Sai quanto incidono gli ingredienti" desc="Ricette e prezzi d’acquisto alimentano il food cost e il margine sulle materie prime. Confronti redditività e popolarità dei piatti per valutare il menu con più chiarezza.">
           <VizMenu />
         </BuildCard>
 
-        <BuildCard icon={CalendarClock} title="Personale & turni AI" desc="Turni generati dall'AI su ore e vincoli, timbrature via QR con check WiFi, richieste ferie e export presenze pronto per le paghe.">
+        <BuildCard icon={CalendarClock} title="Turni e presenze nello stesso flusso" desc="L’AI propone i turni secondo ore, disponibilità e vincoli impostati. Timbrature via QR, verifica della rete Wi-Fi prevista dal progetto e richieste del team confluiscono nell’export presenze.">
           <VizTurni />
         </BuildCard>
       </div>

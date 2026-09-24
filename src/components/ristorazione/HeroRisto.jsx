@@ -31,14 +31,15 @@ export default function HeroRisto() {
         </motion.div>
 
         <motion.h1 className="hero__title" variants={fadeUp} custom={1} initial="hidden" animate="show">
-          Sistema operativo AI per <span className="hero-accent">bar e ristoranti</span>
+          Il centro operativo intelligente per il tuo <span className="hero-accent">bar o ristorante</span>
         </motion.h1>
 
         <motion.p className="hero__note" variants={fadeUp} custom={2} initial="hidden" animate="show">
-          <strong>Magazzino, fatture, turni e incassi. Marketing, prenotazioni, sito e recensioni.</strong>{' '}
+          <strong>Collega gli strumenti che usi già. Vedi il locale nel suo insieme.</strong>{' '}
           <br className="hero-note-break" />
-          Rush Ristorazione tiene insieme tutto quello che serve per far crescere il locale, in un
-          solo posto.
+          RUSH Ristorazione centralizza dati e flussi di lavoro di cassa, acquisti, magazzino e
+          personale. Hai più chiarezza su costi e margini, con l’AI che ti aiuta a capire dove
+          intervenire. E puoi collegare anche prenotazioni, sito e marketing.
         </motion.p>
 
         <motion.div className="btn-row hero__cta" variants={fadeUp} custom={3} initial="hidden" animate="show">

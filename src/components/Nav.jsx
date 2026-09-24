@@ -61,10 +61,10 @@ const LINKS = [
   ['FAQ', '#faq'],
 ];
 
-function ContactLink({ className = '', onClick }) {
+function ContactLink({ className = '', onClick, label = 'Parliamone' }) {
   return (
     <a className={`btn btn--accent btn--hero nav__cta ${className}`} href="#contatti" onClick={onClick}>
-      Parliamone
+      {label}
       <span className="btn__badge">
         <ArrowRight size={14} strokeWidth={2.4} />
       </span>
@@ -72,7 +72,7 @@ function ContactLink({ className = '', onClick }) {
   );
 }
 
-export default function Nav({ logoVariant = 'default', links = LINKS }) {
+export default function Nav({ logoVariant = 'default', links = LINKS, contactLabel = 'Parliamone' }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { scrollY } = useScroll();
   /* wide at the top (almost full screen), shrinks to a compact pill on scroll */
@@ -119,7 +119,7 @@ export default function Nav({ logoVariant = 'default', links = LINKS }) {
           ))}
         </nav>
 
-        <ContactLink />
+        <ContactLink label={contactLabel} />
 
         <button
           type="button"
@@ -158,7 +158,7 @@ export default function Nav({ logoVariant = 'default', links = LINKS }) {
                   {label}
                 </motion.a>
               ))}
-              <ContactLink className="nav__mobile-cta" onClick={closeMobile} />
+              <ContactLink className="nav__mobile-cta" onClick={closeMobile} label={contactLabel} />
             </div>
           </motion.nav>
         ) : null}

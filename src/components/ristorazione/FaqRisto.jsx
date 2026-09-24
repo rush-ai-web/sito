@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { HelpCircle, Plus } from 'lucide-react';
 import { Section, Head } from '../ui';
 import { EASE_MODAL } from '../../lib/motion';
+import { FAQ_DATA_RISTO } from './faqRistoCopy';
 
 const CATEGORIES = {
   scelta: 'Prima di scegliere',
@@ -253,7 +254,7 @@ export const FAQ_DATA = {
 };
 
 import ReadableFaq from '../ReadableFaq';
-export default function FaqRisto() { return <ReadableFaq data={FAQ_DATA} categories={CATEGORIES} restaurant />; }
+export default function FaqRisto() { return <ReadableFaq data={FAQ_DATA_RISTO} categories={CATEGORIES} restaurant />; }
 
 export function LegacyFaqRisto() {
   const cats = Object.keys(CATEGORIES);

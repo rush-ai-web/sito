@@ -21,7 +21,7 @@ import CtaRisto from './components/ristorazione/CtaRisto';
 const NAV_LINKS = [
   ['Funzioni', '#funzioni'],
   ['Prezzi', '#prezzi'],
-  ['Come lavoriamo', '#avvio'],
+  ['Come partiamo', '#avvio'],
   ['FAQ', '#faq'],
 ];
 
@@ -30,18 +30,18 @@ const FOOTER_COLUMNS = [
     'Cosa facciamo',
     [
       ['Tutte le funzioni', '#funzioni'],
-      ['Il core', '#prodotto'],
+      ['La base operativa', '#prodotto'],
       ['Rush AI', '#chat'],
     ],
   ],
   [
     'Rush Ristorazione',
     [
-      ['Risultati misurabili', '#misurabilita'],
+      ['Misura le tue iniziative', '#misurabilita'],
       ['Prezzi', '#prezzi'],
-      ['Come lavoriamo', '#avvio'],
+      ['Come partiamo', '#avvio'],
       ['FAQ', '#faq'],
-      ['Tutto Rush', '/'],
+      ['Scopri RUSH', '/'],
     ],
   ],
   [
@@ -92,7 +92,7 @@ export default function AppRisto() {
         {!visible ? <BootWrap /> : null}
         {prepared ? (
           <div className={`site-shell${visible ? ' is-visible' : ''}`} aria-hidden={visible ? undefined : true}>
-            <Nav logoVariant="ristorazione" links={NAV_LINKS} />
+            <Nav logoVariant="ristorazione" links={NAV_LINKS} contactLabel="Prenota una demo" />
             <main>
               {/* aurora curata: vive dietro alle sezioni e scorre col contenuto */}
               <div className="aurora" aria-hidden="true">

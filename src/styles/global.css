@@ -5752,6 +5752,11 @@ textarea.input::-webkit-scrollbar {
     text-align: center;
   }
 
+  body.risto-orange-page .contact-copy > .t-body {
+    width: 100%;
+    text-align: center;
+  }
+
   /* tabella compatta: tutte le colonne visibili, niente scroll orizzontale */
   .cf-wrap {
     margin-inline: 0;

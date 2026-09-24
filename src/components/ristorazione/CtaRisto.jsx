@@ -130,11 +130,12 @@ export default function CtaRisto() {
             <Pill icon={CalendarClock}>Prenota una demo</Pill>
           </Item>
           <Item as="h2" className="t-sec">
-            Vediamo Rush sul tuo locale.
+            Partiamo dal tuo locale
           </Item>
           <Item as="p" className="t-body">
-            In una call di 30 minuti ti mostriamo Rush su dati reali di un bar, verifichiamo la
-            compatibilità con la tua cassa e capiamo se ha senso per te. Zero impegno.
+            In una call di 30 minuti ti mostriamo RUSH in azione e partiamo dagli strumenti che
+            utilizzi. Individuiamo i flussi da collegare, le verifiche necessarie e il primo
+            risultato utile da cercare. Senza impegno.
           </Item>
           <Item as="p" className="t-small" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <LiveDot />
@@ -231,7 +232,7 @@ export default function CtaRisto() {
                       {step === 1 && (
                         <div className="wiz__group">
                           <fieldset className="wiz__fs">
-                            <legend className="wiz__q">Quali moduli ti interessano? (facoltativo)</legend>
+                            <legend className="wiz__q">Quali aree vuoi approfondire? (facoltativo)</legend>
                             <div className="wiz__chips">
                               {MODULI.map((m) => (
                                 <button
@@ -274,7 +275,7 @@ export default function CtaRisto() {
 
                       {step === 2 && (
                         <fieldset className="wiz__fs">
-                          <legend className="wiz__q">Dove ti ricontattiamo?</legend>
+                          <legend className="wiz__q">Come possiamo ricontattarti?</legend>
                           <div className="wiz__group">
                             <label className="field">
                               <span className="field__label">Nome e cognome</span>
@@ -366,7 +367,7 @@ export default function CtaRisto() {
                       className="btn btn--primary wiz__next"
                       disabled={!canNext || status === 'sending'}
                     >
-                      {status === 'sending' ? 'Invio…' : 'Prenota la demo'}
+                      {status === 'sending' ? 'Invio…' : 'Richiedi la demo'}
                     </button>
                   )}
                 </div>

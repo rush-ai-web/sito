@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { Section, Head, IconTile } from '../ui';
 import { DUR, EASE_MODAL, inView } from '../../lib/motion';
+import { FUNZIONI_RISTO } from './funzioniRistoCopy';
 
 /* tutto quello che Rush Ristorazione fa, in un'unica griglia: il
    sistema e la strategia intorno, allo stesso livello. Presentiamo
@@ -377,9 +378,7 @@ const FUNZIONI = [
   },
 ];
 
-const ORDERED_FUNZIONI = [...FUNZIONI].sort(
-  (a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)),
-);
+const ORDERED_FUNZIONI = FUNZIONI_RISTO;
 
 export default function FunzioniRisto() {
   const [openIdx, setOpenIdx] = useState(null);
@@ -413,11 +412,12 @@ export default function FunzioniRisto() {
       <Head
         icon={LayoutGrid}
         label="Tutto in un posto"
-        title={<>Automatizzato e su misura{' '}<br className="desktop-title-break" />per il tuo locale</>}
+        title={<>Sala, cucina e amministrazione,{' '}<br className="desktop-title-break" />finalmente nello stesso flusso</>}
         sub={
           <>
-            Non un sistema e poi il resto sparso altrove: <strong>tutto quello che serve per
-            mandare avanti e far crescere il locale vive nello stesso sistema.</strong>
+            Dagli acquisti alle vendite, dai turni alle prenotazioni: RUSH collega le informazioni
+            che servono a far funzionare il locale. <strong>Parti dalle funzioni operative e
+            aggiungi i moduli utili a farlo crescere.</strong>
           </>
         }
       />

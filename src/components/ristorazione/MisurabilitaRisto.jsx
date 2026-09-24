@@ -18,7 +18,7 @@ export default function MisurabilitaRisto() {
       <Head
         icon={Gauge}
         label="Risultati misurabili"
-        title={<>Non promesse.<br />Numeri, uno per uno</>}
+        title={<>Sai cosa investi,{' '}<br />vedi quali risposte arrivano</>}
         className="head--wide-summary"
         sub={
           <>
@@ -27,12 +27,10 @@ export default function MisurabilitaRisto() {
             <br />
             <strong>Fai una promozione?</strong> Sai in tempo reale quante persone l'hanno usata.
             <br />
-            <strong>Fai pubblicità?</strong> Sai quanti hanno cliccato, quanti hanno prenotato,
-            quanti sono passati a chiedere indicazioni.
+            <strong>Fai pubblicità?</strong> Sai quanti hanno cliccato, prenotato o chiesto indicazioni.
             <br />
             <br />
-            <strong>Ogni euro investito nella crescita del locale lascia un numero, non un atto
-            di fede.</strong>
+            <strong>Confronti i risultati delle iniziative e valuti dove investire con più chiarezza.</strong>
           </>
         }
       />
@@ -48,7 +46,7 @@ export default function MisurabilitaRisto() {
           <span className="rh-metrics__dot" />
           <span className="rh-metrics__dot" />
           <span className="rh-metrics__dot" />
-          <span className="rh-metrics__title">Rush · Le tue campagne</span>
+          <span className="rh-metrics__title">RUSH · I risultati delle tue iniziative</span>
         </div>
 
         <div className="rh-metrics__grid">

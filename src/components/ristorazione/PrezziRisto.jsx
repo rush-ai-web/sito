@@ -19,7 +19,7 @@ import { EASE_MODAL } from '../../lib/motion';
 import { useIsMobile } from '../../lib/hooks';
 
 const INCLUSO = [
-  { Icon: Boxes, label: 'Gestione magazzino' },
+  { Icon: Boxes, label: 'Magazzino' },
   { Icon: Truck, label: 'Fornitori' },
   { Icon: CalendarClock, label: 'Turni' },
   { Icon: ScanLine, label: 'Fatture' },
@@ -72,15 +72,17 @@ export default function PrezziRisto() {
         label="Prezzi"
         title={
           <>
-            Il canone copre l'operatività.
+            La base per lavorare meglio.
             <br />
-            La strategia fa la differenza
+            I moduli per crescere con criterio
           </>
         }
         sub={
           <>
-            <strong>Un canone chiaro</strong>, che tiene in piedi il locale ogni giorno. Il vero
-            salto lo fa la strategia che ci costruisci sopra.
+            Un canone per centralizzare il lavoro quotidiano del locale.
+            <br />
+            Aggiungi le funzioni e i servizi che rispondono ai tuoi obiettivi, con un preventivo
+            chiaro prima di partire.
           </>
         }
       />
@@ -158,7 +160,7 @@ export default function PrezziRisto() {
             <span className="prezzi2__divider prezzi2__divider--links" aria-hidden="true" />
 
             <a href="#funzioni" className="prezzi2__detail-link prezzi2__detail-link--up">
-              Rivedi i moduli aggiuntivi
+              Esplora funzioni e moduli
               <ArrowUp size={14} strokeWidth={2.2} />
             </a>
 
@@ -167,7 +169,7 @@ export default function PrezziRisto() {
             </a>
 
             <a href="#prodotto" className="prezzi2__detail-link">
-              Vedi nel dettaglio cosa include il canone base
+              Scopri cosa include il canone base
               <ArrowDown size={14} strokeWidth={2.2} />
             </a>
           </div>

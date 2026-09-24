@@ -11,23 +11,23 @@ const MOBILE_ROUTE_PROGRESS = [0, 1 / 3, 2 / 3, 1];
 const PASSI = [
   {
     icon: PhoneCall,
-    t: 'Ci raccontiamo il locale',
-    d: 'Una chiamata di 30 minuti: guardiamo la tua cassa, i fornitori, come lavori oggi. Capiamo insieme se e dove Rush ti fa risparmiare tempo.',
+    t: 'Individuiamo la priorità',
+    d: 'In una chiamata di 30 minuti ci racconti il locale, gli strumenti che usi e ciò che ti porta via tempo. Scegliamo il primo problema da affrontare e avviamo la verifica dei collegamenti.',
   },
   {
     icon: UploadCloud,
-    t: 'Colleghiamo cassa e fornitori',
-    d: 'Importiamo lo storico, colleghiamo la cassa e le fatture elettroniche. Il magazzino parte già con i tuoi dati veri, non da zero.',
+    t: 'Colleghiamo e verifichiamo i dati',
+    d: 'Configuriamo le integrazioni concordate e importiamo lo storico disponibile. Controlliamo articoli, ricette e giacenze iniziali per costruire una base coerente.',
   },
   {
     icon: GraduationCap,
-    t: 'Formiamo chi lo usa ogni giorno',
-    d: 'Una sessione pratica con te e il team, sul locale vero. Niente manuali da leggere prima di iniziare.',
+    t: 'Accompagniamo il team',
+    d: 'Ti mostriamo come usare RUSH nelle operazioni quotidiane. Ogni persona impara le funzioni utili al proprio ruolo attraverso una sessione pratica.',
   },
   {
     icon: CheckCircle2,
-    t: 'Sei operativo, restiamo vicini',
-    d: 'Nei primi giorni monitoriamo insieme che tutto torni: cassa, magazzino, turni. Poi il sistema lavora da solo.',
+    t: 'Partiamo e seguiamo i flussi',
+    d: 'Nei primi giorni controlliamo insieme che i dati arrivino correttamente. Seguiamo le anomalie e restiamo il tuo riferimento per il lavoro gestito in RUSH.',
   },
 ];
 
@@ -49,12 +49,12 @@ export default function AvvioRisto() {
     <Section id="avvio" large>
       <Head
         icon={Compass}
-        label="Come lavoriamo"
-        title={<>Rush entra nel locale senza fermarlo</>}
+        label="Come partiamo"
+        title={<>Partiamo dal tuo modo di lavorare e colleghiamo ciò che oggi è separato.</>}
         sub={
           <>
-            Partiamo da come lavori già, colleghiamo i dati e accompagniamo il team fino a quando tutto gira.
-            Quattro passaggi chiari, senza salti nel vuoto.
+            Analizziamo gli strumenti del locale, configuriamo i flussi e accompagniamo il team
+            nell’utilizzo di RUSH. Quattro passaggi per portare il centro operativo nel lavoro quotidiano.
           </>
         }
       />

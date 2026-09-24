@@ -119,6 +119,7 @@ export default function Fab({ page = 'home' }) {
   const theme = useContext(ThemeCtx);
   const logoSrc = LOGO[page]?.[theme === 'dark' ? 'dark' : 'light'] || LOGO.home.light;
   const suggests = SUGGESTS[page] || SUGGESTS.home;
+  const triggerLabel = page === 'ristorazione' ? 'Chiedi a RUSH' : 'Chiedi a Rush';
   /* stessa soglia del CSS mobile del pannello (@media max-width: 560px) */
   const isMobile = useIsMobile('(max-width: 560px)');
 
@@ -396,12 +397,12 @@ export default function Fab({ page = 'home' }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: EASE_MODAL, delay: 1.1 }}
         whileHover={{ opacity: 0.9 }}
-        aria-label="Chiedi a Rush"
+        aria-label={triggerLabel}
       >
         <span className="fab__glow" aria-hidden="true" />
         <span className="fab__inner">
           <Sparkles size={18} strokeWidth={1.75} />
-          <span className="fab__text">Chiedi a Rush</span>
+          <span className="fab__text">{triggerLabel}</span>
         </span>
       </motion.button>
 

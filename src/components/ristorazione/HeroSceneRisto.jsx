@@ -245,7 +245,7 @@ export default function HeroSceneRisto() {
               <div className="dash__scroll">
                 <div className="dash__greet">
                   <h4>Buongiorno, Mario</h4>
-                  <p>Maggio 2026 · ecco come va Caffè Centrale in questo momento</p>
+                  <p>I dati di Caffè Centrale, riuniti in un’unica vista.</p>
                 </div>
 
                 <div className="dash__kpis">
