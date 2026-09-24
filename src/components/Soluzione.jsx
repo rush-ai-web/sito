@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { Section, Head, IconTile } from './ui';
 import { EASE_MODAL } from '../lib/motion';
-import { useIsMobile } from '../lib/hooks';
+import { useIsMobile, useAnimationActivity } from '../lib/hooks';
 
 const ORBIT = [
   {
@@ -204,10 +204,9 @@ function SoluzioneDesktop() {
   const angleRef = useRef(0);
   const focusRef = useRef(null);
   const rafRef = useRef(null);
-  const inViewportRef = useRef(false);
   const openIdRef = useRef(null);
   const cardRefs = useRef({});
-  const rootRef = useRef(null);
+  const [rootRef, active] = useAnimationActivity();
 
   useEffect(() => {
     openIdRef.current = openId;
@@ -239,7 +238,6 @@ function SoluzioneDesktop() {
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
-          inViewportRef.current = e.isIntersecting;
           if (e.isIntersecting) {
             setEntered(true);
           }
@@ -253,15 +251,11 @@ function SoluzioneDesktop() {
 
   useEffect(() => {
     applyPositions();
-    if (reduce) return undefined;
+    if (reduce || !active) return undefined;
     let last = performance.now();
     const loop = (now) => {
       const dt = now - last;
       last = now;
-      if (!inViewportRef.current || document.hidden) {
-        rafRef.current = requestAnimationFrame(loop);
-        return;
-      }
       const f = focusRef.current;
       if (f) {
         const t = Math.min((now - f.start) / FOCUS_DURATION, 1);
@@ -277,7 +271,7 @@ function SoluzioneDesktop() {
     };
     rafRef.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [reduce]);
+  }, [reduce, active]);
 
   const focusNode = (id) => {
     const idx = ORBIT.findIndex((o) => o.id === id);

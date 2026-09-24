@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Gauge, ShieldCheck, Sparkles, CalendarClock, Boxes, Receipt, TrendingDown, Lightbulb } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
+import { useAnimationActivity } from '../lib/hooks';
 
 const ROTATE_MS = 6000;
 
@@ -191,19 +192,21 @@ const ESITI = [
 
 export default function EsitiShowcase() {
   const reduce = useReducedMotion();
+  const [showcaseRef, inView] = useAnimationActivity();
   const [active, setActive] = useState(0);
 
   useEffect(() => {
-    if (reduce) return undefined;
+    if (reduce || !inView) return undefined;
     const id = setInterval(() => setActive((a) => (a + 1) % ESITI.length), ROTATE_MS);
     return () => clearInterval(id);
-  }, [reduce, active]);
+  }, [reduce, active, inView]);
 
   const Scene = ESITI[active].Scene;
 
   return (
     <motion.div
       className="esiti"
+      ref={showcaseRef}
       initial={{ opacity: 0, y: 26 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
@@ -228,7 +231,7 @@ export default function EsitiShowcase() {
                 <b>{e.t}</b>
                 <em>{e.d}</em>
               </span>
-              {on && !reduce && (
+              {on && !reduce && inView && (
                 <motion.span
                   className="esiti__prog"
                   key={active}
@@ -252,7 +255,7 @@ export default function EsitiShowcase() {
             exit={reduce ? undefined : { opacity: 0, y: -14 }}
             transition={{ duration: 0.6, ease: EASE_MODAL }}
           >
-            <Scene reduce={reduce} />
+            <Scene reduce={reduce || !inView} />
           </motion.div>
         </AnimatePresence>
         <span className="esiti__stage-glow" aria-hidden="true" />

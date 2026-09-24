@@ -1,30 +1,38 @@
-// Decode below-the-fold assets during idle time. Prepare only nearby animated
-// layers so we do not allocate a GPU layer for every component on the page.
+// Suspend decorative loops outside the viewport. Keep native lazy decoding;
+// do not promote every nested reveal to a large translucent GPU layer.
 export function warmupScroll() {
-  const idle = window.requestIdleCallback || (fn => setTimeout(fn, 200));
-  const cancelIdle = window.cancelIdleCallback || clearTimeout;
-  let cancelled = false;
-  let task;
-  const images = [...document.images];
-  async function next() {
-    if (cancelled || !images.length) return;
-    const image = images.shift();
-    await image.decode?.().catch(() => {});
-    if (!cancelled) task = idle(next, { timeout: 2000 });
-  }
-  task = idle(next, { timeout: 2000 });
-  const prepared = new Set();
+  const sections = [...document.querySelectorAll('main > section')];
+  const nearby = new Set();
+  const sync = (section) => {
+    section.dataset.motionActive = String(nearby.has(section) && !document.hidden);
+    section.querySelectorAll('svg').forEach(svg => {
+      if (typeof svg.pauseAnimations !== 'function') return;
+      if (nearby.has(section) && !document.hidden) svg.unpauseAnimations();
+      else svg.pauseAnimations();
+    });
+  };
+  sections.forEach(section => { section.dataset.motionActive = 'false'; });
   const observer = new IntersectionObserver(entries => {
     for (const entry of entries) {
-      if (entry.isIntersecting) {
-        entry.target.style.willChange = 'transform, opacity';
-        prepared.add(entry.target);
-      } else {
-        entry.target.style.removeProperty('will-change');
-        prepared.delete(entry.target);
-      }
+      if (entry.isIntersecting) nearby.add(entry.target);
+      else nearby.delete(entry.target);
+      sync(entry.target);
     }
-  }, { rootMargin: '300px 0px' });
-  document.querySelectorAll('main [style*="opacity: 0"]:not(.faq-item__body)').forEach(node => observer.observe(node));
-  return () => { cancelled = true; cancelIdle(task); observer.disconnect(); prepared.forEach(node => node.style.removeProperty('will-change')); };
+  }, { rootMargin: '200px 0px' });
+  sections.forEach(section => observer.observe(section));
+  const visibility = () => {
+    document.documentElement.classList.toggle('page-hidden', document.hidden);
+    sections.forEach(sync);
+  };
+  document.addEventListener('visibilitychange', visibility);
+  visibility();
+  return () => {
+    observer.disconnect();
+    document.removeEventListener('visibilitychange', visibility);
+    document.documentElement.classList.remove('page-hidden');
+    sections.forEach(section => {
+      delete section.dataset.motionActive;
+      section.querySelectorAll('svg').forEach(svg => svg.unpauseAnimations?.());
+    });
+  };
 }

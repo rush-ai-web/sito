@@ -1562,10 +1562,10 @@
   animation: ecoDrop 1.8s ease-in-out infinite;
 }
 @keyframes ecoDrop {
-  0% { top: 0; opacity: 0; }
+  0% { transform: translateY(0); opacity: 0; }
   20% { opacity: 1; }
   80% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
+  100% { transform: translateY(46px); opacity: 0; }
 }
 .eco-m__core {
   display: flex;

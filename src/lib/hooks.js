@@ -1,69 +1,16 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { animate, useInView, useMotionValue, useReducedMotion } from 'framer-motion';
-import Lenis from 'lenis';
 import { warmupScroll } from './warmup';
 import { EASE_MODAL } from './motion';
 
-const BOOT_TIMEOUT_MS = 1800;
-const BOOT_MINIMUM_MS = 2000;
-
-const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-function preloadImage(src) {
-  return new Promise((resolve) => {
-    const image = new Image();
-    image.decoding = 'async';
-    image.onload = resolve;
-    image.onerror = resolve;
-    image.src = src;
-    if (image.complete) {
-      image.decode?.().catch(() => {}).finally(resolve);
-    }
-  });
-}
-
-/* Prima di montare le animazioni iniziali prepariamo i font, i loghi visibili
-   subito e le varianti Ristorazione usate più avanti. Il timeout evita che
-   una risorsa guasta possa mai bloccare la pagina. */
+/* The page is immediately usable. Let the browser prioritize visible assets
+   instead of eagerly decoding logos and images belonging to other sections. */
 export function useAppReady() {
   useEffect(warmupScroll, []);
-  const [ready, setReady] = useState(true);
-
   useEffect(() => {
-    let cancelled = false;
     document.getElementById('root')?.removeAttribute('data-prerender');
-    let timeoutId;
-
-    const fontTasks = document.fonts
-      ? [document.fonts.load('400 18px "Inter Variable"'), document.fonts.ready]
-      : [];
-    const imageTasks = [
-      preloadImage(`${import.meta.env.BASE_URL}rush-logo-192.png`),
-      preloadImage(`${import.meta.env.BASE_URL}rush-logo-dark-192.png`),
-      preloadImage(`${import.meta.env.BASE_URL}rush-logo-orange.webp`),
-      preloadImage(`${import.meta.env.BASE_URL}rush-logo-orange-dark.webp`),
-    ];
-    const resources = Promise.allSettled([...fontTasks, ...imageTasks]);
-    const timeout = new Promise((resolve) => {
-      timeoutId = window.setTimeout(resolve, BOOT_TIMEOUT_MS);
-    });
-
-    Promise.all([wait(BOOT_MINIMUM_MS), Promise.race([resources, timeout])]).then(() => {
-      window.clearTimeout(timeoutId);
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          if (!cancelled) setReady(true);
-        });
-      });
-    });
-
-    return () => {
-      cancelled = true;
-      window.clearTimeout(timeoutId);
-    };
   }, []);
-
-  return ready;
+  return true;
 }
 
 /* ---------- Viewport: mobile vs desktop ---------- */
@@ -86,60 +33,53 @@ export function useIsMobile(query = '(max-width: 760px)') {
   return is;
 }
 
-/* ---------- Smooth scroll stile Framer (Lenis) ---------- */
+/* Native wheel/touch scrolling; smooth scrolling only for navigation links. */
 export function useSmoothScroll(enabled = true) {
   const reduce = useReducedMotion();
 
   useEffect(() => {
-    if (!enabled || reduce) return undefined;
-    /* niente smooth su touch: sui telefoni lo scroll nativo è già ottimo
-       e Lenis sul wheel non serve. */
-    const coarse = window.matchMedia('(pointer: coarse)').matches;
-    if (coarse) return undefined;
-
-    const lenis = new Lenis({
-      duration: 1.15,
-      /* expo-out: parte veloce e si adagia - il feeling dei siti Framer */
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      smoothTouch: false,
-      touchMultiplier: 1.5,
-      wheelMultiplier: 1,
-      overscroll: false,
-      /* la chat (e qualunque altro pannello scrollabile al suo interno) deve
-         scrollare nativamente: senza questa esclusione Lenis intercetta la
-         rotella anche lì e lo scroll interno non si muove mai. */
-      prevent: (node) => !!node.closest('.chat-panel__list'),
-    });
-
-    let rafId;
-    const raf = (time) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    };
-    rafId = requestAnimationFrame(raf);
-
-    /* le ancore (#home, #prodotto, #contatti…) passano da Lenis con un
-       offset per la nav flottante, invece del salto nativo. */
+    if (!enabled) return undefined;
     const onClick = (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const a = e.target.closest('a[href^="#"]');
-      if (!a) return;
+      if (!a || a.hasAttribute('download') || (a.target && a.target !== '_self')) return;
       const id = a.getAttribute('href');
       if (!id || id === '#') return;
-      const target = document.querySelector(id);
+      const target = document.getElementById(decodeURIComponent(id.slice(1)));
       if (!target) return;
       e.preventDefault();
-      lenis.scrollTo(target, { offset: -96 });
+      window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 96, behavior: reduce ? 'instant' : 'smooth' });
       if (history.replaceState) history.replaceState(null, '', id);
     };
     document.addEventListener('click', onClick);
 
     return () => {
-      cancelAnimationFrame(rafId);
       document.removeEventListener('click', onClick);
-      lenis.destroy();
     };
   }, [enabled, reduce]);
+}
+
+/* Demo loops run near the viewport, never in a background tab. */
+export function useAnimationActivity() {
+  const ref = useRef(null);
+  const [active, setActive] = useState(false);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return undefined;
+    let nearby = false;
+    const update = () => setActive(nearby && !document.hidden);
+    const observer = new IntersectionObserver(([entry]) => {
+      nearby = entry.isIntersecting;
+      update();
+    }, { rootMargin: '120px 0px' });
+    observer.observe(node);
+    document.addEventListener('visibilitychange', update);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', update);
+    };
+  }, []);
+  return [ref, active];
 }
 
 /* ---------- Tema: light di default, dark alla pari ---------- */
@@ -190,11 +130,13 @@ export function useTheme() {
 }
 
 /* ---------- Numeri in formato italiano ---------- */
-export const fmt = (n, dec = 0) =>
-  new Intl.NumberFormat('it-IT', {
-    minimumFractionDigits: dec,
-    maximumFractionDigits: dec,
-  }).format(n);
+const numberFormats = new Map();
+export const fmt = (n, dec = 0) => {
+  if (!numberFormats.has(dec)) numberFormats.set(dec, new Intl.NumberFormat('it-IT', {
+    minimumFractionDigits: dec, maximumFractionDigits: dec,
+  }));
+  return numberFormats.get(dec).format(n);
+};
 
 /* ---------- Conteggio animato - signature move ----------
    Parte quando il numero entra in viewport, si ferma sul valore

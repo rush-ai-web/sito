@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion, useTransform } from 'framer-motion';
 import {
   LayoutDashboard,
   Boxes,
@@ -20,6 +20,7 @@ import {
   ChevronUp,
 } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
+import { useAnimationActivity } from '../lib/hooks';
 
 const logoLight = `${import.meta.env.BASE_URL}rush-logo.png`;
 const logoDark = `${import.meta.env.BASE_URL}rush-logo-dark.png`;
@@ -101,17 +102,14 @@ const QUERIES = [
 
 function useNum(target) {
   const mv = useMotionValue(target);
-  const [n, setN] = useState(target);
-  const previous = useRef(target);
+  const reduce = useReducedMotion();
   useEffect(() => {
-    const from = previous.current;
-    previous.current = target;
-    if (from === target) return undefined;
-    mv.set(from);
-    const c = animate(mv, target, { duration: 0.85, ease: EASE_MODAL, onUpdate: setN });
+    if (reduce) { mv.set(target); return undefined; }
+    if (mv.get() === target) return undefined;
+    const c = animate(mv, target, { duration: 0.85, ease: EASE_MODAL });
     return () => c.stop();
-  }, [target, mv]);
-  return n;
+  }, [target, mv, reduce]);
+  return mv;
 }
 
 const fmt = (n, kind) =>
@@ -121,10 +119,11 @@ const fmt = (n, kind) =>
 
 function Kpi({ lab, v, fmt: kind, d, dir, tone }) {
   const n = useNum(v);
+  const text = useTransform(n, value => fmt(value, kind));
   return (
     <div className="dash__kpi">
       <p className="dash__kpi-lab">{lab}</p>
-      <p className="dash__kpi-val num">{fmt(n, kind)}</p>
+      <motion.p className="dash__kpi-val num">{text}</motion.p>
       <span className={`dash__kpi-d ${tone ? `is-${tone}` : 'is-flat'}`}>
         {dir === 'up' && <TrendingUp size={11} strokeWidth={2.4} />}
         {dir === 'down' && <TrendingDown size={11} strokeWidth={2.4} />}
@@ -136,6 +135,7 @@ function Kpi({ lab, v, fmt: kind, d, dir, tone }) {
 
 export default function HeroScene() {
   const reduce = useReducedMotion();
+  const [sceneRef, active] = useAnimationActivity();
   const [period, setPeriod] = useState(0);
   const [alerts, setAlerts] = useState(ALERT_POOL.slice(0, 3));
   const alertIdx = useRef(3);
@@ -144,31 +144,31 @@ export default function HeroScene() {
   const p = PERIODS[period];
 
   useEffect(() => {
-    if (reduce) return;
+    if (reduce || !active) return;
     const id = setInterval(() => setPeriod((v) => (v + 1) % PERIODS.length), 4200);
     return () => clearInterval(id);
-  }, [reduce]);
+  }, [reduce, active]);
 
   useEffect(() => {
-    if (reduce) return;
+    if (reduce || !active) return;
     const id = setInterval(() => {
       const next = ALERT_POOL[alertIdx.current % ALERT_POOL.length];
       alertIdx.current += 1;
       setAlerts((prev) => [next, ...prev].slice(0, 3));
     }, 3200);
     return () => clearInterval(id);
-  }, [reduce]);
+  }, [reduce, active]);
 
   useEffect(() => {
-    if (reduce) return;
+    if (reduce || !active) return;
     const id = setInterval(() => setQ((v) => (v + 1) % QUERIES.length), 3600);
     return () => clearInterval(id);
-  }, [reduce]);
+  }, [reduce, active]);
 
   const maxBar = Math.max(...p.inc, ...p.spe);
 
   return (
-    <div className="scene">
+    <div className="scene" ref={sceneRef}>
       <div className="win" aria-hidden="true">
         <div className="win__chrome">
           <span className="win__dots"><i /><i /><i /></span>
@@ -275,13 +275,15 @@ export default function HeroScene() {
                             <motion.span
                               className="dash__bar is-inc"
                               initial={false}
-                              animate={{ height: `${(p.inc[i] / maxBar) * 100}%` }}
+                              style={{ height: '100%', transformOrigin: 'bottom' }}
+                              animate={{ scaleY: p.inc[i] / maxBar }}
                               transition={{ duration: 0.7, ease: EASE_MODAL, delay: i * 0.04 }}
                             />
                             <motion.span
                               className="dash__bar is-spe"
                               initial={false}
-                              animate={{ height: `${(p.spe[i] / maxBar) * 100}%` }}
+                              style={{ height: '100%', transformOrigin: 'bottom' }}
+                              animate={{ scaleY: p.spe[i] / maxBar }}
                               transition={{ duration: 0.7, ease: EASE_MODAL, delay: i * 0.04 + 0.05 }}
                             />
                           </div>
@@ -329,10 +331,10 @@ export default function HeroScene() {
       <motion.div
         className="sat sat--l"
         initial={{ opacity: 0 }}
-        animate={reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: [-7, 7] }}
+        animate={reduce || !active ? { opacity: 1, y: 0 } : { opacity: 1, y: [-7, 7] }}
         transition={{
           opacity: { duration: 0.7, ease: EASE_MODAL, delay: 0.9 },
-          y: { duration: 4.5, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror', delay: 0.9 },
+          y: reduce || !active ? { duration: 0 } : { duration: 4.5, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror', delay: 0.9 },
         }}
         aria-hidden="true"
       >
@@ -346,10 +348,10 @@ export default function HeroScene() {
       <motion.div
         className="sat sat--r"
         initial={{ opacity: 0 }}
-        animate={reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: [7, -7] }}
+        animate={reduce || !active ? { opacity: 1, y: 0 } : { opacity: 1, y: [7, -7] }}
         transition={{
           opacity: { duration: 0.7, ease: EASE_MODAL, delay: 1.1 },
-          y: { duration: 5.5, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror', delay: 1.1 },
+          y: reduce || !active ? { duration: 0 } : { duration: 5.5, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror', delay: 1.1 },
         }}
         aria-hidden="true"
       >
@@ -363,10 +365,10 @@ export default function HeroScene() {
       <motion.div
         className="sat sat--bl"
         initial={{ opacity: 0 }}
-        animate={reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: [5, -5] }}
+        animate={reduce || !active ? { opacity: 1, y: 0 } : { opacity: 1, y: [5, -5] }}
         transition={{
           opacity: { duration: 0.7, ease: EASE_MODAL, delay: 1.3 },
-          y: { duration: 5, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror', delay: 1.3 },
+          y: reduce || !active ? { duration: 0 } : { duration: 5, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror', delay: 1.3 },
         }}
         aria-hidden="true"
       >

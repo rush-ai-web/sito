@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { Compass, PhoneCall, UploadCloud, GraduationCap, CheckCircle2 } from 'lucide-react';
 import { Section, Head, IconTile } from '../ui';
 import { EASE_MODAL } from '../../lib/motion';
+import { useAnimationActivity } from '../../lib/hooks';
 
 const STEP_DURATION = 1900;
 const DESKTOP_ROUTE_PROGRESS = [0, 0.339, 0.67, 1];
@@ -33,17 +34,18 @@ const PASSI = [
 
 export default function AvvioRisto() {
   const reduceMotion = useReducedMotion();
+  const [stepsRef, active] = useAnimationActivity();
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
-    if (reduceMotion) return undefined;
+    if (reduceMotion || !active) return undefined;
 
     const intervalId = window.setInterval(() => {
       setActiveStep((step) => (step + 1) % PASSI.length);
     }, STEP_DURATION);
 
     return () => window.clearInterval(intervalId);
-  }, [reduceMotion]);
+  }, [reduceMotion, active]);
 
   return (
     <Section id="avvio" large>
@@ -59,7 +61,7 @@ export default function AvvioRisto() {
         }
       />
 
-      <div className="onb" aria-label="Le quattro fasi di attivazione di Rush">
+      <div className="onb" ref={stepsRef} aria-label="Le quattro fasi di attivazione di Rush">
         <svg className="onb__route onb__route--desktop" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
           <path
             className="onb__route-base"

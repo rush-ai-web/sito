@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowDown, Sparkles, Link2, Database, Lightbulb } from 'lucide-react';
 import HeroScene from './HeroScene';
 import { wordUp, fadeUp, EASE_MODAL } from '../lib/motion';
+import { useAnimationActivity } from '../lib/hooks';
 
 /* titolo principale, fisso */
 const L1 = ['IL', 'CENTRALIZZATORE', 'OPERATIVO', 'CHE'];
@@ -67,6 +68,7 @@ function Word({ w, i }) {
    segue il contenuto grazie a layout, il testo entra lettera per lettera. */
 function RotatingSlot() {
   const reduce = useReducedMotion();
+  const [slotRef, active] = useAnimationActivity();
   const [i, setI] = useState(0);
   /* al primo mount evitiamo la spring per carattere (pesa 15+ animazioni
      simultanee): letters entrano in blocco con la pill. Dopo la prima
@@ -82,7 +84,7 @@ function RotatingSlot() {
   const [layoutReady, setLayoutReady] = useState(false);
 
   useEffect(() => {
-    if (reduce) return undefined;
+    if (reduce || !active) return undefined;
     const settle = setTimeout(() => setLayoutReady(true), 1300);
     const id = setInterval(() => {
       setStarted(true);
@@ -92,7 +94,7 @@ function RotatingSlot() {
       clearTimeout(settle);
       clearInterval(id);
     };
-  }, [reduce]);
+  }, [reduce, active]);
 
   const { t, Icon } = ROTATE[i];
   const chars = Array.from(t);
@@ -101,6 +103,7 @@ function RotatingSlot() {
     <motion.span
       className="hero__pill"
       layout={layoutReady}
+      ref={slotRef}
       initial={reduce ? false : { opacity: 0, y: 10 }}
       animate={reduce ? {} : { opacity: 1, y: 0 }}
       transition={{

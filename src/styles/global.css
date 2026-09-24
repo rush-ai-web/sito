@@ -528,6 +528,19 @@ main {
   z-index: 0;
 }
 
+/* Pause offscreen decorative loops, not Motion's one-shot entrances. */
+[data-motion-active='false'],
+[data-motion-active='false']::before,
+[data-motion-active='false']::after,
+[data-motion-active='false'] *,
+[data-motion-active='false'] *::before,
+[data-motion-active='false'] *::after,
+.page-hidden *,
+.page-hidden *::before,
+.page-hidden *::after {
+  animation-play-state: paused !important;
+}
+
 .aurora {
   position: absolute;
   inset: 0;
@@ -3351,11 +3364,11 @@ html.chat-open {
 /* Bordo animato "shiny border": container con overflow hidden + padding
    (= spessore del bordo), un raggio conico che ruota dietro, e il
    contenuto interno con sfondo solido che copre tutto tranne il bordo. */
-/* Bordo con conic-gradient animato via @property (stesso stile del prezzi2__frame):
-   il container ruota l'angle, il glow lo eredita per un alone sincronizzato. */
+/* Keep the animated angle local: inheriting it invalidated every descendant
+   each frame. The glow runs the same animation on its own layer. */
 @property --fab-angle {
   syntax: '<angle>';
-  inherits: true;
+  inherits: false;
   initial-value: 0deg;
 }
 
@@ -3390,8 +3403,9 @@ html.chat-open {
   --fab-ink: #1d1d1f;
 }
 
-/* alone luminoso sincronizzato con lo stesso angle (ereditato) */
+/* Alone sincronizzato senza propagare l'angolo ai discendenti. */
 .fab__glow {
+  animation: fabSpin 4s linear infinite;
   position: absolute;
   inset: 0;
   border-radius: inherit;
@@ -6116,7 +6130,7 @@ textarea.input::-webkit-scrollbar {
 /* ---- cornice con bordo animato + glow ---- */
 @property --prezzi-angle {
   syntax: '<angle>';
-  inherits: true;
+  inherits: false;
   initial-value: 0deg;
 }
 
@@ -6139,8 +6153,9 @@ textarea.input::-webkit-scrollbar {
   isolation: isolate;
 }
 
-/* alone luminoso sincronizzato (eredita --prezzi-angle) */
+/* Alone sincronizzato con un'animazione locale, non ereditata. */
 .prezzi2__frame-glow {
+  animation: prezziSpin 4s linear infinite;
   position: absolute;
   inset: 0;
   border-radius: inherit;
@@ -6165,7 +6180,7 @@ textarea.input::-webkit-scrollbar {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .prezzi2__frame { animation: none; }
+  .prezzi2__frame, .prezzi2__frame-glow { animation: none; }
 }
 
 /* Card invertita: sfondo bianco in dark, nero in light */
