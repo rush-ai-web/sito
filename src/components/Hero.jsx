@@ -254,8 +254,8 @@ export default function Hero() {
 
       <motion.div
         className="hero__stage"
-        initial={{ opacity: 0, y: 44 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, transform: 'translateY(44px)' }}
+        animate={{ opacity: 1, transform: 'none' }}
         transition={{ duration: 1, ease: EASE_MODAL, delay: 0.4 }}
       >
         <span className="hero__beam" aria-hidden="true" />

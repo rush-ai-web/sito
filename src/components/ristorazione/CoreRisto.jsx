@@ -57,8 +57,8 @@ function BuildCard({ icon, title, desc, accent = false, wide = false, children }
       ref={ref}
       onPointerMove={onMove}
       className={`buildcard card card--lg card--glow ${accent ? 'card--glow-accent buildcard--accent' : ''} ${wide ? 'buildcard--wide' : ''}`}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, transform: 'translateY(24px)' }}
+      whileInView={{ opacity: 1, transform: 'none' }}
       viewport={inViewOnce}
       transition={{ duration: 0.6, ease: EASE_MODAL }}
     >
@@ -240,8 +240,8 @@ export default function CoreRisto() {
           <motion.div
             key={t}
             className="rh-altro__item"
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, transform: 'translateY(14px)' }}
+            whileInView={{ opacity: 1, transform: 'none' }}
             viewport={inView}
             transition={{ duration: 0.5, ease: EASE_MODAL }}
           >

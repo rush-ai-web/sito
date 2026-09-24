@@ -45,17 +45,17 @@ const COME_FUNZIONA = [
 ];
 
 const FRAME_REVEAL = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_MODAL } },
+  hidden: { opacity: 0, transform: 'translateY(20px)' },
+  show: { opacity: 1, transform: 'none', transition: { duration: 0.6, ease: EASE_MODAL } },
 };
 const INFO_REVEAL = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_MODAL, delay: 0.1 } },
+  hidden: { opacity: 0, transform: 'translateY(20px)' },
+  show: { opacity: 1, transform: 'none', transition: { duration: 0.6, ease: EASE_MODAL, delay: 0.1 } },
 };
 /* hidden === show: sulla card prezzi da mobile l'entrata resta ferma,
    senza staccare whileInView (che lasciato "a metà" congela l'elemento
    nello stato nascosto invece di mostrarlo). */
-const NO_MOTION = { hidden: { opacity: 1, y: 0 }, show: { opacity: 1, y: 0 } };
+const NO_MOTION = { hidden: { opacity: 1, transform: 'none' }, show: { opacity: 1, transform: 'none' } };
 
 export default function Prezzi() {
   const [yearly, setYearly] = useState(true);

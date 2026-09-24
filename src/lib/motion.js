@@ -22,10 +22,11 @@ export const DUR = {
 export const inView = { once: true, amount: 0.2, margin: '0px 0px -8% 0px' };
 
 export const fadeUp = {
-  hidden: { opacity: 0, y: 22 },
+  // Full transform enables Motion's WAAPI path; x/y use its JS frame loop.
+  hidden: { opacity: 0, transform: 'translateY(22px)' },
   show: (i = 0) => ({
     opacity: 1,
-    y: 0,
+    transform: 'none',
     transition: { duration: DUR.reveal, ease: EASE_MODAL, delay: i * 0.06 },
   }),
 };
@@ -64,10 +65,10 @@ export const liftHover = {
 
 /* il titolo hero si compone parola per parola */
 export const wordUp = {
-  hidden: { opacity: 0, y: '0.42em' },
+  hidden: { opacity: 0, transform: 'translateY(0.42em)' },
   show: (i = 0) => ({
     opacity: 1,
-    y: 0,
+    transform: 'none',
     transition: { duration: 0.75, ease: EASE_MODAL, delay: 0.06 + i * 0.055 },
   }),
 };

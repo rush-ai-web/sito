@@ -37,3 +37,22 @@ smoothly. Decorative loops and demo timers pause outside the viewport or in
 hidden tabs. KPI text updates bypass React rendering on every frame, chart
 bars use transforms, animated gradient angles no longer invalidate entire
 descendant trees, and image decoding is left to browser prioritization.
+
+## Entrance-specific follow-up
+
+The original scroll cleanup still left entrance translations on Motion's
+JavaScript frame loop. In the installed `motion-dom` version, full `transform`
+is eligible for the browser/WAAPI animation path; individual `x` and `y` are
+not. Section/card entrances now use equivalent translate/scale strings and
+finish at `none`, preserving distances, easing, timing, stagger and thresholds.
+Interactive layout, orbital motion, SVG path drawing and modal behavior are
+not mechanically converted.
+
+Run `node --test tests/*.test.mjs`. For browser verification, instrument
+`Element.prototype.animate` before startup and inspect transform keyframes
+while entering sections for the first time. Before this follow-up there were
+no native transform animations in the sampled entrances; after the change
+Chrome invokes the native transform path. Also check normal/reduced motion,
+desktop/mobile, card hover, and that completed entrances do not replay on
+return. Main-thread RAF timing alone is not compositor FPS, so do not infer a
+universal frame-rate guarantee from this change.

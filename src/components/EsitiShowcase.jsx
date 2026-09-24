@@ -207,8 +207,8 @@ export default function EsitiShowcase() {
     <motion.div
       className="esiti"
       ref={showcaseRef}
-      initial={{ opacity: 0, y: 26 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, transform: 'translateY(26px)' }}
+      whileInView={{ opacity: 1, transform: 'none' }}
       viewport={{ once: true, amount: 0.25 }}
       transition={{ duration: 0.7, ease: EASE_MODAL }}
     >

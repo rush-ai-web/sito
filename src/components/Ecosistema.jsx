@@ -177,8 +177,8 @@ function EcosistemaDesktop() {
                   width: pct(CARD_W, VB_W),
                   height: pct(CARD_H, VB_H),
                 }}
-                initial={reduce ? false : { opacity: 0, x: -22 }}
-                whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
+                initial={reduce ? false : { opacity: 0, transform: 'translateX(-22px)' }}
+                whileInView={reduce ? undefined : { opacity: 1, transform: 'none' }}
                 viewport={{ once: true, amount: 0.4 }}
                 transition={{ duration: 0.55, ease: EASE_MODAL, delay: i * 0.1 }}
               >
@@ -195,8 +195,8 @@ function EcosistemaDesktop() {
           <motion.div
             className="eco__core"
             style={{ left: pct(NODE_CX, VB_W), top: pct(NODE_CY, VB_H) }}
-            initial={reduce ? false : { opacity: 0, scale: 0.8 }}
-            whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
+            initial={reduce ? false : { opacity: 0, transform: 'scale(0.8)' }}
+            whileInView={reduce ? undefined : { opacity: 1, transform: 'none' }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.6, ease: EASE_MODAL, delay: 0.5 }}
           >
@@ -230,8 +230,8 @@ function EcosistemaDesktop() {
               width: pct(VB_W - DEST_L - 12, VB_W),
               height: pct(172, VB_H),
             }}
-            initial={reduce ? false : { opacity: 0, x: 22 }}
-            whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
+            initial={reduce ? false : { opacity: 0, transform: 'translateX(22px)' }}
+            whileInView={reduce ? undefined : { opacity: 1, transform: 'none' }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.6, ease: EASE_MODAL, delay: 0.95 }}
           >
@@ -276,8 +276,8 @@ function EcosistemaMobile() {
               <motion.div
                 key={m.t}
                 className="eco-m__mod"
-                initial={reduce ? false : { opacity: 0, y: 14 }}
-                whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+                initial={reduce ? false : { opacity: 0, transform: 'translateY(14px)' }}
+                whileInView={reduce ? undefined : { opacity: 1, transform: 'none' }}
                 viewport={{ once: true, amount: 0.4 }}
                 transition={{ duration: 0.45, ease: EASE_MODAL, delay: i * 0.06 }}
               >

@@ -63,8 +63,8 @@ export default function ChatRisto() {
 
       <motion.div
         className="rh-chat card card--lg contrast-card"
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, transform: 'translateY(24px)' }}
+        whileInView={{ opacity: 1, transform: 'none' }}
         viewport={inView}
         transition={{ duration: 0.65, ease: EASE_MODAL }}
       >
@@ -73,8 +73,8 @@ export default function ChatRisto() {
             <motion.div
               key={i}
               className={`rh-chat__msg rh-chat__msg--${m.role}`}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, transform: 'translateY(12px)' }}
+              whileInView={{ opacity: 1, transform: 'none' }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.45, ease: EASE_MODAL, delay: i * 0.12 }}
             >

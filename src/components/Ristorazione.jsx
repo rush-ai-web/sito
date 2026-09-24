@@ -45,8 +45,8 @@ export default function Ristorazione() {
       <div className="risto2">
         <motion.div
           className="risto2__text"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, transform: 'translateY(24px)' }}
+          whileInView={{ opacity: 1, transform: 'none' }}
           viewport={inView}
           transition={{ duration: 0.6, ease: EASE_MODAL }}
         >
@@ -85,8 +85,8 @@ export default function Ristorazione() {
           ref={cardRef}
           onPointerMove={onMove}
           className="risto2__card contrast-card restaurant-card"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, transform: 'translateY(24px)' }}
+          whileInView={{ opacity: 1, transform: 'none' }}
           viewport={inView}
           transition={{ duration: 0.6, ease: EASE_MODAL, delay: 0.1 }}
         >

@@ -71,8 +71,8 @@ export default function Confronto() {
 
       <motion.div
         className="cf-wrap"
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, transform: 'translateY(24px)' }}
+        whileInView={{ opacity: 1, transform: 'none' }}
         viewport={inView}
         transition={{ duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }}
       >

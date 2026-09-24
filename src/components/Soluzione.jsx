@@ -133,8 +133,8 @@ function SoluzioneMobile() {
               type="button"
               key={item.id}
               className={`sol-card${isOpen ? ' is-open' : ''}`}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, transform: 'translateY(18px)' }}
+              whileInView={{ opacity: 1, transform: 'none' }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.5, ease: EASE_MODAL, delay: (idx % 2) * 0.08 }}
               onClick={() => setOpenId(isOpen ? null : item.id)}

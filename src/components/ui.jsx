@@ -23,12 +23,12 @@ const MOBILE_MOTION_BY_SECTION = {
 const mobileReveal = {
   up: fadeUp,
   left: {
-    hidden: { opacity: 0, x: -28 },
-    show: (i = 0) => ({ opacity: 1, x: 0, transition: { duration: 0.56, ease: [0.16, 1, 0.3, 1], delay: i * 0.045 } }),
+    hidden: { opacity: 0, transform: 'translateX(-28px)' },
+    show: (i = 0) => ({ opacity: 1, transform: 'none', transition: { duration: 0.56, ease: [0.16, 1, 0.3, 1], delay: i * 0.045 } }),
   },
   right: {
-    hidden: { opacity: 0, x: 28 },
-    show: (i = 0) => ({ opacity: 1, x: 0, transition: { duration: 0.56, ease: [0.16, 1, 0.3, 1], delay: i * 0.045 } }),
+    hidden: { opacity: 0, transform: 'translateX(28px)' },
+    show: (i = 0) => ({ opacity: 1, transform: 'none', transition: { duration: 0.56, ease: [0.16, 1, 0.3, 1], delay: i * 0.045 } }),
   },
 };
 
@@ -150,7 +150,7 @@ export function Group({ delay = 0, each = 0.07, as = 'div', className = '', chil
    mobile) senza staccare l'elemento dalla propagazione delle varianti
    del Group padre - toglierlo del tutto lascia l'elemento congelato
    sull'ultimo stato applicato invece di renderlo visibile. */
-const noMotion = { hidden: { opacity: 1, x: 0, y: 0 }, show: { opacity: 1, x: 0, y: 0 } };
+const noMotion = { hidden: { opacity: 1, transform: 'none' }, show: { opacity: 1, transform: 'none' } };
 
 export const Item = forwardRef(function Item({ as = 'div', className = '', children, noMobileMotion = false, ...rest }, ref) {
   const M = motion[as] || motion.div;

@@ -37,8 +37,8 @@ export default function MisurabilitaRisto() {
 
       <motion.div
         className="rh-metrics"
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, transform: 'translateY(24px)' }}
+        whileInView={{ opacity: 1, transform: 'none' }}
         viewport={inView}
         transition={{ duration: 0.65, ease: EASE_MODAL }}
       >

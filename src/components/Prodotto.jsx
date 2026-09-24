@@ -36,8 +36,8 @@ function BuildCard({ icon, title, desc, accent = false, wide = false, children }
       className={`buildcard card card--lg card--glow ${accent ? 'card--glow-accent buildcard--accent' : ''} ${
         wide ? 'buildcard--wide' : ''
       }`}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, transform: 'translateY(24px)' }}
+      whileInView={{ opacity: 1, transform: 'none' }}
       viewport={inViewOnce}
       transition={{ duration: 0.6, ease: EASE_MODAL }}
     >
