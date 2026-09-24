@@ -1478,7 +1478,7 @@ main {
 
 /* solo la riga statica: più grande della pill */
 .hero__line:not(.hero__line--slot) {
-  font-size: clamp(1em, 3.7vw, 1.22em);
+  font-size: clamp(1.3em, 3.7vw, 1.22em);
 }
 
 /* la seconda riga: "CHE" e la promessa dinamica restano affiancati */
@@ -4236,7 +4236,7 @@ textarea.input::-webkit-scrollbar {
   }
 
   .hero__line:not(.hero__line--slot) {
-    line-height: 30px;
+    line-height: 35px;
   }
 
   .hero__mobile-break {
@@ -4262,7 +4262,7 @@ textarea.input::-webkit-scrollbar {
     max-width: calc(100vw - 32px);
     box-sizing: border-box;
     font-size: 1.18em;
-    padding: 0.18em 0.24em;
+    padding: 0.40em 0.45em;
   }
   .hero__pill-in {
     gap: 0.28em;
