@@ -14,6 +14,14 @@ function inlineCss() {
     apply: 'build',
     enforce: 'post',
     transformIndexHtml(html, context) {
+      // The repository root is temporarily published by GitHub Pages and
+      // redirects visitors to /docs. Never include that fallback in the
+      // compiled pages: when Pages publishes /docs, they are served at /.
+      html = html.replace(
+        /\s*<script data-pages-root-redirect>[\s\S]*?<\/script>/,
+        '',
+      );
+
       if (cachedCss === null) {
         const cssAssets = Object.values(context.bundle || {}).filter(
           (asset) => asset.type === 'asset' && asset.fileName.endsWith('.css'),
