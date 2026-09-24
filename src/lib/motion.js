@@ -39,6 +39,13 @@ export const fade = {
   }),
 };
 
+/* Motion normalizes "none" to zero for complex transform strings. A scale
+   reveal must end explicitly at 1, otherwise its visible size becomes zero. */
+export const scaleIn = {
+  hidden: { opacity: 0, transform: 'scale(0.8)' },
+  show: { opacity: 1, transform: 'scale(1)' },
+};
+
 /* le card orbitanti entrano dal centro verso la loro posizione */
 export const floatIn = {
   hidden: { opacity: 0, scale: 0.94, y: 16 },

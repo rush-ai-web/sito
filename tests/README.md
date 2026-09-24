@@ -43,8 +43,12 @@ descendant trees, and image decoding is left to browser prioritization.
 The original scroll cleanup still left entrance translations on Motion's
 JavaScript frame loop. In the installed `motion-dom` version, full `transform`
 is eligible for the browser/WAAPI animation path; individual `x` and `y` are
-not. Section/card entrances now use equivalent translate/scale strings and
-finish at `none`, preserving distances, easing, timing, stagger and thresholds.
+not. Section/card entrances now use equivalent translate/scale strings,
+preserving distances, easing, timing, stagger and thresholds. Translations
+finish at `none`; scale entrances must end explicitly at `scale(1)` because
+Motion normalizes `none` to `scale(0)` for a complex scale string. The ecosystem
+core has a regression test for this endpoint, plus browser checks of its
+112px visible size, centered position and logo in light/dark themes.
 Interactive layout, orbital motion, SVG path drawing and modal behavior are
 not mechanically converted.
 

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { fadeUp, wordUp, DUR, EASE_MODAL } from '../src/lib/motion.js';
+import { fadeUp, wordUp, scaleIn, DUR, EASE_MODAL } from '../src/lib/motion.js';
 
 test('shared entrances use full transforms eligible for browser animation', () => {
   for (const variants of [fadeUp, wordUp]) {
@@ -22,4 +22,10 @@ test('entrance distance, duration, easing and stagger remain unchanged', () => {
   assert.deepEqual(fadeUp.show(2).transition.ease, EASE_MODAL);
   assert.equal(wordUp.hidden.transform, 'translateY(0.42em)');
   assert.equal(wordUp.show(0).transition.duration, 0.75);
+});
+
+test('scale entrances end at unit scale, never at the zero-normalized none value', () => {
+  assert.equal(scaleIn.hidden.transform, 'scale(0.8)');
+  assert.equal(scaleIn.show.transform, 'scale(1)');
+  assert.equal(scaleIn.show.opacity, 1);
 });

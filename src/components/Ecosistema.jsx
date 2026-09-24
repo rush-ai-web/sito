@@ -10,7 +10,7 @@ import {
   Boxes,
 } from 'lucide-react';
 import { Section, Head, IconTile } from './ui';
-import { EASE_MODAL } from '../lib/motion';
+import { EASE_MODAL, scaleIn } from '../lib/motion';
 import { useIsMobile } from '../lib/hooks';
 
 /* ------------------------------------------------------------
@@ -195,8 +195,9 @@ function EcosistemaDesktop() {
           <motion.div
             className="eco__core"
             style={{ left: pct(NODE_CX, VB_W), top: pct(NODE_CY, VB_H) }}
-            initial={reduce ? false : { opacity: 0, transform: 'scale(0.8)' }}
-            whileInView={reduce ? undefined : { opacity: 1, transform: 'none' }}
+            variants={scaleIn}
+            initial={reduce ? false : 'hidden'}
+            whileInView={reduce ? undefined : 'show'}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.6, ease: EASE_MODAL, delay: 0.5 }}
           >
