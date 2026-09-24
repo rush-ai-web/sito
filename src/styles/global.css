@@ -7533,6 +7533,16 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
   color: var(--accent);
 }
 
+body.risto-orange-page .hero__title {
+  line-height: 1.2;
+}
+
+@media (max-width: 720px) {
+  body.risto-orange-page .hero__title {
+    font-size: clamp(20px, 6.8vw, 24px);
+  }
+}
+
 .risto-orange .dash__bar.is-inc {
   background: linear-gradient(180deg, #ff8759 0%, #cc4a1f 100%);
 }
