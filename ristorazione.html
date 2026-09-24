@@ -2,6 +2,11 @@
 <html lang="it" prefix="og: https://ogp.me/ns#" class="risto-orange-page">
   <head>
     <meta charset="utf-8" />
+    <script>
+      if (!window.location.pathname.startsWith('/docs/')) {
+        window.location.replace(`/docs/ristorazione.html${window.location.search}${window.location.hash}`);
+      }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#FAFAF9" />
     <meta name="application-name" content="Rush Ristorazione" />
