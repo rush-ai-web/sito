@@ -6971,6 +6971,7 @@ textarea.input::-webkit-scrollbar {
    ============================================================ */
 /* Hero ristorazione: separa promessa e dettaglio soltanto su mobile. */
 .hero-note-break { display: none; }
+.hero-note-break.hero-note-break--home { display: block; }
 @media (max-width: 720px) {
   .hero-note-break { display: block; }
 }

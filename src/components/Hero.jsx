@@ -223,7 +223,7 @@ export default function Hero() {
           animate="show"
         >
           <strong>Un sistema che si adatta alla tua azienda.</strong>{' '}
-          <br className="hero-note-break" />
+          <br className="hero-note-break hero-note-break--home" />
           Collega processi e strumenti e automatizza il lavoro ripetitivo.
         </motion.p>
 
