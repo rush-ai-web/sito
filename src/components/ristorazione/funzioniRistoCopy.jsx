@@ -27,8 +27,8 @@ export const FUNZIONI_RISTO = [
       <>
         <p>
           Sai cosa entra, cosa viene consumato e dove le quantità non tornano. RUSH collega
-          fatture, vendite e ricette per aggiornare le giacenze e ricostruire i movimenti del
-          magazzino.
+          <strong> fatture, vendite e ricette</strong> per aggiornare le giacenze e ricostruire i
+          movimenti del magazzino.
         </p>
         <ul>
           <li>Carichi e consumi confluiscono nello stesso registro.</li>
@@ -51,8 +51,8 @@ export const FUNZIONI_RISTO = [
       <>
         <p>
           Un locale pieno è un buon segnale. Capire quanto resta richiede di collegare i numeri.
-          RUSH riunisce incassi e costi registrati e mette in relazione vendite, ricette e prezzi
-          di acquisto.
+          RUSH riunisce <strong>incassi e costi registrati</strong> e mette in relazione vendite,
+          ricette e prezzi di acquisto.
         </p>
         <ul>
           <li>Leggi il food cost e il margine sulle materie prime di ogni piatto o bevanda.</li>
@@ -75,7 +75,8 @@ export const FUNZIONI_RISTO = [
       <>
         <p>
           Il cliente comincia a conoscere il tuo locale prima di sedersi a tavola. Costruiamo un
-          sito che renda chiari la tua proposta, l’atmosfera e le informazioni utili per sceglierti.
+          sito che renda chiari <strong>la tua proposta, l’atmosfera e le informazioni utili</strong>
+          per sceglierti.
         </p>
         <ul>
           <li>Menu, orari e contatti facili da consultare.</li>
@@ -84,8 +85,8 @@ export const FUNZIONI_RISTO = [
         </ul>
         <p>
           Quando aggiorni le informazioni collegate in RUSH, il sito può riceverle nello stesso
-          flusso. Riduci le versioni da tenere allineate e rendi più semplice il percorso dalla
-          scoperta alla prenotazione.
+          flusso. Riduci le versioni da tenere allineate e rendi più semplice il percorso <u>dalla
+          scoperta alla prenotazione</u>.
         </p>
       </>
     ),
@@ -103,7 +104,7 @@ export const FUNZIONI_RISTO = [
           social.
         </p>
         <p>
-          La comunicazione segue gli obiettivi della tua attività: far conoscere una nuova
+          La comunicazione segue <u>gli obiettivi della tua attività</u>: far conoscere una nuova
           proposta, sostenere un evento o coltivare il rapporto con chi è già stato da te. È un
           servizio complementare, definito su preventivo e coordinato con le iniziative seguite
           attraverso RUSH.
@@ -122,13 +123,13 @@ export const FUNZIONI_RISTO = [
       <>
         <p>
           Accorgerti che manca un ingrediente durante il servizio significa dover cambiare
-          programma. RUSH monitora le giacenze registrate e segnala quando un articolo raggiunge
-          le soglie impostate.
+          programma. RUSH monitora le giacenze registrate e <strong>segnala quando un articolo
+          raggiunge le soglie impostate</strong>.
         </p>
         <p>
           Distingui ciò che va tenuto d’occhio da ciò che richiede un riordino. Il sistema può
-          preparare una proposta con prodotti raggruppati per fornitore, quantità convertite in
-          confezioni e costo previsto. <strong>Controlli, confermi e procedi con l’ordine.</strong>
+          preparare una proposta con <u>prodotti raggruppati per fornitore, quantità convertite in
+          confezioni e costo previsto</u>. <strong>Controlli, confermi e procedi con l’ordine.</strong>
         </p>
       </>
     ),
@@ -139,7 +140,7 @@ export const FUNZIONI_RISTO = [
     content: (
       <>
         <p>
-          Disponibilità, turni, presenze e richieste del team si ritrovano nello stesso ambiente.
+          <strong>Disponibilità, turni, presenze e richieste del team</strong> si ritrovano nello stesso ambiente.
           Ogni persona consulta ciò che riguarda il proprio lavoro; tu hai una visione più chiara
           della copertura del servizio.
         </p>
@@ -150,8 +151,8 @@ export const FUNZIONI_RISTO = [
         </ul>
         <p>
           Quando i dati di cassa lo consentono, puoi leggere anche scontrino medio e vendite per
-          addetto: informazioni da valutare nel contesto del servizio e usare per la formazione
-          del team.
+          addetto: informazioni da valutare nel contesto del servizio e usare per <u>la formazione
+          del team</u>.
         </p>
       </>
     ),
@@ -163,8 +164,8 @@ export const FUNZIONI_RISTO = [
       <>
         <p>
           Ogni fattura contiene informazioni utili per il lavoro del locale: cosa hai comprato,
-          quanto hai speso e quali prezzi sono cambiati. RUSH le raccoglie in un unico registro e
-          le collega a fornitori, articoli e magazzino.
+          quanto hai speso e quali prezzi sono cambiati. RUSH le raccoglie in <strong>un unico
+          registro</strong> e le collega a fornitori, articoli e magazzino.
         </p>
         <p>
           Le fatture elettroniche arrivano tramite il collegamento configurato. Per quelle
@@ -182,15 +183,15 @@ export const FUNZIONI_RISTO = [
     content: (
       <>
         <p>
-          Una promozione è utile quando porta un risultato che sai riconoscere. Con il modulo
+          <strong>Una promozione è utile quando porta un risultato che sai riconoscere.</strong> Con il modulo
           marketing coordini offerte, iniziative e comunicazioni usando i dati e i canali
           collegati a RUSH.
         </p>
         <p>
           Crei l’iniziativa, scegli il pubblico e la distribuisci sui punti di contatto previsti,
           dal sito al QR nel locale. Poi segui le risposte registrate: utilizzi della promo,
-          coupon e prenotazioni attribuite. Hai più elementi per capire cosa riproporre, cosa
-          correggere e come mantenere il rapporto con i clienti.
+          coupon e prenotazioni attribuite. Hai più elementi per capire <u>cosa riproporre, cosa
+          correggere e come mantenere il rapporto con i clienti</u>.
         </p>
       </>
     ),
@@ -201,14 +202,14 @@ export const FUNZIONI_RISTO = [
     content: (
       <>
         <p>
-          Le richieste dai canali collegati e quelle inserite dal team confluiscono nello stesso
-          calendario. Sala e responsabili consultano disponibilità, capienza e preferenze dei
+          Le richieste dai canali collegati e quelle inserite dal team confluiscono nello <strong>stesso
+          calendario</strong>. Sala e responsabili consultano disponibilità, capienza e preferenze dei
           clienti senza ricostruire il servizio tra telefonate e messaggi.
         </p>
         <p>
           Le regole di assegnazione aiutano a evitare sovrapposizioni. Conferme e promemoria
           automatici tengono informato il cliente e riducono i passaggi manuali. Se usi già un
-          sistema di prenotazione, verifichiamo come collegarlo al tuo centro operativo.
+          sistema di prenotazione, <u>verifichiamo come collegarlo al tuo centro operativo</u>.
         </p>
       </>
     ),
@@ -220,12 +221,12 @@ export const FUNZIONI_RISTO = [
       <>
         <p>
           Durante il servizio non puoi interromperti a ogni richiesta. L’assistente AI può
-          rispondere alle domande ricorrenti e accompagnare il cliente verso la prenotazione,
+          <strong>rispondere alle domande ricorrenti e accompagnare il cliente verso la prenotazione</strong>,
           attraverso i canali configurati.
         </p>
         <p>
           Utilizza le informazioni messe a disposizione dal locale: orari, menu, servizi,
-          disponibilità e regole. Il lavoro di risposta entra così nello stesso flusso operativo,
+          disponibilità e regole. Il lavoro di risposta entra così <u>nello stesso flusso operativo</u>,
           con modalità e limiti definiti insieme al team.
         </p>
       </>
@@ -238,13 +239,13 @@ export const FUNZIONI_RISTO = [
       <>
         <p>
           Le recensioni raccontano come le persone hanno vissuto il tuo locale. RUSH ti aiuta a
-          raccoglierle e seguirle: puoi inviare una richiesta dopo la visita, ricevere avvisi e
+          <strong>raccoglierle e seguirle</strong>: puoi inviare una richiesta dopo la visita, ricevere avvisi e
           individuare i temi che ricorrono nei commenti.
         </p>
         <p>
           L’AI prepara bozze di risposta che controlli prima di pubblicare. Puoi affiancare le
           card fisiche Business Review per rendere facile lasciare una recensione su Google. Un
-          flusso ordinato per ascoltare i clienti e curare la reputazione del locale.
+          flusso ordinato per ascoltare i clienti e <u>curare la reputazione del locale</u>.
         </p>
       </>
     ),
@@ -255,14 +256,14 @@ export const FUNZIONI_RISTO = [
     content: (
       <>
         <p>
-          Aiutiamo chi cerca un locale nella tua zona a trovare informazioni chiare sulla tua
-          proposta. Lavoriamo sulla struttura del sito, sui contenuti e sulla coerenza di menu,
+          Aiutiamo chi cerca un locale nella tua zona a trovare <strong>informazioni chiare sulla tua
+          proposta</strong>. Lavoriamo sulla struttura del sito, sui contenuti e sulla coerenza di menu,
           orari e contatti tra i punti di presenza online.
         </p>
         <p>
           La SEO entra in un progetto coordinato con il sito e gli obiettivi del locale. Puoi
           seguirne l’andamento attraverso gli indicatori disponibili, come ricerche e visite,
-          senza confondere la visibilità con le prenotazioni effettive.
+          <u>senza confondere la visibilità con le prenotazioni effettive</u>.
         </p>
       </>
     ),
@@ -273,13 +274,13 @@ export const FUNZIONI_RISTO = [
     content: (
       <>
         <p>
-          Organizziamo le informazioni sul locale perché siano chiare anche per i sistemi che
+          Organizziamo le informazioni sul locale perché siano <strong>chiare anche per i sistemi che
           elaborano risposte: proposta, menu, orari, servizi e specialità, coerenti con le fonti
-          pubblicate online.
+          pubblicate online</strong>.
         </p>
         <p>
           Questo lavoro affianca sito e SEO. Serve a rendere il locale più comprensibile ai
-          sistemi di ricerca, senza garantire citazioni o raccomandazioni da parte degli
+          sistemi di ricerca, <u>senza garantire citazioni o raccomandazioni</u> da parte degli
           assistenti AI.
         </p>
       </>
@@ -291,14 +292,14 @@ export const FUNZIONI_RISTO = [
     content: (
       <>
         <p>
-          Colleghiamo la pubblicità a un obiettivo concreto del locale: promuovere una serata,
+          Colleghiamo la pubblicità a <strong>un obiettivo concreto del locale</strong>: promuovere una serata,
           sostenere una nuova proposta o raccogliere prenotazioni. Definiamo territorio,
           pubblico e messaggi in funzione di quell’obiettivo.
         </p>
         <p>
           Segui clic, richieste di indicazioni e prenotazioni tracciate dai canali attivati. RUSH
-          riunisce gli indicatori disponibili per aiutarti a valutare le campagne e decidere
-          come distribuire l’investimento.
+          riunisce gli indicatori disponibili per aiutarti a <u>valutare le campagne e decidere
+          come distribuire l’investimento</u>.
         </p>
       </>
     ),
@@ -310,12 +311,12 @@ export const FUNZIONI_RISTO = [
       <>
         <p>
           Promemoria ai clienti, avvisi sulle scorte, documenti da registrare, proposte d’ordine:
-          ogni giorno ci sono passaggi che si ripetono. Li individuiamo e li colleghiamo
+          ogni giorno ci sono <strong>passaggi che si ripetono</strong>. Li individuiamo e li colleghiamo
           attraverso regole definite sui tuoi processi.
         </p>
         <p>
           RUSH esegue le attività previste e rende visibili le eccezioni. Tu e il team mantenete
-          il controllo sui passaggi che richiedono una verifica o una decisione.
+          <u>il controllo sui passaggi che richiedono una verifica o una decisione</u>.
         </p>
       </>
     ),
@@ -326,14 +327,14 @@ export const FUNZIONI_RISTO = [
     content: (
       <>
         <p>
-          Un menu da aggiornare, più lingue per accogliere i tuoi clienti. Piatti, prezzi e
+          <strong>Un menu da aggiornare, più lingue per accogliere i tuoi clienti.</strong> Piatti, prezzi e
           disponibilità vengono gestiti nello stesso flusso e resi consultabili dal sito o
           tramite QR.
         </p>
         <p>
           Riduci i file da correggere separatamente e rendi la proposta più accessibile. Le
-          traduzioni e le informazioni sugli ingredienti vengono controllate prima della
-          pubblicazione.
+          <u>traduzioni e le informazioni sugli ingredienti vengono controllate prima della
+          pubblicazione</u>.
         </p>
       </>
     ),

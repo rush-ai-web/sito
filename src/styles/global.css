@@ -6969,10 +6969,10 @@ textarea.input::-webkit-scrollbar {
 /* ============================================================
    Ritocchi desktop/tablet aggiuntivi
    ============================================================ */
-/* Hero: a capo dopo la prima frase solo da desktop/tablet, non su mobile */
-.hero-note-break { display: inline; }
+/* Hero ristorazione: separa promessa e dettaglio soltanto su mobile. */
+.hero-note-break { display: none; }
 @media (max-width: 720px) {
-  .hero-note-break { display: none; }
+  .hero-note-break { display: block; }
 }
 
 /* ---- Tablet (portrait): 721–1024px ---- */

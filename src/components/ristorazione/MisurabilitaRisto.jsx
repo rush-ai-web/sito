@@ -18,7 +18,7 @@ export default function MisurabilitaRisto() {
       <Head
         icon={Gauge}
         label="Risultati misurabili"
-        title={<>Sai cosa investi,{' '}<br />vedi quali risposte arrivano</>}
+        title={<>Sai in cosa investi,{' '}<br />vedi quali risposte arrivano</>}
         className="head--wide-summary"
         sub={
           <>
