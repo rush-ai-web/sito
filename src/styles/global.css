@@ -3325,6 +3325,16 @@ html.chat-open {
 /* ============================================================
    FAB "Chiedi a Rush" + command palette
    ============================================================ */
+/* Override Motion's inline visibility too; hidden controls cannot intercept taps.
+   The open chat panel and its close button intentionally remain usable. */
+html.mobile-keyboard-open .fab,
+html.mobile-keyboard-open .back-to-top,
+html.mobile-keyboard-open .tsw {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 .back-to-top {
   position: fixed;
   left: 22px;

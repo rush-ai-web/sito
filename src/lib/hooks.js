@@ -2,11 +2,13 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { animate, useInView, useMotionValue, useReducedMotion } from 'framer-motion';
 import { warmupScroll } from './warmup';
 import { EASE_MODAL } from './motion';
+import { watchMobileKeyboard } from './mobileKeyboard';
 
 /* The page is immediately usable. Let the browser prioritize visible assets
    instead of eagerly decoding logos and images belonging to other sections. */
 export function useAppReady() {
   useEffect(warmupScroll, []);
+  useEffect(watchMobileKeyboard, []);
   useEffect(() => {
     document.getElementById('root')?.removeAttribute('data-prerender');
   }, []);
