@@ -4136,7 +4136,9 @@ textarea.input::-webkit-scrollbar {
     position: absolute;
     z-index: 1;
     inset: 0;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     border: 0;
     border-radius: 0;
     background: var(--nav-bg);
@@ -4161,11 +4163,13 @@ textarea.input::-webkit-scrollbar {
     align-items: center;
     justify-content: center;
     width: 100%;
+    height: max-content;
     min-height: 100%;
     gap: 12px;
-    padding: 112px 24px 52px;
+    padding: 112px 24px max(52px, env(safe-area-inset-bottom));
   }
   .nav__mobile-link {
+    flex-shrink: 0;
     width: auto;
     padding: 8px 18px;
     border-radius: var(--r-pill);
@@ -4188,10 +4192,12 @@ textarea.input::-webkit-scrollbar {
     width: min(100%, 320px);
     min-width: 0;
     height: 72px;
+    flex-shrink: 0;
     margin-top: 22px;
     padding: 0 9px 0 28px;
     gap: 14px;
-    font-size: var(--nav-mobile-font);
+    /* The longer demo label must leave room for the arrow even at 320px. */
+    font-size: clamp(20px, 5.8vw, 24px);
     font-weight: 620;
     letter-spacing: -0.04em;
   }
