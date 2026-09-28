@@ -119,7 +119,8 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
 /* ── S1 / S8 logo ── */
 .mark { position: absolute; width: 420px; height: 420px; }
 .lg { position: absolute; left: 446px; top: 330px; width: 1028px; height: 220px; display: flex; align-items: center; gap: 28px; }
-.wm { width: 880px; height: 220px; display: block; }
+.wm { width: 880px; height: 220px; display: block; overflow: visible; transform-origin: 149px 110px; }
+.wm path { transform-box: view-box; }
 .lg .ic { --z: 120px; }
 .rst { top: 610px; font-size: 46px; font-weight: 700; color: var(--accent); text-transform: uppercase; }
 .rst span { display: inline-block; }
@@ -143,12 +144,12 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
 .hub { position: absolute; left: 960px; top: 660px; width: 200px; height: 200px; margin: -100px 0 0 -100px; border-radius: 50%;
   background: radial-gradient(90% 70% at 50% -8%, #ffffff 0%, #fafaf9 45%, #f0efeb 100%); border: 1px solid rgba(0,0,0,.06);
   box-shadow: 0 3px 6px rgba(0,0,0,.08), 0 30px 60px -20px rgba(0,0,0,.25), 0 0 0 10px rgba(255,100,47,.08); display: grid; place-items: center; }
-.hub img { width: 124px; height: 124px; }
+.hub svg { width: 132px; height: 97px; overflow: visible; }
 .hring { position: absolute; left: 960px; top: 660px; width: 200px; height: 200px; margin: -100px 0 0 -100px; border-radius: 50%; border: 3px solid rgba(255,100,47,.5); opacity: 0; }
 .node { position: absolute; width: 0; height: 0; }
 .node .in { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .node .ic { --z: 96px; }
-.node .pill { height: 46px; font-size: 20px; padding: 0 20px 0 16px; }
+.node .pill { height: 46px; font-size: 20px; padding: 0 22px; }
 #s4 svg.lines { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
 .lines line { stroke: rgba(255,100,47,.55); stroke-width: 3; stroke-linecap: round; }
 .lines circle { fill: #ff642f; }
@@ -408,34 +409,44 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
     }).join('');
   };
 
+  /* logo RUSH vettoriale (ricalcato da rush-logo-orange.webp): R, barra arancione, u s h */
+  const LOGO = {"R": "M252.00 182.59C252.33 182.28 252.33 182.17 252.00 181.64C251.65 181.08 248.62 177.52 244.25 172.52C243.22 171.34 242.15 170.07 241.88 169.71C241.60 169.34 240.64 168.14 239.75 167.04C238.86 165.94 237.42 164.11 236.56 162.96C234.92 160.77 233.59 159.14 231.34 156.59C230.60 155.74 229.46 154.38 228.81 153.56C228.16 152.74 227.06 151.38 226.38 150.55C225.69 149.71 224.56 148.26 223.88 147.33C223.19 146.40 221.89 144.79 220.99 143.75C220.09 142.72 219.02 141.43 218.62 140.88C218.22 140.32 216.14 137.70 214.01 135.03C211.87 132.37 209.28 129.10 208.25 127.77C207.22 126.44 205.84 124.68 205.20 123.86C203.14 121.27 203.00 121.06 203.00 120.57C203.00 119.96 203.62 119.41 206.12 117.75C209.43 115.56 215.10 109.48 217.90 105.12C221.24 99.92 222.67 97.11 224.06 93.00C226.73 85.13 227.19 82.63 227.41 74.87C227.61 67.94 227.40 65.87 225.85 59.62C224.63 54.69 224.32 53.72 223.16 51.12C220.20 44.52 217.27 40.46 211.02 34.29C205.59 28.93 202.56 26.73 196.38 23.65C192.57 21.75 191.10 21.12 189.99 20.87C189.55 20.78 188.72 20.49 188.15 20.23C187.59 19.97 186.84 19.75 186.50 19.75C186.16 19.74 185.43 19.52 184.88 19.25C184.32 18.98 183.46 18.76 182.94 18.76C182.43 18.75 181.59 18.59 181.07 18.40C180.55 18.20 178.90 17.86 177.40 17.64C175.90 17.42 174.55 17.16 174.40 17.06C173.93 16.77 20.27 16.72 19.73 17.01C19.46 17.15 19.25 17.42 19.25 17.61C19.25 17.80 20.85 19.85 22.81 22.17C24.77 24.49 26.82 26.94 27.38 27.62C27.93 28.31 28.90 29.43 29.54 30.12C30.18 30.81 31.51 32.39 32.49 33.62C33.47 34.86 35.39 37.23 36.76 38.88C47.01 51.30 48.47 52.75 51.20 53.33C51.95 53.49 73.59 53.64 111.50 53.73L170.62 53.88L172.25 54.46C175.97 55.80 177.59 56.67 179.92 58.56C182.36 60.53 183.56 61.99 184.77 64.44C186.02 67.00 186.38 68.80 186.37 72.50C186.36 75.54 186.00 77.71 185.22 79.40C184.96 79.97 184.75 80.54 184.75 80.67C184.75 81.05 182.56 84.21 181.74 85.01C179.94 86.77 177.42 88.34 174.88 89.29L173.38 89.85L113.44 89.93L53.51 90.01L53.24 90.52C52.91 91.13 52.88 91.08 55.50 94.13C56.53 95.34 58.43 97.63 59.71 99.22C60.99 100.82 62.43 102.55 62.91 103.07C63.39 103.59 64.36 104.72 65.06 105.57C66.33 107.12 67.83 108.83 69.38 110.50C69.82 110.98 70.62 111.94 71.14 112.62C71.66 113.31 73.17 115.11 74.50 116.62C75.82 118.14 77.79 120.48 78.87 121.83C79.94 123.19 81.26 124.58 81.79 124.93C83.89 126.32 82.98 126.28 117.28 126.37C153.02 126.47 149.70 126.25 151.53 128.57C152.10 129.29 153.35 130.72 154.31 131.75C155.75 133.29 161.57 139.47 163.00 140.98C163.21 141.20 164.34 142.50 165.52 143.88C167.77 146.49 175.10 154.42 176.26 155.50C176.63 155.84 177.54 156.86 178.27 157.75C180.02 159.86 184.02 164.31 186.60 167.00C187.72 168.17 189.98 170.70 191.62 172.62C196.09 177.86 200.41 182.14 201.62 182.54C202.40 182.79 207.35 182.89 223.38 182.99C247.81 183.15 251.47 183.10 252.00 182.59Z", "O": "M181.99 182.64C182.39 182.16 182.11 181.31 181.26 180.38C180.88 179.96 180.42 179.39 180.23 179.10C179.88 178.58 177.69 176.08 176.00 174.28C173.18 171.27 172.35 170.35 172.12 169.98C171.99 169.75 170.67 168.29 169.21 166.72C167.74 165.16 166.19 163.44 165.77 162.90C165.34 162.37 164.84 161.80 164.66 161.65C164.47 161.50 164.21 161.19 164.09 160.96C163.97 160.74 162.41 159.01 160.62 157.12C156.39 152.64 156.04 152.25 155.00 151.00C154.52 150.42 153.16 148.91 151.99 147.66C150.81 146.40 149.52 144.98 149.11 144.50C148.71 144.02 147.14 142.36 145.64 140.81L142.90 138.00L119.89 138.06L96.88 138.12L96.80 138.68C96.75 139.04 97.05 139.60 97.69 140.30C98.22 140.89 98.91 141.71 99.22 142.12C99.75 142.81 102.31 145.64 106.26 149.87C107.16 150.84 108.19 152.02 108.55 152.50C108.90 152.98 110.92 155.25 113.03 157.54C117.16 162.01 121.32 166.62 123.45 169.09C126.02 172.06 127.66 173.87 131.07 177.48C134.74 181.37 134.94 181.57 136.10 182.44L136.85 183.00L159.27 183.00C178.56 183.00 181.73 182.95 181.99 182.64Z", "U": ["M378.25 182.76C383.79 182.21 388.87 181.17 391.75 180.00C392.51 179.70 393.57 179.29 394.11 179.09C395.40 178.61 399.18 176.71 400.55 175.85C405.44 172.78 409.85 167.87 412.53 162.50C414.47 158.61 415.83 154.32 416.52 149.88C416.67 148.91 416.89 147.56 417.00 146.88C417.12 146.19 417.22 130.98 417.23 113.07C417.25 81.13 417.24 80.51 416.77 80.26C416.45 80.09 410.46 80.00 399.07 80.00C383.90 80.00 381.80 80.05 381.31 80.39L380.75 80.78L380.75 110.11L380.75 139.45L380.14 142.34C379.80 143.92 379.35 145.56 379.14 145.97C378.92 146.39 378.75 146.86 378.75 147.02C378.75 147.67 376.84 150.38 375.28 151.95C373.27 153.97 370.68 155.37 367.69 156.04C363.05 157.08 359.42 157.23 338.88 157.24C317.80 157.24 311.89 157.05 308.38 156.29C305.61 155.69 304.31 155.11 302.22 153.57C298.70 150.97 297.26 148.66 295.69 143.09L295.13 141.12L295.06 110.94L294.98 80.75L294.42 80.38C293.62 79.86 259.69 79.85 259.16 80.37C258.89 80.65 258.82 85.60 258.79 107.92C258.74 139.74 258.94 148.04 259.84 152.12C260.83 156.62 261.20 157.71 263.00 161.38C264.91 165.26 266.21 167.39 268.05 169.62C272.37 174.86 279.17 178.80 287.95 181.15C292.01 182.24 297.37 182.79 305.88 183.00C316.24 183.26 375.24 183.07 378.25 182.76Z", "M546.75 183.01C552.59 182.89 557.94 182.68 558.62 182.54C559.31 182.41 560.72 182.16 561.75 182.00C564.42 181.59 569.75 179.88 572.30 178.62C578.31 175.66 582.70 171.47 585.63 165.88C586.27 164.64 586.95 163.06 587.13 162.38C588.90 155.64 589.00 155.03 589.00 150.75C589.00 143.41 587.09 136.80 583.65 132.25C581.28 129.11 578.00 126.43 574.38 124.67C572.01 123.52 570.30 122.80 569.51 122.63C569.07 122.53 568.41 122.30 568.05 122.10C567.68 121.91 567.04 121.75 566.62 121.75C566.21 121.75 565.54 121.57 565.12 121.35C564.71 121.14 563.42 120.86 562.25 120.73C561.08 120.60 559.67 120.36 559.12 120.20C558.39 119.99 547.44 119.87 517.38 119.76C479.66 119.62 476.46 119.58 474.40 119.16C471.85 118.66 470.65 118.12 469.49 116.95C468.37 115.84 467.98 114.75 467.97 112.79C467.96 110.19 468.60 109.16 471.04 107.78C474.24 105.99 468.95 106.15 528.38 106.01C571.31 105.90 581.99 105.81 582.44 105.55L583.00 105.23L583.00 92.88C583.00 80.88 582.99 80.51 582.51 80.26C582.18 80.08 564.24 80.02 524.95 80.06C471.09 80.12 467.68 80.15 464.38 80.59C462.45 80.84 460.13 81.26 459.21 81.52C458.30 81.79 457.34 82.00 457.09 82.00C456.42 82.01 453.72 82.88 451.12 83.92C444.83 86.46 440.44 89.92 436.56 95.43C436.25 95.87 436.00 96.30 436.00 96.39C436.00 96.48 435.78 96.86 435.51 97.24C434.64 98.46 433.24 102.30 432.64 105.12C431.64 109.82 431.58 117.55 432.51 121.25C434.25 128.20 436.62 131.94 442.00 136.24C445.41 138.96 450.22 141.13 455.35 142.26C459.03 143.07 465.05 143.23 499.25 143.38C516.92 143.46 534.86 143.61 539.12 143.72C546.76 143.91 546.90 143.92 548.25 144.56C551.04 145.88 552.48 147.93 552.49 150.57C552.50 152.83 551.31 154.72 549.30 155.62C548.79 155.84 548.09 156.18 547.74 156.37C547.40 156.56 545.93 156.91 544.49 157.14C542.09 157.54 537.55 157.58 488.25 157.68C440.83 157.78 434.58 157.83 434.20 158.17C433.82 158.52 433.79 159.52 433.90 170.43C433.96 176.96 434.07 182.42 434.15 182.55C434.24 182.68 434.54 182.88 434.84 183.00C435.54 183.28 532.84 183.29 546.75 183.01Z", "M640.58 182.94C640.86 182.47 640.93 177.45 640.97 153.75C640.99 138.01 641.08 124.00 641.16 122.62C641.24 121.19 641.51 119.54 641.78 118.76C642.04 118.01 642.25 117.19 642.25 116.94C642.25 116.38 642.97 114.95 644.01 113.39C645.95 110.53 651.04 107.60 655.50 106.77C656.26 106.63 657.49 106.40 658.25 106.26C660.01 105.93 705.01 105.91 708.00 106.24C712.75 106.77 716.44 107.80 718.92 109.29C722.84 111.65 725.35 116.76 725.89 123.50C725.98 124.67 726.09 138.38 726.13 153.96C726.18 177.42 726.26 182.36 726.54 182.64C727.02 183.12 762.32 183.21 762.89 182.74C763.23 182.46 763.26 178.61 763.19 149.27C763.13 119.19 763.08 115.94 762.69 114.12C762.46 113.03 762.11 111.34 761.91 110.38C761.20 106.95 760.54 104.61 759.77 102.88C757.28 97.27 754.91 93.87 751.15 90.55C748.66 88.35 745.07 85.99 742.50 84.86C742.02 84.65 741.40 84.38 741.12 84.25C740.85 84.13 740.23 83.91 739.75 83.78C739.27 83.64 737.92 83.18 736.76 82.76C735.60 82.34 734.36 82.00 734.01 82.00C733.66 82.00 732.67 81.77 731.82 81.50C730.35 81.05 728.45 80.76 723.62 80.25C720.67 79.95 662.68 79.93 661.00 80.24C660.24 80.38 658.70 80.61 657.56 80.75C656.43 80.89 655.02 81.16 654.44 81.35C653.85 81.53 652.84 81.83 652.18 82.00C651.52 82.18 650.93 82.42 650.85 82.53C650.78 82.65 650.55 82.75 650.34 82.75C649.94 82.75 647.86 83.64 645.88 84.67C645.19 85.03 644.17 85.74 643.62 86.27C643.08 86.79 642.32 87.29 641.94 87.38C641.37 87.53 641.22 87.45 641.02 86.94C640.89 86.58 640.78 78.60 640.77 67.72C640.74 49.15 640.74 49.12 640.22 48.69C639.73 48.28 638.51 48.25 622.46 48.25L605.23 48.25L604.66 48.86L604.10 49.46L604.13 115.67C604.14 165.38 604.22 182.01 604.44 182.40C604.71 182.89 605.00 182.93 608.60 183.07C610.73 183.14 615.10 183.15 618.30 183.09C623.04 183.00 630.14 183.12 639.18 183.46C640.03 183.49 640.30 183.39 640.58 182.94Z"]};
+  const logoSvg = () => `<svg class="wm" viewBox="0 0 800 200" aria-label="RUSH"><defs><clipPath id="cu-${Math.random().toString(36).slice(2, 7)}"><rect x="256" y="-20" width="600" height="240"/></clipPath></defs>
+    <path class="pR" fill="#0d0d0d" d="${LOGO.R}"/><path class="pO" fill="#ff5f27" d="${LOGO.O}"/>
+    <g class="gU">${LOGO.U.map((d) => `<path fill="#0d0d0d" d="${d}"/>`).join('')}</g></svg>`;
+  const logoInit = (ctx, el) => {
+    ctx.wm = $('.wm', el); ctx.pR = $('.pR', el); ctx.pO = $('.pO', el); ctx.us = $$('.gU path', el);
+    const cp = $('clipPath', el); $('.gU', el).setAttribute('clip-path', `url(#${cp.id})`);
+    ctx.badge = $('.lg .ic', el); ctx.rw = $('.rw', el); ctx.letters = $$('.rw span', el);
+  };
+  /* la R entra da sola, poi la "camera" si allarga e u-s-h escono da dietro la R */
+  function logoAnim(ctx, t, o) {
+    const z = o.zoom ?? 2.2, t0 = o.at ?? 0, tz = o.tz ?? t0 + 1300;
+    const k = p(t, t0, 900);
+    const m = EIO(p(t, tz, 1100));
+    const sc = lerp(z, 1, m) * lerp(1.18, 1, EO(k));
+    st(ctx.wm, { x: lerp(o.zoom ? 365 : 0, 0, m), y: lerp(o.zoom ? 100 : 0, 0, m), s: sc, r: (1 - EO(k)) * -8, blur: (1 - EO(k)) * 18, o: cl(k * 3) });
+    const ko = EO(p(t, t0 + 350, 750));
+    st(ctx.pO, { o: ko, x: (1 - ko) * -70, y: (1 - ko) * -60 });
+    ctx.us.forEach((u, i) => { const ku = EO(p(t, tz + 250 + i * 140, 800)); st(u, { o: cl(ku * 2), x: (1 - ku) * -150 }); });
+    POP(ctx.badge, t, tz + 900, 700, -140);
+    ctx.letters.forEach((c, i) => A(c, t, { at: tz + 1150 + i * 45, d: 650, y: 34, blur: 12 }));
+    ctx.rw.style.letterSpacing = lerp(0.55, 0.16, EO(p(t, tz + 1150, 1300))) + 'em';
+  }
+
   /* ═════════════ SCENE ═════════════ */
   const S = [];
   const scene = (id, dur, theme, html, update, init) => S.push({ id, dur, theme, html, update, init });
 
   /* ── S1 · logo: la R si stacca e diventa il marchio completo ── */
-  scene('s1', 5500, 'light', () => `
-    <img class="mark" src="rush-mark-orange.png" alt="">
-    <div class="lg"><img class="wm" src="rush-logo-orange.webp" alt="RUSH"><span class="ic round">${ic('utensils', 54, 2.15)}</span></div>
+  scene('s1', 6000, 'light', () => `
+    <div class="lg">${logoSvg()}<span class="ic round">${ic('utensils', 54, 2.15)}</span></div>
     <div class="abs center-x rst"><div class="rw">${[...'RISTORAZIONE'].map((c) => `<span>${c}</span>`).join('')}</div></div>`,
-  function (t) {
-    const mark = this.mark, m = EIO(p(t, 1450, 800));
-    const ki = p(t, 0, 900);
-    const size = lerp(420, 266, m);
-    mark.style.left = lerp(750, 458, m) + 'px';
-    mark.style.top = lerp(330, 328, m) + 'px';
-    mark.style.width = mark.style.height = size + 'px';
-    st(mark, { o: cl(ki * 3) * (1 - p(t, 2150, 260)), s: lerp(.5, 1, EO(ki)) * (1 + .03 * Math.sin(p(t, 800, 700) * Math.PI)), r: (1 - EO(ki)) * -14, blur: (1 - EO(ki)) * 34 });
-    const reveal = EO(p(t, 2150, 850));
-    this.wm.style.opacity = t >= 2150 ? 1 : 0;
-    this.wm.style.clipPath = `inset(-5% ${lerp(69, -1, reveal)}% -5% -5%)`;
-    POP(this.badge, t, 2700, 700, -140);
-    this.letters.forEach((c, i) => A(c, t, { at: 3050 + i * 45, d: 650, y: 34, blur: 12 }));
-    this.rw.style.letterSpacing = lerp(0.55, 0.16, EO(p(t, 3050, 1300))) + 'em';
-  },
-  function (el) { this.mark = $('.mark', el); this.wm = $('.wm', el); this.badge = $('.lg .ic', el); this.rw = $('.rw', el); this.letters = $$('.rw span', el); });
+  function (t) { logoAnim(this, t, { zoom: 2.2, at: 150, tz: 1700 }); },
+  function (el) { logoInit(this, el); });
 
   /* ── S2 · hero ── */
-  scene('s2', 8000, 'light', () => `
+  scene('s2', 9500, 'light', () => `
     <div class="abs center-x" style="top:170px"><div class="hp">${pill('utensils', 'Per bar e ristoranti')}</div></div>
     <div class="abs center-x" style="top:270px">
       <h1 class="T h1">
@@ -472,7 +483,7 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
 
   /* ── S3 · problema: strumenti separati che si uniscono in RUSH ── */
   const TILEPOS = [[250, 300, 'card'], [1640, 270, 'box'], [230, 790, 'cart'], [1680, 800, 'sheet'], [560, 930, 'clock'], [1320, 150, 'receipt']];
-  scene('s3', 9000, 'dark', () => `
+  scene('s3', 11500, 'dark', () => `
     ${TILEPOS.map(([x, y, n]) => `<div class="abs pt" style="left:${x}px;top:${y}px"><div style="transform:translate(-50%,-50%)">${tile(n, 104)}</div></div>`).join('')}
     <div class="abs center-x" style="top:170px"><div class="pp">${pill('alert', 'Il problema')}</div></div>
     <div class="abs center-x stmt st1"><h2 class="T"><span class="ln">${L('CASSA, MAGAZZINO E ACQUISTI')}</span><span class="ln">${L('IN STRUMENTI')} <span class="mk"><span class="mi acc spread">SEPARATI</span></span></span></h2></div>
@@ -482,31 +493,31 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
     <div class="abs" style="left:960px;top:420px"><div class="hb" style="transform:translate(-50%,-50%)"><span class="ic round" style="--z:190px">${ic('utensils', 86, 2.1)}</span></div></div>
     <div class="abs center-x" style="top:590px"><h2 class="T fin" style="font-size:112px">${L('RUSH COLLEGA [TUTTO.]')}</h2></div>`,
   function (t) {
-    A(this.pp, t, { at: 150, d: 700, y: 30, out: 7100 });
-    const conv = EIO(p(t, 7150, 650));
+    A(this.pp, t, { at: 150, d: 700, y: 30, out: 9000 });
+    const conv = EIO(p(t, 9050, 650));
     this.tiles.forEach((el, i) => {
       const [x, y] = TILEPOS[i];
       const k = p(t, 250 + i * 130, 700);
       const fx = Math.sin(t / 820 + i * 1.3) * 22, fy = Math.cos(t / 1000 + i * 2.1) * 18;
       el.style.left = lerp(x + fx, 960, conv) + 'px';
       el.style.top = lerp(y + fy, 420, conv) + 'px';
-      st(el, { o: cl(k * 4) * (1 - p(t, 7650, 180)), s: EB(k) * lerp(1, .35, conv), r: Math.sin(t / 1300 + i) * 6 * (1 - conv) });
+      st(el, { o: cl(k * 4) * (1 - p(t, 9550, 180)), s: EB(k) * lerp(1, .35, conv), r: Math.sin(t / 1300 + i) * 6 * (1 - conv) });
     });
-    MW(this.w1, t, { at: 550, st: 55, out: 2950 });
-    this.spread.style.letterSpacing = (EIO(p(t, 1500, 900)) * 0.32 - EIO(p(t, 2700, 250)) * 0.32).toFixed(3) + 'em';
-    MW(this.w2, t, { at: 3250, st: 55, out: 5350 });
-    const ek = EO(p(t, 4150, 700)) * (1 - EIO(p(t, 5000, 350)));
+    MW(this.w1, t, { at: 550, st: 55, out: 3500 });
+    this.spread.style.letterSpacing = (EIO(p(t, 1600, 900)) * 0.32 - EIO(p(t, 3150, 300)) * 0.32).toFixed(3) + 'em';
+    MW(this.w2, t, { at: 3800, st: 55, out: 6600 });
+    const ek = EO(p(t, 4800, 700)) * (1 - EIO(p(t, 6150, 350)));
     this.ghosts.forEach((g, i) => {
-      g.style.visibility = t > 3900 && t < 5400 ? 'visible' : 'hidden';
+      g.style.visibility = t > 4600 && t < 6600 ? 'visible' : 'hidden';
       st(g, { o: ek * (0.5 - i * 0.14), y: ek * (i + 1) * 26, x: ek * (i + 1) * 14 });
     });
-    MW(this.w3, t, { at: 5650, st: 55, out: 7100 });
-    const sk = p(t, 6300, 300) * (1 - p(t, 6950, 150));
+    MW(this.w3, t, { at: 6900, st: 55, out: 9000 });
+    const sk = p(t, 7700, 300) * (1 - p(t, 8600, 150));
     st(this.shake, { x: Math.sin(t / 22) * 7 * sk, r: Math.sin(t / 31) * 1.2 * sk });
-    const rk = p(t, 7700, 800);
-    st(this.ring, { o: t > 7700 ? (1 - rk) : 0, s: lerp(.3, 3.4, EO(rk)) });
-    POP(this.hb, t, 7700, 700, -90);
-    MW(this.fin, t, { at: 7950, st: 90 });
+    const rk = p(t, 9600, 800);
+    st(this.ring, { o: t > 9600 ? (1 - rk) : 0, s: lerp(.3, 3.4, EO(rk)) });
+    POP(this.hb, t, 9600, 700, -90);
+    MW(this.fin, t, { at: 9850, st: 90 });
   },
   function (el) {
     this.pp = $('.pp', el); this.tiles = $$('.pt', el);
@@ -520,14 +531,14 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
   const NODES = [['card', 'Cassa', 180], ['box', 'Magazzino', 222], ['file', 'Fatture', 138], ['users', 'Personale', 0], ['truck', 'Fornitori', 318], ['cal', 'Prenotazioni', 42]];
   const HUB = [960, 660];
   const npos = (a) => [HUB[0] + Math.cos(a * Math.PI / 180) * 660, HUB[1] + Math.sin(a * Math.PI / 180) * 300];
-  scene('s4', 8000, 'light', () => `
+  scene('s4', 8500, 'light', () => `
     <svg class="lines" viewBox="0 0 1920 1080">${NODES.map((n) => { const [x, y] = npos(n[2]); return `<line x1="${HUB[0]}" y1="${HUB[1]}" x2="${x}" y2="${y}"/><circle r="7" cx="0" cy="0"/><circle r="7" cx="0" cy="0"/>`; }).join('')}</svg>
     <div class="abs center-x" style="top:90px"><div class="hp">${pill('grid', 'Tutto in un posto')}</div></div>
     <div class="abs center-x" style="top:175px"><h2 class="T tt" style="font-size:84px">${L('I NUMERI DEL LOCALE, [COLLEGATI.]')}</h2></div>
     <div class="abs center-x" style="top:290px"><p class="lead sb">${B('Il lavoro quotidiano, più semplice.')}</p></div>
     <div class="hring"></div><div class="hring"></div>
-    <div class="hub"><img src="rush-mark-orange.png" alt=""></div>
-    ${NODES.map(([n, l, a]) => { const [x, y] = npos(a); return `<div class="node" style="left:${x}px;top:${y}px"><div class="in"><span class="nt">${tile(n, 96, 42)}</span><span class="np">${pill(n, l)}</span></div></div>`; }).join('')}`,
+    <div class="hub"><svg viewBox="15 12 245 180"><path fill="#0d0d0d" d="${LOGO.R}"/><path fill="#ff5f27" d="${LOGO.O}"/></svg></div>
+    ${NODES.map(([n, l, a]) => { const [x, y] = npos(a); return `<div class="node" style="left:${x}px;top:${y}px"><div class="in"><span class="nt">${tile(n, 96, 42)}</span><span class="np"><span class="pill">${l}</span></span></div></div>`; }).join('')}`,
   function (t) {
     A(this.hp, t, { at: 100, d: 700, y: 30 });
     MW(this.tt, t, { at: 220, st: 65 });
@@ -564,7 +575,7 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
   });
 
   /* ── S5 · le funzioni, una alla volta ── */
-  const FD = 5200;
+  const FD = 8500;
   const FEAT = [
     { ic: 'wallet', tag: 'Costi e incassi', t: ['COSTI E INCASSI', 'NELLA [STESSA]', '[VISTA]'],
       b: 'I dati della cassa e delle fatture confluiscono in RUSH. Niente più conti ricostruiti tra strumenti diversi.',
@@ -658,61 +669,6 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
         const on = [700, 1000, 2800, 3350];
         c.q('.s4', (s, i) => { A(s, t, { at: 300 + i * 80, d: 600, y: 20, blur: 6 }); s.classList.toggle('on', t >= on[i]); });
       } },
-    { ic: 'up', tag: 'Rincari', t: ['I RINCARI', 'DIVENTANO', '[VISIBILI]'],
-      b: 'Ogni fattura confronta i prezzi con quelli precedenti. Se un fornitore aumenta, lo vedi subito.',
-      card: () => `
-        <span class="caps">Burro 1 kg · Latteria Bianchi</span>
-        <div style="display:flex;align-items:flex-end;gap:18px;margin-top:18px"><span class="num pr" style="font-size:80px;line-height:1">€ 8,47</span><span class="chip warn pb" style="margin-bottom:10px">+11%</span></div>
-        <div class="chart"><svg viewBox="0 0 800 250" preserveAspectRatio="none">
-          <defs><linearGradient id="ga" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ff642f" stop-opacity=".28"/><stop offset="1" stop-color="#ff642f" stop-opacity="0"/></linearGradient></defs>
-          ${[0, 1, 2, 3].map((i) => `<line x1="0" x2="800" y1="${30 + i * 70}" y2="${30 + i * 70}" stroke="rgba(0,0,0,.07)" stroke-width="1.5"/>`).join('')}
-          <path class="ar" d="M0 190 L160 184 L320 180 L480 182 L640 170 L800 40 L800 250 L0 250Z" fill="url(#ga)"/>
-          <path class="ln" d="M0 190 L160 184 L320 180 L480 182 L640 170 L800 40" fill="none" stroke="#ff642f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <div class="pdot" style="left:100%;top:16%"></div>
-        <div style="position:absolute;left:0;right:0;top:262px;justify-content:space-between" class="lgd">${['Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set'].map((m) => `<span>${m}</span>`).join('')}</div></div>
-        ${[['Distillerie Rossi', 'Gin premium 70cl · da € 21,10 a € 24,90', '+18%'], ['Latteria Bianchi', 'Burro 1 kg · da € 8,47 a € 9,40', '+11%']].map(([a, b, d], i) => `
-          <div class="alr row" style="top:${560 + i * 86}px">${tile('alert', 44, 22)}<div><b>${a}</b><small>${b}</small></div><span class="chip warn">${d}</span></div>`).join('')}`,
-      viz(t, c) {
-        const ln = c.one('path.ln'), len = 900;
-        const dk = EIO(p(t, 700, 1500));
-        ln.style.strokeDasharray = len; ln.style.strokeDashoffset = (1 - dk) * len;
-        c.one('path.ar').style.opacity = EO(p(t, 1600, 800));
-        POP(c.one('.pdot'), t, 2150, 600);
-        const pr = c.one('.pr');
-        pr.textContent = '€ ' + fmt(lerp(8.47, 9.40, EO(p(t, 2100, 900))), 2);
-        pr.style.color = t > 2200 ? 'var(--warn)' : '';
-        POP(c.one('.pb'), t, 2600, 600, -20);
-        c.q('.alr', (r, i) => A(r, t, { at: 2900 + i * 280, d: 700, y: 30, blur: 10 }));
-      } },
-    { ic: 'users', tag: 'Personale', t: ['TURNI E PRESENZE', 'NELLO', '[STESSO FLUSSO]'],
-      b: 'Turni, ore e costo del personale accanto agli incassi del giorno, senza fogli a parte.',
-      card: () => {
-        const R = { Sara: 'gg-ssg-', Luca: 'ssgg-ss', Emma: '-ggsgs-', Marco: 'g-sgggs' };
-        return `
-        <div style="display:flex;justify-content:space-between;align-items:center"><span class="caps">Settimana 23 – 29 settembre</span>
-          <span class="lgd"><span><i style="background:rgba(255,100,47,.3);border-radius:4px"></i>Giorno</span><span><i style="background:#ff642f;border-radius:4px"></i>Sera</span></span></div>
-        <div class="sh"><span></span>${['L', 'M', 'M', 'G', 'V', 'S', 'D'].map((d) => `<span class="hd">${d}</span>`).join('')}<span class="hd" style="text-align:right">Ore</span>
-          ${Object.entries(R).map(([n, s]) => `<span class="nm">${n}</span>${[...s].map((ch) => `<span class="cell ${ch === 'g' ? 'g' : ch === 's' ? 's' : ''}"><i></i></span>`).join('')}<span class="num hr" data-h="${[...s].filter((ch) => ch !== '-').length * 7}">0</span>`).join('')}
-        </div>
-        <div class="gauge row"><div class="top"><span class="caps">Costo personale su incassi</span><span class="num gv" style="font-size:44px">0%</span></div><div class="trk"><i></i></div>
-          <div style="margin-top:14px"><span class="chip pos gc">in linea con l’obiettivo</span></div></div>`;
-      },
-      viz(t, c) {
-        c.q('.cell', (cell, k) => {
-          const r = Math.floor(k / 7), col = k % 7;
-          A(cell, t, { at: 350 + r * 90 + col * 25, d: 500, y: 14, blur: 4 });
-          const kk = p(t, 900 + k * 48, 420);
-          st($('i', cell), { o: EO(kk), s: lerp(.4, 1, EB(kk)) });
-        });
-        c.q('.hr', (h, r) => COUNT(h, t, 900 + r * 7 * 48, 7 * 48 + 500, +h.dataset.h));
-        c.q('.nm', (n, r) => A(n, t, { at: 350 + r * 90, d: 600, x: -20, y: 0, blur: 6 }));
-        A(c.one('.gauge'), t, { at: 2300, d: 700, y: 30, blur: 10 });
-        const gk = EO(p(t, 2600, 1100));
-        c.one('.gauge .trk i').style.transform = `scaleX(${(gk * .27).toFixed(4)})`;
-        c.one('.gv').textContent = Math.round(27 * gk) + '%';
-        POP(c.one('.gc'), t, 3400, 600);
-      } },
   ];
   scene('s5', FD * FEAT.length, 'light', () => `
     ${FEAT.map((f, i) => `
@@ -758,7 +714,7 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
   /* ── S6 · Rush AI ── */
   const TYPE1 = 'Il food cost della [tartare] è salito al [42%] questo mese. Il prezzo del tonno dal tuo fornitore è aumentato del [18%].';
   const TYPE2 = 'Il [pancake salato]: margine sulle materie prime del [74%], con 128 porzioni vendute a settembre.';
-  scene('s6', 8000, 'dark', () => `
+  scene('s6', 10000, 'dark', () => `
     <div class="abs center-x" style="top:100px"><div class="hp">${pill('sparkles', 'Rush AI')}</div></div>
     <div class="abs center-x" style="top:185px"><h2 class="T tt" style="font-size:80px">${L('L’AI TI AIUTA A [CAPIRE COSA FARE]')}</h2></div>
     <div class="card chat">
@@ -772,21 +728,21 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
     MW(this.tt, t, { at: 220, st: 60 });
     A(this.chat, t, { at: 450, d: 900, y: 90, s: .95, blur: 16 });
     A(this.m1, t, { at: 950, d: 700, y: 30, blur: 8 });
-    const n1 = Math.floor(this.c1.length * p(t, 1250, 1700));
-    const n2 = Math.floor(this.c2.length * p(t, 4700, 1600));
+    const n1 = Math.floor(this.c1.length * p(t, 1250, 2300));
+    const n2 = Math.floor(this.c2.length * p(t, 5700, 2100));
     this.c1.forEach((c, i) => { c.style.opacity = i < n1 ? 1 : 0; });
     this.c2.forEach((c, i) => { c.style.opacity = i < n2 ? 1 : 0; });
-    const k2 = p(t, 3200, 650);
+    const k2 = p(t, 4100, 650);
     this.m2.style.transformOrigin = '100% 100%';
     st(this.m2, { o: cl(k2 * 3), s: lerp(.6, 1, EB(k2)), y: (1 - EO(k2)) * 30 });
-    A(this.m3, t, { at: 3900, d: 600, y: 30, blur: 8 });
-    const typing = t > 3900 && t < 4700;
+    A(this.m3, t, { at: 4900, d: 600, y: 30, blur: 8 });
+    const typing = t > 4900 && t < 5700;
     this.dots.style.display = typing ? '' : 'none';
     this.t2.style.display = typing ? 'none' : '';
     this.dotI.forEach((d, i) => st(d, { y: Math.sin(t / 110 - i * .9) * -5 }));
     let hostC = null, busy = false;
-    if (t > 1250 && t < 3200) { hostC = this.c1[Math.max(0, n1 - 1)]; busy = n1 < this.c1.length; }
-    else if (t >= 4700) { hostC = this.c2[Math.max(0, n2 - 1)]; busy = n2 < this.c2.length; }
+    if (t > 1250 && t < 4100) { hostC = this.c1[Math.max(0, n1 - 1)]; busy = n1 < this.c1.length; }
+    else if (t >= 5700) { hostC = this.c2[Math.max(0, n2 - 1)]; busy = n2 < this.c2.length; }
     if (hostC) {
       if (hostC.nextSibling !== this.caret) hostC.after(this.caret);
       this.caret.style.opacity = busy || Math.floor(t / 420) % 2 === 0 ? 1 : 0;
@@ -799,49 +755,21 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
     this.dots = $('.dots', el); this.dotI = $$('.dots i', el); this.caret = $('.caret', el);
   });
 
-  /* ── S7 · risultati ── */
-  const MET = [['globe', 'Visite al sito', 2140, 'e cosa hanno cercato'], ['mega', 'Promo utilizzate', 340, 'Aperitivo del giovedì'], ['click', 'Click da ADV', 1240, 'Google Ads · 30 giorni'],
-    ['cal', 'Prenotazioni da ADV', 86, 'dalle campagne'], ['pin', 'Richieste indicazioni', 412, 'da Google Maps'], ['ticket', 'Coupon scaricati', 210, 'promozioni attive']];
+  /* ── S7 · chiusura ── */
   scene('s7', 7000, 'light', () => `
-    <div class="abs center-x" style="top:100px"><div class="hp">${pill('line', 'Misura le tue iniziative')}</div></div>
-    <div class="abs center-x" style="top:185px"><h2 class="T tt" style="font-size:80px"><span class="ln">${L('SAI IN COSA INVESTI,')}</span><span class="ln">${L('VEDI QUALI [RISPOSTE ARRIVANO.]')}</span></h2></div>
-    <div class="tiles">${MET.map(([n, l, v, c]) => `
-      <div class="card tile">${tile(n, 54, 26)}<span class="caps">${l}</span><span class="num nv">0</span><span class="chip">${c}</span></div>`).join('')}</div>`,
-  function (t) {
-    A(this.hp, t, { at: 100, d: 700, y: 30 });
-    MW(this.tt, t, { at: 220, st: 60 });
-    this.tiles.forEach((el, i) => {
-      const at = 750 + i * 120;
-      A(el, t, { at, d: 900, y: 90, s: .9, blur: 16 });
-      COUNT($('.nv', el), t, at + 200, 1500, MET[i][2]);
-      A($('.chip', el), t, { at: at + 900, d: 600, y: 10, s: .85, blur: 4 });
-      const hk = EO(p(t, 3400 + i * 260, 350)) * (1 - EO(p(t, 3400 + i * 260 + 450, 400)));
-      el.style.borderColor = `rgba(255,100,47,${(hk * .6).toFixed(3)})`;
-      el.style.translate = `0 ${(-hk * 10).toFixed(2)}px`;
-    });
-  },
-  function (el) { this.hp = $('.hp', el); this.tt = $$('.tt .mi', el); this.tiles = $$('.tile', el); });
-
-  /* ── S8 · chiusura ── */
-  scene('s8', 6500, 'light', () => `
-    <div class="lg"><img class="wm" src="rush-logo-orange.webp" alt="RUSH"><span class="ic round">${ic('utensils', 54, 2.15)}</span></div>
+    <div class="lg">${logoSvg()}<span class="ic round">${ic('utensils', 54, 2.15)}</span></div>
     <div class="abs center-x rst"><div class="rw">${[...'RISTORAZIONE'].map((c) => `<span>${c}</span>`).join('')}</div></div>
     <div class="abs center-x url"><span class="ut">${typed('rush-ai.it[/ristorazione]')}</span></div>`,
   function (t) {
-    const r = EO(p(t, 250, 1000));
-    this.wm.style.clipPath = `inset(-5% ${lerp(101, -1, r)}% -5% -5%)`;
-    st(this.wm, { blur: (1 - r) * 10, x: (1 - r) * -30 });
-    POP(this.badge, t, 900, 700, -140);
-    this.letters.forEach((c, i) => A(c, t, { at: 1200 + i * 40, d: 650, y: 34, blur: 12 }));
-    this.rw.style.letterSpacing = lerp(0.55, 0.16, EO(p(t, 1200, 1300))) + 'em';
-    const n = Math.floor(this.uc.length * p(t, 2300, 1100));
+    logoAnim(this, t, { at: 150, tz: 450 });
+    const n = Math.floor(this.uc.length * p(t, 2700, 1200));
     this.uc.forEach((c, i) => { c.style.opacity = i < n ? 1 : 0; });
-    A(this.url, t, { at: 2200, d: 500, y: 16, blur: 4 });
+    A(this.url, t, { at: 2600, d: 500, y: 16, blur: 4 });
     /* dissolvenza finale sul fondo: il loop riparte pulito dalla scena 1 */
-    this.cam.style.opacity = (1 - EIO(p(t, 5750, 700))).toFixed(3);
+    this.cam.style.opacity = (1 - EIO(p(t, 6200, 750))).toFixed(3);
   },
   function (el) {
-    this.wm = $('.wm', el); this.badge = $('.lg .ic', el); this.rw = $('.rw', el); this.letters = $$('.rw span', el);
+    logoInit(this, el);
     this.uc = $$('.ut .c', el); this.url = $('.url', el);
     $$('.ut .hk', el).forEach((c) => c.classList.add('acc'));
   });
@@ -861,7 +789,7 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
   });
   const TOTAL = acc;
   /* confini con la fascia obliqua; gli altri usano blur + zoom */
-  const WIPES = [S[1].start, S[3].start, S[5].start, S[7].start];
+  const WIPES = [S[1].start, S[3].start, S[5].start, S[6].start];
   const isWipe = (b) => WIPES.includes(b);
   const bgD = $('.bg-d');
   const blobsL = $$('.bg-l .blob'), blobsD = $$('.bg-d .blob');
