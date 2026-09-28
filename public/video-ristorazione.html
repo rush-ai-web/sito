@@ -846,7 +846,10 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
   window.__render = render;
 
   const cv = $('#cv'), stage = $('#stage');
-  const fit = () => { cv.style.transform = CAPTURE ? 'none' : `scale(${stage.clientWidth / 1920})`; };
+  /* ?capture&w=2560 registra a una risoluzione più alta: il palco si ridisegna nitido, non si ingrandisce un'immagine */
+  const CW = +((/[?&]w=(\d+)/.exec(location.search) || [])[1] || 1920);
+  if (CAPTURE) { stage.style.width = CW + 'px'; stage.style.height = (CW * 9 / 16) + 'px'; }
+  const fit = () => { cv.style.transform = `scale(${(CAPTURE ? CW : stage.clientWidth) / 1920})`; };
   new ResizeObserver(fit).observe(stage); fit();
 
   const imgs = $$('img').map((im) => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()));
