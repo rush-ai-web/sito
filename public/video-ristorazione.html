@@ -5,631 +5,935 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>RUSH Ristorazione Video</title>
 <meta name="robots" content="noindex">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: un palco 16:9 disegnato a 960×540 e scalato per adattarsi allo schermo;
-   ogni scena alterna bande LIGHT e DARK come il sito, un solo accento arancione. */
+/* Video 1920×1080 scalato allo schermo. Stile della landing /ristorazione:
+   fondo #fafaf9 con grana, bulb arancioni sfocati, titoli Inter 800 maiuscoli,
+   pill nere, riquadri icona arancioni con glifo nero. Tutto è guidato da un
+   unico orologio (render(t)), così lo stesso file si registra in MP4 frame per frame. */
+@font-face {
+  font-family: 'Inter Video';
+  src: url('video/inter-latin-wght.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: block;
+}
 :root {
   --accent: #ff642f;
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-hover: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --font: 'Inter', 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --page: #0e0e10;
-  color-scheme: dark;
+  --grad: linear-gradient(135deg, #ff8759 0%, #ff642f 45%, #cc4a1f 100%);
+  --ink: #111113;
+  --font: 'Inter Video', 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --grain-dark: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='1' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.95 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --grain-light: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='1' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.95 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  color-scheme: light;
 }
 *, *::before, *::after { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
 body {
-  background: var(--page);
-  font-family: var(--font);
-  display: grid;
-  place-items: center;
+  background: #0e0e10;
+  display: grid; place-items: center;
   padding-inline: 16px;
-  box-sizing: border-box;
   overflow: hidden;
+  font-family: var(--font);
+  font-feature-settings: 'ss01', 'ss03', 'cv11';
   -webkit-font-smoothing: antialiased;
 }
-
-.stage {
+body.capture { padding: 0; background: #fafaf9; }
+#stage {
   position: relative;
-  width: min(960px, calc(100vw - 32px), calc((100vh - 32px) * 16 / 9));
+  width: min(1280px, calc(100vw - 32px), calc((100vh - 32px) * 16 / 9));
   max-width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border-radius: 24px;
-  background: #17171a;
-  transition: background-color 400ms linear;
-  box-shadow: 0 2px 4px rgba(0,0,0,.25), 0 40px 80px -30px rgba(0,0,0,.7);
+  border-radius: 20px;
+  box-shadow: 0 40px 80px -30px rgba(0,0,0,.7);
 }
-.stage[data-theme="light"] { background: #fafaf9; }
-.canvas { position: absolute; left: 0; top: 0; width: 960px; height: 540px; transform-origin: 0 0; }
-#scene { position: absolute; inset: 0; opacity: 0; transition: opacity 400ms linear; }
-.progress { position: absolute; left: 0; bottom: 0; height: 3px; width: 0; background: var(--accent); z-index: 5; }
+body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shadow: none; }
+#cv { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; overflow: hidden; }
 
-/* ── token per tema di scena ── */
-.scene.light {
-  --bg: #fafaf9; --surface: #fcfcfc; --surface-top: #ffffff;
-  --text: #1d1d1f; --text-2: #3b3b3d; --text-3: #6b6b6d;
-  --hairline: rgba(0,0,0,0.06); --rail: rgba(0,0,0,0.10);
-  --accent-soft: rgba(255,100,47,0.10);
-  --pos: #15803d; --warn: #b45309; --neg: #b91c1c;
-  --pos-soft: rgba(21,128,61,.10); --warn-soft: rgba(180,83,9,.10); --neg-soft: rgba(185,28,28,.09);
-  --vig: radial-gradient(90% 70% at 50% -8%, #ffffff 0%, #fafaf9 45%, #f3f2ee 100%);
-  --sh-1: 0 1px 2px rgba(0,0,0,.07), 0 20px 40px -14px rgba(0,0,0,.12);
-  --sh-2: 0 2px 4px rgba(0,0,0,.10), 0 28px 56px -18px rgba(0,0,0,.16);
-  color: var(--text);
-}
-.scene.dark {
-  --bg: #17171a; --surface: #1b1b1d; --surface-top: #212124;
-  --text: #f5f5f7; --text-2: #e1e1e1; --text-3: #8b8b8d;
-  --hairline: rgba(255,255,255,0.08); --rail: rgba(255,255,255,0.12);
-  --accent-soft: rgba(255,100,47,0.16);
-  --pos: #22a85a; --warn: #c2660b; --neg: #e14b4b;
-  --vig: radial-gradient(90% 70% at 50% -8%, #232325 0%, #17171a 45%, #0b0b0c 100%);
-  --sh-1: 0 1px 2px rgba(0,0,0,.07), 0 20px 40px -14px rgba(0,0,0,.55);
-  --sh-2: 0 2px 4px rgba(0,0,0,.10), 0 28px 56px -18px rgba(0,0,0,.55);
-  color: var(--text);
-}
+/* ── sfondo: base + bulb + grana, una variante chiara e una scura ── */
+.bg { position: absolute; inset: 0; overflow: hidden; }
+.bg-l { background: #fafaf9; }
+.bg-d { background: #17171a; opacity: 0; }
+.bg .vig { position: absolute; inset: 0; }
+.bg-l .vig { background: radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.9) 0%, rgba(255,255,255,0) 55%), radial-gradient(90% 60% at 50% 100%, rgba(0,0,0,.035) 0%, rgba(0,0,0,0) 60%); }
+.bg-d .vig { background: radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.055) 0%, rgba(255,255,255,0) 55%), radial-gradient(90% 60% at 50% 100%, rgba(0,0,0,.25) 0%, rgba(0,0,0,0) 60%); }
+.blob { position: absolute; left: 0; top: 0; width: 1100px; height: 1100px; margin: -550px 0 0 -550px; border-radius: 50%; }
+.bg-l .blob { background: radial-gradient(closest-side, rgba(255,100,47,.34), rgba(255,100,47,.12) 45%, rgba(255,100,47,0) 100%); }
+.bg-d .blob { background: radial-gradient(closest-side, rgba(255,100,47,.30), rgba(255,100,47,.08) 45%, rgba(255,100,47,0) 100%); }
+.grain { position: absolute; inset: 0; background-size: 240px 240px; }
+.bg-l .grain { background-image: var(--grain-dark); opacity: .22; }
+.bg-d .grain { background-image: var(--grain-light); opacity: .16; }
 
-/* ── grammatica di movimento ── */
-@keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.035); } }
-@keyframes aurora { 0%, 100% { transform: scale(1) translateY(0); } 50% { transform: scale(1.08) translateY(-12px); } }
-@keyframes boom { from { transform: scale(.1); opacity: 1; } to { transform: scale(3); opacity: 0; } }
-@keyframes draw { to { stroke-dashoffset: 0; } }
-
-.fu { opacity: 0; transform: translateY(28px); }
-.fu.go { animation: fadeUp 600ms var(--ease) forwards; }
-.fu.slow.go { animation-duration: 900ms; }
-.fi { opacity: 0; }
-.fi.go { animation: fadeIn 600ms var(--ease) forwards; }
-
-.aurora {
-  position: absolute; left: 50%; top: 56%;
-  width: 600px; height: 300px; margin: -150px 0 0 -300px;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(255,100,47,.16), rgba(255,100,47,.05) 55%, transparent);
-  filter: blur(20px);
-  animation: aurora 6s ease-in-out infinite;
-  pointer-events: none;
-}
-.aurora.big { width: 700px; height: 350px; margin: -175px 0 0 -350px; top: 52%;
-  background: radial-gradient(closest-side, rgba(255,100,47,.19), rgba(255,100,47,.06) 55%, transparent); }
+/* ── scene ── */
+.sc { position: absolute; inset: 0; display: none; color: #1d1d1f;
+  --text: #1d1d1f; --text-2: #3b3b3d; --text-3: #6b6b6d; --hair: rgba(0,0,0,.07); --hair-2: rgba(0,0,0,.12);
+  --surface: #ffffff; --soft: #f0f0ee;
+  --card: radial-gradient(90% 70% at 50% -8%, #ffffff 0%, #fafaf9 45%, #f3f2ee 100%);
+  --sh: 0 3px 6px rgba(0,0,0,.08), 0 44px 88px -24px rgba(0,0,0,.2);
+  --pos: #15803d; --warn: #b45309; --neg: #b91c1c; }
+.sc.dark { color: #f5f5f7;
+  --text: #f5f5f7; --text-2: #e1e1e1; --text-3: #9a9a9d; --hair: rgba(255,255,255,.09); --hair-2: rgba(255,255,255,.16);
+  --surface: #232326; --soft: #2a2a2d;
+  --card: radial-gradient(90% 70% at 50% -8%, #2a2a2d 0%, #1b1b1e 46%, #0e0e10 100%);
+  --sh: 0 3px 6px rgba(255,255,255,.05), 0 44px 88px -24px rgba(0,0,0,.7);
+  --pos: #22a85a; --warn: #d9761a; --neg: #e14b4b; }
+.cam { position: absolute; inset: 0; transform-origin: 50% 50%; }
+.abs { position: absolute; }
+.center-x { left: 0; right: 0; display: flex; justify-content: center; text-align: center; }
 
 /* ── tipografia ── */
-.cap { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
-.h2 { margin: 0; font-size: 34px; font-weight: 700; line-height: 1.18; letter-spacing: -.02em; color: var(--text); text-wrap: balance; }
-.sub { margin: 0; font-size: 17px; font-weight: 500; color: var(--text-2); }
-.body { margin: 0; font-size: 15px; line-height: 1.65; color: var(--text-2); text-wrap: pretty; }
-.num { font-weight: 700; font-variant-numeric: tabular-nums; }
+.T { margin: 0; font-weight: 800; text-transform: uppercase; letter-spacing: -0.035em; line-height: 1.02; color: var(--text); }
+.T .ln { display: block; white-space: nowrap; }
 .acc { color: var(--accent); }
+.mk { display: inline-block; overflow: hidden; vertical-align: top; padding: .16em .04em .1em; margin: -.16em -.04em -.1em; }
+.mi { display: inline-block; }
+.lead { margin: 0; font-size: 36px; font-weight: 700; letter-spacing: -.02em; line-height: 1.3; color: var(--text); }
+.body { margin: 0; font-size: 28px; font-weight: 400; letter-spacing: -.01em; line-height: 1.5; color: var(--text-2); }
+.bw { display: inline-block; }
+.caps { font-size: 17px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--text-2); }
+.num { font-variant-numeric: tabular-nums; font-weight: 800; letter-spacing: -.03em; }
+.shine .mi { background: linear-gradient(100deg, #ff642f 0%, #ff642f 40%, #ffd3c2 50%, #ff642f 60%, #ff642f 100%);
+  background-size: 400% 100%; background-position: 100% 0; -webkit-background-clip: text; background-clip: text; color: transparent; }
 
-.card {
-  background: var(--vig);
-  border: 1px solid var(--hairline);
-  border-radius: 16px;
-  box-shadow: var(--sh-1);
-  transition: transform 180ms var(--ease-hover), box-shadow 180ms var(--ease-hover);
-}
-.card:hover, .card.hot { transform: translateY(-3px); box-shadow: var(--sh-2); }
+/* ── componenti: stessi colori e stile ovunque ── */
+.pill { display: inline-flex; align-items: center; gap: 11px; height: 54px; padding: 0 24px 0 18px; border-radius: 999px;
+  background: #1d1d1f; color: #fff; font-size: 22px; font-weight: 600; letter-spacing: -.01em; white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0,0,0,.12), 0 18px 36px -14px rgba(0,0,0,.35); }
+.sc.dark .pill { background: #0c0c0d; border: 1px solid rgba(255,255,255,.14); }
+.pill svg { color: #fff; flex: none; }
+.ic { --z: 64px; width: var(--z); height: var(--z); flex: none; display: grid; place-items: center; position: relative; overflow: hidden;
+  border-radius: calc(var(--z) * .3); color: var(--ink); background: var(--grad);
+  border: 1px solid rgba(204,74,31,.48);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,.74), inset 0 -5px 10px rgba(96,28,5,.2), 0 6px 18px -6px rgba(255,100,47,.6); }
+.ic::before { content: ''; position: absolute; width: 70%; height: 44%; top: 5%; left: 15%; border-radius: 50%;
+  background: linear-gradient(to bottom, rgba(255,255,255,.72), transparent); opacity: .55; }
+.ic svg { position: relative; z-index: 1; }
+.ic.round { border-radius: 50%; }
+.card { position: absolute; background: var(--card); border: 1px solid var(--hair); border-radius: 36px; box-shadow: var(--sh); overflow: hidden; }
+.chip { display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 999px; font-size: 18px; font-weight: 600; white-space: nowrap; background: var(--soft); color: var(--text-2); }
+.chip.pos { color: var(--pos); background: color-mix(in srgb, var(--pos) 12%, transparent); }
+.chip.warn { color: var(--warn); background: color-mix(in srgb, var(--warn) 14%, transparent); }
+.chip.neg { color: var(--neg); background: color-mix(in srgb, var(--neg) 11%, transparent); }
+.chip.accent { color: var(--accent); background: rgba(255,100,47,.12); }
+.row { background: var(--surface); border: 1px solid var(--hair); border-radius: 18px; }
 
-.pill {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--accent); color: #fff;
-  border-radius: 999px; padding: 10px 22px;
-  font-size: 14px; font-weight: 600;
-  box-shadow: 0 1px 2px rgba(255,100,47,.3), 0 14px 28px -12px rgba(255,100,47,.55);
-}
-
-/* ── S1 intro ── */
-.center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-.logo { font-size: 64px; font-weight: 700; letter-spacing: -.02em; color: #fff; line-height: 1; }
-.intro-icon { color: var(--accent); margin-top: 22px; display: flex; }
-.intro-sub { margin-top: 14px; font-size: 24px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+/* ── S1 / S8 logo ── */
+.mark { position: absolute; width: 420px; height: 420px; }
+.lg { position: absolute; left: 446px; top: 330px; width: 1028px; height: 220px; display: flex; align-items: center; gap: 28px; }
+.wm { width: 880px; height: 220px; display: block; }
+.lg .ic { --z: 120px; }
+.rst { top: 610px; font-size: 46px; font-weight: 700; color: var(--accent); text-transform: uppercase; }
+.rst span { display: inline-block; }
 
 /* ── S2 hero ── */
-.topvig { position: absolute; inset: 0 0 auto; height: 320px; background: radial-gradient(70% 100% at 50% 0%, rgba(255,255,255,.9), rgba(255,255,255,0)); pointer-events: none; }
-.hero { gap: 0; padding: 0 90px; }
-.hero h1 { margin: 0; max-width: 780px; font-size: 52px; font-weight: 700; line-height: 1.12; letter-spacing: -.025em; text-wrap: balance; color: var(--text); }
-.hero h1 .w { display: inline-block; }
-.hero .sub { margin-top: 22px; font-size: 18px; }
-.hero .cta-wrap { margin-top: 30px; }
+.h1 { font-size: 104px; }
+.hl { position: relative; display: inline-block; }
+.hl-bg { position: absolute; left: -.08em; right: -.08em; top: .02em; bottom: -.02em; background: var(--grad); border-radius: 18px; transform-origin: 0 50%; }
+.hl-w { position: absolute; left: 0; top: 0; color: #fff; white-space: nowrap; }
+.hl-t { position: relative; }
+.fl { position: absolute; }
 
 /* ── S3 problema ── */
-.prob-stage { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px;
-  transition: transform 400ms var(--ease), opacity 400ms var(--ease); }
-.prob-stage.collapse { transform: scale(.85); opacity: 0; }
-.prob-cards { display: flex; gap: 16px; }
-.pcard { width: 256px; padding: 18px 20px; display: flex; flex-direction: column; gap: 16px; }
-.pcard p { margin: 0; font-size: 15px; font-weight: 500; line-height: 1.45; color: var(--text); text-wrap: balance; }
-.itile { width: 38px; height: 38px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; }
-.burst { position: absolute; left: 50%; top: 50%; width: 200px; height: 200px; margin: -100px 0 0 -100px; border-radius: 50%; background: var(--accent); opacity: 0; transform: scale(.1); pointer-events: none; }
-.burst.boom { animation: boom 500ms var(--ease) forwards; }
-.answer { gap: 16px; padding: 0 160px; }
-.answer h2 { margin: 0; font-size: 40px; font-weight: 700; letter-spacing: -.02em; color: #fff; }
-.answer .body { max-width: 540px; color: var(--text-3); }
+.stmt { top: 380px; }
+.stmt .T { font-size: 88px; }
+.echo { position: relative; display: inline-block; }
+.echo .gh { position: absolute; left: 0; top: 0; white-space: nowrap; color: var(--accent); visibility: hidden; }
+.ring { position: absolute; left: 960px; top: 420px; width: 240px; height: 240px; margin: -120px 0 0 -120px; border-radius: 50%; border: 6px solid var(--accent); opacity: 0; }
 
-/* ── S4 bento ── */
-.s-bento { position: absolute; inset: 0; padding: 30px 44px 28px; display: flex; flex-direction: column; gap: 18px; }
-.b-head { display: flex; flex-direction: column; gap: 6px; }
-.b-head .row { display: flex; align-items: baseline; gap: 14px; }
-.grid { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; gap: 14px; }
-.grid .card { padding: 15px 17px 16px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; min-width: 0; }
-.grid .card.accent { border-color: rgba(255,100,47,.4); }
-.c-head { display: flex; gap: 10px; align-items: flex-start; }
-.c-ic { flex: none; width: 28px; height: 28px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; }
-.c-head h3 { margin: 0; padding-top: 5px; font-size: 14.5px; font-weight: 600; line-height: 1.3; color: var(--text); text-wrap: balance; }
-.viz { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: flex-end; }
-.card:not(.play) .vz { opacity: 0; }
+/* ── S4 hub ── */
+.hub { position: absolute; left: 960px; top: 660px; width: 200px; height: 200px; margin: -100px 0 0 -100px; border-radius: 50%;
+  background: radial-gradient(90% 70% at 50% -8%, #ffffff 0%, #fafaf9 45%, #f0efeb 100%); border: 1px solid rgba(0,0,0,.06);
+  box-shadow: 0 3px 6px rgba(0,0,0,.08), 0 30px 60px -20px rgba(0,0,0,.25), 0 0 0 10px rgba(255,100,47,.08); display: grid; place-items: center; }
+.hub img { width: 124px; height: 124px; }
+.hring { position: absolute; left: 960px; top: 660px; width: 200px; height: 200px; margin: -100px 0 0 -100px; border-radius: 50%; border: 3px solid rgba(255,100,47,.5); opacity: 0; }
+.node { position: absolute; width: 0; height: 0; }
+.node .in { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.node .ic { --z: 96px; }
+.node .pill { height: 46px; font-size: 20px; padding: 0 20px 0 16px; }
+#s4 svg.lines { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+.lines line { stroke: rgba(255,100,47,.55); stroke-width: 3; stroke-linecap: round; }
+.lines circle { fill: #ff642f; }
 
-@keyframes growBar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-.bars { display: flex; gap: 7px; height: 92px; }
-.bcol { flex: 1; display: flex; flex-direction: column; gap: 5px; }
-.bwrap { flex: 1; display: flex; align-items: flex-end; }
-.bar { width: 100%; height: var(--h); border-radius: 5px 5px 2px 2px; background: var(--accent); transform-origin: bottom; }
-.card.play .bar { animation: growBar 700ms var(--ease) calc(var(--i) * 60ms) both; }
-.bday { font-size: 10px; font-weight: 500; color: var(--text-3); text-align: center; }
+/* ── S5 funzioni ── */
+.fcol { position: absolute; left: 130px; top: 0; bottom: 0; width: 720px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 30px; }
+.fcol .T { font-size: 80px; }
+.fcol .body { max-width: 640px; }
+.fcard { left: 900px; top: 170px; width: 890px; height: 740px; padding: 46px; }
+.fprog { position: absolute; left: 130px; top: 930px; display: flex; gap: 10px; }
+.fprog i { display: block; width: 64px; height: 6px; border-radius: 99px; background: rgba(0,0,0,.1); overflow: hidden; position: relative; }
+.fprog b { position: absolute; inset: 0; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); }
+.lgd { display: flex; gap: 22px; font-size: 18px; color: var(--text-3); font-weight: 500; align-items: center; }
+.lgd i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; vertical-align: 0; }
+.kpis { display: flex; gap: 48px; margin-top: 30px; }
+.kpi .caps { font-size: 15px; color: var(--text-3); }
+.kpi .num { font-size: 58px; line-height: 1.05; margin-top: 6px; }
+.bars { position: absolute; left: 46px; right: 46px; bottom: 46px; height: 330px; display: flex; gap: 22px; }
+.bg6 { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 14px; position: relative; }
+.bg6 .pair { flex: 1; width: 100%; display: flex; gap: 8px; align-items: flex-end; justify-content: center; position: relative; }
+.bg6 .b { width: 42px; border-radius: 10px 10px 4px 4px; transform-origin: 50% 100%; }
+.bg6 .inc { background: linear-gradient(180deg, #ff8759 0%, #cc4a1f 100%); }
+.bg6 .spe { background: #d7d6d2; }
+.bg6 .dl { font-size: 18px; font-weight: 600; color: var(--text-3); height: 34px; display: grid; place-items: center; padding: 0 12px; border-radius: 999px; position: relative; }
+.col-hi { position: absolute; inset: -14px -8px -6px; border-radius: 20px; background: rgba(255,100,47,.08); border: 1.5px dashed rgba(255,100,47,.45); }
+.tip { position: absolute; right: 40px; top: 250px; padding: 14px 20px; border-radius: 18px; background: #1d1d1f; color: #fff; font-size: 19px; font-weight: 600; box-shadow: 0 18px 36px -14px rgba(0,0,0,.45); white-space: nowrap; }
+.tip small { display: block; font-size: 13px; font-weight: 700; color: #b9b9bc; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 4px; }
 
-@keyframes popDot { from { transform: scale(0); } to { transform: scale(1); } }
-@keyframes slideTag { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: none; } }
-.stock { display: flex; flex-direction: column; gap: 8px; }
-.srow { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border-radius: 10px; background: var(--surface-top); border: 1px solid var(--hairline); font-size: 13px; font-weight: 500; color: var(--text-2); }
-.dot { flex: none; width: 8px; height: 8px; border-radius: 50%; }
-.tag { margin-left: auto; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
-.pos { --c: var(--pos); --cs: var(--pos-soft); } .warn { --c: var(--warn); --cs: var(--warn-soft); } .neg { --c: var(--neg); --cs: var(--neg-soft); }
-.dot { background: var(--c); } .tag { color: var(--c); background: var(--cs); }
-.card.play .srow { animation: fadeIn 300ms var(--ease) calc(var(--i) * 140ms) both; }
-.card.play .dot { animation: popDot 520ms cubic-bezier(.34,1.56,.64,1) calc(var(--i) * 140ms + 120ms) both; }
-.card.play .tag { animation: slideTag 480ms var(--ease) calc(var(--i) * 140ms + 260ms) both; }
+.feed { position: relative; height: 140px; margin-top: 26px; overflow: hidden; }
+.ev { position: absolute; left: 0; right: 0; top: 0; height: 62px; display: flex; align-items: center; gap: 14px; padding: 0 18px 0 12px; font-size: 20px; font-weight: 500; color: var(--text-2); }
+.ev b { font-weight: 700; color: var(--text); }
+.ev .t { margin-left: auto; font-size: 16px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+.stk { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
+.si { display: grid; grid-template-columns: 200px 1fr 170px; align-items: center; gap: 22px; padding: 15px 20px; }
+.si b { font-size: 22px; font-weight: 600; }
+.trk { height: 12px; border-radius: 99px; background: rgba(0,0,0,.07); overflow: hidden; }
+.trk i { display: block; height: 100%; border-radius: 99px; transform-origin: 0 50%; }
+.si .chip { justify-self: end; }
+.toast { position: absolute; left: 0; right: 0; bottom: 36px; display: flex; justify-content: center; }
 
-.flow { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); }
-.flow-line { position: absolute; top: 15px; left: 12.5%; width: 75%; height: 2px; overflow: visible; }
-.flow-line line { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 1; stroke-dashoffset: 1; }
-.card.play .flow-line { opacity: 1; }
-.card.play .flow-line line { animation: draw 900ms var(--ease) 200ms forwards; }
-.fnode { position: relative; display: flex; flex-direction: column; align-items: center; gap: 7px; }
-.fdot { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--accent); background: var(--surface-top); color: var(--accent); display: grid; place-items: center; box-sizing: border-box; }
-.fnode.ai .fdot { background: var(--accent); color: #fff; }
-.fnode span { font-size: 11px; font-weight: 600; color: var(--text); }
-.card.play .fnode { animation: fadeUp 600ms var(--ease) calc(var(--i) * 200ms) both; }
-.fnote { margin-top: 14px; font-size: 11.5px; color: var(--text-3); display: flex; justify-content: space-between; gap: 8px; }
-.card.play .fnote { animation: fadeIn 500ms var(--ease) 900ms both; }
+.inv { position: absolute; left: 60px; top: 150px; width: 320px; height: 430px; background: #fff; border-radius: 14px; box-shadow: 0 2px 4px rgba(0,0,0,.08), 0 30px 60px -20px rgba(0,0,0,.25); padding: 26px 24px; }
+.inv h5 { margin: 0; font-size: 15px; font-weight: 800; letter-spacing: .08em; color: #1d1d1f; }
+.inv p { margin: 4px 0 18px; font-size: 14px; color: #6b6b6d; }
+.inv .l { height: 12px; border-radius: 6px; background: #ececea; margin-top: 16px; }
+.inv .l.s { width: 60%; } .inv .l.m { width: 82%; }
+.inv .tot { margin-top: 26px; display: flex; justify-content: space-between; font-size: 15px; font-weight: 800; color: #1d1d1f; border-top: 1px dashed #ddd; padding-top: 12px; }
+.scan { position: absolute; left: -14px; right: -14px; height: 4px; border-radius: 4px; background: var(--accent); box-shadow: 0 0 22px 6px rgba(255,100,47,.45); }
+.brk { position: absolute; left: 36px; top: 128px; width: 368px; height: 476px; }
+.brk i { position: absolute; width: 46px; height: 46px; border: 5px solid var(--accent); }
+.brk i:nth-child(1) { left: 0; top: 0; border-right: 0; border-bottom: 0; border-radius: 16px 0 0 0; }
+.brk i:nth-child(2) { right: 0; top: 0; border-left: 0; border-bottom: 0; border-radius: 0 16px 0 0; }
+.brk i:nth-child(3) { left: 0; bottom: 0; border-right: 0; border-top: 0; border-radius: 0 0 0 16px; }
+.brk i:nth-child(4) { right: 0; bottom: 0; border-left: 0; border-top: 0; border-radius: 0 0 16px 0; }
+.xr { position: absolute; left: 440px; right: 46px; display: flex; align-items: center; gap: 14px; padding: 16px 18px; }
+.xr b { display: block; font-size: 20px; font-weight: 700; }
+.xr small { display: block; font-size: 16px; color: var(--text-3); margin-top: 2px; font-variant-numeric: tabular-nums; }
+.steps4 { position: absolute; left: 46px; right: 46px; bottom: 46px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.s4 { display: flex; align-items: center; gap: 12px; padding: 14px 16px; font-size: 19px; font-weight: 700; color: var(--text-3); border: 1.5px solid var(--hair); border-radius: 16px; background: var(--surface); }
+.s4 .n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 15px; font-weight: 800; background: #e6e5e2; color: #6b6b6d; flex: none; }
+.s4.on { color: var(--text); border-color: rgba(255,100,47,.55); }
+.s4.on .n { background: var(--accent); color: #fff; }
 
-.alerts { display: flex; flex-direction: column; gap: 8px; }
-.arow { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; background: var(--surface-top); border: 1px solid var(--hairline); }
-.arow b { display: block; font-size: 13px; font-weight: 600; color: var(--text); }
-.arow small { display: block; font-size: 11px; color: var(--text-3); margin-top: 1px; }
-.delta { margin-left: auto; font-size: 11.5px; font-weight: 700; color: #fff; background: var(--warn); padding: 4px 9px; border-radius: 999px; font-variant-numeric: tabular-nums; }
-.card.play .arow { animation: fadeUp 600ms var(--ease) calc(var(--i) * 160ms) both; }
-.card.play .delta { animation: popDot 480ms cubic-bezier(.34,1.56,.64,1) calc(var(--i) * 160ms + 300ms) both; }
+.chart { position: absolute; left: 46px; right: 46px; top: 250px; height: 250px; }
+.chart svg { width: 100%; height: 100%; overflow: visible; }
+.alr { position: absolute; left: 46px; right: 46px; display: flex; align-items: center; gap: 16px; padding: 14px 20px; }
+.alr b { display: block; font-size: 21px; font-weight: 700; }
+.alr small { display: block; font-size: 16px; color: var(--text-3); margin-top: 2px; }
+.alr .chip { margin-left: auto; }
+.pdot { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 7px rgba(255,100,47,.2); }
 
-@keyframes cellIn { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: none; } }
-.quad { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.q { display: flex; align-items: center; gap: 8px; padding: 10px; border-radius: 10px; background: var(--surface-top); border: 1px solid var(--hairline); font-size: 12.5px; font-weight: 600; color: var(--text); }
-.q svg { color: var(--accent); flex: none; }
-.card.play .q { animation: cellIn 520ms var(--ease) calc(var(--i) * 80ms) both; }
+.sh { position: absolute; left: 46px; right: 46px; top: 150px; display: grid; grid-template-columns: 110px repeat(7, 1fr) 90px; gap: 10px; align-items: center; }
+.sh .hd { font-size: 16px; font-weight: 700; color: var(--text-3); text-align: center; }
+.sh .nm { font-size: 21px; font-weight: 600; }
+.sh .hr { font-size: 26px; text-align: right; }
+.cell { height: 52px; border-radius: 12px; background: var(--surface); border: 1px solid var(--hair); position: relative; overflow: hidden; }
+.cell i { position: absolute; inset: -1px; border-radius: inherit; opacity: 0; }
+.cell.g i { background: rgba(255,100,47,.3); }
+.cell.s i { background: var(--grad); }
+.gauge { position: absolute; left: 46px; right: 46px; bottom: 46px; padding: 22px 26px; }
+.gauge .top { display: flex; justify-content: space-between; align-items: center; }
+.gauge .trk { height: 16px; margin-top: 16px; }
+.gauge .trk i { background: var(--grad); transform: scaleX(0); }
 
-.shift { display: grid; grid-template-columns: 38px repeat(7, 1fr); gap: 4px; align-items: center; }
-.shift .hd { font-size: 9.5px; font-weight: 600; color: var(--text-3); text-align: center; }
-.shift .nm { font-size: 11.5px; font-weight: 600; color: var(--text-2); }
-.cell { height: 17px; border-radius: 4px; background: var(--surface-top); border: 1px solid var(--hairline); position: relative; overflow: hidden; box-sizing: border-box; }
-.cell::after { content: ''; position: absolute; inset: -1px; opacity: 0; }
-.cell.g::after { background: rgba(255,100,47,.28); }
-.cell.s::after { background: var(--accent); }
-.card.play .cell::after { animation: fadeIn 200ms linear calc(var(--r) * 300ms + var(--c) * 20ms) both; }
-.card.play .shift .nm { animation: fadeIn 200ms linear calc(var(--r) * 300ms) both; }
-.legend { margin-top: 9px; display: flex; gap: 14px; font-size: 10.5px; color: var(--text-3); }
-.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+/* ── S6 AI ── */
+.chat { left: 330px; top: 330px; width: 1260px; height: 660px; padding: 44px; }
+.msg { position: absolute; left: 44px; right: 44px; display: flex; gap: 18px; align-items: flex-start; }
+.bub { max-width: 860px; padding: 22px 28px; border-radius: 26px; font-size: 27px; line-height: 1.45; letter-spacing: -.01em; }
+.bub.ai { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: var(--text); }
+.bub.ai.note { background: linear-gradient(135deg, rgba(255,100,47,.16), rgba(255,100,47,.04)); border-color: rgba(255,100,47,.4); }
+.bub .lab { display: block; font-size: 15px; font-weight: 800; letter-spacing: .08em; color: var(--accent); margin-bottom: 8px; }
+.bub .hk { color: var(--accent); font-weight: 700; }
+.msg.me { justify-content: flex-end; }
+.bub.me { background: var(--grad); color: #fff; font-weight: 500; border: 1px solid rgba(204,74,31,.5); }
+.caret { display: inline-block; width: 3px; height: 1.05em; background: var(--accent); vertical-align: -.15em; margin-left: 2px; opacity: 0; }
+.dots { display: inline-flex; gap: 8px; padding: 8px 4px; }
+.dots i { width: 12px; height: 12px; border-radius: 50%; background: var(--text-3); }
 
-/* ── S5 risultati ── */
-.s-res { position: absolute; inset: 0; padding: 0 80px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 10px; }
-.s-res .h2 { max-width: 640px; }
-.win { margin-top: 18px; width: 800px; border-radius: 12px; overflow: hidden; background: var(--surface); border: 1px solid var(--hairline); box-shadow: var(--sh-2); text-align: left; }
-.win-bar { display: flex; align-items: center; gap: 7px; padding: 11px 16px; border-bottom: 1px solid var(--hairline); background: var(--surface-top); }
-.win-bar i { width: 10px; height: 10px; border-radius: 50%; background: #3a3a3d; }
-.win-bar span { margin-left: 10px; font-size: 12px; font-weight: 500; color: var(--text-3); }
-.win-bar em { margin-left: auto; font-style: normal; font-size: 11px; font-weight: 500; color: var(--text-3); border: 1px solid var(--hairline); border-radius: 999px; padding: 3px 10px; }
-.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 16px; }
-.tile { padding: 16px 18px 18px; border-radius: 12px; display: flex; flex-direction: column; gap: 12px; }
-.tile .lbl { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 500; color: var(--text-3); }
-.tile .lbl svg { color: var(--accent); flex: none; }
-.tile .num { font-size: 28px; line-height: 1; color: var(--accent); letter-spacing: -.01em; }
+/* ── S7 risultati ── */
+.tiles { position: absolute; left: 180px; top: 440px; width: 1560px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+.tile { position: relative; height: 230px; padding: 30px 32px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.tile .caps { font-size: 16px; color: var(--text-3); margin-top: 6px; }
+.tile .num { font-size: 64px; line-height: 1; color: var(--text); }
+.tile .chip { position: absolute; right: 28px; top: 34px; height: 34px; font-size: 16px; }
 
-/* ── S6 onboarding ── */
-.s-onb { position: absolute; inset: 0; padding: 0 64px; display: grid; grid-template-columns: 330px 1fr; gap: 56px; align-items: center; }
-.onb-left { display: flex; flex-direction: column; gap: 12px; }
-.onb-left .h2 { font-size: 36px; }
-.meta { margin-top: 8px; display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; font-size: 12.5px; font-weight: 600; color: var(--text-2); background: var(--surface-top); border: 1px solid var(--hairline); border-radius: 999px; padding: 7px 14px; box-shadow: var(--sh-1); }
-.meta svg { color: var(--accent); }
-.steps { position: relative; display: flex; flex-direction: column; gap: 22px; }
-.rail { position: absolute; left: 18px; top: 19px; height: calc(100% - 38px); width: 2px; margin-left: -1px; overflow: visible; }
-.rail line { stroke-width: 2; stroke-dasharray: 1; }
-.rail .base { stroke: var(--rail); stroke-dashoffset: 1; transition: stroke-dashoffset 1800ms var(--ease); }
-.rail .base.go { stroke-dashoffset: 0; }
-.rail .prog { stroke: var(--accent); stroke-dashoffset: 1; transition: stroke-dashoffset 580ms var(--ease); }
-.step { position: relative; display: flex; gap: 18px; align-items: flex-start; }
-.stile { flex: none; width: 38px; height: 38px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center;
-  transition: background-color 300ms var(--ease), color 300ms var(--ease), box-shadow 300ms var(--ease); }
-.step h4 { margin: 0; padding-top: 2px; font-size: 16px; font-weight: 600; color: var(--text-3); transition: color 300ms var(--ease); }
-.step p { margin: 4px 0 0; font-size: 13.5px; line-height: 1.55; color: var(--text-3); max-width: 420px; transition: color 300ms var(--ease); }
-.step.on .stile { background: var(--accent); color: #fff; box-shadow: 0 10px 22px -10px rgba(255,100,47,.7); }
-.step.on h4 { color: var(--text); }
-.step.on p { color: var(--text-2); }
+/* ── S8 outro ── */
+.url { top: 740px; font-size: 48px; font-weight: 700; letter-spacing: -.02em; color: var(--text); }
 
-/* ── S7 CTA ── */
-.cta { gap: 0; }
-.url { display: flex; font-size: 20px; font-weight: 500; color: var(--text-3); letter-spacing: -.005em; }
-.url .acc { color: var(--accent); }
-.cta h1 { margin: 26px 0 0; font-size: 60px; font-weight: 700; letter-spacing: -.03em; line-height: 1.05; color: #fff; }
-.cta .sub { margin-top: 16px; font-size: 18px; color: var(--text-2); }
-.cta .btn-wrap { margin-top: 34px; }
-.cta .pill { font-size: 15px; padding: 13px 26px; animation: pulse 2s var(--ease) 600ms infinite; }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; }
-  #scene { transition: opacity 750ms linear !important; }
-  .fu, .fi { transform: none; }
-  .card .vz, .cell::after { opacity: 1 !important; }
-  .flow-line line { stroke-dashoffset: 0; }
-}
+/* ── transizione a fascia (la barra obliqua del logo) ── */
+.wipe { position: absolute; left: 0; top: -200px; width: 3100px; height: 1480px; pointer-events: none; }
+.wipe.w1 { background: #1d1d1f; }
+.wipe.w2 { background: var(--grad); }
+.prog { position: absolute; left: 0; bottom: 0; height: 5px; width: 0; background: var(--accent); z-index: 10; }
 </style>
 </head>
 <body>
-<div class="stage" id="stage" data-theme="dark" role="img" aria-label="Video di presentazione di RUSH Ristorazione">
-  <div class="canvas" id="canvas"><div id="scene" class="scene dark"></div></div>
-  <div class="progress" id="progress"></div>
+<div id="stage" role="img" aria-label="Video di presentazione di RUSH Ristorazione">
+  <div id="cv">
+    <div class="bg bg-l"><div class="vig"></div><div class="blob"></div><div class="blob"></div><div class="blob"></div><div class="grain"></div></div>
+    <div class="bg bg-d"><div class="vig"></div><div class="blob"></div><div class="blob"></div><div class="grain"></div></div>
+    <div id="scenes"></div>
+    <div class="wipe w1"></div>
+    <div class="wipe w2"></div>
+    <div class="prog"></div>
+  </div>
 </div>
 
 <script>
 (() => {
-  const $$ = (s, r) => [...r.querySelectorAll(s)];
-  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const FADE = RM ? 750 : 400;
-  const stage = document.getElementById('stage');
-  const canvas = document.getElementById('canvas');
-  const root = document.getElementById('scene');
-  const bar = document.getElementById('progress');
+  const CAPTURE = /[?&]capture\b/.test(location.search);
+  if (CAPTURE) document.body.classList.add('capture');
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
-  /* ── icone (Lucide, stroke 2) ── */
+  /* ── easing e helper di animazione ── */
+  const cl = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const lerp = (a, b, k) => a + (b - a) * k;
+  const p = (t, t0, d) => cl((t - t0) / d);
+  function bez(x1, y1, x2, y2) {
+    const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+    const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+    const sx = (t) => ((ax * t + bx) * t + cx) * t, sy = (t) => ((ay * t + by) * t + cy) * t;
+    const dx = (t) => (3 * ax * t + 2 * bx) * t + cx;
+    return (x) => {
+      if (x <= 0) return 0; if (x >= 1) return 1;
+      let t = x;
+      for (let i = 0; i < 8; i++) { const e = sx(t) - x, d = dx(t); if (Math.abs(e) < 1e-5 || Math.abs(d) < 1e-6) break; t -= e / d; }
+      return sy(cl(t));
+    };
+  }
+  const EO = bez(0.16, 1, 0.3, 1);      /* spring deceleration del sito */
+  const EIO = bez(0.65, 0, 0.35, 1);
+  const EI = bez(0.55, 0, 1, 0.45);
+  const EB = bez(0.34, 1.56, 0.64, 1);  /* pop con rimbalzo */
+
+  function st(el, o) {
+    let tf = '';
+    if (o.x || o.y) tf += `translate3d(${(o.x || 0).toFixed(2)}px,${(o.y || 0).toFixed(2)}px,0) `;
+    if (o.yp) tf += `translateY(${o.yp.toFixed(2)}%) `;
+    if (o.s != null && o.s !== 1) tf += `scale(${o.s.toFixed(4)}) `;
+    if (o.r) tf += `rotate(${o.r.toFixed(2)}deg)`;
+    el.style.transform = tf;
+    if (o.o != null) el.style.opacity = cl(o.o).toFixed(3);
+    const b = o.blur || 0;
+    el.style.filter = b > 0.1 ? `blur(${b.toFixed(1)}px)` : '';
+  }
+  /* entrata "rise": opacità + salita + sfocatura, con uscita opzionale */
+  function A(el, t, a) {
+    const ki = EO(p(t, a.at, a.d ?? 800));
+    const ko = a.out != null ? EIO(p(t, a.out, a.od ?? 450)) : 0;
+    st(el, {
+      o: ki * (1 - ko),
+      x: (1 - ki) * (a.x ?? 0) + ko * (a.ox ?? 0),
+      y: (1 - ki) * (a.y ?? 40) + ko * (a.oy ?? -40),
+      s: lerp(a.s ?? 1, 1, ki) * lerp(1, a.os ?? 1, ko),
+      r: (1 - ki) * (a.r ?? 0),
+      blur: (1 - ki) * (a.blur ?? 14) + ko * (a.oblur ?? 12),
+    });
+    return ki * (1 - ko);
+  }
+  /* pop con rimbalzo (icone, badge, chip) */
+  function POP(el, t, at, d = 650, r0 = 0) {
+    const k = p(t, at, d);
+    st(el, { o: cl(k * 4), s: EB(k), r: (1 - EO(k)) * r0 });
+    return k;
+  }
+  /* parole mascherate che salgono dalla loro riga */
+  function MW(els, t, a) {
+    els.forEach((el, i) => {
+      const ki = EO(p(t, a.at + i * (a.st ?? 60), a.d ?? 850));
+      const ko = a.out != null ? EIO(p(t, a.out + i * (a.ost ?? 25), 480)) : 0;
+      st(el, { yp: (1 - ki) * 150 - ko * 150, r: (1 - ki) * 6 });
+    });
+  }
+  /* parole di corpo che emergono dal blur */
+  function BW(els, t, a) {
+    els.forEach((el, i) => {
+      const ki = EO(p(t, a.at + i * (a.st ?? 30), a.d ?? 700));
+      const ko = a.out != null ? EIO(p(t, a.out, 420)) : 0;
+      st(el, { o: ki * (1 - ko), y: (1 - ki) * 18 + ko * -24, blur: (1 - ki) * 10 + ko * 8 });
+    });
+  }
+  const fmt = (n, dec = 0) => {
+    const [i, d] = n.toFixed(dec).split('.');
+    return i.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + (d ? ',' + d : '');
+  };
+  const COUNT = (el, t, at, d, to, dec = 0, pre = '', suf = '') => {
+    el.textContent = pre + fmt(to * EO(p(t, at, d)), dec) + suf;
+  };
+
+  /* ── markup helper ── */
+  const L = (text) => {
+    let acc = false;
+    return text.split(' ').map((w) => {
+      let a = acc;
+      if (w.startsWith('[')) { w = w.slice(1); a = acc = true; }
+      if (w.endsWith(']')) { w = w.slice(0, -1); acc = false; }
+      return `<span class="mk"><span class="mi${a ? ' acc' : ''}">${w}</span></span>`;
+    }).join(' ');
+  };
+  const B = (text) => text.split(' ').map((w) => `<span class="bw">${w}</span>`).join(' ');
   const I = {
     utensils: '<path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8"/><path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"/><path d="m2.1 21.8 6.4-6.3"/><path d="m19 5-7 7"/>',
+    alert: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+    card: '<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>',
     box: '<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+    cart: '<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>',
+    sheet: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 13h2"/><path d="M14 13h2"/><path d="M8 17h2"/><path d="M14 17h2"/>',
     clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
-    down: '<polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/>',
-    up: '<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
-    chart: '<path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>',
-    warehouse: '<path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35A2 2 0 0 1 3.26 6.5l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z"/><path d="M6 18h12"/><path d="M6 14h12"/><rect width="12" height="12" x="6" y="10"/>',
     file: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>',
-    pie: '<path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/>',
+    grid: '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>',
     users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    truck: '<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>',
+    cal: '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/>',
+    scan: '<path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/>',
+    wallet: '<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
+    up: '<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
+    sparkles: '<path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.13-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.13a.5.5 0 0 1 .96 0L14.06 8.5A2 2 0 0 0 15.5 9.94l6.13 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.13a.5.5 0 0 1-.96 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/>',
+    line: '<path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="m19 9-5 5-4-4-3 3"/>',
     globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
-    megaphone: '<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+    mega: '<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
     click: '<path d="m9 9 5 12 1.8-5.2L21 14Z"/><path d="M7.2 2.2 8 5.1"/><path d="m5.1 8-2.9-.8"/><path d="M14 4.1 12 6"/><path d="m6 12-1.9 2"/>',
-    calcheck: '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/>',
     pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
     ticket: '<path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/>',
-    phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
-    cloud: '<path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 2.5 8.2"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/>',
-    cap: '<path d="M22 10v6"/><path d="M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
-    check: '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
-    tick: '<path d="M20 6 9 17l-5-5"/>',
-    arrow: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
-    camera: '<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>',
-    sparkle: '<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 17v4"/><path d="M17 19h4"/>',
-    star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
-    puzzle: '<path d="M19.44 7.85c-.05.32.06.65.29.88l1.57 1.57c.47.47.7 1.09.7 1.7s-.23 1.24-.7 1.71l-1.61 1.61a.98.98 0 0 1-.84.28c-.47-.07-.8-.48-.97-.93a2.5 2.5 0 1 0-3.21 3.21c.45.17.86.5.93.97a.98.98 0 0 1-.28.84l-1.61 1.61a2.4 2.4 0 0 1-1.7.7 2.4 2.4 0 0 1-1.71-.7l-1.57-1.57a1.03 1.03 0 0 0-.88-.29c-.49.07-.84.5-1.02.97a2.5 2.5 0 1 1-3.24-3.24c.46-.18.9-.53.97-1.02a1.03 1.03 0 0 0-.29-.88L2.7 13.7A2.4 2.4 0 0 1 2 12c0-.62.24-1.23.7-1.7l1.53-1.53c.24-.24.58-.35.92-.3.51.08.88.53 1.07 1.01a2.5 2.5 0 1 0 3.26-3.26c-.48-.2-.93-.56-1.01-1.07-.05-.34.06-.68.3-.92L10.3 2.7A2.4 2.4 0 0 1 12 2c.62 0 1.23.24 1.7.7l1.57 1.57c.23.23.56.34.88.29.49-.07.84-.5 1.02-.97a2.5 2.5 0 1 1 3.24 3.24c-.46.18-.9.53-.97 1.02Z"/>',
-    horse: '<path d="M6 21h12"/><path d="M8 21v-1.5c0-2.5 1.2-4 3.2-5.6L9 13l-2 1.5-2-1.8 3.4-5.2C9.6 5.4 11.4 4 14 4c3.5 0 5 3 5 7.5V21"/><path d="M12 4 11 2"/>',
-    anvil: '<path d="M3 5h12c0 3 2.5 4 5 4v2h-5a3 3 0 0 0-3 3v2"/><path d="M7 5v3a5 5 0 0 0 5 5"/><path d="M8 16h8l1 5H7z"/>',
+    check: '<path d="M20 6 9 17l-5-5"/>',
+    receipt: '<path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/>',
   };
-  const ic = (n, s = 20, w = 2) =>
+  const ic = (n, s = 28, w = 2.1) =>
     `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
-  const fmt = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-  /* ── timeline di scena ── */
-  let timers = [];
-  const at = (ms, fn) => timers.push(setTimeout(fn, ms));
-  const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
-
-  function reveal(el) {
-    if (RM) el.classList.remove('fu', 'fi'); else el.classList.add('go');
-    if (el.dataset.count) countUp(el);
-  }
-  /* Programma ogni elemento con data-t (ms dall'inizio della scena) */
-  function arm(scope) {
-    $$('[data-t]', scope).forEach((el) => at(+el.dataset.t, () => reveal(el)));
-  }
-  /* Finita l'entrata, l'elemento torna "normale" così hover e stati possono muoverlo */
-  root.addEventListener('animationend', (e) => {
-    const el = e.target;
-    if (el.classList.contains('go') && (e.animationName === 'fadeUp' || e.animationName === 'fadeIn')) {
-      el.classList.remove('fu', 'fi', 'go', 'slow');
-    }
-  });
-
-  function countUp(el) {
-    const target = +el.dataset.count;
-    if (RM) { el.textContent = fmt(target); return; }
-    let v = 0, last = performance.now();
-    const tick = (now) => {
-      if (!el.isConnected) return;
-      /* valore += (target - valore) * fattore, normalizzato sul frame a 60fps */
-      const k = 1 - Math.pow(1 - 0.12, (now - last) / 16.667);
-      last = now;
-      v += (target - v) * k;
-      if (target - v < 0.5) v = target;
-      el.textContent = fmt(Math.round(v));
-      if (v !== target) requestAnimationFrame(tick);
-    };
-    el.textContent = '0';
-    requestAnimationFrame(tick);
-  }
-  const replay = (card) => { card.classList.remove('play'); void card.offsetWidth; card.classList.add('play'); };
-  const spotlight = (els, start, every, end) => {
-    els.forEach((el, i) => at(start + i * every, () => {
-      els.forEach((x) => x.classList.remove('hot'));
-      el.classList.add('hot');
-      if (el.classList.contains('bento')) replay(el);
-    }));
-    at(end, () => els.forEach((x) => x.classList.remove('hot')));
+  const tile = (n, z = 64, s) => `<span class="ic" style="--z:${z}px">${ic(n, s ?? Math.round(z * 0.44), 2.1)}</span>`;
+  const pill = (n, text) => `<span class="pill">${ic(n, 22, 2.2)}${text}</span>`;
+  const typed = (s) => {
+    let hk = false;
+    return [...s].map((ch) => {
+      if (ch === '[') { hk = true; return ''; }
+      if (ch === ']') { hk = false; return ''; }
+      return `<span class="c${hk ? ' hk' : ''}">${ch}</span>`;
+    }).join('');
   };
 
-  /* ── SCENA 1 · intro logo ── */
-  function buildIntroLogo(el) {
-    el.innerHTML = `
-      <div class="aurora"></div>
-      <div class="center">
-        <div class="logo fu" data-t="150">RUSH</div>
-        <div class="intro-icon fu" data-t="450">${ic('utensils', 22, 2)}</div>
-        <div class="intro-sub fu" data-t="850">Ristorazione</div>
-      </div>`;
-    arm(el);
-  }
+  /* ═════════════ SCENE ═════════════ */
+  const S = [];
+  const scene = (id, dur, theme, html, update, init) => S.push({ id, dur, theme, html, update, init });
 
-  /* ── SCENA 2 · headline hero ── */
-  function buildHero(el) {
-    const words = 'Il centro operativo intelligente per il tuo bar o ristorante'.split(' ');
-    const h = words.map((w, i) =>
-      `<span class="w fu slow${w === 'intelligente' ? ' acc' : ''}" data-t="${200 + i * 80}">${w}</span>`).join(' ');
-    el.innerHTML = `
-      <div class="topvig"></div>
-      <div class="center hero">
-        <h1>${h}</h1>
-        <p class="sub fu" data-t="1400">Collega gli strumenti che usi già. Vedi il locale nel suo insieme.</p>
-        <div class="cta-wrap fu" data-t="2000"><span class="pill">Prenota una demo ${ic('arrow', 16, 2.2)}</span></div>
-      </div>`;
-    arm(el);
-  }
+  /* ── S1 · logo: la R si stacca e diventa il marchio completo ── */
+  scene('s1', 5500, 'light', () => `
+    <img class="mark" src="rush-mark-orange.png" alt="">
+    <div class="lg"><img class="wm" src="rush-logo-orange.webp" alt="RUSH"><span class="ic round">${ic('utensils', 54, 2.15)}</span></div>
+    <div class="abs center-x rst"><div class="rw">${[...'RISTORAZIONE'].map((c) => `<span>${c}</span>`).join('')}</div></div>`,
+  function (t) {
+    const mark = this.mark, m = EIO(p(t, 1450, 800));
+    const ki = p(t, 0, 900);
+    const size = lerp(420, 266, m);
+    mark.style.left = lerp(750, 458, m) + 'px';
+    mark.style.top = lerp(330, 328, m) + 'px';
+    mark.style.width = mark.style.height = size + 'px';
+    st(mark, { o: cl(ki * 3) * (1 - p(t, 2150, 260)), s: lerp(.5, 1, EO(ki)) * (1 + .03 * Math.sin(p(t, 800, 700) * Math.PI)), r: (1 - EO(ki)) * -14, blur: (1 - EO(ki)) * 34 });
+    const reveal = EO(p(t, 2150, 850));
+    this.wm.style.opacity = t >= 2150 ? 1 : 0;
+    this.wm.style.clipPath = `inset(-5% ${lerp(69, -1, reveal)}% -5% -5%)`;
+    POP(this.badge, t, 2700, 700, -140);
+    this.letters.forEach((c, i) => A(c, t, { at: 3050 + i * 45, d: 650, y: 34, blur: 12 }));
+    this.rw.style.letterSpacing = lerp(0.55, 0.16, EO(p(t, 3050, 1300))) + 'em';
+  },
+  function (el) { this.mark = $('.mark', el); this.wm = $('.wm', el); this.badge = $('.lg .ic', el); this.rw = $('.rw', el); this.letters = $$('.rw span', el); });
 
-  /* ── SCENA 3 · problema → RUSH collega tutto ── */
-  function buildProblema(el) {
-    const items = [
-      ['box', 'Cassa, magazzino e acquisti in strumenti separati'],
-      ['clock', 'Ore perse a ricopiare gli stessi dati'],
-      ['down', 'Costi che non si riesce mai a tenere sotto controllo'],
-    ];
-    el.innerHTML = `
-      <div class="prob-stage">
-        <div class="cap fu" data-t="150">Il problema</div>
-        <div class="prob-cards">
-          ${items.map(([i, t], k) => `
-            <div class="card pcard fu" data-t="${450 + k * 300}">
-              <span class="itile">${ic(i, 20, 2)}</span>
-              <p>${t}</p>
-            </div>`).join('')}
-        </div>
-      </div>
-      <div class="burst"></div>
-      <div class="center answer">
-        <h2 class="fu slow" data-t="3750">RUSH collega tutto.</h2>
-        <p class="body fu" data-t="4350">RUSH collega cassa, acquisti, magazzino e personale, aiutandoti a controllare costi e margini con il supporto dell'AI.</p>
-      </div>`;
-    arm(el);
-    at(3150, () => el.querySelector('.prob-stage').classList.add('collapse'));
-    at(3450, () => el.querySelector('.burst').classList.add('boom'));
-  }
-
-  /* ── SCENA 4 · bento core ── */
-  function buildBento(el) {
-    const heights = [52, 61, 48, 72, 66, 88, 79];
-    const days = ['L', 'M', 'M', 'G', 'V', 'S', 'D'];
-    const bars = `<div class="bars">${heights.map((h, i) => `
-      <div class="bcol"><div class="bwrap"><div class="bar vz" style="--h:${h}%;--i:${i};opacity:${(0.4 + 0.6 * i / 6).toFixed(2)}"></div></div><div class="bday">${days[i]}</div></div>`).join('')}</div>`;
-
-    const stock = `<div class="stock">${[
-      ['pos', 'Caffè in grani', 'in stock'],
-      ['warn', 'Gin premium', 'in calo'],
-      ['neg', 'Burro', 'sotto soglia'],
-    ].map(([c, n, t], i) => `<div class="srow vz ${c}" style="--i:${i}"><span class="dot"></span>${n}<span class="tag">${t}</span></div>`).join('')}</div>`;
-
-    const flow = `<div class="flow">
-        <svg class="flow-line vz" viewBox="0 0 100 2" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="1" x2="100" y2="1" pathLength="1"/></svg>
-        ${[['camera', 'Inquadra'], ['sparkle', 'AI'], ['tick', 'Conferma'], ['box', 'Carico']].map(([i, t], k) => `
-          <div class="fnode vz${t === 'AI' ? ' ai' : ''}" style="--i:${k}"><span class="fdot">${ic(i, 15, 2.2)}</span><span>${t}</span></div>`).join('')}
-      </div>
-      <div class="fnote vz"><span>Fattura n. 214 · Distillerie Rossi</span><span class="acc">12 righe</span></div>`;
-
-    const alerts = `<div class="alerts">${[
-      ['Distillerie Rossi', 'Gin premium · prezzo unitario', '+18%'],
-      ['Latteria Bianchi', 'Burro · prezzo unitario', '+11%'],
-    ].map(([n, s, d], i) => `<div class="arow vz" style="--i:${i}"><div><b>${n}</b><small>${s}</small></div><span class="delta vz" style="--i:${i}">${d}</span></div>`).join('')}</div>`;
-
-    const quad = `<div class="quad">${[['star', 'Stelle'], ['puzzle', 'Puzzle'], ['horse', 'Cavalli'], ['anvil', 'Incudini']]
-      .map(([i, t], k) => `<div class="q vz" style="--i:${k}">${ic(i, 16, 2)}${t}</div>`).join('')}</div>`;
-
-    const rows = { Sara: 'ggs-sg-', Luca: 'ssgg-ss', Emma: '-ggsgs-' };
-    const shift = `<div class="shift">
-        <span></span>${days.map((d) => `<span class="hd">${d}</span>`).join('')}
-        ${Object.entries(rows).map(([n, p], r) => `<span class="nm vz" style="--r:${r}">${n}</span>` +
-          [...p].map((c, k) => `<span class="cell ${c === 'g' ? 'g' : c === 's' ? 's' : ''}" style="--r:${r};--c:${k}"></span>`).join('')).join('')}
-      </div>
-      <div class="legend"><span><i style="background:rgba(255,100,47,.28)"></i>Giorno</span><span><i style="background:var(--accent)"></i>Sera</span><span><i style="border:1px solid var(--rail)"></i>Riposo</span></div>`;
-
-    const cards = [
-      ['chart', 'Costi e incassi nella stessa vista', bars],
-      ['warehouse', 'Magazzino collegato al servizio', stock],
-      ['file', 'Dalla fattura ai dati utili', flow, true],
-      ['up', 'I rincari diventano visibili', alerts],
-      ['pie', 'Sai quanto incidono gli ingredienti', quad],
-      ['users', 'Turni e presenze nello stesso flusso', shift],
-    ];
-    el.innerHTML = `
-      <div class="s-bento">
-        <div class="b-head">
-          <div class="cap fu" data-t="150">La base operativa · sempre inclusa</div>
-          <div class="row">
-            <h2 class="h2 fu" data-t="300">I numeri del locale, collegati.</h2>
-            <p class="sub fu" data-t="500">Il lavoro quotidiano, più semplice.</p>
-          </div>
-        </div>
-        <div class="grid">
-          ${cards.map(([i, t, v, a], k) => `
-            <div class="card bento fu${a ? ' accent' : ''}" data-t="${800 + k * 120}">
-              <div class="c-head"><span class="c-ic">${ic(i, 16, 2.2)}</span><h3>${t}</h3></div>
-              <div class="viz">${v}</div>
-            </div>`).join('')}
-        </div>
-      </div>`;
-    arm(el);
-    const cs = $$('.bento', el);
-    cs.forEach((c, k) => at(800 + k * 120 + 280, () => c.classList.add('play')));
-    spotlight(cs, 4000, 3400, 24600);
-  }
-
-  /* ── SCENA 5 · risultati ── */
-  function buildMetriche(el) {
-    const m = [
-      ['globe', 'Visite al sito', 2140],
-      ['megaphone', 'Promo utilizzate', 340],
-      ['click', 'Click da ADV', 1240],
-      ['calcheck', 'Prenotazioni da ADV', 86],
-      ['pin', 'Richieste indicazioni', 412],
-      ['ticket', 'Coupon scaricati', 210],
-    ];
-    el.innerHTML = `
-      <div class="s-res">
-        <div class="cap fu" data-t="150">Risultati misurabili</div>
-        <h2 class="h2 fu" data-t="300">Sai in cosa investi, vedi quali risposte arrivano.</h2>
-        <div class="win fu" data-t="650">
-          <div class="win-bar"><i></i><i></i><i></i><span>RUSH · I risultati delle tue iniziative</span><em>Ultimi 30 giorni</em></div>
-          <div class="tiles">
-            ${m.map(([i, l, n], k) => `
-              <div class="card tile fu" data-t="${950 + k * 100}">
-                <div class="lbl">${ic(i, 16, 2)}${l}</div>
-                <div class="num" data-t="${1150 + k * 100}" data-count="${n}">0</div>
-              </div>`).join('')}
-          </div>
-        </div>
-      </div>`;
-    arm(el);
-    spotlight($$('.tile', el), 3600, 1500, 12800);
-  }
-
-  /* ── SCENA 6 · come partiamo ── */
-  function buildOnboarding(el) {
-    const steps = [
-      ['phone', 'Individuiamo la priorità', 'In una chiamata di 30 minuti partiamo dal locale e dagli strumenti che usi.'],
-      ['cloud', 'Colleghiamo e verifichiamo i dati', 'Configuriamo le integrazioni e importiamo lo storico disponibile.'],
-      ['cap', 'Accompagniamo il team', 'Ogni persona impara le funzioni del proprio ruolo in una sessione pratica.'],
-      ['check', 'Partiamo e seguiamo i flussi', 'Nei primi giorni controlliamo insieme che i dati arrivino correttamente.'],
-    ];
-    el.innerHTML = `
-      <div class="s-onb">
-        <div class="onb-left">
-          <div class="cap fu" data-t="150">Come partiamo</div>
-          <h2 class="h2 fu" data-t="300">Partiamo dal tuo modo di lavorare.</h2>
-          <p class="body fu" data-t="500">E colleghiamo ciò che oggi è separato, un passo alla volta.</p>
-          <div class="meta fu" data-t="700">${ic('clock', 14, 2.2)}Prima chiamata: 30 minuti</div>
-        </div>
-        <div class="steps">
-          <svg class="rail" viewBox="0 0 2 100" preserveAspectRatio="none" aria-hidden="true">
-            <line class="base" x1="1" y1="0" x2="1" y2="100" pathLength="1"/>
-            <line class="prog" x1="1" y1="0" x2="1" y2="100" pathLength="1"/>
-          </svg>
-          ${steps.map(([i, t, d], k) => `
-            <div class="step fu" data-t="${350 + k * 120}">
-              <span class="stile">${ic(i, 18, 2)}</span>
-              <div><h4>${t}</h4><p>${d}</p></div>
-            </div>`).join('')}
-        </div>
-      </div>`;
-    arm(el);
-    const tiles = $$('.stile', el);
-    el.querySelector('.rail').style.height =
-      tiles[tiles.length - 1].parentElement.offsetTop - tiles[0].parentElement.offsetTop + 'px';
-    const base = el.querySelector('.rail .base');
-    const prog = el.querySelector('.rail .prog');
-    at(450, () => base.classList.add('go'));
-    $$('.step', el).forEach((s, k) => at(1600 + k * 1800, () => {
-      s.classList.add('on');
-      prog.style.strokeDashoffset = String(1 - k / 3);
-    }));
-  }
-
-  /* ── SCENA 7 · CTA finale ── */
-  function buildCta(el) {
-    el.innerHTML = `
-      <div class="aurora big"></div>
-      <div class="center cta">
-        <div class="url"><span class="fi" data-t="100">rush-ai.it</span><span class="fi acc" data-t="700">/ristorazione</span></div>
-        <h1 class="fu slow" data-t="1300">Prenota una demo</h1>
-        <p class="sub fu" data-t="2000">30 minuti. Partiamo dal tuo locale.</p>
-        <div class="btn-wrap fu" data-t="2500"><span class="pill">${ic('arrow', 17, 2.2)}rush-ai.it/ristorazione</span></div>
-      </div>`;
-    arm(el);
-  }
-
-  const SCENES = [
-    { duration: 5000, theme: 'dark', build: buildIntroLogo },
-    { duration: 9000, theme: 'light', build: buildHero },
-    { duration: 8000, theme: 'dark', build: buildProblema },
-    { duration: 26000, theme: 'light', build: buildBento },
-    { duration: 14000, theme: 'dark', build: buildMetriche },
-    { duration: 16000, theme: 'light', build: buildOnboarding },
-    { duration: 12000, theme: 'dark', build: buildCta },
-  ];
-  const OFFSETS = [];
-  const totalMs = SCENES.reduce((a, s) => (OFFSETS.push(a), a + s.duration), 0);
-
-  let current = 0, sceneStart = performance.now();
-
-  function play(i) {
-    clearTimers();
-    current = i;
-    const s = SCENES[i];
-    root.className = 'scene ' + s.theme;
-    stage.dataset.theme = s.theme;
-    s.build(root);
-    sceneStart = performance.now();
-    requestAnimationFrame(() => requestAnimationFrame(() => { root.style.opacity = '1'; }));
-    at(s.duration - FADE, () => { root.style.opacity = '0'; });
-    at(s.duration, () => play((i + 1) % SCENES.length));
-  }
-
-  function frame(now) {
-    const elapsed = OFFSETS[current] + Math.min(now - sceneStart, SCENES[current].duration);
-    bar.style.width = (elapsed / totalMs) * 100 + '%';
-    requestAnimationFrame(frame);
-  }
-
-  function fit() { canvas.style.transform = `scale(${stage.clientWidth / 960})`; }
-  new ResizeObserver(fit).observe(stage);
-  fit();
-
-  /* i timer rallentano a scheda nascosta: al ritorno la scena riparte pulita */
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) { root.style.opacity = '0'; play(current); }
+  /* ── S2 · hero ── */
+  scene('s2', 8000, 'light', () => `
+    <div class="abs center-x" style="top:170px"><div class="hp">${pill('utensils', 'Per bar e ristoranti')}</div></div>
+    <div class="abs center-x" style="top:270px">
+      <h1 class="T h1">
+        <span class="ln">${L('IL CENTRO OPERATIVO')}</span>
+        <span class="ln"><span class="mk"><span class="mi"><span class="hl"><span class="hl-bg"></span><span class="hl-t">INTELLIGENTE</span><span class="hl-w">INTELLIGENTE</span></span></span></span> ${L('PER IL TUO')}</span>
+        <span class="ln shine">${L('BAR O RISTORANTE')}</span>
+      </h1>
+    </div>
+    <div class="abs center-x" style="top:672px"><p class="lead ld">${B('Collega gli strumenti che usi già. Vedi il locale nel suo insieme.')}</p></div>
+    <div class="abs center-x" style="top:740px"><p class="body bd" style="max-width:1100px">${B('RUSH collega cassa, acquisti, magazzino e personale, aiutandoti a controllare costi e margini con il supporto dell’AI.')}</p></div>
+    <div class="fl" style="left:120px;top:240px">${pill('card', 'Cassa')}</div>
+    <div class="fl" style="left:1560px;top:200px">${pill('box', 'Magazzino')}</div>
+    <div class="fl" style="left:150px;top:880px">${pill('file', 'Fatture')}</div>
+    <div class="fl" style="left:1540px;top:900px">${pill('users', 'Personale')}</div>`,
+  function (t) {
+    A(this.hp, t, { at: 100, d: 700, y: 30 });
+    MW(this.words, t, { at: 280, st: 70 });
+    const hk = EO(p(t, 1500, 650));
+    this.hlbg.style.transform = `scaleX(${hk.toFixed(4)})`;
+    this.hlw.style.clipPath = `inset(-10% ${((1 - hk) * 100).toFixed(2)}% -10% -2%)`;
+    this.shine.forEach((w, i) => { w.style.backgroundPosition = `${lerp(100, -40, EIO(p(t, 2000 + i * 130, 1100))).toFixed(2)}% 0`; });
+    BW(this.lead, t, { at: 2300, st: 45 });
+    BW(this.body, t, { at: 3000, st: 22 });
+    this.fl.forEach((f, i) => {
+      const k = p(t, 3700 + i * 180, 700);
+      st(f, { o: cl(k * 4), s: EB(k), y: Math.sin(t / 700 + i * 1.7) * 10, x: Math.cos(t / 900 + i) * 8 });
+    });
+  },
+  function (el) {
+    this.hp = $('.hp', el); this.words = $$('.h1 .mi', el);
+    this.hlbg = $('.hl-bg', el); this.hlw = $('.hl-w', el); this.shine = $$('.shine .mi', el);
+    this.lead = $$('.ld .bw', el); this.body = $$('.bd .bw', el); this.fl = $$('.fl', el);
   });
 
-  /* #scena-4 nell'indirizzo fa partire il video da quella scena */
-  const m = /^#scena-(\d)$/.exec(location.hash);
-  const first = m ? Math.min(SCENES.length, Math.max(1, +m[1])) - 1 : 0;
-  const start = () => { play(first); requestAnimationFrame(frame); };
-  if (document.fonts && document.fonts.ready) {
-    Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1200))]).then(start);
-  } else start();
+  /* ── S3 · problema: strumenti separati che si uniscono in RUSH ── */
+  const TILEPOS = [[250, 300, 'card'], [1640, 270, 'box'], [230, 790, 'cart'], [1680, 800, 'sheet'], [560, 930, 'clock'], [1320, 150, 'receipt']];
+  scene('s3', 9000, 'dark', () => `
+    ${TILEPOS.map(([x, y, n]) => `<div class="abs pt" style="left:${x}px;top:${y}px"><div style="transform:translate(-50%,-50%)">${tile(n, 104)}</div></div>`).join('')}
+    <div class="abs center-x" style="top:170px"><div class="pp">${pill('alert', 'Il problema')}</div></div>
+    <div class="abs center-x stmt st1"><h2 class="T"><span class="ln">${L('CASSA, MAGAZZINO E ACQUISTI')}</span><span class="ln">${L('IN STRUMENTI')} <span class="mk"><span class="mi acc spread">SEPARATI</span></span></span></h2></div>
+    <div class="abs center-x stmt st2"><h2 class="T"><span class="ln">${L('[ORE PERSE] A RICOPIARE')}</span><span class="ln"><span class="echo"><span class="gh">GLI STESSI DATI</span><span class="gh">GLI STESSI DATI</span><span class="gh">GLI STESSI DATI</span><span class="real">${L('GLI STESSI DATI')}</span></span></span></h2></div>
+    <div class="abs center-x stmt st3"><h2 class="T"><span class="ln">${L('COSTI CHE NON RIESCI')}</span><span class="ln">${L('A TENERE')} <span class="shake" style="display:inline-block">${L('[SOTTO CONTROLLO]')}</span></span></h2></div>
+    <div class="ring"></div>
+    <div class="abs" style="left:960px;top:420px"><div class="hb" style="transform:translate(-50%,-50%)"><span class="ic round" style="--z:190px">${ic('utensils', 86, 2.1)}</span></div></div>
+    <div class="abs center-x" style="top:590px"><h2 class="T fin" style="font-size:112px">${L('RUSH COLLEGA [TUTTO.]')}</h2></div>`,
+  function (t) {
+    A(this.pp, t, { at: 150, d: 700, y: 30, out: 7100 });
+    const conv = EIO(p(t, 7150, 650));
+    this.tiles.forEach((el, i) => {
+      const [x, y] = TILEPOS[i];
+      const k = p(t, 250 + i * 130, 700);
+      const fx = Math.sin(t / 820 + i * 1.3) * 22, fy = Math.cos(t / 1000 + i * 2.1) * 18;
+      el.style.left = lerp(x + fx, 960, conv) + 'px';
+      el.style.top = lerp(y + fy, 420, conv) + 'px';
+      st(el, { o: cl(k * 4) * (1 - p(t, 7650, 180)), s: EB(k) * lerp(1, .35, conv), r: Math.sin(t / 1300 + i) * 6 * (1 - conv) });
+    });
+    MW(this.w1, t, { at: 550, st: 55, out: 2950 });
+    this.spread.style.letterSpacing = (EIO(p(t, 1500, 900)) * 0.32 - EIO(p(t, 2700, 250)) * 0.32).toFixed(3) + 'em';
+    MW(this.w2, t, { at: 3250, st: 55, out: 5350 });
+    const ek = EO(p(t, 4150, 700)) * (1 - EIO(p(t, 5000, 350)));
+    this.ghosts.forEach((g, i) => {
+      g.style.visibility = t > 3900 && t < 5400 ? 'visible' : 'hidden';
+      st(g, { o: ek * (0.5 - i * 0.14), y: ek * (i + 1) * 26, x: ek * (i + 1) * 14 });
+    });
+    MW(this.w3, t, { at: 5650, st: 55, out: 7100 });
+    const sk = p(t, 6300, 300) * (1 - p(t, 6950, 150));
+    st(this.shake, { x: Math.sin(t / 22) * 7 * sk, r: Math.sin(t / 31) * 1.2 * sk });
+    const rk = p(t, 7700, 800);
+    st(this.ring, { o: t > 7700 ? (1 - rk) : 0, s: lerp(.3, 3.4, EO(rk)) });
+    POP(this.hb, t, 7700, 700, -90);
+    MW(this.fin, t, { at: 7950, st: 90 });
+  },
+  function (el) {
+    this.pp = $('.pp', el); this.tiles = $$('.pt', el);
+    this.w1 = $$('.st1 .mi', el);
+    this.w2 = [...$$('.st2 .ln:first-child .mi', el), ...$$('.st2 .real .mi', el)];
+    this.w3 = $$('.st3 .mi', el); this.spread = $('.spread', el); this.ghosts = $$('.gh', el);
+    this.shake = $('.shake', el); this.ring = $('.ring', el); this.hb = $('.hb', el); this.fin = $$('.fin .mi', el);
+  });
+
+  /* ── S4 · tutto collegato ── */
+  const NODES = [['card', 'Cassa', 180], ['box', 'Magazzino', 222], ['file', 'Fatture', 138], ['users', 'Personale', 0], ['truck', 'Fornitori', 318], ['cal', 'Prenotazioni', 42]];
+  const HUB = [960, 660];
+  const npos = (a) => [HUB[0] + Math.cos(a * Math.PI / 180) * 660, HUB[1] + Math.sin(a * Math.PI / 180) * 300];
+  scene('s4', 8000, 'light', () => `
+    <svg class="lines" viewBox="0 0 1920 1080">${NODES.map((n) => { const [x, y] = npos(n[2]); return `<line x1="${HUB[0]}" y1="${HUB[1]}" x2="${x}" y2="${y}"/><circle r="7" cx="0" cy="0"/><circle r="7" cx="0" cy="0"/>`; }).join('')}</svg>
+    <div class="abs center-x" style="top:90px"><div class="hp">${pill('grid', 'Tutto in un posto')}</div></div>
+    <div class="abs center-x" style="top:175px"><h2 class="T tt" style="font-size:84px">${L('I NUMERI DEL LOCALE, [COLLEGATI.]')}</h2></div>
+    <div class="abs center-x" style="top:290px"><p class="lead sb">${B('Il lavoro quotidiano, più semplice.')}</p></div>
+    <div class="hring"></div><div class="hring"></div>
+    <div class="hub"><img src="rush-mark-orange.png" alt=""></div>
+    ${NODES.map(([n, l, a]) => { const [x, y] = npos(a); return `<div class="node" style="left:${x}px;top:${y}px"><div class="in"><span class="nt">${tile(n, 96, 42)}</span><span class="np">${pill(n, l)}</span></div></div>`; }).join('')}`,
+  function (t) {
+    A(this.hp, t, { at: 100, d: 700, y: 30 });
+    MW(this.tt, t, { at: 220, st: 65 });
+    BW(this.sb, t, { at: 900, st: 50 });
+    POP(this.hub, t, 700, 800);
+    this.hr.forEach((r, i) => {
+      const t0 = 1200 + i * 900;
+      const k = t > t0 ? ((t - t0) % 1800) / 1800 : 0;
+      st(r, { o: t > t0 ? (1 - k) * .9 : 0, s: 1 + EO(k) * 1.6 });
+    });
+    this.nodes.forEach((nd, i) => {
+      const tn = 1300 + i * 380;
+      const [x, y] = npos(NODES[i][2]);
+      const ln = this.lines[i], len = Math.hypot(x - HUB[0], y - HUB[1]);
+      const lk = EO(p(t, tn, 700));
+      ln.style.strokeDasharray = len; ln.style.strokeDashoffset = (1 - lk) * len;
+      const ki = p(t, tn + 350, 700);
+      st(nd.t, { o: cl(ki * 4), s: EB(ki), y: Math.sin(t / 800 + i) * 8 * EO(ki) });
+      A(nd.p, t, { at: tn + 550, d: 600, y: 18, blur: 8 });
+      [0, 1].forEach((j) => {
+        const c = this.dots[i * 2 + j];
+        const on = t > tn + 900;
+        const u = on ? (((t - tn - 900) / 1500 + j * 0.5) % 1) : 0;
+        c.setAttribute('cx', lerp(x, HUB[0], u).toFixed(1)); c.setAttribute('cy', lerp(y, HUB[1], u).toFixed(1));
+        c.style.opacity = on ? Math.sin(u * Math.PI).toFixed(3) : 0;
+      });
+    });
+  },
+  function (el) {
+    this.hp = $('.hp', el); this.tt = $$('.tt .mi', el); this.sb = $$('.sb .bw', el);
+    this.hub = $('.hub', el); this.hr = $$('.hring', el);
+    this.lines = $$('svg line', el); this.dots = $$('svg circle', el);
+    this.nodes = $$('.node', el).map((n) => ({ t: $('.nt', n), p: $('.np', n) }));
+  });
+
+  /* ── S5 · le funzioni, una alla volta ── */
+  const FD = 5200;
+  const FEAT = [
+    { ic: 'wallet', tag: 'Costi e incassi', t: ['COSTI E INCASSI', 'NELLA [STESSA]', '[VISTA]'],
+      b: 'I dati della cassa e delle fatture confluiscono in RUSH. Niente più conti ricostruiti tra strumenti diversi.',
+      card: () => `
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="caps">Incassi vs spese · ultimi 6 giorni</span>
+          <span class="lgd"><span><i style="background:#ff642f"></i>Incassi</span><span><i style="background:#d7d6d2"></i>Spese</span></span>
+        </div>
+        <div class="kpis">
+          <div class="kpi"><div class="caps">Incassi</div><div class="num k1">€ 0</div></div>
+          <div class="kpi"><div class="caps">Margine lordo</div><div class="num k2 acc">0%</div></div>
+          <div class="kpi" style="align-self:flex-end;padding-bottom:10px"><span class="chip pos">+9% vs sett. prec.</span></div>
+        </div>
+        <div class="bars">${['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'].map((d, i) => `
+          <div class="bg6">${i === 5 ? '<span class="col-hi"></span>' : ''}<div class="pair"><div class="b inc" style="height:${[58, 70, 54, 66, 84, 100][i]}%"></div><div class="b spe" style="height:${[36, 42, 34, 38, 46, 52][i]}%"></div></div><span class="dl">${d}</span></div>`).join('')}
+        </div>
+        <div class="tip"><small>Sabato</small>€ 3.420 incassi · € 1.780 spese</div>`,
+      viz(t, c) {
+        c.q('.kpi', (e, i) => A(e, t, { at: 450 + i * 120, d: 700, y: 24, blur: 8 }));
+        COUNT(c.one('.k1'), t, 600, 1600, 14820, 0, '€ ');
+        COUNT(c.one('.k2'), t, 700, 1600, 41.8, 1, '', '%');
+        c.q('.b', (b, k) => {
+          const g = Math.floor(k / 2), j = k % 2;
+          b.style.transform = `scaleY(${EO(p(t, 800 + g * 110 + j * 60, 900)).toFixed(4)})`;
+        });
+        const dl = c.all('.dl')[5];
+        const hk = EO(p(t, 2300, 500));
+        dl.style.background = `rgba(255,100,47,${(hk * .14).toFixed(3)})`; dl.style.color = hk > .5 ? '#ff642f' : '';
+        st(c.one('.col-hi'), { o: hk, s: lerp(.9, 1, hk) });
+        A(c.one('.tip'), t, { at: 2500, d: 700, y: 20, s: .9, blur: 8 });
+      } },
+    { ic: 'box', tag: 'Magazzino', t: ['MAGAZZINO', 'COLLEGATO AL', '[SERVIZIO]'],
+      b: 'Vendite e ricette registrano i consumi. Le scorte basse si vedono subito, prima che manchi qualcosa.',
+      card: () => `
+        <div style="display:flex;justify-content:space-between;align-items:center"><span class="caps">Dalla cassa · in tempo reale</span><span class="chip accent">Live</span></div>
+        <div class="feed">${[['#1482', '2× Gin tonic', '21:04'], ['#1483', '3× Cappuccino', '21:05'], ['#1484', '4× Croissant al burro', '21:06'], ['#1485', '2× Pizza margherita', '21:07']].map(([n, w, h]) => `
+          <div class="ev row">${tile('receipt', 38, 18)}<span><b>Scontrino ${n}</b> · ${w}</span><span class="t">${h}</span></div>`).join('')}</div>
+        <div class="stk">${['Caffè in grani', 'Gin premium', 'Burro', 'Farina 00'].map((n) => `
+          <div class="si row"><b>${n}</b><div class="trk"><i></i></div><span class="chip"></span></div>`).join('')}</div>
+        <div class="toast"><span class="pill">${ic('alert', 22, 2.2)}Burro sotto soglia · riordina oggi</span></div>`,
+      viz(t, c) {
+        const EV = [900, 1550, 2200, 2850];
+        const HIT = [[1, 26], [0, 6], [2, 15], [3, 8]];
+        const START = [78, 54, 30, 66];
+        c.q('.ev', (e, j) => {
+          const k = EO(p(t, EV[j], 550));
+          const push = EV.slice(j + 1).reduce((a, x) => a + EO(p(t, x, 550)), 0);
+          st(e, { o: k * cl(1.6 - push * .8), y: (1 - k) * -40 + push * 72, s: lerp(.94, 1, k), blur: (1 - k) * 8 });
+        });
+        c.q('.si', (r, i) => {
+          A(r, t, { at: 350 + i * 100, d: 700, y: 26, blur: 8 });
+          let v = START[i];
+          HIT.forEach(([idx, d], j) => { if (idx === i) v -= d * EO(p(t, EV[j] + 150, 600)); });
+          const bar = $('.trk i', r);
+          const cls = v > 50 ? 'pos' : v > 25 ? 'warn' : 'neg';
+          bar.style.transform = `scaleX(${(v / 100).toFixed(4)})`;
+          bar.style.background = `var(--${cls})`;
+          const chip = $('.chip', r);
+          if (chip.dataset.c !== cls) {
+            chip.dataset.at = chip.dataset.c ? t : -9999;
+            chip.dataset.c = cls; chip.className = 'chip ' + cls;
+            chip.textContent = { pos: 'in stock', warn: 'in calo', neg: 'sotto soglia' }[cls];
+          }
+          const ck = p(t, +chip.dataset.at, 500);
+          st(chip, { s: lerp(.6, 1, EB(ck)) });
+        });
+        A(c.one('.toast .pill'), t, { at: 3500, d: 700, y: 30, s: .9 });
+      } },
+    { ic: 'scan', tag: 'Fatture', t: ['DALLA FATTURA', 'AI [DATI UTILI]'],
+      b: 'Per le fatture di carta basta una foto: l’AI legge articoli e prezzi, tu controlli e confermi.',
+      card: () => `
+        <div style="display:flex;justify-content:space-between;align-items:center"><span class="caps">Nuova fattura</span><span class="chip accent">Lettura AI</span></div>
+        <div class="brk"><i></i><i></i><i></i><i></i></div>
+        <div class="inv"><h5>FATTURA N. 214</h5><p>Distillerie Rossi · 24/09</p>
+          <div class="l m"></div><div class="l"></div><div class="l s"></div><div class="l m"></div><div class="l"></div><div class="l s"></div><div class="l m"></div>
+          <div class="tot"><span>TOTALE</span><span>€ 326,40</span></div>
+          <div class="scan"></div></div>
+        ${[['Gin premium 70cl', '6 × € 24,90'], ['Vermouth rosso 1L', '4 × € 13,50'], ['Acqua tonica 20cl', '48 × € 0,85']].map(([a, b], i) => `
+          <div class="xr row" style="top:${170 + i * 104}px">${tile('check', 40, 20)}<div><b>${a}</b><small>${b}</small></div></div>`).join('')}
+        <div class="xr row" style="top:500px">${tile('box', 40, 20)}<div><b>Magazzino aggiornato</b><small>3 articoli caricati</small></div></div>
+        <div class="steps4">${['Inquadra', 'Lettura AI', 'Conferma', 'Carico'].map((s, i) => `<div class="s4"><span class="n">${i + 1}</span>${s}</div>`).join('')}</div>`,
+      viz(t, c) {
+        A(c.one('.inv'), t, { at: 350, d: 800, y: 50, r: -6, blur: 10 });
+        const bk = EO(p(t, 700, 600));
+        st(c.one('.brk'), { o: bk, s: lerp(1.12, 1, bk) });
+        const sk = p(t, 1000, 1800);
+        const scan = c.one('.scan');
+        scan.style.top = lerp(10, 410, EIO(sk)) + 'px';
+        scan.style.opacity = sk > 0 && sk < 1 ? 1 : 0;
+        c.q('.xr', (r, i) => A(r, t, { at: [1450, 1900, 2350, 3350][i], d: 700, x: -60, y: 0, blur: 10 }));
+        const on = [700, 1000, 2800, 3350];
+        c.q('.s4', (s, i) => { A(s, t, { at: 300 + i * 80, d: 600, y: 20, blur: 6 }); s.classList.toggle('on', t >= on[i]); });
+      } },
+    { ic: 'up', tag: 'Rincari', t: ['I RINCARI', 'DIVENTANO', '[VISIBILI]'],
+      b: 'Ogni fattura confronta i prezzi con quelli precedenti. Se un fornitore aumenta, lo vedi subito.',
+      card: () => `
+        <span class="caps">Burro 1 kg · Latteria Bianchi</span>
+        <div style="display:flex;align-items:flex-end;gap:18px;margin-top:18px"><span class="num pr" style="font-size:80px;line-height:1">€ 8,47</span><span class="chip warn pb" style="margin-bottom:10px">+11%</span></div>
+        <div class="chart"><svg viewBox="0 0 800 250" preserveAspectRatio="none">
+          <defs><linearGradient id="ga" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ff642f" stop-opacity=".28"/><stop offset="1" stop-color="#ff642f" stop-opacity="0"/></linearGradient></defs>
+          ${[0, 1, 2, 3].map((i) => `<line x1="0" x2="800" y1="${30 + i * 70}" y2="${30 + i * 70}" stroke="rgba(0,0,0,.07)" stroke-width="1.5"/>`).join('')}
+          <path class="ar" d="M0 190 L160 184 L320 180 L480 182 L640 170 L800 40 L800 250 L0 250Z" fill="url(#ga)"/>
+          <path class="ln" d="M0 190 L160 184 L320 180 L480 182 L640 170 L800 40" fill="none" stroke="#ff642f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="pdot" style="left:100%;top:16%"></div>
+        <div style="position:absolute;left:0;right:0;top:262px;justify-content:space-between" class="lgd">${['Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set'].map((m) => `<span>${m}</span>`).join('')}</div></div>
+        ${[['Distillerie Rossi', 'Gin premium 70cl · da € 21,10 a € 24,90', '+18%'], ['Latteria Bianchi', 'Burro 1 kg · da € 8,47 a € 9,40', '+11%']].map(([a, b, d], i) => `
+          <div class="alr row" style="top:${560 + i * 86}px">${tile('alert', 44, 22)}<div><b>${a}</b><small>${b}</small></div><span class="chip warn">${d}</span></div>`).join('')}`,
+      viz(t, c) {
+        const ln = c.one('path.ln'), len = 900;
+        const dk = EIO(p(t, 700, 1500));
+        ln.style.strokeDasharray = len; ln.style.strokeDashoffset = (1 - dk) * len;
+        c.one('path.ar').style.opacity = EO(p(t, 1600, 800));
+        POP(c.one('.pdot'), t, 2150, 600);
+        const pr = c.one('.pr');
+        pr.textContent = '€ ' + fmt(lerp(8.47, 9.40, EO(p(t, 2100, 900))), 2);
+        pr.style.color = t > 2200 ? 'var(--warn)' : '';
+        POP(c.one('.pb'), t, 2600, 600, -20);
+        c.q('.alr', (r, i) => A(r, t, { at: 2900 + i * 280, d: 700, y: 30, blur: 10 }));
+      } },
+    { ic: 'users', tag: 'Personale', t: ['TURNI E PRESENZE', 'NELLO', '[STESSO FLUSSO]'],
+      b: 'Turni, ore e costo del personale accanto agli incassi del giorno, senza fogli a parte.',
+      card: () => {
+        const R = { Sara: 'gg-ssg-', Luca: 'ssgg-ss', Emma: '-ggsgs-', Marco: 'g-sgggs' };
+        return `
+        <div style="display:flex;justify-content:space-between;align-items:center"><span class="caps">Settimana 23 – 29 settembre</span>
+          <span class="lgd"><span><i style="background:rgba(255,100,47,.3);border-radius:4px"></i>Giorno</span><span><i style="background:#ff642f;border-radius:4px"></i>Sera</span></span></div>
+        <div class="sh"><span></span>${['L', 'M', 'M', 'G', 'V', 'S', 'D'].map((d) => `<span class="hd">${d}</span>`).join('')}<span class="hd" style="text-align:right">Ore</span>
+          ${Object.entries(R).map(([n, s]) => `<span class="nm">${n}</span>${[...s].map((ch) => `<span class="cell ${ch === 'g' ? 'g' : ch === 's' ? 's' : ''}"><i></i></span>`).join('')}<span class="num hr" data-h="${[...s].filter((ch) => ch !== '-').length * 7}">0</span>`).join('')}
+        </div>
+        <div class="gauge row"><div class="top"><span class="caps">Costo personale su incassi</span><span class="num gv" style="font-size:44px">0%</span></div><div class="trk"><i></i></div>
+          <div style="margin-top:14px"><span class="chip pos gc">in linea con l’obiettivo</span></div></div>`;
+      },
+      viz(t, c) {
+        c.q('.cell', (cell, k) => {
+          const r = Math.floor(k / 7), col = k % 7;
+          A(cell, t, { at: 350 + r * 90 + col * 25, d: 500, y: 14, blur: 4 });
+          const kk = p(t, 900 + k * 48, 420);
+          st($('i', cell), { o: EO(kk), s: lerp(.4, 1, EB(kk)) });
+        });
+        c.q('.hr', (h, r) => COUNT(h, t, 900 + r * 7 * 48, 7 * 48 + 500, +h.dataset.h));
+        c.q('.nm', (n, r) => A(n, t, { at: 350 + r * 90, d: 600, x: -20, y: 0, blur: 6 }));
+        A(c.one('.gauge'), t, { at: 2300, d: 700, y: 30, blur: 10 });
+        const gk = EO(p(t, 2600, 1100));
+        c.one('.gauge .trk i').style.transform = `scaleX(${(gk * .27).toFixed(4)})`;
+        c.one('.gv').textContent = Math.round(27 * gk) + '%';
+        POP(c.one('.gc'), t, 3400, 600);
+      } },
+  ];
+  scene('s5', FD * FEAT.length, 'light', () => `
+    ${FEAT.map((f, i) => `
+      <div class="fcol fi${i}">
+        <div class="fp">${pill(f.ic, f.tag)}</div>
+        <h2 class="T ft">${f.t.map((l) => `<span class="ln">${L(l)}</span>`).join('')}</h2>
+        <p class="body fb">${B(f.b)}</p>
+      </div>
+      <div class="card fcard fc${i}">${f.card()}</div>`).join('')}
+    <div class="fprog">${FEAT.map(() => '<i><b></b></i>').join('')}</div>`,
+  function (t) {
+    this.items.forEach((it, i) => {
+      const u = t - i * FD;
+      const on = u > -50 && u < FD + 50;
+      it.col.style.display = it.card.style.display = on ? '' : 'none';
+      if (!on) return;
+      const out = i === FEAT.length - 1 ? null : FD - 480;
+      A(it.p, u, { at: 0, d: 650, y: 26, out, od: 380 });
+      MW(it.w, u, { at: 120, st: 60, out, ost: 22 });
+      BW(it.b, u, { at: 650, st: 16, out });
+      A(it.card, u, { at: 180, d: 950, y: 140, s: .92, blur: 20, out, od: 420, oy: -90, os: .97 });
+      FEAT[i].viz(u, it.c);
+    });
+    this.bars.forEach((b, i) => { b.style.transform = `scaleX(${p(t, i * FD, FD).toFixed(4)})`; });
+    A(this.prog, t, { at: 200, d: 700, y: 20 });
+  },
+  function (el) {
+    this.items = FEAT.map((f, i) => {
+      const card = $('.fc' + i, el);
+      const cache = {};
+      return {
+        col: $('.fi' + i, el), card, p: $('.fi' + i + ' .fp', el), w: $$('.fi' + i + ' .mi', el), b: $$('.fi' + i + ' .bw', el),
+        c: {
+          one: (s) => (cache[s] ??= $(s, card)),
+          all: (s) => (cache['*' + s] ??= $$(s, card)),
+          q(s, fn) { this.all(s).forEach(fn); },
+        },
+      };
+    });
+    this.bars = $$('.fprog b', el); this.prog = $('.fprog', el);
+  });
+
+  /* ── S6 · Rush AI ── */
+  const TYPE1 = 'Il food cost della [tartare] è salito al [42%] questo mese. Il prezzo del tonno dal tuo fornitore è aumentato del [18%].';
+  const TYPE2 = 'Il [pancake salato]: margine sulle materie prime del [74%], con 128 porzioni vendute a settembre.';
+  scene('s6', 8000, 'dark', () => `
+    <div class="abs center-x" style="top:100px"><div class="hp">${pill('sparkles', 'Rush AI')}</div></div>
+    <div class="abs center-x" style="top:185px"><h2 class="T tt" style="font-size:80px">${L('L’AI TI AIUTA A [CAPIRE COSA FARE]')}</h2></div>
+    <div class="card chat">
+      <div class="msg m1" style="top:44px">${tile('sparkles', 56, 26)}<div class="bub ai note"><span class="lab">RUSH NOTA DA SOLO</span><span class="ty t1">${typed(TYPE1)}</span></div></div>
+      <div class="msg me m2" style="top:292px"><div class="bub me">Qual è il piatto del brunch con il margine più alto?</div></div>
+      <div class="msg m3" style="top:412px">${tile('sparkles', 56, 26)}<div class="bub ai"><span class="dots"><i></i><i></i><i></i></span><span class="ty t2">${typed(TYPE2)}</span></div></div>
+      <span class="caret"></span>
+    </div>`,
+  function (t) {
+    A(this.hp, t, { at: 100, d: 700, y: 30 });
+    MW(this.tt, t, { at: 220, st: 60 });
+    A(this.chat, t, { at: 450, d: 900, y: 90, s: .95, blur: 16 });
+    A(this.m1, t, { at: 950, d: 700, y: 30, blur: 8 });
+    const n1 = Math.floor(this.c1.length * p(t, 1250, 1700));
+    const n2 = Math.floor(this.c2.length * p(t, 4700, 1600));
+    this.c1.forEach((c, i) => { c.style.opacity = i < n1 ? 1 : 0; });
+    this.c2.forEach((c, i) => { c.style.opacity = i < n2 ? 1 : 0; });
+    const k2 = p(t, 3200, 650);
+    this.m2.style.transformOrigin = '100% 100%';
+    st(this.m2, { o: cl(k2 * 3), s: lerp(.6, 1, EB(k2)), y: (1 - EO(k2)) * 30 });
+    A(this.m3, t, { at: 3900, d: 600, y: 30, blur: 8 });
+    const typing = t > 3900 && t < 4700;
+    this.dots.style.display = typing ? '' : 'none';
+    this.t2.style.display = typing ? 'none' : '';
+    this.dotI.forEach((d, i) => st(d, { y: Math.sin(t / 110 - i * .9) * -5 }));
+    let hostC = null, busy = false;
+    if (t > 1250 && t < 3200) { hostC = this.c1[Math.max(0, n1 - 1)]; busy = n1 < this.c1.length; }
+    else if (t >= 4700) { hostC = this.c2[Math.max(0, n2 - 1)]; busy = n2 < this.c2.length; }
+    if (hostC) {
+      if (hostC.nextSibling !== this.caret) hostC.after(this.caret);
+      this.caret.style.opacity = busy || Math.floor(t / 420) % 2 === 0 ? 1 : 0;
+    } else this.caret.style.opacity = 0;
+  },
+  function (el) {
+    this.hp = $('.hp', el); this.tt = $$('.tt .mi', el); this.chat = $('.chat', el);
+    this.m1 = $('.m1', el); this.m2 = $('.m2', el); this.m3 = $('.m3', el);
+    this.c1 = $$('.t1 .c', el); this.c2 = $$('.t2 .c', el); this.t2 = $('.t2', el);
+    this.dots = $('.dots', el); this.dotI = $$('.dots i', el); this.caret = $('.caret', el);
+  });
+
+  /* ── S7 · risultati ── */
+  const MET = [['globe', 'Visite al sito', 2140, 'e cosa hanno cercato'], ['mega', 'Promo utilizzate', 340, 'Aperitivo del giovedì'], ['click', 'Click da ADV', 1240, 'Google Ads · 30 giorni'],
+    ['cal', 'Prenotazioni da ADV', 86, 'dalle campagne'], ['pin', 'Richieste indicazioni', 412, 'da Google Maps'], ['ticket', 'Coupon scaricati', 210, 'promozioni attive']];
+  scene('s7', 7000, 'light', () => `
+    <div class="abs center-x" style="top:100px"><div class="hp">${pill('line', 'Misura le tue iniziative')}</div></div>
+    <div class="abs center-x" style="top:185px"><h2 class="T tt" style="font-size:80px"><span class="ln">${L('SAI IN COSA INVESTI,')}</span><span class="ln">${L('VEDI QUALI [RISPOSTE ARRIVANO.]')}</span></h2></div>
+    <div class="tiles">${MET.map(([n, l, v, c]) => `
+      <div class="card tile">${tile(n, 54, 26)}<span class="caps">${l}</span><span class="num nv">0</span><span class="chip">${c}</span></div>`).join('')}</div>`,
+  function (t) {
+    A(this.hp, t, { at: 100, d: 700, y: 30 });
+    MW(this.tt, t, { at: 220, st: 60 });
+    this.tiles.forEach((el, i) => {
+      const at = 750 + i * 120;
+      A(el, t, { at, d: 900, y: 90, s: .9, blur: 16 });
+      COUNT($('.nv', el), t, at + 200, 1500, MET[i][2]);
+      A($('.chip', el), t, { at: at + 900, d: 600, y: 10, s: .85, blur: 4 });
+      const hk = EO(p(t, 3400 + i * 260, 350)) * (1 - EO(p(t, 3400 + i * 260 + 450, 400)));
+      el.style.borderColor = `rgba(255,100,47,${(hk * .6).toFixed(3)})`;
+      el.style.translate = `0 ${(-hk * 10).toFixed(2)}px`;
+    });
+  },
+  function (el) { this.hp = $('.hp', el); this.tt = $$('.tt .mi', el); this.tiles = $$('.tile', el); });
+
+  /* ── S8 · chiusura ── */
+  scene('s8', 6500, 'light', () => `
+    <div class="lg"><img class="wm" src="rush-logo-orange.webp" alt="RUSH"><span class="ic round">${ic('utensils', 54, 2.15)}</span></div>
+    <div class="abs center-x rst"><div class="rw">${[...'RISTORAZIONE'].map((c) => `<span>${c}</span>`).join('')}</div></div>
+    <div class="abs center-x url"><span class="ut">${typed('rush-ai.it[/ristorazione]')}</span></div>`,
+  function (t) {
+    const r = EO(p(t, 250, 1000));
+    this.wm.style.clipPath = `inset(-5% ${lerp(101, -1, r)}% -5% -5%)`;
+    st(this.wm, { blur: (1 - r) * 10, x: (1 - r) * -30 });
+    POP(this.badge, t, 900, 700, -140);
+    this.letters.forEach((c, i) => A(c, t, { at: 1200 + i * 40, d: 650, y: 34, blur: 12 }));
+    this.rw.style.letterSpacing = lerp(0.55, 0.16, EO(p(t, 1200, 1300))) + 'em';
+    const n = Math.floor(this.uc.length * p(t, 2300, 1100));
+    this.uc.forEach((c, i) => { c.style.opacity = i < n ? 1 : 0; });
+    A(this.url, t, { at: 2200, d: 500, y: 16, blur: 4 });
+    /* dissolvenza finale sul fondo: il loop riparte pulito dalla scena 1 */
+    this.cam.style.opacity = (1 - EIO(p(t, 5750, 700))).toFixed(3);
+  },
+  function (el) {
+    this.wm = $('.wm', el); this.badge = $('.lg .ic', el); this.rw = $('.rw', el); this.letters = $$('.rw span', el);
+    this.uc = $$('.ut .c', el); this.url = $('.url', el);
+    $$('.ut .hk', el).forEach((c) => c.classList.add('acc'));
+  });
+
+  /* ═════════════ MOTORE ═════════════ */
+  const host = $('#scenes');
+  let acc = 0;
+  S.forEach((s) => {
+    s.start = acc; acc += s.dur;
+    const el = document.createElement('section');
+    el.className = 'sc' + (s.theme === 'dark' ? ' dark' : '');
+    el.id = s.id;
+    el.innerHTML = `<div class="cam">${s.html()}</div>`;
+    host.appendChild(el);
+    s.el = el; s.cam = el.firstElementChild;
+    s.init && s.init.call(s, s.cam);
+  });
+  const TOTAL = acc;
+  /* confini con la fascia obliqua; gli altri usano blur + zoom */
+  const WIPES = [S[1].start, S[3].start, S[5].start, S[7].start];
+  const isWipe = (b) => WIPES.includes(b);
+  const bgD = $('.bg-d');
+  const blobsL = $$('.bg-l .blob'), blobsD = $$('.bg-d .blob');
+  const w1 = $('.wipe.w1'), w2 = $('.wipe.w2'), prog = $('.prog');
+
+  function render(T) {
+    T = ((T % TOTAL) + TOTAL) % TOTAL;
+    let dark = 0;
+    S.forEach((s) => {
+      if (s.theme !== 'dark') return;
+      const r = isWipe(s.start) ? 1 : 500, r2 = isWipe(s.start + s.dur) ? 1 : 500;
+      dark = Math.max(dark, Math.min(p(T, s.start - r / 2, r), 1 - p(T, s.start + s.dur - r2 / 2, r2)));
+    });
+    bgD.style.opacity = dark.toFixed(3);
+    const bp = [[1500, 150, 0], [300, 900, 2], [1100, 1150, 4]];
+    blobsL.forEach((b, i) => {
+      const [x, y, ph] = bp[i];
+      b.style.transform = `translate(${(x + Math.sin(T / 5200 + ph) * 160).toFixed(1)}px, ${(y + Math.cos(T / 6100 + ph) * 110).toFixed(1)}px) scale(${(1 + Math.sin(T / 4300 + ph) * .1).toFixed(3)})`;
+    });
+    blobsD.forEach((b, i) => {
+      const [x, y, ph] = bp[i];
+      b.style.transform = `translate(${(1920 - x + Math.sin(T / 5000 + ph) * 160).toFixed(1)}px, ${(y + Math.cos(T / 5700 + ph) * 110).toFixed(1)}px)`;
+    });
+
+    S.forEach((s) => {
+      const lt = T - s.start;
+      const on = lt >= 0 && lt < s.dur;
+      if (on !== s.on) { s.el.style.display = on ? 'block' : 'none'; s.on = on; }
+      if (!on) return;
+      let o = 1, sc = 1 + 0.035 * (lt / s.dur), bl = 0;
+      if (!isWipe(s.start) && s.start > 0) { const k = EO(p(lt, 0, 600)); o *= k; sc *= lerp(1.06, 1, k); bl += (1 - k) * 18; }
+      const end = s.start + s.dur;
+      if (!isWipe(end) && end !== TOTAL) { const k = EI(p(lt, s.dur - 450, 450)); o *= 1 - k; sc *= lerp(1, .95, k); bl += k * 18; }
+      s.cam.style.opacity = o.toFixed(3);
+      s.cam.style.transform = `scale(${sc.toFixed(4)})`;
+      s.cam.style.filter = bl > .1 ? `blur(${bl.toFixed(1)}px)` : '';
+      s.update.call(s, lt, s.cam);
+    });
+
+    /* fascia obliqua: nera davanti, arancione dietro; il taglio avviene mentre copre */
+    let wx1 = -4000, wx2 = -4000;
+    WIPES.forEach((b) => {
+      if (Math.abs(T - b) < 800) {
+        wx2 = lerp(-3700, 2520, EIO(p(T, b - 700, 1400)));
+        wx1 = lerp(-3700, 2520, EIO(p(T, b - 790, 1400)));
+      }
+    });
+    w1.style.transform = `translateX(${wx1.toFixed(1)}px) skewX(-32deg)`;
+    w2.style.transform = `translateX(${wx2.toFixed(1)}px) skewX(-32deg)`;
+    prog.style.width = ((T / TOTAL) * 100).toFixed(3) + '%';
+  }
+
+  window.__TOTAL = TOTAL;
+  window.__render = render;
+
+  const cv = $('#cv'), stage = $('#stage');
+  const fit = () => { cv.style.transform = CAPTURE ? 'none' : `scale(${stage.clientWidth / 1920})`; };
+  new ResizeObserver(fit).observe(stage); fit();
+
+  const imgs = $$('img').map((im) => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()));
+  window.__ready = Promise.all([document.fonts.load('800 40px "Inter Video"'), document.fonts.ready, ...imgs]).then(() => { render(0); return true; });
+
+  if (!CAPTURE) {
+    /* #t=12 nell'indirizzo fa partire il video dal secondo 12 */
+    const m = /^#t=(\d+)$/.exec(location.hash);
+    const offset = m ? +m[1] * 1000 : 0;
+    window.__ready.then(() => {
+      const t0 = performance.now() - offset;
+      const loop = (now) => { render(now - t0); requestAnimationFrame(loop); };
+      requestAnimationFrame(loop);
+    });
+  }
 })();
 </script>
 </body>
