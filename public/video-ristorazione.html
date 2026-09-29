@@ -257,10 +257,6 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
 /* ── S8 outro ── */
 .url { top: 740px; font-size: 48px; font-weight: 700; letter-spacing: -.02em; color: var(--text); }
 
-/* ── transizione a fascia (la barra obliqua del logo) ── */
-.wipe { position: absolute; left: 0; top: -200px; width: 3100px; height: 1480px; pointer-events: none; }
-.wipe.w1 { background: #1d1d1f; }
-.wipe.w2 { background: var(--grad); }
 .prog { position: absolute; left: 0; bottom: 0; height: 5px; width: 0; background: var(--accent); z-index: 10; }
 </style>
 </head>
@@ -270,8 +266,6 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
     <div class="bg bg-l"><div class="vig"></div><div class="blob"></div><div class="blob"></div><div class="blob"></div><div class="grain"></div></div>
     <div class="bg bg-d"><div class="vig"></div><div class="blob"></div><div class="blob"></div><div class="grain"></div></div>
     <div id="scenes"></div>
-    <div class="wipe w1"></div>
-    <div class="wipe w2"></div>
     <div class="prog"></div>
   </div>
 </div>
@@ -301,7 +295,6 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
   }
   const EO = bez(0.16, 1, 0.3, 1);      /* spring deceleration del sito */
   const EIO = bez(0.65, 0, 0.35, 1);
-  const EI = bez(0.55, 0, 1, 0.45);
   const EB = bez(0.34, 1.56, 0.64, 1);  /* pop con rimbalzo */
 
   function st(el, o) {
@@ -442,11 +435,11 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
   scene('s1', 6000, 'light', () => `
     <div class="lg">${logoSvg()}<span class="ic round">${ic('utensils', 54, 2.15)}</span></div>
     <div class="abs center-x rst"><div class="rw">${[...'RISTORAZIONE'].map((c) => `<span>${c}</span>`).join('')}</div></div>`,
-  function (t) { logoAnim(this, t, { zoom: 2.2, at: 150, tz: 1700 }); },
+  function (t) { logoAnim(this, t, { zoom: 2.2, at: 100, tz: 1900 }); },
   function (el) { logoInit(this, el); });
 
   /* ── S2 · hero ── */
-  scene('s2', 9500, 'light', () => `
+  scene('s2', 10000, 'light', () => `
     <div class="abs center-x" style="top:170px"><div class="hp">${pill('utensils', 'Per bar e ristoranti')}</div></div>
     <div class="abs center-x" style="top:270px">
       <h1 class="T h1">
@@ -483,7 +476,7 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
 
   /* ── S3 · problema: strumenti separati che si uniscono in RUSH ── */
   const TILEPOS = [[250, 300, 'card'], [1640, 270, 'box'], [230, 790, 'cart'], [1680, 800, 'sheet'], [560, 930, 'clock'], [1320, 150, 'receipt']];
-  scene('s3', 11500, 'dark', () => `
+  scene('s3', 12000, 'dark', () => `
     ${TILEPOS.map(([x, y, n]) => `<div class="abs pt" style="left:${x}px;top:${y}px"><div style="transform:translate(-50%,-50%)">${tile(n, 104)}</div></div>`).join('')}
     <div class="abs center-x" style="top:170px"><div class="pp">${pill('alert', 'Il problema')}</div></div>
     <div class="abs center-x stmt st1"><h2 class="T"><span class="ln">${L('CASSA, MAGAZZINO E ACQUISTI')}</span><span class="ln">${L('IN STRUMENTI')} <span class="mk"><span class="mi acc spread">SEPARATI</span></span></span></h2></div>
@@ -531,7 +524,7 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
   const NODES = [['card', 'Cassa', 180], ['box', 'Magazzino', 222], ['file', 'Fatture', 138], ['users', 'Personale', 0], ['truck', 'Fornitori', 318], ['cal', 'Prenotazioni', 42]];
   const HUB = [960, 660];
   const npos = (a) => [HUB[0] + Math.cos(a * Math.PI / 180) * 660, HUB[1] + Math.sin(a * Math.PI / 180) * 300];
-  scene('s4', 8500, 'light', () => `
+  scene('s4', 8000, 'light', () => `
     <svg class="lines" viewBox="0 0 1920 1080">${NODES.map((n) => { const [x, y] = npos(n[2]); return `<line x1="${HUB[0]}" y1="${HUB[1]}" x2="${x}" y2="${y}"/><circle r="7" cx="0" cy="0"/><circle r="7" cx="0" cy="0"/>`; }).join('')}</svg>
     <div class="abs center-x" style="top:90px"><div class="hp">${pill('grid', 'Tutto in un posto')}</div></div>
     <div class="abs center-x" style="top:175px"><h2 class="T tt" style="font-size:84px">${L('I NUMERI DEL LOCALE, [COLLEGATI.]')}</h2></div>
@@ -575,7 +568,7 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
   });
 
   /* ── S5 · le funzioni, una alla volta ── */
-  const FD = 8500;
+  const FD = 8000;
   const FEAT = [
     { ic: 'wallet', tag: 'Costi e incassi', t: ['COSTI E INCASSI', 'NELLA [STESSA]', '[VISTA]'],
       b: 'I dati della cassa e delle fatture confluiscono in RUSH. Niente più conti ricostruiti tra strumenti diversi.',
@@ -689,7 +682,7 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
       A(it.p, u, { at: 0, d: 650, y: 26, out, od: 380 });
       MW(it.w, u, { at: 120, st: 60, out, ost: 22 });
       BW(it.b, u, { at: 650, st: 16, out });
-      A(it.card, u, { at: 180, d: 950, y: 140, s: .92, blur: 20, out, od: 420, oy: -90, os: .97 });
+      A(it.card, u, { at: 180, d: 1000, y: 110, s: .95, blur: 4, out, od: 450, oy: -70, os: .98, oblur: 2 });
       FEAT[i].viz(u, it.c);
     });
     this.bars.forEach((b, i) => { b.style.transform = `scaleX(${p(t, i * FD, FD).toFixed(4)})`; });
@@ -756,7 +749,7 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
   });
 
   /* ── S7 · chiusura ── */
-  scene('s7', 7000, 'light', () => `
+  scene('s7', 8000, 'light', () => `
     <div class="lg">${logoSvg()}<span class="ic round">${ic('utensils', 54, 2.15)}</span></div>
     <div class="abs center-x rst"><div class="rw">${[...'RISTORAZIONE'].map((c) => `<span>${c}</span>`).join('')}</div></div>
     <div class="abs center-x url"><span class="ut">${typed('rush-ai.it[/ristorazione]')}</span></div>`,
@@ -766,7 +759,7 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
     this.uc.forEach((c, i) => { c.style.opacity = i < n ? 1 : 0; });
     A(this.url, t, { at: 2600, d: 500, y: 16, blur: 4 });
     /* dissolvenza finale sul fondo: il loop riparte pulito dalla scena 1 */
-    this.cam.style.opacity = (1 - EIO(p(t, 6200, 750))).toFixed(3);
+    this.cam.style.opacity = (1 - EIO(p(t, 7150, 800))).toFixed(3);
   },
   function (el) {
     logoInit(this, el);
@@ -788,20 +781,17 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
     s.init && s.init.call(s, s.cam);
   });
   const TOTAL = acc;
-  /* confini con la fascia obliqua; gli altri usano blur + zoom */
-  const WIPES = [S[1].start, S[3].start, S[5].start, S[6].start];
-  const isWipe = (b) => WIPES.includes(b);
   const bgD = $('.bg-d');
   const blobsL = $$('.bg-l .blob'), blobsD = $$('.bg-d .blob');
-  const w1 = $('.wipe.w1'), w2 = $('.wipe.w2'), prog = $('.prog');
+  const prog = $('.prog');
 
   function render(T) {
     T = ((T % TOTAL) + TOTAL) % TOTAL;
     let dark = 0;
     S.forEach((s) => {
       if (s.theme !== 'dark') return;
-      const r = isWipe(s.start) ? 1 : 500, r2 = isWipe(s.start + s.dur) ? 1 : 500;
-      dark = Math.max(dark, Math.min(p(T, s.start - r / 2, r), 1 - p(T, s.start + s.dur - r2 / 2, r2)));
+      /* il fondo passa da chiaro a scuro in modo morbido, a cavallo del cambio scena */
+      dark = Math.max(dark, Math.min(EIO(p(T, s.start - 450, 900)), 1 - EIO(p(T, s.start + s.dur - 450, 900))));
     });
     bgD.style.opacity = dark.toFixed(3);
     const bp = [[1500, 150, 0], [300, 900, 2], [1100, 1150, 4]];
@@ -819,26 +809,16 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
       const on = lt >= 0 && lt < s.dur;
       if (on !== s.on) { s.el.style.display = on ? 'block' : 'none'; s.on = on; }
       if (!on) return;
-      let o = 1, sc = 1 + 0.035 * (lt / s.dur), bl = 0;
-      if (!isWipe(s.start) && s.start > 0) { const k = EO(p(lt, 0, 600)); o *= k; sc *= lerp(1.06, 1, k); bl += (1 - k) * 18; }
-      const end = s.start + s.dur;
-      if (!isWipe(end) && end !== TOTAL) { const k = EI(p(lt, s.dur - 450, 450)); o *= 1 - k; sc *= lerp(1, .95, k); bl += k * 18; }
+      /* transizione morbida: la scena che esce sale e sfuma, quella che entra arriva dal basso.
+         Niente sfocature a tutto schermo: restano pulite anche nel video compresso. */
+      let o = 1, y = 0;
+      if (s.start > 0) { const k = EO(p(lt, 0, 800)); o *= k; y += (1 - k) * 36; }
+      if (s.start + s.dur !== TOTAL) { const k = EIO(p(lt, s.dur - 500, 500)); o *= 1 - k; y -= k * 28; }
       s.cam.style.opacity = o.toFixed(3);
-      s.cam.style.transform = `scale(${sc.toFixed(4)})`;
-      s.cam.style.filter = bl > .1 ? `blur(${bl.toFixed(1)}px)` : '';
+      s.cam.style.transform = y ? `translate3d(0,${y.toFixed(2)}px,0)` : '';
       s.update.call(s, lt, s.cam);
     });
 
-    /* fascia obliqua: nera davanti, arancione dietro; il taglio avviene mentre copre */
-    let wx1 = -4000, wx2 = -4000;
-    WIPES.forEach((b) => {
-      if (Math.abs(T - b) < 800) {
-        wx2 = lerp(-3700, 2520, EIO(p(T, b - 700, 1400)));
-        wx1 = lerp(-3700, 2520, EIO(p(T, b - 790, 1400)));
-      }
-    });
-    w1.style.transform = `translateX(${wx1.toFixed(1)}px) skewX(-32deg)`;
-    w2.style.transform = `translateX(${wx2.toFixed(1)}px) skewX(-32deg)`;
     prog.style.width = ((T / TOTAL) * 100).toFixed(3) + '%';
   }
 
