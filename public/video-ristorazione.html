@@ -119,7 +119,7 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
 /* ── S1 / S8 logo ── */
 .mark { position: absolute; width: 420px; height: 420px; }
 .lg { position: absolute; left: 446px; top: 330px; width: 1028px; height: 220px; display: flex; align-items: center; gap: 28px; }
-.wm { width: 880px; height: 220px; display: block; overflow: visible; transform-origin: 149px 110px; }
+.wm { width: 880px; height: 220px; display: block; overflow: visible; }
 .wm path { transform-box: view-box; }
 .lg .ic { --z: 120px; }
 .rst { top: 610px; font-size: 46px; font-weight: 700; color: var(--accent); text-transform: uppercase; }
@@ -258,6 +258,31 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
 .url { top: 740px; font-size: 48px; font-weight: 700; letter-spacing: -.02em; color: var(--text); }
 
 .prog { position: absolute; left: 0; bottom: 0; height: 5px; width: 0; background: var(--accent); z-index: 10; }
+
+/* ═════ formato verticale 9:16 (Reels) ═════ */
+.vert #stage { width: min(540px, calc(100vw - 32px), calc((100vh - 32px) * 9 / 16)); aspect-ratio: 9 / 16; }
+.vert #cv { width: 1080px; height: 1920px; }
+.vert .lg { left: 131px; top: 780px; width: 818px; height: 175px; gap: 22px; }
+.vert .wm { width: 700px; height: 175px; }
+.vert .lg .ic { --z: 96px; }
+.vert .rst { top: 1010px; font-size: 40px; }
+.vert .url { top: 1150px; font-size: 44px; }
+.vert .h1 { font-size: 112px; }
+.vert .lead { font-size: 40px; max-width: 900px; }
+.vert .body { font-size: 30px; }
+.vert .stmt { top: 640px; }
+.vert .stmt .T { font-size: 96px; }
+.vert .ring { left: 540px; top: 820px; }
+.vert .hub, .vert .hring { left: 540px; top: 1250px; }
+.vert #s4 svg.lines { width: 1080px; height: 1920px; }
+.vert .fcol { left: 95px; top: 150px; bottom: auto; height: 820px; width: 890px; }
+.vert .fcol .T { font-size: 86px; }
+.vert .fcol .body { max-width: 890px; }
+.vert .fcard { zoom: 1.0787; left: 55.6px; top: 922px; }
+.vert .fprog { left: 60px; top: 1838px; }
+.vert .fcol { left: 60px; width: 960px; }
+.vert .chat { left: 60px; top: 620px; width: 960px; height: 820px; }
+.vert .bub { max-width: 780px; font-size: 30px; }
 </style>
 </head>
 <body>
@@ -274,6 +299,11 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
 (() => {
   const CAPTURE = /[?&]capture\b/.test(location.search);
   if (CAPTURE) document.body.classList.add('capture');
+  /* ?v → formato verticale 9:16 per Reels: stessi tempi, impaginazione diversa */
+  const V = /[?&]v\b/.test(location.search);
+  if (V) document.body.classList.add('vert');
+  const W = V ? 1080 : 1920, H = V ? 1920 : 1080;
+  const pick = (h, v) => (V ? v : h);
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
@@ -411,6 +441,11 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
     ctx.wm = $('.wm', el); ctx.pR = $('.pR', el); ctx.pO = $('.pO', el); ctx.us = $$('.gU path', el);
     const cp = $('clipPath', el); $('.gU', el).setAttribute('clip-path', `url(#${cp.id})`);
     ctx.badge = $('.lg .ic', el); ctx.rw = $('.rw', el); ctx.letters = $$('.rw span', el);
+    /* centro della R nel marchio (x 135,5 su 800 nel disegno): la camera parte centrata lì */
+    const lg = pick({ x: 446, y: 330, w: 880, h: 220 }, { x: 131, y: 780, w: 700, h: 175 });
+    const rcx = lg.w * 135.5 / 800, rcy = lg.h / 2;
+    ctx.wm.style.transformOrigin = `${rcx}px ${rcy}px`;
+    ctx.zx = W / 2 - (lg.x + rcx); ctx.zy = H / 2 - (lg.y + rcy);
   };
   /* la R entra da sola, poi la "camera" si allarga e u-s-h escono da dietro la R */
   function logoAnim(ctx, t, o) {
@@ -418,7 +453,7 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
     const k = p(t, t0, 900);
     const m = EIO(p(t, tz, 1100));
     const sc = lerp(z, 1, m) * lerp(1.18, 1, EO(k));
-    st(ctx.wm, { x: lerp(o.zoom ? 365 : 0, 0, m), y: lerp(o.zoom ? 100 : 0, 0, m), s: sc, r: (1 - EO(k)) * -8, blur: (1 - EO(k)) * 18, o: cl(k * 3) });
+    st(ctx.wm, { x: lerp(o.zoom ? ctx.zx : 0, 0, m), y: lerp(o.zoom ? ctx.zy : 0, 0, m), s: sc, r: (1 - EO(k)) * -8, blur: (1 - EO(k)) * 18, o: cl(k * 3) });
     const ko = EO(p(t, t0 + 350, 750));
     st(ctx.pO, { o: ko, x: (1 - ko) * -70, y: (1 - ko) * -60 });
     ctx.us.forEach((u, i) => { const ku = EO(p(t, tz + 250 + i * 140, 800)); st(u, { o: cl(ku * 2), x: (1 - ku) * -150 }); });
@@ -439,21 +474,23 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
   function (el) { logoInit(this, el); });
 
   /* ── S2 · hero ── */
+  const HL = '<span class="mk"><span class="mi"><span class="hl"><span class="hl-bg"></span><span class="hl-t">INTELLIGENTE</span><span class="hl-w">INTELLIGENTE</span></span></span></span>';
+  const FLPOS = pick([[120, 240], [1560, 200], [150, 880], [1540, 900]], [[60, 170], [740, 225], [70, 1640], [640, 1700]]);
   scene('s2', 10000, 'light', () => `
-    <div class="abs center-x" style="top:170px"><div class="hp">${pill('utensils', 'Per bar e ristoranti')}</div></div>
-    <div class="abs center-x" style="top:270px">
-      <h1 class="T h1">
+    <div class="abs center-x" style="top:${pick(170, 320)}px"><div class="hp">${pill('utensils', 'Per bar e ristoranti')}</div></div>
+    <div class="abs center-x" style="top:${pick(270, 430)}px">
+      <h1 class="T h1">${pick(`
         <span class="ln">${L('IL CENTRO OPERATIVO')}</span>
-        <span class="ln"><span class="mk"><span class="mi"><span class="hl"><span class="hl-bg"></span><span class="hl-t">INTELLIGENTE</span><span class="hl-w">INTELLIGENTE</span></span></span></span> ${L('PER IL TUO')}</span>
-        <span class="ln shine">${L('BAR O RISTORANTE')}</span>
+        <span class="ln">${HL} ${L('PER IL TUO')}</span>
+        <span class="ln shine">${L('BAR O RISTORANTE')}</span>`, `
+        <span class="ln">${L('IL CENTRO')}</span><span class="ln">${L('OPERATIVO')}</span>
+        <span class="ln">${HL}</span><span class="ln">${L('PER IL TUO')}</span>
+        <span class="ln shine">${L('BAR O')}</span><span class="ln shine">${L('RISTORANTE')}</span>`)}
       </h1>
     </div>
-    <div class="abs center-x" style="top:672px"><p class="lead ld">${B('Collega gli strumenti che usi già. Vedi il locale nel suo insieme.')}</p></div>
-    <div class="abs center-x" style="top:740px"><p class="body bd" style="max-width:1100px">${B('RUSH collega cassa, acquisti, magazzino e personale, aiutandoti a controllare costi e margini con il supporto dell’AI.')}</p></div>
-    <div class="fl" style="left:120px;top:240px">${pill('card', 'Cassa')}</div>
-    <div class="fl" style="left:1560px;top:200px">${pill('box', 'Magazzino')}</div>
-    <div class="fl" style="left:150px;top:880px">${pill('file', 'Fatture')}</div>
-    <div class="fl" style="left:1540px;top:900px">${pill('users', 'Personale')}</div>`,
+    <div class="abs center-x" style="top:${pick(672, 1190)}px"><p class="lead ld">${B('Collega gli strumenti che usi già. Vedi il locale nel suo insieme.')}</p></div>
+    <div class="abs center-x" style="top:${pick(740, 1330)}px"><p class="body bd" style="max-width:${pick(1100, 900)}px">${B('RUSH collega cassa, acquisti, magazzino e personale, aiutandoti a controllare costi e margini con il supporto dell’AI.')}</p></div>
+    ${[['card', 'Cassa'], ['box', 'Magazzino'], ['file', 'Fatture'], ['users', 'Personale']].map(([n, l], i) => `<div class="fl" style="left:${FLPOS[i][0]}px;top:${FLPOS[i][1]}px">${pill(n, l)}</div>`).join('')}`,
   function (t) {
     A(this.hp, t, { at: 100, d: 700, y: 30 });
     MW(this.words, t, { at: 280, st: 70 });
@@ -475,16 +512,24 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
   });
 
   /* ── S3 · problema: strumenti separati che si uniscono in RUSH ── */
-  const TILEPOS = [[250, 300, 'card'], [1640, 270, 'box'], [230, 790, 'cart'], [1680, 800, 'sheet'], [560, 930, 'clock'], [1320, 150, 'receipt']];
+  const TILEPOS = pick(
+    [[250, 300, 'card'], [1640, 270, 'box'], [230, 790, 'cart'], [1680, 800, 'sheet'], [560, 930, 'clock'], [1320, 150, 'receipt']],
+    [[180, 390, 'card'], [900, 340, 'box'], [170, 1520, 'cart'], [910, 1560, 'sheet'], [420, 1750, 'clock'], [720, 200, 'receipt']]);
+  const HB = pick([960, 420], [540, 820]);
+  const ECHO = `<span class="echo"><span class="gh">GLI STESSI DATI</span><span class="gh">GLI STESSI DATI</span><span class="gh">GLI STESSI DATI</span><span class="real">${L('GLI STESSI DATI')}</span></span>`;
+  const SEP = '<span class="mk"><span class="mi acc spread">SEPARATI</span></span>';
+  const SHK = `<span class="shake" style="display:inline-block">${L('[SOTTO CONTROLLO]')}</span>`;
+  const lines = (arr) => arr.map((l) => `<span class="ln">${l}</span>`).join('');
   scene('s3', 12000, 'dark', () => `
     ${TILEPOS.map(([x, y, n]) => `<div class="abs pt" style="left:${x}px;top:${y}px"><div style="transform:translate(-50%,-50%)">${tile(n, 104)}</div></div>`).join('')}
-    <div class="abs center-x" style="top:170px"><div class="pp">${pill('alert', 'Il problema')}</div></div>
-    <div class="abs center-x stmt st1"><h2 class="T"><span class="ln">${L('CASSA, MAGAZZINO E ACQUISTI')}</span><span class="ln">${L('IN STRUMENTI')} <span class="mk"><span class="mi acc spread">SEPARATI</span></span></span></h2></div>
-    <div class="abs center-x stmt st2"><h2 class="T"><span class="ln">${L('[ORE PERSE] A RICOPIARE')}</span><span class="ln"><span class="echo"><span class="gh">GLI STESSI DATI</span><span class="gh">GLI STESSI DATI</span><span class="gh">GLI STESSI DATI</span><span class="real">${L('GLI STESSI DATI')}</span></span></span></h2></div>
-    <div class="abs center-x stmt st3"><h2 class="T"><span class="ln">${L('COSTI CHE NON RIESCI')}</span><span class="ln">${L('A TENERE')} <span class="shake" style="display:inline-block">${L('[SOTTO CONTROLLO]')}</span></span></h2></div>
+    <div class="abs center-x" style="top:${pick(170, 180)}px"><div class="pp">${pill('alert', 'Il problema')}</div></div>
+    <div class="abs center-x stmt st1"><h2 class="T">${pick(lines([L('CASSA, MAGAZZINO E ACQUISTI'), `${L('IN STRUMENTI')} ${SEP}`]),
+      lines([L('CASSA,'), L('MAGAZZINO'), L('E ACQUISTI'), L('IN STRUMENTI'), SEP]))}</h2></div>
+    <div class="abs center-x stmt st2"><h2 class="T">${pick(lines([L('[ORE PERSE] A RICOPIARE'), ECHO]), lines([L('[ORE PERSE]'), L('A RICOPIARE'), ECHO]))}</h2></div>
+    <div class="abs center-x stmt st3"><h2 class="T">${pick(lines([L('COSTI CHE NON RIESCI'), `${L('A TENERE')} ${SHK}`]), lines([L('COSTI CHE'), L('NON RIESCI'), L('A TENERE'), SHK]))}</h2></div>
     <div class="ring"></div>
-    <div class="abs" style="left:960px;top:420px"><div class="hb" style="transform:translate(-50%,-50%)"><span class="ic round" style="--z:190px">${ic('utensils', 86, 2.1)}</span></div></div>
-    <div class="abs center-x" style="top:590px"><h2 class="T fin" style="font-size:112px">${L('RUSH COLLEGA [TUTTO.]')}</h2></div>`,
+    <div class="abs" style="left:${HB[0]}px;top:${HB[1]}px"><div class="hb" style="transform:translate(-50%,-50%)"><span class="ic round" style="--z:190px">${ic('utensils', 86, 2.1)}</span></div></div>
+    <div class="abs center-x" style="top:${pick(590, 1000)}px"><h2 class="T fin" style="font-size:${pick(112, 120)}px">${pick(L('RUSH COLLEGA [TUTTO.]'), lines([L('RUSH COLLEGA'), L('[TUTTO.]')]))}</h2></div>`,
   function (t) {
     A(this.pp, t, { at: 150, d: 700, y: 30, out: 9000 });
     const conv = EIO(p(t, 9050, 650));
@@ -492,8 +537,8 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
       const [x, y] = TILEPOS[i];
       const k = p(t, 250 + i * 130, 700);
       const fx = Math.sin(t / 820 + i * 1.3) * 22, fy = Math.cos(t / 1000 + i * 2.1) * 18;
-      el.style.left = lerp(x + fx, 960, conv) + 'px';
-      el.style.top = lerp(y + fy, 420, conv) + 'px';
+      el.style.left = lerp(x + fx, HB[0], conv) + 'px';
+      el.style.top = lerp(y + fy, HB[1], conv) + 'px';
       st(el, { o: cl(k * 4) * (1 - p(t, 9550, 180)), s: EB(k) * lerp(1, .35, conv), r: Math.sin(t / 1300 + i) * 6 * (1 - conv) });
     });
     MW(this.w1, t, { at: 550, st: 55, out: 3500 });
@@ -515,23 +560,24 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
   function (el) {
     this.pp = $('.pp', el); this.tiles = $$('.pt', el);
     this.w1 = $$('.st1 .mi', el);
-    this.w2 = [...$$('.st2 .ln:first-child .mi', el), ...$$('.st2 .real .mi', el)];
+    this.w2 = $$('.st2 .mi', el);
     this.w3 = $$('.st3 .mi', el); this.spread = $('.spread', el); this.ghosts = $$('.gh', el);
     this.shake = $('.shake', el); this.ring = $('.ring', el); this.hb = $('.hb', el); this.fin = $$('.fin .mi', el);
   });
 
   /* ── S4 · tutto collegato ── */
-  const NODES = [['card', 'Cassa', 180], ['box', 'Magazzino', 222], ['file', 'Fatture', 138], ['users', 'Personale', 0], ['truck', 'Fornitori', 318], ['cal', 'Prenotazioni', 42]];
-  const HUB = [960, 660];
-  const npos = (a) => [HUB[0] + Math.cos(a * Math.PI / 180) * 660, HUB[1] + Math.sin(a * Math.PI / 180) * 300];
+  const NODES = [['card', 'Cassa', 180, 210], ['box', 'Magazzino', 222, 270], ['file', 'Fatture', 138, 150], ['users', 'Personale', 0, 330], ['truck', 'Fornitori', 318, 30], ['cal', 'Prenotazioni', 42, 90]];
+  const HUB = pick([960, 660], [540, 1250]);
+  const [RX, RY] = pick([660, 300], [300, 420]);
+  const npos = (n) => { const a = (V ? n[3] : n[2]) * Math.PI / 180; return [HUB[0] + Math.cos(a) * RX, HUB[1] + Math.sin(a) * RY]; };
   scene('s4', 8000, 'light', () => `
-    <svg class="lines" viewBox="0 0 1920 1080">${NODES.map((n) => { const [x, y] = npos(n[2]); return `<line x1="${HUB[0]}" y1="${HUB[1]}" x2="${x}" y2="${y}"/><circle r="7" cx="0" cy="0"/><circle r="7" cx="0" cy="0"/>`; }).join('')}</svg>
-    <div class="abs center-x" style="top:90px"><div class="hp">${pill('grid', 'Tutto in un posto')}</div></div>
-    <div class="abs center-x" style="top:175px"><h2 class="T tt" style="font-size:84px">${L('I NUMERI DEL LOCALE, [COLLEGATI.]')}</h2></div>
-    <div class="abs center-x" style="top:290px"><p class="lead sb">${B('Il lavoro quotidiano, più semplice.')}</p></div>
+    <svg class="lines" viewBox="0 0 ${W} ${H}">${NODES.map((n) => { const [x, y] = npos(n); return `<line x1="${HUB[0]}" y1="${HUB[1]}" x2="${x}" y2="${y}"/><circle r="7" cx="0" cy="0"/><circle r="7" cx="0" cy="0"/>`; }).join('')}</svg>
+    <div class="abs center-x" style="top:${pick(90, 170)}px"><div class="hp">${pill('grid', 'Tutto in un posto')}</div></div>
+    <div class="abs center-x" style="top:${pick(175, 260)}px"><h2 class="T tt" style="font-size:${pick(84, 104)}px">${pick(L('I NUMERI DEL LOCALE, [COLLEGATI.]'), lines([L('I NUMERI'), L('DEL LOCALE,'), L('[COLLEGATI.]')]))}</h2></div>
+    <div class="abs center-x" style="top:${pick(290, 620)}px"><p class="lead sb">${B('Il lavoro quotidiano, più semplice.')}</p></div>
     <div class="hring"></div><div class="hring"></div>
     <div class="hub"><svg viewBox="15 12 245 180"><path fill="#0d0d0d" d="${LOGO.R}"/><path fill="#ff5f27" d="${LOGO.O}"/></svg></div>
-    ${NODES.map(([n, l, a]) => { const [x, y] = npos(a); return `<div class="node" style="left:${x}px;top:${y}px"><div class="in"><span class="nt">${tile(n, 96, 42)}</span><span class="np"><span class="pill">${l}</span></span></div></div>`; }).join('')}`,
+    ${NODES.map((nd) => { const [n, l] = nd; const [x, y] = npos(nd); return `<div class="node" style="left:${x}px;top:${y}px"><div class="in"><span class="nt">${tile(n, 96, 42)}</span><span class="np"><span class="pill">${l}</span></span></div></div>`; }).join('')}`,
   function (t) {
     A(this.hp, t, { at: 100, d: 700, y: 30 });
     MW(this.tt, t, { at: 220, st: 65 });
@@ -544,7 +590,7 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
     });
     this.nodes.forEach((nd, i) => {
       const tn = 1300 + i * 380;
-      const [x, y] = npos(NODES[i][2]);
+      const [x, y] = npos(NODES[i]);
       const ln = this.lines[i], len = Math.hypot(x - HUB[0], y - HUB[1]);
       const lk = EO(p(t, tn, 700));
       ln.style.strokeDasharray = len; ln.style.strokeDashoffset = (1 - lk) * len;
@@ -708,12 +754,12 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
   const TYPE1 = 'Il food cost della [tartare] è salito al [42%] questo mese. Il prezzo del tonno dal tuo fornitore è aumentato del [18%].';
   const TYPE2 = 'Il [pancake salato]: margine sulle materie prime del [74%], con 128 porzioni vendute a settembre.';
   scene('s6', 10000, 'dark', () => `
-    <div class="abs center-x" style="top:100px"><div class="hp">${pill('sparkles', 'Rush AI')}</div></div>
-    <div class="abs center-x" style="top:185px"><h2 class="T tt" style="font-size:80px">${L('L’AI TI AIUTA A [CAPIRE COSA FARE]')}</h2></div>
+    <div class="abs center-x" style="top:${pick(100, 190)}px"><div class="hp">${pill('sparkles', 'Rush AI')}</div></div>
+    <div class="abs center-x" style="top:${pick(185, 290)}px"><h2 class="T tt" style="font-size:${pick(80, 96)}px">${pick(L('L’AI TI AIUTA A [CAPIRE COSA FARE]'), lines([L('L’AI TI AIUTA A'), L('[CAPIRE COSA FARE]')]))}</h2></div>
     <div class="card chat">
       <div class="msg m1" style="top:44px">${tile('sparkles', 56, 26)}<div class="bub ai note"><span class="lab">RUSH NOTA DA SOLO</span><span class="ty t1">${typed(TYPE1)}</span></div></div>
-      <div class="msg me m2" style="top:292px"><div class="bub me">Qual è il piatto del brunch con il margine più alto?</div></div>
-      <div class="msg m3" style="top:412px">${tile('sparkles', 56, 26)}<div class="bub ai"><span class="dots"><i></i><i></i><i></i></span><span class="ty t2">${typed(TYPE2)}</span></div></div>
+      <div class="msg me m2" style="top:${pick(292, 350)}px"><div class="bub me">Qual è il piatto del brunch con il margine più alto?</div></div>
+      <div class="msg m3" style="top:${pick(412, 540)}px">${tile('sparkles', 56, 26)}<div class="bub ai"><span class="dots"><i></i><i></i><i></i></span><span class="ty t2">${typed(TYPE2)}</span></div></div>
       <span class="caret"></span>
     </div>`,
   function (t) {
@@ -794,14 +840,14 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
       dark = Math.max(dark, Math.min(EIO(p(T, s.start - 450, 900)), 1 - EIO(p(T, s.start + s.dur - 450, 900))));
     });
     bgD.style.opacity = dark.toFixed(3);
-    const bp = [[1500, 150, 0], [300, 900, 2], [1100, 1150, 4]];
+    const bp = pick([[1500, 150, 0], [300, 900, 2], [1100, 1150, 4]], [[880, 260, 0], [140, 1050, 2], [760, 1780, 4]]);
     blobsL.forEach((b, i) => {
       const [x, y, ph] = bp[i];
       b.style.transform = `translate(${(x + Math.sin(T / 5200 + ph) * 160).toFixed(1)}px, ${(y + Math.cos(T / 6100 + ph) * 110).toFixed(1)}px) scale(${(1 + Math.sin(T / 4300 + ph) * .1).toFixed(3)})`;
     });
     blobsD.forEach((b, i) => {
       const [x, y, ph] = bp[i];
-      b.style.transform = `translate(${(1920 - x + Math.sin(T / 5000 + ph) * 160).toFixed(1)}px, ${(y + Math.cos(T / 5700 + ph) * 110).toFixed(1)}px)`;
+      b.style.transform = `translate(${(W - x + Math.sin(T / 5000 + ph) * 160).toFixed(1)}px, ${(y + Math.cos(T / 5700 + ph) * 110).toFixed(1)}px)`;
     });
 
     S.forEach((s) => {
@@ -827,9 +873,9 @@ body.capture #stage { width: 1920px; height: 1080px; border-radius: 0; box-shado
 
   const cv = $('#cv'), stage = $('#stage');
   /* ?capture&w=2560 registra a una risoluzione più alta: il palco si ridisegna nitido, non si ingrandisce un'immagine */
-  const CW = +((/[?&]w=(\d+)/.exec(location.search) || [])[1] || 1920);
-  if (CAPTURE) { stage.style.width = CW + 'px'; stage.style.height = (CW * 9 / 16) + 'px'; }
-  const fit = () => { cv.style.transform = `scale(${(CAPTURE ? CW : stage.clientWidth) / 1920})`; };
+  const CW = +((/[?&]w=(\d+)/.exec(location.search) || [])[1] || W);
+  if (CAPTURE) { stage.style.width = CW + 'px'; stage.style.height = (CW * H / W) + 'px'; }
+  const fit = () => { cv.style.transform = `scale(${(CAPTURE ? CW : stage.clientWidth) / W})`; };
   new ResizeObserver(fit).observe(stage); fit();
 
   const imgs = $$('img').map((im) => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()));
