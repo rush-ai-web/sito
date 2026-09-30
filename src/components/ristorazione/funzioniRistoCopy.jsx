@@ -238,7 +238,7 @@ export const FUNZIONI_RISTO = [
     content: (
       <>
         <p>
-          Le recensioni raccontano come le persone hanno vissuto il tuo locale. RUSH ti aiuta a
+          Le recensioni raccontano come le persone hanno vissuto il tuo locale. RUSH ti aiuta a{' '}
           <strong>raccoglierle e seguirle</strong>: puoi inviare una richiesta dopo la visita, ricevere avvisi e
           individuare i temi che ricorrono nei commenti.
         </p>
@@ -315,7 +315,7 @@ export const FUNZIONI_RISTO = [
           attraverso regole definite sui tuoi processi.
         </p>
         <p>
-          RUSH esegue le attività previste e rende visibili le eccezioni. Tu e il team mantenete
+          RUSH esegue le attività previste e rende visibili le eccezioni. Tu e il team mantenete{' '}
           <u>il controllo sui passaggi che richiedono una verifica o una decisione</u>.
         </p>
       </>
@@ -332,8 +332,8 @@ export const FUNZIONI_RISTO = [
           tramite QR.
         </p>
         <p>
-          Riduci i file da correggere separatamente e rendi la proposta più accessibile. Le
-          <u>traduzioni e le informazioni sugli ingredienti vengono controllate prima della
+          Riduci i file da correggere separatamente e rendi la proposta più accessibile.{' '}
+          <u>Le traduzioni e le informazioni sugli ingredienti vengono controllate prima della
           pubblicazione</u>.
         </p>
       </>
