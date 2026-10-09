@@ -19,10 +19,10 @@ import {
   ChevronUp,
 } from 'lucide-react';
 import { EASE_MODAL } from '../../lib/motion';
-import { useAnimationActivity } from '../../lib/hooks';
+import { fmt as fmtNum, useAnimationActivity } from '../../lib/hooks';
 
-const logoLight = `${import.meta.env.BASE_URL}rush-logo-orange.webp`;
-const logoDark = `${import.meta.env.BASE_URL}rush-logo-orange-dark.webp`;
+const logoLight = `./rush-logo-orange.webp`;
+const logoDark = `./rush-logo-orange-dark.webp`;
 
 /* stesso menu della dashboard home, ma con marketing e prenotazioni al
    posto di ordini/report: il sistema operativo del locale segue anche la
@@ -114,8 +114,8 @@ function useNum(target) {
 
 const fmt = (n, kind) => {
   if (kind === 'pct') return `${n.toFixed(1).replace('.', ',')}%`;
-  if (kind === 'int') return Math.round(n).toLocaleString('it-IT');
-  return `€${Math.round(n).toLocaleString('it-IT')}`;
+  if (kind === 'int') return fmtNum(n);
+  return `€${fmtNum(n)}`;
 };
 
 function Kpi({ lab, v, fmt: kind, d, dir, tone }) {

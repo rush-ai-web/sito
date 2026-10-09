@@ -1,11 +1,11 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
 // Inter self-hosted: nessuna chiamata a Google Fonts
 import '@fontsource-variable/inter';
 import './styles/global.css';
+import { mount } from './lib/boot';
 import AppRisto from './AppRisto';
 
-createRoot(document.getElementById('root')).render(
+mount(
   <React.StrictMode>
     <AppRisto />
   </React.StrictMode>

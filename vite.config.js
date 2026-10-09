@@ -39,7 +39,16 @@ function inlineCss() {
 
       if (!cachedCss) return html;
 
-      const styleTag = `<style data-rush-critical>${cachedCss}</style>`;
+      /* Inter latino serve a tutto il testo sopra la piega: senza preload il
+         browser lo scopre solo leggendo il CSS e il cambio font sposta il
+         layout già disegnato. */
+      const interLatin = Object.values(context.bundle || {}).find((asset) =>
+        /inter-latin-wght-normal-[^/]+\.woff2$/.test(asset.fileName),
+      );
+      const fontPreload = interLatin
+        ? `<link rel="preload" href="./${interLatin.fileName}" as="font" type="font/woff2" crossorigin>`
+        : '';
+      const styleTag = `${fontPreload}<style data-rush-critical>${cachedCss}</style>`;
       const linkRe = /<link rel="stylesheet"[^>]*href="\.\/assets\/[^\"]+\.css"[^>]*>/g;
 
       /* la pagina che "possiede" il chunk CSS ha il <link> e lo sostituiamo;
