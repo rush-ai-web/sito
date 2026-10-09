@@ -89,7 +89,7 @@ export default function Footer({ logoVariant = 'default', columns = COLONNE }) {
         </div>
 
         <div className="footer__base">
-          <span>© {new Date().getFullYear()} Rush. Tutti i diritti riservati.</span>
+          <span suppressHydrationWarning>{`© ${new Date().getFullYear()} Rush. Tutti i diritti riservati.`}</span>
           <span style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
             <a
               href="https://www.iubenda.com/privacy-policy/64941360"

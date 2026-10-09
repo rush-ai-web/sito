@@ -400,6 +400,7 @@ export default function Fab({ page = 'home' }) {
         aria-label={triggerLabel}
       >
         <span className="fab__glow" aria-hidden="true" />
+        <span className="fab__ring" aria-hidden="true" />
         <span className="fab__inner">
           <Sparkles size={18} strokeWidth={1.75} />
           <span className="fab__text">{triggerLabel}</span>

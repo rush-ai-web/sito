@@ -20,12 +20,12 @@ import {
   ChevronUp,
 } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
-import { useAnimationActivity } from '../lib/hooks';
+import { fmt as fmtNum, useAnimationActivity } from '../lib/hooks';
 
-const logoLight = `${import.meta.env.BASE_URL}rush-logo.png`;
-const logoDark = `${import.meta.env.BASE_URL}rush-logo-dark.png`;
-const logoLightSrcSet = `${import.meta.env.BASE_URL}rush-logo-192.png 192w, ${import.meta.env.BASE_URL}rush-logo-320.png 320w, ${logoLight} 800w`;
-const logoDarkSrcSet = `${import.meta.env.BASE_URL}rush-logo-dark-192.png 192w, ${import.meta.env.BASE_URL}rush-logo-dark-320.png 320w, ${logoDark} 800w`;
+const logoLight = `./rush-logo.png`;
+const logoDark = `./rush-logo-dark.png`;
+const logoLightSrcSet = `./rush-logo-192.png 192w, ./rush-logo-320.png 320w, ${logoLight} 800w`;
+const logoDarkSrcSet = `./rush-logo-dark-192.png 192w, ./rush-logo-dark-320.png 320w, ${logoDark} 800w`;
 
 const NAV = [
   { icon: LayoutDashboard, t: 'Dashboard' },
@@ -115,7 +115,7 @@ function useNum(target) {
 const fmt = (n, kind) =>
   kind === 'pct'
     ? `${n.toFixed(1).replace('.', ',')}%`
-    : `€${Math.round(n).toLocaleString('it-IT')}`;
+    : `€${fmtNum(n)}`;
 
 function Kpi({ lab, v, fmt: kind, d, dir, tone }) {
   const n = useNum(v);

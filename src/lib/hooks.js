@@ -3,15 +3,14 @@ import { animate, useInView, useMotionValue, useReducedMotion } from 'framer-mot
 import { warmupScroll } from './warmup';
 import { EASE_MODAL } from './motion';
 import { watchMobileKeyboard } from './mobileKeyboard';
+import { onPrerenderReleased, releasePrerender } from './boot';
 
 /* The page is immediately usable. Let the browser prioritize visible assets
    instead of eagerly decoding logos and images belonging to other sections. */
 export function useAppReady() {
   useEffect(warmupScroll, []);
   useEffect(watchMobileKeyboard, []);
-  useEffect(() => {
-    document.getElementById('root')?.removeAttribute('data-prerender');
-  }, []);
+  useEffect(releasePrerender, []);
   return true;
 }
 
@@ -69,14 +68,20 @@ export function useAnimationActivity() {
     const node = ref.current;
     if (!node) return undefined;
     let nearby = false;
-    const update = () => setActive(nearby && !document.hidden);
+    let released = false;
+    const update = () => setActive(nearby && released && !document.hidden);
     const observer = new IntersectionObserver(([entry]) => {
       nearby = entry.isIntersecting;
       update();
     }, { rootMargin: '120px 0px' });
     observer.observe(node);
+    const stopWaiting = onPrerenderReleased(() => {
+      released = true;
+      update();
+    });
     document.addEventListener('visibilitychange', update);
     return () => {
+      stopWaiting();
       observer.disconnect();
       document.removeEventListener('visibilitychange', update);
     };
@@ -94,11 +99,16 @@ export function useTheme() {
       ? 'dark'
       : 'light';
 
-  const [theme, setTheme] = useState(() => {
-    const saved = typeof window === 'undefined' ? null : window.localStorage.getItem('rush-theme');
+  /* Si parte da 'light' come nell'HTML prerenderizzato, così l'idratazione
+     combacia; il tema vero arriva subito dopo, prima del primo paint. */
+  const [theme, setTheme] = useState('light');
+
+  const isomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+  isomorphicLayoutEffect(() => {
+    const saved = window.localStorage.getItem('rush-theme');
     /* se l'utente ha scelto a mano si rispetta, altrimenti si segue il sistema */
-    return saved === 'light' || saved === 'dark' ? saved : systemTheme();
-  });
+    setTheme(saved === 'light' || saved === 'dark' ? saved : systemTheme());
+  }, []);
 
   /* finché l'utente NON ha scelto a mano, il sito segue in tempo reale le
      impostazioni del dispositivo (chiaro/scuro) */
@@ -114,7 +124,7 @@ export function useTheme() {
   /* NB: qui NON salviamo su localStorage, altrimenti il primo render
      "congelerebbe" il tema di sistema come se fosse una scelta manuale.
      Il salvataggio avviene solo nel toggle sotto. */
-  (typeof window === 'undefined' ? useEffect : useLayoutEffect)(() => {
+  isomorphicLayoutEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute('content', theme === 'dark' ? '#17171A' : '#FAFAF9');
@@ -131,13 +141,14 @@ export function useTheme() {
   return [theme, toggle];
 }
 
-/* ---------- Numeri in formato italiano ---------- */
-const numberFormats = new Map();
+/* ---------- Numeri in formato italiano ----------
+   Scritto a mano invece di Intl: le versioni di ICU di Node (prerender) e
+   dei browser non concordano sulle migliaia a 4 cifre ("1240" / "1.240"),
+   e un testo diverso fa fallire l'idratazione dell'intera pagina. */
 export const fmt = (n, dec = 0) => {
-  if (!numberFormats.has(dec)) numberFormats.set(dec, new Intl.NumberFormat('it-IT', {
-    minimumFractionDigits: dec, maximumFractionDigits: dec,
-  }));
-  return numberFormats.get(dec).format(n);
+  const [int, frac] = Math.abs(n).toFixed(dec).split('.');
+  const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return `${n < 0 && Number(n.toFixed(dec)) !== 0 ? '-' : ''}${grouped}${frac ? `,${frac}` : ''}`;
 };
 
 /* ---------- Conteggio animato - signature move ----------
@@ -148,7 +159,13 @@ export function useCountUp(target, { dec = 0, duration = 1.5 } = {}) {
   const seen = useInView(ref, { once: true, amount: 0.35 });
   const reduce = useReducedMotion();
   const mv = useMotionValue(0);
-  const [text, setText] = useState(() => fmt(typeof window === 'undefined' || reduce ? target : 0, dec));
+  /* l'HTML prerenderizzato mostra il valore finale: lo stato parte uguale
+     per l'idratazione e torna a zero prima del paint, pronto a contare. */
+  const [text, setText] = useState(() => fmt(target, dec));
+
+  (typeof window === 'undefined' ? useEffect : useLayoutEffect)(() => {
+    if (!reduce) setText(fmt(0, dec));
+  }, []);
 
   useEffect(() => {
     if (!seen) return;
