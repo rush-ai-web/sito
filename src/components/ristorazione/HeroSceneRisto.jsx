@@ -180,8 +180,8 @@ export default function HeroSceneRisto() {
           <div className="dash">
             <aside className="dash__side">
               <div className="dash__brand">
-                <img className="dash__brand-logo win__logo--l" src={logoLight} alt="" width="800" height="200" />
-                <img className="dash__brand-logo win__logo--d" src={logoDark} alt="" width="800" height="200" />
+                <img className="dash__brand-logo win__logo--l" src={logoLight} alt="" width="800" height="200" loading="lazy" />
+                <img className="dash__brand-logo win__logo--d" src={logoDark} alt="" width="800" height="200" loading="lazy" />
                 <span className="dash__brand-label">CAFFÈ CENTRALE</span>
               </div>
 

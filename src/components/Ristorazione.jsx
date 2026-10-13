@@ -50,14 +50,14 @@ export default function Ristorazione() {
           viewport={inView}
           transition={{ duration: 0.6, ease: EASE_MODAL }}
         >
-          <Pill icon={UtensilsCrossed}>Un esempio: Rush Ristorazione</Pill>
+          <Pill icon={UtensilsCrossed}>Un esempio: Rush AI Ristorazione</Pill>
 
           <h2 className="t-sec" style={{ marginTop: 16 }}>
             IL TUO LOCALE LAVORA. TU VEDI DOVE GUADAGNA
           </h2>
 
           <p className="t-body" style={{ marginTop: 14 }}>
-            RUSH collega i dati di cassa, acquisti, magazzino e personale. Hai un quadro più chiaro del margine sui piatti, degli aumenti dei fornitori e delle scorte da riordinare.
+            Rush AI collega i dati di cassa, acquisti, magazzino e personale. Hai un quadro più chiaro del margine sui piatti, degli aumenti dei fornitori e delle scorte da riordinare.
           </p>
 
           <ul className="risto2__list">
@@ -73,7 +73,7 @@ export default function Ristorazione() {
 
           <div className="risto2__cta-row">
             <a className="btn btn--accent btn--hero risto-discover" href="./ristorazione.html">
-              Scopri RUSH Ristorazione
+              Scopri Rush AI Ristorazione
               <span className="btn__badge" aria-hidden="true">
                 <ArrowRight size={18} strokeWidth={2} />
               </span>
@@ -110,7 +110,7 @@ export default function Ristorazione() {
           <div className="risto2__kpi">
             <span className="t-label">Più locali, un unico centro operativo</span>
             <p className="t-body" style={{ marginTop: 10 }}>
-              Un bar, un ristorante e una panineria? Riunisci i dati delle tre attività in RUSH. Tu hai una visione complessiva, ogni responsabile segue la propria sede.
+              Un bar, un ristorante e una panineria? Riunisci i dati delle tre attività in Rush AI. Tu hai una visione complessiva, ogni responsabile segue la propria sede.
             </p>
           </div>
 

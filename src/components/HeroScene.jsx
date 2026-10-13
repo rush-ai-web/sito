@@ -180,8 +180,8 @@ export default function HeroScene() {
             {/* menu laterale */}
             <aside className="dash__side">
               <div className="dash__brand">
-                <img className="dash__brand-logo win__logo--l" src={logoLight} srcSet={logoLightSrcSet} sizes="76px" alt="" width="800" height="200" />
-                <img className="dash__brand-logo win__logo--d" src={logoDark} srcSet={logoDarkSrcSet} sizes="76px" alt="" width="800" height="200" />
+                <img className="dash__brand-logo win__logo--l" src={logoLight} srcSet={logoLightSrcSet} sizes="76px" alt="" width="800" height="200" loading="lazy" />
+                <img className="dash__brand-logo win__logo--d" src={logoDark} srcSet={logoDarkSrcSet} sizes="76px" alt="" width="800" height="200" loading="lazy" />
                 <span className="dash__brand-label">LA TUA ATTIVITÀ</span>
               </div>
 

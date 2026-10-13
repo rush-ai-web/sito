@@ -194,6 +194,7 @@ export default function Hero() {
             alt="Logo Rush"
             width="800"
             height="200"
+            loading="eager"
             className="hero__logo-img hero__logo-img--l"
           />
           <img
@@ -203,6 +204,7 @@ export default function Hero() {
             alt="Logo Rush"
             width="800"
             height="200"
+            loading="eager"
             className="hero__logo-img hero__logo-img--d"
           />
         </motion.div>

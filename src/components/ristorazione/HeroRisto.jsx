@@ -15,6 +15,7 @@ export default function HeroRisto() {
             alt="Logo Rush Ristorazione"
             width="800"
             height="200"
+            loading="eager"
             className="hero__logo-img hero__logo-img--l"
           />
           <img
@@ -23,6 +24,7 @@ export default function HeroRisto() {
             aria-hidden="true"
             width="800"
             height="200"
+            loading="eager"
             className="hero__logo-img hero__logo-img--d"
           />
           <span className="risto-brand-icon risto-brand-icon--hero" aria-hidden="true">

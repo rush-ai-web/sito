@@ -34,6 +34,7 @@ function LogoMark({ variant = 'default' }) {
         alt="Logo Rush"
         width="800"
         height="200"
+        loading="eager"
         className="nav__logo-img nav__logo-img--on-dark"
       />
       <img
@@ -44,6 +45,7 @@ function LogoMark({ variant = 'default' }) {
         aria-hidden="true"
         width="800"
         height="200"
+        loading="eager"
         className="nav__logo-img nav__logo-img--on-light"
       />
       {variant === 'ristorazione' ? (
