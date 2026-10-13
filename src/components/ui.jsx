@@ -1,10 +1,12 @@
-import { createContext, forwardRef, useContext } from 'react';
+import { createContext, forwardRef, useContext, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { fadeUp, inView, stagger } from '../lib/motion';
+import { Entrance } from './Entrance';
+import { fadeUp, inView } from '../lib/motion';
 import { useIsMobile } from '../lib/hooks';
 
 export const ThemeCtx = createContext('light');
 const SectionMotionCtx = createContext('up');
+const EntranceGroupCtx = createContext(null);
 
 const MOBILE_MOTION_BY_SECTION = {
   problema: 'left',
@@ -104,80 +106,49 @@ export function Head({ icon, label, title, sub, left = false, className = '', ch
 
 /* Reveal - comparsa allo scroll, una sola volta */
 export function Reveal({ i = 0, as = 'div', className = '', children, ...rest }) {
-  const M = motion[as] || motion.div;
-  const isMobile = useIsMobile();
-  const profile = useContext(SectionMotionCtx);
-  const isStatic = isMobile && profile === 'static';
   return (
-    <M
-      className={className}
-      variants={isMobile ? mobileReveal[profile] || fadeUp : fadeUp}
-      custom={i}
-      initial={isStatic ? false : 'hidden'}
-      whileInView="show"
-      viewport={inView}
-      {...rest}
-    >
-      {children}
-    </M>
+    <Item as={as} className={className} custom={i} {...rest}>{children}</Item>
   );
 }
 
 /* Group - contenitore che scagliona i figli */
-export function Group({ delay = 0, each = 0.07, as = 'div', className = '', children, ...rest }) {
-  const M = motion[as] || motion.div;
-  const isMobile = useIsMobile();
-  const profile = useContext(SectionMotionCtx);
+export function Group({ delay = 0, each = 0.07, as: Tag = 'div', className = '', children, ...rest }) {
+  const ref = useRef(null);
+  const group = useMemo(() => ({ ref, delay, each }), [delay, each]);
   return (
-    <M
-      className={className}
-      variants={stagger(delay, each)}
-      initial={isMobile && profile === 'static' ? false : 'hidden'}
-      whileInView="show"
-      viewport={inView}
-      {...rest}
-    >
-      {children}
-    </M>
+    <EntranceGroupCtx.Provider value={group}>
+      <Tag ref={ref} className={className} {...rest}>{children}</Tag>
+    </EntranceGroupCtx.Provider>
   );
 }
 
-/* Item - figlio di Group.
-   Inoltra il ref: serve a useCountUp, che deve osservare il nodo
-   vero per far partire il conteggio quando entra in viewport. */
-/* hidden === show: nessun movimento, il figlio resta sempre nel suo
-   stato finale. Serve a spegnere l'animazione (titoli/sottotitoli su
-   mobile) senza staccare l'elemento dalla propagazione delle varianti
-   del Group padre - toglierlo del tutto lascia l'elemento congelato
-   sull'ultimo stato applicato invece di renderlo visibile. */
-const noMotion = { hidden: { opacity: 1, transform: 'none' }, show: { opacity: 1, transform: 'none' } };
-
-export const Item = forwardRef(function Item({ as = 'div', className = '', children, noMobileMotion = false, ...rest }, ref) {
-  const M = motion[as] || motion.div;
+/* One observer target per group; each child keeps its own native animation
+   and the original stagger. No React variant propagation during scrolling. */
+export const Item = forwardRef(function Item({ as = 'div', className = '', children, noMobileMotion = false, custom = 0, initial = 'hidden', whileInView, viewport = inView, transition, ...rest }, ref) {
   const isMobile = useIsMobile();
   const profile = useContext(SectionMotionCtx);
-  /* Titoli e sottotitoli di sezione restano fermi su mobile: niente
-     comparsa animata, per alleggerire lo scroll sui dispositivi più
-     lenti. Il resto del contenuto continua ad animarsi come prima. */
-  const variants = isMobile && noMobileMotion ? noMotion : isMobile ? mobileReveal[profile] || fadeUp : fadeUp;
+  const group = useContext(EntranceGroupCtx);
+  const variants = isMobile ? mobileReveal[profile] || fadeUp : fadeUp;
+  const { transition: timing, ...shown } = variants.show(custom);
+  const isStatic = initial === false || (isMobile && (noMobileMotion || profile === 'static'));
   return (
-    <M ref={ref} className={className} variants={variants} {...rest}>
+    <Entrance as={as} ref={ref} className={className}
+      initial={isStatic ? false : variants.hidden} whileInView={shown}
+      transition={transition || timing} viewport={viewport} group={group} {...rest}>
       {children}
-    </M>
+    </Entrance>
   );
 });
 
 /* Card che si solleva. Il sollevamento è CSS (`.card--hover`):
    Framer Motion non interpola `var(--sh-2)` e il suo transform
    creava un contesto di impilamento che spegneva il bagliore.
-   Qui FM resta responsabile solo della comparsa allo scroll. */
+   La comparsa una tantum usa l'animazione nativa di Item. */
 export const LiftCard = forwardRef(function LiftCard({ className = '', children, ...rest }, ref) {
-  const isMobile = useIsMobile();
-  const profile = useContext(SectionMotionCtx);
   return (
-    <motion.div ref={ref} className={`${className} card--hover`} variants={isMobile ? mobileReveal[profile] || fadeUp : fadeUp} {...rest}>
+    <Item ref={ref} className={`${className} card--hover`} {...rest}>
       {children}
-    </motion.div>
+    </Item>
   );
 });
 

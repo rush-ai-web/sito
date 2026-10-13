@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUp, Sparkles, X } from 'lucide-react';
 import { DUR, EASE_MODAL } from '../lib/motion';
 import { useHotkey, useIsMobile } from '../lib/hooks';
+import { watchBackToTop } from '../lib/scrollControls';
 import { ThemeCtx } from './ui';
 
 /* stesso endpoint del form di contatto: /chat e /chat-summary vivono
@@ -137,42 +138,7 @@ export default function Fab({ page = 'home' }) {
   const set = useCallback((v) => setOpen(v), []);
   useHotkey(set);
 
-  useEffect(() => {
-    let frameId;
-    let triggerTop = Number.POSITIVE_INFINITY;
-
-    const measure = () => {
-      const section = document.getElementById('ristorazione');
-      if (section) {
-        triggerTop = section.getBoundingClientRect().top + window.scrollY - window.innerHeight;
-      } else {
-        const fullHeight = document.documentElement.scrollHeight;
-        triggerTop = (fullHeight - window.innerHeight) / 2;
-      }
-    };
-
-    const update = () => {
-      cancelAnimationFrame(frameId);
-      frameId = requestAnimationFrame(() => {
-        setShowBackToTop(window.scrollY >= triggerTop);
-      });
-    };
-
-    const onResize = () => {
-      measure();
-      update();
-    };
-
-    measure();
-    update();
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', onResize, { passive: true });
-    return () => {
-      cancelAnimationFrame(frameId);
-      window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', onResize);
-    };
-  }, []);
+  useEffect(() => watchBackToTop(setShowBackToTop), []);
 
   /* Il problema di fondo su iOS: quando un input dentro un elemento fixed
      prende il focus, Safari SPOSTA la pagina per "portarlo in vista". Un

@@ -1,5 +1,6 @@
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { watchSectionProgress } from '../lib/scrollControls';
 import { useReducedMotion } from '../lib/preferences';
 import { GitBranch, Search, PenTool, Rocket, RefreshCw } from 'lucide-react';
 import { Section, Head } from './ui';
@@ -119,10 +120,11 @@ export default function Metodo() {
   const strokeAccent = isMobile ? 4.5 : 2.5;
 
   /* la linea e la comparsa di card/dot sono guidate dallo stesso scroll */
-  const { scrollYProgress } = useScroll({
-    target: tlRef,
-    offset: ['start center', 'end center'],
-  });
+  const scrollYProgress = useMotionValue(0);
+  useEffect(() => {
+    if (reduce) { scrollYProgress.set(1); return; }
+    return watchSectionProgress(tlRef.current, value => scrollYProgress.set(value));
+  }, [reduce, scrollYProgress]);
   const rectHeight = useTransform(scrollYProgress, [0, 1], [0, TOTAL]);
 
   return (

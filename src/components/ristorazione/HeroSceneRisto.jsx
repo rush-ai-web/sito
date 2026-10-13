@@ -189,11 +189,7 @@ export default function HeroSceneRisto() {
                 {NAV.map(({ icon: Icon, t, badge }, i) => (
                   <span key={t} className={`dash__navitem ${i === 0 ? 'is-on' : ''}`}>
                     {i === 0 && (
-                      <motion.span
-                        className="dash__navhi"
-                        layoutId="navhi-risto"
-                        transition={{ type: 'spring', damping: 30, stiffness: 320 }}
-                      />
+                      <span className="dash__navhi" />
                     )}
                     <Icon size={15} strokeWidth={1.9} />
                     <b>{t}</b>
@@ -303,6 +299,7 @@ export default function HeroSceneRisto() {
                             className={`dash__alert is-${k}`}
                             key={id}
                             layout
+                            layoutDependency={alerts}
                             initial={{ opacity: 0, y: -12 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, transition: { duration: 0.2 } }}

@@ -2856,7 +2856,7 @@ main {
   position: absolute;
   z-index: 2;
   --lift: 0px;
-  translate: calc(-50% + var(--ox, 0px)) calc(-50% + var(--oy, 0px) + var(--lift));
+  translate: -50% calc(-50% + var(--lift));
   padding: 12px 18px 12px 12px;
   border-radius: var(--r-pill);
   background-image: var(--card-vig);

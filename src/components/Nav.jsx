@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
+import { AnimatePresence, motion, useMotionValue } from 'framer-motion';
+import { watchNavWidth } from '../lib/scrollControls';
 import { ArrowRight, Menu, UtensilsCrossed, X } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
 
@@ -74,9 +75,9 @@ function ContactLink({ className = '', onClick, label = 'Parliamone' }) {
 
 export default function Nav({ logoVariant = 'default', links = LINKS, contactLabel = 'Parliamone' }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { scrollY } = useScroll();
   /* wide at the top (almost full screen), shrinks to a compact pill on scroll */
-  const navW = useTransform(scrollY, [0, 220], [1160, 740]);
+  const navW = useMotionValue(1160);
+  useEffect(() => watchNavWidth(width => navW.set(width)), [navW]);
 
   useEffect(() => {
     const closeWithKeyboard = (event) => {

@@ -50,3 +50,42 @@ test('native entries share observers, animate once, and clean up without hiding 
     globalThis.IntersectionObserver = previous.IntersectionObserver;
   }
 });
+
+test('a group observes once, releases every child and avoids viewport reads during entry', () => {
+  const previous = { window: globalThis.window, IntersectionObserver: globalThis.IntersectionObserver };
+  const media = Object.assign(new EventTarget(), { matches: false });
+  let observer, viewportReads = 0;
+  class Observer {
+    constructor(callback) { this.callback = callback; this.targets = new Set(); observer = this; }
+    observe(node) { this.targets.add(node); }
+    unobserve(node) { this.targets.delete(node); }
+    disconnect() { this.targets.clear(); }
+  }
+  globalThis.window = {
+    get innerWidth() { viewportReads++; return 1200; },
+    get innerHeight() { viewportReads++; return 800; },
+    matchMedia: () => media, IntersectionObserver: Observer,
+  };
+  globalThis.IntersectionObserver = Observer;
+  const group = {};
+  const children = Array.from({ length: 3 }, () => ({
+    dataset: {}, calls: [], animate(frames, timing) { this.calls.push({ frames, timing }); return { cancel() {} }; },
+  }));
+  try {
+    const cleanups = children.map((child, index) => observeEntrance(child, {
+      from: { opacity: 0, transform: 'translateY(22px)' }, to: { opacity: 1, transform: 'none' }, delay: index * 0.09,
+    }, group));
+    assert.equal(observer.targets.size, 1);
+    observer.callback([{ target: group, boundingClientRect: { top: 1000, bottom: 1300, left: 0, right: 800 }, isIntersecting: false, intersectionRatio: 0 }]);
+    assert.ok(children.every(child => 'entryPending' in child.dataset));
+    assert.equal(viewportReads, 2, 'One batched viewport read, not one per child');
+    observer.callback([{ target: group, isIntersecting: true, intersectionRatio: 0.5 }]);
+    assert.equal(viewportReads, 2, 'No geometry read at scroll crossings');
+    assert.deepEqual(children.map(child => child.calls[0].timing.delay), [0, 90, 180]);
+    assert.ok(children.every(child => !('entryPending' in child.dataset)));
+    assert.equal(observer.targets.size, 0);
+    observer.callback([{ target: group, isIntersecting: true, intersectionRatio: 1 }]);
+    assert.ok(children.every(child => child.calls.length === 1));
+    cleanups.forEach(cleanup => cleanup());
+  } finally { Object.assign(globalThis, previous); }
+});

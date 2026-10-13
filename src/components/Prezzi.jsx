@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Entrance } from './Entrance';
 import {
   Banknote,
   SlidersHorizontal,
@@ -52,10 +53,6 @@ const INFO_REVEAL = {
   hidden: { opacity: 0, transform: 'translateY(20px)' },
   show: { opacity: 1, transform: 'none', transition: { duration: 0.6, ease: EASE_MODAL, delay: 0.1 } },
 };
-/* hidden === show: sulla card prezzi da mobile l'entrata resta ferma,
-   senza staccare whileInView (che lasciato "a metà" congela l'elemento
-   nello stato nascosto invece di mostrarlo). */
-const NO_MOTION = { hidden: { opacity: 1, transform: 'none' }, show: { opacity: 1, transform: 'none' } };
 
 export default function Prezzi() {
   const [yearly, setYearly] = useState(true);
@@ -84,11 +81,11 @@ export default function Prezzi() {
 
       <div className="prezzi2">
         {/* colonna sinistra - prezzo, dentro una cornice animata */}
-        <motion.div
+        <Entrance
           className="prezzi2__frame"
-          variants={isMobile ? NO_MOTION : FRAME_REVEAL}
-          initial="hidden"
-          whileInView="show"
+          initial={isMobile ? false : FRAME_REVEAL.hidden}
+          whileInView={{ opacity: 1, transform: 'none' }}
+          transition={FRAME_REVEAL.show.transition}
           viewport={{ once: true, amount: 0.3 }}
         >
           <span className="prezzi2__frame-glow" aria-hidden="true" />
@@ -167,14 +164,14 @@ export default function Prezzi() {
               Valutiamo il tuo progetto
             </a>
           </div>
-        </motion.div>
+        </Entrance>
 
         {/* colonna destra - come funziona */}
-        <motion.div
+        <Entrance
           className="prezzi2__info"
-          variants={isMobile ? NO_MOTION : INFO_REVEAL}
-          initial="hidden"
-          whileInView="show"
+          initial={isMobile ? false : INFO_REVEAL.hidden}
+          whileInView={{ opacity: 1, transform: 'none' }}
+          transition={INFO_REVEAL.show.transition}
           viewport={{ once: true, amount: 0.3 }}
         >
           <div className="prezzi2__steps">
@@ -197,7 +194,7 @@ export default function Prezzi() {
           <p className="prezzi2__note">
             Il canone copre analisi, configurazione iniziale, centro operativo personalizzato e AI base. Automazioni complesse e integrazioni personalizzate si aggiungono su preventivo.
           </p>
-        </motion.div>
+        </Entrance>
       </div>
     </Section>
   );

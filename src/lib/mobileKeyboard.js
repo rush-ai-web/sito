@@ -12,30 +12,38 @@ export function watchMobileKeyboard(win = window, doc = document) {
   const mobile = win.matchMedia('(any-pointer: coarse), (max-width: 760px)');
   const viewport = win.visualViewport;
   const height = () => viewport ? viewport.height * viewport.scale : win.innerHeight;
-  let baseline = height();
-  let width = win.innerWidth;
+  let baseline = 0;
+  let width = 0;
   let keyboardObserved = false;
   let dismissed = false;
   let blurTimer;
-  const setHidden = value => doc.documentElement.classList.toggle('mobile-keyboard-open', value);
-  const contracted = () => baseline - height() > Math.max(120, baseline * 0.18);
+  let hidden = false;
+  const setHidden = value => {
+    if (value === hidden) return;
+    hidden = value;
+    doc.documentElement.classList.toggle('mobile-keyboard-open', value);
+  };
 
   function update() {
     if (!mobile.matches) {
-      baseline = height();
+      baseline = width = 0;
       keyboardObserved = dismissed = false;
       setHidden(false);
       return;
     }
-    if (Math.abs(win.innerWidth - width) > 80) {
+    // Read once, before the class write. visualViewport/innerWidth can flush
+    // layout; re-reading after toggling the root class forced a second pass.
+    const currentHeight = height();
+    const currentWidth = win.innerWidth;
+    if (Math.abs(currentWidth - width) > 80) {
       // A rotation changes the reference height, unlike a keyboard opening.
-      width = win.innerWidth;
-      baseline = height();
+      width = currentWidth;
+      baseline = currentHeight;
       keyboardObserved = dismissed = false;
     }
-    baseline = Math.max(baseline, height());
+    baseline = Math.max(baseline, currentHeight);
     const editing = acceptsKeyboard(doc.activeElement);
-    const shrunk = contracted();
+    const shrunk = baseline - currentHeight > Math.max(120, baseline * 0.18);
     if (editing && shrunk) keyboardObserved = true;
     if (keyboardObserved && !shrunk) {
       // Android can dismiss the keyboard while retaining input focus.
@@ -43,7 +51,7 @@ export function watchMobileKeyboard(win = window, doc = document) {
       dismissed = true;
     }
     setHidden((editing && !dismissed) || (keyboardObserved && shrunk));
-    if (!editing && !shrunk) baseline = height();
+    if (!editing && !shrunk) baseline = currentHeight;
   }
 
   function onFocus(event) {

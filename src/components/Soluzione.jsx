@@ -223,8 +223,9 @@ function SoluzioneDesktop() {
       const rad = (a * Math.PI) / 180;
       const el = cardRefs.current[item.id];
       if (el) {
-        el.style.setProperty('--ox', `${Math.cos(rad) * RADIUS_X}px`);
-        el.style.setProperty('--oy', `${Math.sin(rad) * RADIUS_Y}px`);
+        // translate does not inherit. Updating custom --ox/--oy properties
+        // invalidated every label and SVG descendant on every orbit frame.
+        el.style.translate = `calc(-50% + ${Math.cos(rad) * RADIUS_X}px) calc(-50% + ${Math.sin(rad) * RADIUS_Y}px + var(--lift))`;
       }
     }
   };

@@ -2,7 +2,10 @@
 
 ## Current performance follow-up (13 October 2026)
 
-Run `npm test` (14 tests) and `npm run build`. Current verification results
+Run `npm test` (19 tests) and `npm run build`. Scroll-time follow-up results
+against production `53b1b9e` are in
+[`deployment/SCROLL_PERFORMANCE.md`](../deployment/SCROLL_PERFORMANCE.md).
+Earlier initial-load verification results
 and the required Cloudflare cache setting are in
 [`deployment/PERFORMANCE.md`](../deployment/PERFORMANCE.md).
 
