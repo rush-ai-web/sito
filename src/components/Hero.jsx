@@ -90,7 +90,7 @@ function RotatingSlot() {
     const id = setInterval(() => {
       setStarted(true);
       setI((v) => (v + 1) % ROTATE.length);
-    }, 4600);
+    }, 3000);
     return () => {
       clearTimeout(settle);
       clearInterval(id);
