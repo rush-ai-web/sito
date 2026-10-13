@@ -85,3 +85,12 @@ rendering/painting costs and the third-party consent script remain separate.
 The 62ms CookieScript forced-layout item reported by PageSpeed comes from
 provider-hosted code. This patch does not edit, proxy or disable that vendor
 script. Its initialization cost is separate from the site's scroll-time work.
+
+## Deployment check
+
+Wait for the GitHub Pages deployment to finish before requesting new hashed
+asset URLs. Cloudflare can cache an early 404 with the asset browser TTL.
+An early probe hit this case during verification; a fresh content hash was
+published to bypass the negative response without changing the animation.
+Verify both HTML entry points and their actual imported JS after deployment,
+not just the GitHub build status.

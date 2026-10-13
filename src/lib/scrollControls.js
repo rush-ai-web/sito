@@ -126,7 +126,7 @@ export function watchSectionProgress(node, onProgress) {
     height = Math.max(1, entry.boundingClientRect.height);
     viewportHeight = entry.rootBounds?.height || window.innerHeight;
     publish(y);
-    listen(entry.isIntersecting && !document.hidden);
+    listen(!document.hidden);
   });
   const refresh = () => { observer.unobserve(node); observer.observe(node); };
   const resize = window.ResizeObserver ? new ResizeObserver(refresh) : null;
