@@ -1,5 +1,5 @@
+import { Entrance } from './Entrance';
 import { useContext, useRef } from 'react';
-import { motion } from 'framer-motion';
 import { ArrowRight, UtensilsCrossed, Boxes, Coins, Users, Megaphone, Check } from 'lucide-react';
 import { Section, Pill, ThemeCtx } from './ui';
 import { EASE_MODAL, inView } from '../lib/motion';
@@ -43,7 +43,7 @@ export default function Ristorazione() {
     <Section id="ristorazione" large className="risto-orange">
       <span aria-hidden="true" className="ristorazione-bulb" />
       <div className="risto2">
-        <motion.div
+        <Entrance as="div"
           className="risto2__text"
           initial={{ opacity: 0, transform: 'translateY(24px)' }}
           whileInView={{ opacity: 1, transform: 'none' }}
@@ -79,9 +79,9 @@ export default function Ristorazione() {
               </span>
             </a>
           </div>
-        </motion.div>
+        </Entrance>
 
-        <motion.div
+        <Entrance as="div"
           ref={cardRef}
           onPointerMove={onMove}
           className="risto2__card contrast-card restaurant-card"
@@ -125,7 +125,7 @@ export default function Ristorazione() {
               ))}
             </ul>
           </div>
-        </motion.div>
+        </Entrance>
       </div>
     </Section>
   );

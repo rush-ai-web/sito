@@ -1,0 +1,13 @@
+{
+  "description": "RUSH: one-year browser cache for versioned assets",
+  "expression": "(http.host in {\"rush-ai.it\" \"www.rush-ai.it\"} and (starts_with(http.request.uri.path, \"/assets/\") or starts_with(http.request.uri.path, \"/docs/assets/\")))",
+  "action": "set_cache_settings",
+  "action_parameters": {
+    "cache": true,
+    "browser_ttl": {
+      "mode": "override",
+      "default": 31536000
+    }
+  },
+  "enabled": true
+}

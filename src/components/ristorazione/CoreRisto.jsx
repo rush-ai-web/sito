@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { motion } from 'framer-motion';
+import { Entrance } from '../Entrance';
+import { useCardGlow } from '../../lib/useCardGlow';
 import {
   LayoutGrid,
   Wallet,
@@ -44,16 +44,9 @@ function HorseIcon({ size = 15, strokeWidth = 1.75 }) {
 }
 
 function BuildCard({ icon, title, desc, accent = false, wide = false, children }) {
-  const ref = useRef(null);
-  const onMove = (e) => {
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--gx', `${e.clientX - r.left}px`);
-    el.style.setProperty('--gy', `${e.clientY - r.top}px`);
-  };
+  const [ref, onMove] = useCardGlow();
   return (
-    <motion.div
+    <Entrance as="div"
       ref={ref}
       onPointerMove={onMove}
       className={`buildcard card card--lg card--glow ${accent ? 'card--glow-accent buildcard--accent' : ''} ${wide ? 'buildcard--wide' : ''}`}
@@ -76,7 +69,7 @@ function BuildCard({ icon, title, desc, accent = false, wide = false, children }
           {children}
         </div>
       ) : null}
-    </motion.div>
+    </Entrance>
   );
 }
 
@@ -237,7 +230,7 @@ export default function CoreRisto() {
 
       <div className="rh-altro">
         {ALTRO.map(({ Icon, t, d }) => (
-          <motion.div
+          <Entrance as="div"
             key={t}
             className="rh-altro__item"
             initial={{ opacity: 0, transform: 'translateY(14px)' }}
@@ -252,7 +245,7 @@ export default function CoreRisto() {
               <strong>{t}</strong>
               {d}
             </span>
-          </motion.div>
+          </Entrance>
         ))}
       </div>
     </Section>

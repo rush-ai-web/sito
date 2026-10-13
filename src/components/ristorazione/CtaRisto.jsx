@@ -1,3 +1,4 @@
+import { Entrance } from '../Entrance';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Check, CalendarClock, ArrowRight, ArrowLeft } from 'lucide-react';
@@ -143,7 +144,7 @@ export default function CtaRisto() {
           </Item>
         </Group>
 
-        <motion.div
+        <Entrance as="div"
           className="card card--lg contrast-card contact-card"
           initial={{ opacity: 0, transform: 'translateY(24px)' }}
           whileInView={{ opacity: 1, transform: 'none' }}
@@ -384,7 +385,7 @@ export default function CtaRisto() {
               </form>
             )}
           </AnimatePresence>
-        </motion.div>
+        </Entrance>
       </div>
     </Section>
   );

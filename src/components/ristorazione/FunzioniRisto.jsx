@@ -1,3 +1,4 @@
+import { Entrance } from '../Entrance';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -424,7 +425,7 @@ export default function FunzioniRisto() {
 
       <div className="rh-fx-grid">
         {ORDERED_FUNZIONI.map(({ icon: Icon, t, featured }, i) => (
-          <motion.button
+          <Entrance as="button"
             type="button"
             key={t}
             className={`rh-fx-tile${featured ? ' is-featured' : ''}`}
@@ -440,7 +441,7 @@ export default function FunzioniRisto() {
               Scopri di più
               <ArrowRight size={12} strokeWidth={2.2} />
             </span>
-          </motion.button>
+          </Entrance>
         ))}
       </div>
 

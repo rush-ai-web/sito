@@ -529,6 +529,13 @@ main {
 }
 
 /* Pause offscreen decorative loops, not Motion's one-shot entrances. */
+[data-entry-pending] {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-entry-pending] { opacity: 1; }
+}
+
 [data-motion-active='false'],
 [data-motion-active='false']::before,
 [data-motion-active='false']::after,

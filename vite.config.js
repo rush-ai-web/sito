@@ -1,5 +1,37 @@
-import { defineConfig } from 'vite';
+import { defineConfig, transformWithEsbuild } from 'vite';
 import react from '@vitejs/plugin-react';
+import { readFileSync, readdirSync } from 'node:fs';
+import { versionedLogos } from './scripts/static-assets.mjs';
+
+function thirdPartyNotices() {
+  return {
+    name: 'rush-third-party-notices',
+    generateBundle() {
+      const packages = ['react', 'react-dom', 'scheduler', 'framer-motion', 'motion-dom', 'motion-utils', 'lucide-react', '@fontsource-variable/inter'];
+      const notices = packages.map(name => {
+        const directory = new URL(`./node_modules/${name}/`, import.meta.url);
+        const filename = readdirSync(directory).find(file => /^licen[sc]e(?:\.|$)/i.test(file));
+        if (!filename) throw new Error(`Missing license for ${name}`);
+        return `${name}\n\n${readFileSync(new URL(filename, directory), 'utf8')}`;
+      }).join('\n\n--------------------\n\n');
+      this.emitFile({ type: 'asset', fileName: 'THIRD_PARTY_NOTICES.txt', source: notices });
+    },
+  };
+}
+
+function consentBootstrap() {
+  return {
+    name: 'rush-consent-bootstrap',
+    transformIndexHtml: {
+      order: 'pre',
+      async handler(html) {
+        const source = readFileSync(new URL('./src/lib/consent.js', import.meta.url), 'utf8');
+        const { code } = await transformWithEsbuild(source, 'consent.js', { minify: true, target: 'es2020' });
+        return html.replace('<script data-rush-consent></script>', `<script data-rush-consent>${code}</script>`);
+      },
+    },
+  };
+}
 
 /* La pagina è una singola landing: incorporare il CSS evita un secondo
    round-trip bloccante prima del primo paint. I riferimenti ai font vengono
@@ -66,7 +98,10 @@ function inlineCss() {
 }
 
 export default defineConfig({
-  plugins: [react(), inlineCss()],
+  plugins: [react(), consentBootstrap(), inlineCss(), thirdPartyNotices(), versionedLogos()],
+  // Lucide carries one identical license comment per icon. Keep licenses in
+  // THIRD_PARTY_NOTICES.txt instead of repeating them in every network payload.
+  esbuild: { legalComments: 'none' },
   // relative base so the build works from /, /sito/ or /docs/ alike
   base: './',
   build: {

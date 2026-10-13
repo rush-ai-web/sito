@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { animate, useInView, useMotionValue, useReducedMotion } from 'framer-motion';
+import { animate, useInView, useMotionValue } from 'framer-motion';
+import { useMediaQuery, useReducedMotion } from './preferences';
 import { warmupScroll } from './warmup';
 import { EASE_MODAL } from './motion';
 import { watchMobileKeyboard } from './mobileKeyboard';
@@ -16,22 +17,7 @@ export function useAppReady() {
 
 /* ---------- Viewport: mobile vs desktop ---------- */
 export function useIsMobile(query = '(max-width: 760px)') {
-  /* Parte sempre da false, uguale al render lato server: la pagina è
-     prerenderizzata senza window, quindi calcolare il match subito sul
-     client (prima che l'effect corregga il valore) produce un mismatch
-     tra il markup statico e il primo render idratato. Su schermi piccoli
-     questo faceva "lampeggiare" gli elementi animati allo scroll: il
-     valore giusto arriva un istante dopo il paint iniziale, prima che
-     l'utente possa notare la differenza. */
-  const [is, setIs] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia(query);
-    const on = () => setIs(mq.matches);
-    on();
-    mq.addEventListener('change', on);
-    return () => mq.removeEventListener('change', on);
-  }, [query]);
-  return is;
+  return useMediaQuery(query);
 }
 
 /* Native wheel/touch scrolling; smooth scrolling only for navigation links. */

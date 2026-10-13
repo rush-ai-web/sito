@@ -1,5 +1,19 @@
 # Scroll performance regression checks
 
+## Current performance follow-up (13 October 2026)
+
+Run `npm test` (14 tests) and `npm run build`. Current verification results
+and the required Cloudflare cache setting are in
+[`deployment/PERFORMANCE.md`](../deployment/PERFORMANCE.md).
+
+One-shot card/section entrances and connector-path drawing now use the shared
+native animation observer in `src/lib/entrances.js`; interactive Motion
+components remain. This supersedes the earlier Motion-only entrance approach
+described below. Browser verification covers initial reduced motion, all card
+entrances, consent/revocation, theme/menu/dialog/form states and section geometry.
+
+## Earlier baseline checks
+
 Run `node --test tests/motion-lifecycle.test.mjs` and `npm run build`.
 The lifecycle test covers offscreen CSS/SVG animation suspension, re-entry,
 background-tab suspension and effect cleanup/remount (React StrictMode).

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { Entrance } from '../Entrance';
 import { Gauge, Globe, Megaphone, MousePointerClick, CalendarCheck, MapPin, Ticket } from 'lucide-react';
 import { Section, Head } from '../ui';
 import { EASE_MODAL, inView } from '../../lib/motion';
@@ -35,7 +35,7 @@ export default function MisurabilitaRisto() {
         }
       />
 
-      <motion.div
+      <Entrance as="div"
         className="rh-metrics"
         initial={{ opacity: 0, transform: 'translateY(24px)' }}
         whileInView={{ opacity: 1, transform: 'none' }}
@@ -61,7 +61,7 @@ export default function MisurabilitaRisto() {
             </div>
           ))}
         </div>
-      </motion.div>
+      </Entrance>
     </Section>
   );
 }

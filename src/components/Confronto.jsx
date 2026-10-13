@@ -1,6 +1,6 @@
+import { Entrance } from './Entrance';
 import { Fragment } from 'react';
 import { Scale, Check, Minus, X } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { Section, Head } from './ui';
 import { inView } from '../lib/motion';
 
@@ -69,7 +69,7 @@ export default function Confronto() {
         }
       />
 
-      <motion.div
+      <Entrance as="div"
         className="cf-wrap"
         initial={{ opacity: 0, transform: 'translateY(24px)' }}
         whileInView={{ opacity: 1, transform: 'none' }}
@@ -129,7 +129,7 @@ export default function Confronto() {
             })}
           </div>
         </div>
-      </motion.div>
+      </Entrance>
     </Section>
   );
 }

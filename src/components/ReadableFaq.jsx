@@ -1,5 +1,6 @@
 import React, { useId, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useReducedMotion } from '../lib/preferences';
 import { HelpCircle } from 'lucide-react';
 import { Head, Section } from './ui';
 
