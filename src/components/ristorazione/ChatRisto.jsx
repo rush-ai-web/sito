@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { Entrance } from '../Entrance';
 import { Sparkles, BellRing, ArrowUp } from 'lucide-react';
 import { Section, Head } from '../ui';
 import { EASE_MODAL, inView } from '../../lib/motion';
@@ -61,7 +61,7 @@ export default function ChatRisto() {
         }
       />
 
-      <motion.div
+      <Entrance as="div"
         className="rh-chat card card--lg contrast-card"
         initial={{ opacity: 0, transform: 'translateY(24px)' }}
         whileInView={{ opacity: 1, transform: 'none' }}
@@ -70,7 +70,7 @@ export default function ChatRisto() {
       >
         <div className="rh-chat__thread">
           {CHAT.map((m, i) => (
-            <motion.div
+            <Entrance as="div"
               key={i}
               className={`rh-chat__msg rh-chat__msg--${m.role}`}
               initial={{ opacity: 0, transform: 'translateY(12px)' }}
@@ -91,7 +91,7 @@ export default function ChatRisto() {
                 {m.role === 'alert' && <span className="rh-chat__flag">Rush nota da solo</span>}
                 {m.t}
               </span>
-            </motion.div>
+            </Entrance>
           ))}
         </div>
 
@@ -101,7 +101,7 @@ export default function ChatRisto() {
             <ArrowUp size={16} strokeWidth={2.4} />
           </span>
         </div>
-      </motion.div>
+      </Entrance>
 
       <div className="rh-suggests">
         {SUGGESTS.map((s) => (

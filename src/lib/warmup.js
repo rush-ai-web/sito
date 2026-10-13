@@ -9,7 +9,7 @@ export function warmupScroll() {
     section.dataset.motionActive = String(nearby.has(section) && !document.hidden);
     section.querySelectorAll('svg').forEach(svg => {
       if (typeof svg.pauseAnimations !== 'function') return;
-      if (nearby.has(section) && !document.hidden) svg.unpauseAnimations();
+      if (nearby.has(section) && !document.hidden && !svg.closest?.('[data-motion-active="false"]')) svg.unpauseAnimations();
       else svg.pauseAnimations();
     });
   };
@@ -31,13 +31,26 @@ export function warmupScroll() {
     nearby.delete(section);
     observer.unobserve(section);
   };
-  main.querySelectorAll(':scope > section').forEach(track);
+  // A tall feature section can contain many offscreen animated cards. Track
+  // each expensive scene as well, on desktop and mobile, with the same pool.
+  const scopes = '.buildcard, .eco__stage';
+  main.querySelectorAll(`:scope > section, ${scopes}`).forEach(track);
   // Some sections swap their desktop/mobile variant after mount: the new
   // <section> must be suspended offscreen like the one it replaces.
   const mutations = new MutationObserver(records => {
     for (const record of records) {
-      record.removedNodes.forEach(node => { if (node.tagName === 'SECTION') untrack(node); });
-      record.addedNodes.forEach(node => { if (node.tagName === 'SECTION') track(node); });
+      record.removedNodes.forEach(node => {
+        if (node.tagName === 'SECTION') {
+          untrack(node);
+          node.querySelectorAll?.(scopes).forEach(untrack);
+        }
+      });
+      record.addedNodes.forEach(node => {
+        if (node.tagName === 'SECTION') {
+          track(node);
+          node.querySelectorAll?.(scopes).forEach(track);
+        }
+      });
     }
   });
   mutations.observe(main, { childList: true });

@@ -1,6 +1,6 @@
 import React from 'react';
 // Inter self-hosted: nessuna chiamata a Google Fonts
-import '@fontsource-variable/inter';
+import './styles/fonts.css';
 import './styles/global.css';
 import { mount } from './lib/boot';
 import App from './App';

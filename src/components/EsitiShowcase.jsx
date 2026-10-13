@@ -1,5 +1,7 @@
+import { Entrance } from './Entrance';
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useReducedMotion } from '../lib/preferences';
 import { Gauge, ShieldCheck, Sparkles, CalendarClock, Boxes, Receipt, TrendingDown, Lightbulb } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
 import { useAnimationActivity } from '../lib/hooks';
@@ -204,7 +206,7 @@ export default function EsitiShowcase() {
   const Scene = ESITI[active].Scene;
 
   return (
-    <motion.div
+    <Entrance as="div"
       className="esiti"
       ref={showcaseRef}
       initial={{ opacity: 0, transform: 'translateY(26px)' }}
@@ -260,6 +262,6 @@ export default function EsitiShowcase() {
         </AnimatePresence>
         <span className="esiti__stage-glow" aria-hidden="true" />
       </div>
-    </motion.div>
+    </Entrance>
   );
 }

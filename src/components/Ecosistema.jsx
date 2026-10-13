@@ -1,4 +1,5 @@
-import { motion, useReducedMotion } from 'framer-motion';
+import { Entrance } from './Entrance';
+import { useReducedMotion } from '../lib/preferences';
 import {
   CreditCard,
   Users,
@@ -110,28 +111,32 @@ function EcosistemaDesktop() {
             </defs>
 
             {MODULES.map((m, i) => (
-              <motion.path
+              <Entrance as="path"
+                pathLength="1"
+                style={{ strokeDasharray: 1 }}
                 key={m.t}
                 id={`eco-in-${i}`}
                 d={inPath(m.y)}
                 stroke="url(#ecoLine)"
                 strokeWidth="1.5"
                 strokeLinecap="round"
-                initial={reduce ? false : { pathLength: 0, opacity: 0 }}
-                whileInView={reduce ? undefined : { pathLength: 1, opacity: 1 }}
+                initial={reduce ? false : { strokeDashoffset: 1, opacity: 0 }}
+                whileInView={reduce ? undefined : { strokeDashoffset: 0, opacity: 1 }}
                 viewport={{ once: true, amount: 0.4 }}
                 transition={{ duration: 0.9, ease: EASE_MODAL, delay: 0.15 + i * 0.12 }}
               />
             ))}
 
-            <motion.path
+            <Entrance as="path"
+              pathLength="1"
+              style={{ strokeDasharray: 1 }}
               id="eco-out"
               d={OUT_PATH}
               stroke="url(#ecoLine)"
               strokeWidth="2"
               strokeLinecap="round"
-              initial={reduce ? false : { pathLength: 0, opacity: 0 }}
-              whileInView={reduce ? undefined : { pathLength: 1, opacity: 1 }}
+              initial={reduce ? false : { strokeDashoffset: 1, opacity: 0 }}
+              whileInView={reduce ? undefined : { strokeDashoffset: 0, opacity: 1 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.7, ease: EASE_MODAL, delay: 0.8 }}
             />
@@ -168,7 +173,7 @@ function EcosistemaDesktop() {
           {MODULES.map((m, i) => {
             const Icon = m.icon;
             return (
-              <motion.div
+              <Entrance as="div"
                 key={m.t}
                 className="eco__mod"
                 style={{
@@ -187,17 +192,16 @@ function EcosistemaDesktop() {
                   <b>{m.t}</b>
                   <em>{m.d}</em>
                 </span>
-              </motion.div>
+              </Entrance>
             );
           })}
 
           {/* nodo centrale: il logotipo Rush al cuore del sistema */}
-          <motion.div
+          <Entrance as="div"
             className="eco__core"
             style={{ left: pct(NODE_CX, VB_W), top: pct(NODE_CY, VB_H) }}
-            variants={scaleIn}
-            initial={reduce ? false : 'hidden'}
-            whileInView={reduce ? undefined : 'show'}
+            initial={reduce ? false : scaleIn.hidden}
+            whileInView={reduce ? undefined : scaleIn.show}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.6, ease: EASE_MODAL, delay: 0.5 }}
           >
@@ -220,10 +224,10 @@ function EcosistemaDesktop() {
                 AI
               </span>
             </span>
-          </motion.div>
+          </Entrance>
 
           {/* card destinazione: la dashboard che ne esce */}
-          <motion.div
+          <Entrance as="div"
             className="eco__dest"
             style={{
               left: pct(DEST_L, VB_W),
@@ -239,7 +243,7 @@ function EcosistemaDesktop() {
             <IconTile icon={LayoutDashboard} accent />
             <b className="eco__dest-t">Il tuo centro operativo</b>
             <span className="eco__dest-sub">Dati collegati e organizzati per reparto. Il quadro dell’attività, in un’unica vista.</span>
-          </motion.div>
+          </Entrance>
         </div>
       </div>
     </Section>
@@ -274,7 +278,7 @@ function EcosistemaMobile() {
           {MODULES.map((m, i) => {
             const Icon = m.icon;
             return (
-              <motion.div
+              <Entrance as="div"
                 key={m.t}
                 className="eco-m__mod"
                 initial={reduce ? false : { opacity: 0, transform: 'translateY(14px)' }}
@@ -287,7 +291,7 @@ function EcosistemaMobile() {
                   <b>{m.t}</b>
                   <em>{m.d}</em>
                 </span>
-              </motion.div>
+              </Entrance>
             );
           })}
         </div>

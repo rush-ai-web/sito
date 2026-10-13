@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion, useTransform } from 'framer-motion';
+import { AnimatePresence, animate, motion, useMotionValue, useTransform } from 'framer-motion';
+import { useReducedMotion } from '../../lib/preferences';
 import {
   LayoutDashboard,
   Boxes,

@@ -2,6 +2,43 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { warmupScroll } from '../src/lib/warmup.js';
 
+test('an offscreen card stays paused inside an onscreen section, including after tab changes', () => {
+  const previous = { document: globalThis.document, IntersectionObserver: globalThis.IntersectionObserver, MutationObserver: globalThis.MutationObserver };
+  let observer, visibility;
+  const section = { dataset: {} }, card = { dataset: {} };
+  const svg = {
+    paused: false,
+    pauseAnimations() { this.paused = true; }, unpauseAnimations() { this.paused = false; },
+    closest() { return [section, card].find(n => n.dataset.motionActive === 'false'); },
+  };
+  section.querySelectorAll = card.querySelectorAll = () => [svg];
+  globalThis.document = {
+    hidden: false,
+    querySelector: () => ({ querySelectorAll: () => [section, card] }),
+    documentElement: { classList: { toggle() {}, remove() {} } },
+    addEventListener: (_, fn) => { visibility = fn; }, removeEventListener() {},
+  };
+  globalThis.IntersectionObserver = class {
+    constructor(callback) { this.callback = callback; observer = this; }
+    observe() {} unobserve() {} disconnect() {}
+  };
+  globalThis.MutationObserver = class { observe() {} disconnect() {} };
+  try {
+    const cleanup = warmupScroll();
+    observer.callback([{target:section,isIntersecting:true}]);
+    assert.equal(svg.paused,true);
+    observer.callback([{target:card,isIntersecting:true}]);
+    assert.equal(svg.paused,false);
+    observer.callback([{target:card,isIntersecting:false}]);
+    assert.equal(svg.paused,true);
+    document.hidden=true; visibility(); document.hidden=false; visibility();
+    assert.equal(svg.paused,true);
+    observer.callback([{target:card,isIntersecting:true}]);
+    assert.equal(svg.paused,false);
+    cleanup(); assert.equal(svg.paused,false);
+  } finally { Object.assign(globalThis,previous); }
+});
+
 test('offscreen and hidden sections pause; re-entry and cleanup restore animation', () => {
   const originalDocument = globalThis.document;
   const originalObserver = globalThis.IntersectionObserver;
@@ -10,7 +47,7 @@ test('offscreen and hidden sections pause; re-entry and cleanup restore animatio
   const classes = new Set();
   const sections = Array.from({ length: 2 }, () => {
     const svg = { paused: false, pauseAnimations() { this.paused = true; }, unpauseAnimations() { this.paused = false; } };
-    return { tagName: 'SECTION', dataset: {}, svg, querySelectorAll: () => [svg] };
+    return { tagName: 'SECTION', dataset: {}, svg, querySelectorAll: selector => selector === 'svg' ? [svg] : [] };
   });
   globalThis.document = {
     hidden: false,
@@ -49,7 +86,7 @@ test('offscreen and hidden sections pause; re-entry and cleanup restore animatio
     assert.equal(sections[0].dataset.motionActive, 'true');
     // A section swapped after mount (desktop/mobile variant) is tracked too.
     const svg = { paused: false, pauseAnimations() { this.paused = true; }, unpauseAnimations() { this.paused = false; } };
-    const swapped = { tagName: 'SECTION', dataset: {}, svg, querySelectorAll: () => [svg] };
+    const swapped = { tagName: 'SECTION', dataset: {}, svg, querySelectorAll: selector => selector === 'svg' ? [svg] : [] };
     mutations.callback([{ removedNodes: [sections[1]], addedNodes: [swapped] }]);
     assert.ok(observer.targets.includes(swapped) && !observer.targets.includes(sections[1]));
     assert.equal(swapped.dataset.motionActive, 'false');

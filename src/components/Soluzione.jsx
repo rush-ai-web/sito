@@ -1,5 +1,7 @@
+import { Entrance } from './Entrance';
 import { useState, useEffect, useRef } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useReducedMotion } from '../lib/preferences';
 import {
   Lightbulb,
   Blocks,
@@ -129,7 +131,7 @@ function SoluzioneMobile() {
           const isOpen = openId === item.id;
           const Icon = item.icon;
           return (
-            <motion.button
+            <Entrance as="button"
               type="button"
               key={item.id}
               className={`sol-card${isOpen ? ' is-open' : ''}`}
@@ -175,7 +177,7 @@ function SoluzioneMobile() {
                   <ChevronDown size={15} strokeWidth={2.4} />
                 </span>
               )}
-            </motion.button>
+            </Entrance>
           );
         })}
       </div>

@@ -1,3 +1,4 @@
+import { Entrance } from './Entrance';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -174,7 +175,7 @@ export default function Cta() {
           </Item>
         </Group>
 
-        <motion.div
+        <Entrance as="div"
           className="card card--lg contrast-card contact-card"
           initial={{ opacity: 0, transform: 'translateY(24px)' }}
           whileInView={{ opacity: 1, transform: 'none' }}
@@ -467,7 +468,7 @@ export default function Cta() {
               </form>
             )}
           </AnimatePresence>
-        </motion.div>
+        </Entrance>
       </div>
     </Section>
   );

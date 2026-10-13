@@ -1,5 +1,7 @@
-import { Fragment, useRef } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { Entrance } from './Entrance';
+import { Fragment } from 'react';
+import { useCardGlow } from '../lib/useCardGlow';
+import { useReducedMotion } from '../lib/preferences';
 import { Layers, Blocks, BarChart3, CalendarClock, Sparkles, Plug, Wallet, Boxes, Users, Receipt } from 'lucide-react';
 import { Section, Head, IconTile } from './ui';
 import { EASE_MODAL } from '../lib/motion';
@@ -17,20 +19,10 @@ const inViewOnce = { once: true, amount: 0.3 };
    ------------------------------------------------------------ */
 
 function BuildCard({ icon, title, desc, accent = false, wide = false, children }) {
-  const ref = useRef(null);
-
-  /* il bordo/alone segue il cursore: scriviamo la posizione in due
-     custom prop, il resto è CSS (nessun re-render). */
-  const onMove = (e) => {
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--gx', `${e.clientX - r.left}px`);
-    el.style.setProperty('--gy', `${e.clientY - r.top}px`);
-  };
+  const [ref, onMove] = useCardGlow();
 
   return (
-    <motion.div
+    <Entrance as="div"
       ref={ref}
       onPointerMove={onMove}
       className={`buildcard card card--lg card--glow ${accent ? 'card--glow-accent buildcard--accent' : ''} ${
@@ -53,21 +45,23 @@ function BuildCard({ icon, title, desc, accent = false, wide = false, children }
       <div className="buildcard__viz" aria-hidden="true">
         {children}
       </div>
-    </motion.div>
+    </Entrance>
   );
 }
 
 /* riga SVG che si disegna quando entra in viewport */
 function DrawPath({ d, delay = 0, width = 1.5, dash, reduce, ...rest }) {
   return (
-    <motion.path
+    <Entrance as="path"
+      pathLength="1"
+      style={{ strokeDasharray: 1 }}
       d={d}
       fill="none"
       strokeWidth={width}
       strokeLinecap="round"
       strokeLinejoin="round"
-      initial={reduce ? false : { pathLength: 0, opacity: 0 }}
-      whileInView={reduce ? undefined : { pathLength: 1, opacity: 1 }}
+      initial={reduce ? false : { strokeDashoffset: 1, opacity: 0 }}
+      whileInView={reduce ? undefined : { strokeDashoffset: 0, opacity: 1 }}
       viewport={inViewOnce}
       transition={{ duration: 0.9, ease: EASE_MODAL, delay }}
       {...rest}
