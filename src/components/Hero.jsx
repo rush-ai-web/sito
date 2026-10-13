@@ -207,7 +207,7 @@ export default function Hero() {
           />
         </motion.div>
 
-        <h1 className="hero__title" aria-label="Il centralizzatore operativo che integra l’AI">
+        <h1 className="hero__title" aria-label="Rush AI - Il centralizzatore operativo che integra l’AI">
           <span className="hero__line">
             {L1.map((w, i) => [
               i === 2 ? <br key="hero-mobile-break" className="hero__mobile-break" /> : null,
@@ -226,7 +226,7 @@ export default function Hero() {
           initial="hidden"
           animate="show"
         >
-          <strong>Un sistema che si adatta alla tua azienda.</strong>{' '}
+          <strong>Rush AI: un sistema che si adatta alla tua azienda.</strong>{' '}
           <br className="hero-note-break hero-note-break--home" />
           Collega processi e strumenti e automatizza il lavoro ripetitivo.
         </motion.p>

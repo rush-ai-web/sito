@@ -31,7 +31,7 @@ export default function HeroRisto() {
         </motion.div>
 
         <motion.h1 className="hero__title" variants={fadeUp} custom={1} initial="hidden" animate="show">
-          Il centro operativo intelligente per il tuo <span className="hero-accent">bar o ristorante</span>
+          Rush AI: il centro operativo intelligente per il tuo <span className="hero-accent">bar o ristorante</span>
         </motion.h1>
 
         <motion.p className="hero__note" variants={fadeUp} custom={2} initial="hidden" animate="show">
@@ -41,8 +41,8 @@ export default function HeroRisto() {
             Vedi il locale nel suo insieme.
           </strong>{' '}
           <br className="hero-note-break" />
-          RUSH collega cassa, acquisti, magazzino e personale, aiutandoti a controllare costi e
-          margini con il supporto dell’AI. Puoi integrare anche prenotazioni, sito e marketing.
+          Rush AI collega cassa, acquisti, magazzino e personale, aiutandoti a controllare costi e
+          margini con il supporto dell’intelligenza artificiale. Puoi integrare anche prenotazioni, sito e marketing.
         </motion.p>
 
         <motion.div className="btn-row hero__cta" variants={fadeUp} custom={3} initial="hidden" animate="show">
