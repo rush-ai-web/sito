@@ -3,6 +3,48 @@
 const observers = new Map();
 const completed = new WeakSet();
 
+// Allocate and pause nearby HTML animations before the visibility crossing.
+// No movement or ghost content outside the real viewport. The crossing only
+// starts a prepared animation instead of constructing many effects at once.
+// Keep the layer until it leaves this buffer, avoiding a second repaint at
+// the exact end of the entrance. SVG paths are deliberately not promoted.
+let preparation;
+function prepareEntrance(node, target, prepare, discard) {
+  if (!preparation) {
+    const callbacks = new Map();
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) callbacks.get(entry.target)?.forEach(update => update(entry));
+    }, { rootMargin: '400px 0px' });
+    preparation = { callbacks, observer };
+  }
+  const pool = preparation;
+  const stop = () => {
+    delete node.dataset.entryPrepared;
+    const callbacks = pool.callbacks.get(target);
+    callbacks?.delete(update);
+    if (!callbacks?.size) { pool.callbacks.delete(target); pool.observer.unobserve(target); }
+    if (!pool.callbacks.size) {
+      pool.observer.disconnect();
+      if (preparation === pool) preparation = undefined;
+    }
+  };
+  const update = entry => {
+    if (entry.isIntersecting) {
+      node.dataset.entryPrepared = '';
+      if (!completed.has(node)) prepare();
+    }
+    else {
+      delete node.dataset.entryPrepared;
+      if (completed.has(node)) stop();
+      else discard();
+    }
+  };
+  if (!pool.callbacks.has(target)) pool.callbacks.set(target, new Set());
+  pool.callbacks.get(target).add(update);
+  pool.observer.observe(target);
+  return stop;
+}
+
 export function observeEntrance(node, { from, to, duration = 0.62, delay = 0, ease = [0.16, 1, 0.3, 1], amount = 0.2, margin = '0px' }, target = node) {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   if (completed.has(node) || reduce.matches || !node.animate || !window.IntersectionObserver) return;
@@ -24,6 +66,7 @@ export function observeEntrance(node, { from, to, duration = 0.62, delay = 0, ea
     observers.set(key, pool);
   }
   let animation;
+  let stopPreparation;
   const unobserve = () => {
     const callbacks = pool.callbacks.get(target);
     callbacks?.delete(update);
@@ -46,6 +89,8 @@ export function observeEntrance(node, { from, to, duration = 0.62, delay = 0, ea
       const rect = entry.boundingClientRect;
       if (rect.top < viewport.height && rect.bottom > 0 && rect.left < viewport.width && rect.right > 0) {
         completed.add(node);
+        animation?.cancel();
+        stopPreparation?.();
         unobserve();
         return;
       }
@@ -53,29 +98,41 @@ export function observeEntrance(node, { from, to, duration = 0.62, delay = 0, ea
     }
     if (entry.isIntersecting && entry.intersectionRatio >= amount) reveal();
   };
+  const createAnimation = () => node.animate([from, to], {
+    duration: duration * 1000, delay: delay * 1000,
+    easing: Array.isArray(ease) ? `cubic-bezier(${ease.join(',')})` : ease,
+    fill: 'backwards',
+  });
+  const prepare = () => {
+    if (animation || reduce.matches) return;
+    animation = createAnimation();
+    animation.pause();
+    animation.currentTime = 0;
+  };
+  const discard = () => { animation?.cancel(); animation = undefined; };
   const reveal = () => {
     unobserve();
     delete node.dataset.entryPending;
     completed.add(node);
-    if (reduce.matches) return;
-    animation = node.animate([from, to], {
-      duration: duration * 1000, delay: delay * 1000,
-      easing: Array.isArray(ease) ? `cubic-bezier(${ease.join(',')})` : ease,
-      // Release the transform at the end so CSS hover/positioning keeps working.
-      fill: 'backwards',
-    });
+    if (reduce.matches) { stopPreparation?.(); return; }
+    if (animation) animation.play();
+    else animation = createAnimation();
   };
   const stopForReducedMotion = () => {
-    if (reduce.matches) { animation?.cancel(); unobserve(); delete node.dataset.entryPending; }
+    if (reduce.matches) { animation?.cancel(); unobserve(); stopPreparation?.(); delete node.dataset.entryPending; }
   };
   reduce.addEventListener?.('change', stopForReducedMotion);
   update.needsViewport = true;
   if (!pool.callbacks.has(target)) pool.callbacks.set(target, new Set());
   pool.callbacks.get(target).add(update);
   pool.observer.observe(target);
+  if (node.namespaceURI === 'http://www.w3.org/1999/xhtml' && from.transform) {
+    stopPreparation = prepareEntrance(node, target, prepare, discard);
+  }
   return () => {
     animation?.cancel();
     unobserve();
+    stopPreparation?.();
     delete node.dataset.entryPending;
     reduce.removeEventListener?.('change', stopForReducedMotion);
   };

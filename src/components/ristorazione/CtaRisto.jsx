@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Check, CalendarClock, ArrowRight, ArrowLeft } from 'lucide-react';
 import { DUR, EASE_MODAL, inView } from '../../lib/motion';
-import { Group, Item, LiveDot, Pill, Section } from '../ui';
+import { Item, LiveDot, Pill, Section } from '../ui';
 
 const CONTACT_ENDPOINT =
   import.meta.env.VITE_CONTACT_ENDPOINT || 'https://rush-contact.withered-voice-c323.workers.dev';
@@ -126,26 +126,27 @@ export default function CtaRisto() {
       <span aria-hidden="true" className="cta-bulb cta-bulb--l" />
       <span aria-hidden="true" className="cta-bulb cta-bulb--r" />
       <div className="row2" style={{ alignItems: 'start', position: 'relative', zIndex: 1 }}>
-        <Group className="row2__text stack contact-copy" each={0.08}>
-          <Item>
+        <Entrance direction="left" className="row2__text stack contact-copy">
+          <Item initial={false}>
             <Pill icon={CalendarClock}>Prenota una demo</Pill>
           </Item>
-          <Item as="h2" className="t-sec">
+          <Item initial={false} as="h2" className="t-sec">
             Partiamo dal tuo locale
           </Item>
-          <Item as="p" className="t-body">
+          <Item initial={false} as="p" className="t-body">
             In una call di 30 minuti ti mostriamo RUSH in azione e partiamo dagli strumenti che
             utilizzi. Individuiamo i flussi da collegare, le verifiche necessarie e il primo
             risultato utile da cercare. Senza impegno.
           </Item>
-          <Item as="p" className="t-small" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <Item initial={false} as="p" className="t-small" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <LiveDot />
             Rispondiamo entro due giorni lavorativi.
           </Item>
-        </Group>
+        </Entrance>
 
         <Entrance as="div"
           className="card card--lg contrast-card contact-card"
+          direction="right"
           initial={{ opacity: 0, transform: 'translateY(24px)' }}
           whileInView={{ opacity: 1, transform: 'none' }}
           viewport={inView}

@@ -17,9 +17,13 @@ export const DUR = {
   reveal: 0.62,
 };
 
-/* quando entra in viewport: una sola volta, con un margine che
-   fa partire l'animazione poco prima che l'elemento sia visibile */
-export const inView = { once: true, amount: 0.2, margin: '0px 0px -8% 0px' };
+/* Start inside the real viewport, never in the offscreen preparation area. */
+export const inView = { once: true, amount: 0.12, margin: '0px' };
+
+export const columnEntrance = {
+  left: { opacity: 0, transform: 'translateX(-32px)' },
+  right: { opacity: 0, transform: 'translateX(32px)' },
+};
 
 export const fadeUp = {
   // Full transform enables Motion's WAAPI path; x/y use its JS frame loop.

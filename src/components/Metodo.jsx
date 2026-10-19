@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Entrance } from './Entrance';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { watchSectionProgress } from '../lib/scrollControls';
 import { useReducedMotion } from '../lib/preferences';
@@ -83,16 +84,13 @@ function NodeDot({ cx, cy, frac, progress, reduce }) {
   );
 }
 
-/* StepCard - stessa sincronia: esce quando la linea raggiunge il suo nodo */
-function StepCard({ passo, idx, frac, progress, reduce }) {
-  const isLeft = passo.side === 'left';
+/* Each card enters once when visible; scrolling only drives the center line. */
+function StepCard({ passo, idx }) {
   const { icon: Icon, t, d } = passo;
-  const opacity = useTransform(progress, [frac - LEAD_IN, frac + LEAD_OUT], [0, 1]);
-  const x = useTransform(progress, [frac - LEAD_IN, frac + LEAD_OUT], [isLeft ? -20 : 20, 0]);
   return (
-    <motion.div
+    <Entrance direction={passo.side}
       className={`tl-item tl-item--${passo.side}`}
-      style={reduce ? { gridRow: idx + 1 } : { gridRow: idx + 1, opacity, x }}
+      style={{ gridRow: idx + 1 }}
     >
       <div className="tl-item__header">
         <span className="icon-tile icon-tile--sm">
@@ -101,7 +99,7 @@ function StepCard({ passo, idx, frac, progress, reduce }) {
         <h3 className="tl-item__t">{t}</h3>
       </div>
       <p className="tl-item__d">{d}</p>
-    </motion.div>
+    </Entrance>
   );
 }
 
@@ -119,7 +117,7 @@ export default function Metodo() {
   const strokeBase = isMobile ? 3.5 : 2;
   const strokeAccent = isMobile ? 4.5 : 2.5;
 
-  /* la linea e la comparsa di card/dot sono guidate dallo stesso scroll */
+  /* La linea e i dot seguono lo scroll; le card entrano quando visibili. */
   const scrollYProgress = useMotionValue(0);
   useEffect(() => {
     if (reduce) { scrollYProgress.set(1); return; }
@@ -188,9 +186,6 @@ export default function Metodo() {
             key={i}
             passo={passo}
             idx={i}
-            frac={FRAC[i]}
-            progress={scrollYProgress}
-            reduce={reduce}
           />
         ))}
       </div>

@@ -89,3 +89,62 @@ test('a group observes once, releases every child and avoids viewport reads duri
     cleanups.forEach(cleanup => cleanup());
   } finally { Object.assign(globalThis, previous); }
 });
+
+test('HTML layers prepare nearby, survive the entrance and release offscreen; SVGs do not promote', () => {
+  const previous = { window: globalThis.window, IntersectionObserver: globalThis.IntersectionObserver };
+  const observers = [];
+  const media = Object.assign(new EventTarget(), { matches: false });
+  class Observer {
+    constructor(callback, options) { this.callback = callback; this.options = options; this.targets = new Set(); observers.push(this); }
+    observe(node) { this.targets.add(node); }
+    unobserve(node) { this.targets.delete(node); }
+    disconnect() { this.targets.clear(); }
+  }
+  globalThis.window = { innerHeight: 800, innerWidth: 1200, matchMedia: () => media, IntersectionObserver: Observer };
+  globalThis.IntersectionObserver = Observer;
+  const make = (namespaceURI = 'http://www.w3.org/1999/xhtml') => ({
+    namespaceURI, dataset: {}, calls: [],
+    animate(frames) {
+      this.calls.push(frames);
+      return this.animation = { state: 'running', pause() { this.state = 'paused'; }, play() { this.state = 'running'; }, cancel() { this.state = 'cancelled'; } };
+    },
+  });
+  const options = { from: { opacity: 0, transform: 'translateY(22px)' }, to: { opacity: 1, transform: 'none' } };
+  const rect = { top: 1000, bottom: 1200, left: 0, right: 200 };
+  const a = make(), b = make(), svg = make('http://www.w3.org/2000/svg');
+  let cleanups = [];
+  try {
+    cleanups = [a, b, svg].map(node => observeEntrance(node, options));
+    const entry = observers.find(o => o.options.rootMargin === '0px');
+    const preparation = observers.find(o => o.options.rootMargin === '400px 0px');
+    assert.equal(preparation.targets.size, 2, 'Never allocate SVG entrance layers');
+    entry.callback([a,b,svg].map(target => ({ target, boundingClientRect: rect, isIntersecting: false, intersectionRatio: 0 })));
+    preparation.callback([{ target: a, isIntersecting: true }]);
+    assert.ok('entryPrepared' in a.dataset);
+    assert.equal(a.calls.length, 1, 'Construct the effect before the entrance crossing');
+    assert.equal(a.animation.state, 'paused', 'Preparation must never play offscreen');
+    assert.equal(a.animation.currentTime, 0);
+    assert.equal(a.calls[0][0].opacity, 0, 'No faint content before the visible entrance');
+    assert.ok(!('entryPrepared' in b.dataset));
+    entry.callback([{ target: a, isIntersecting: true, intersectionRatio: 0.05 }]);
+    assert.equal(a.animation.state, 'paused', 'Wait until the visible threshold is crossed');
+    assert.ok('entryPending' in a.dataset);
+    entry.callback([{ target: a, isIntersecting: true, intersectionRatio: 0.5 }]);
+    assert.equal(a.calls.length, 1, 'Reuse the prepared effect at entry');
+    assert.equal(a.animation.state, 'running');
+    assert.ok('entryPrepared' in a.dataset, 'Do not demote while visible');
+    preparation.callback([{ target: a, isIntersecting: false }]);
+    assert.ok(!('entryPrepared' in a.dataset));
+    assert.ok(!preparation.targets.has(a));
+    preparation.callback([{ target: b, isIntersecting: true }]);
+    const abandoned = b.animation;
+    preparation.callback([{ target: b, isIntersecting: false }]);
+    assert.equal(abandoned.state, 'cancelled');
+    preparation.callback([{ target: b, isIntersecting: true }]);
+    assert.equal(b.animation.state, 'paused');
+    media.matches = true; media.dispatchEvent(new Event('change'));
+    assert.ok(!('entryPrepared' in b.dataset));
+    assert.equal(preparation.targets.size, 0);
+    assert.ok(!('entryPending' in b.dataset));
+  } finally { cleanups.forEach(cleanup => cleanup()); Object.assign(globalThis, previous); }
+});

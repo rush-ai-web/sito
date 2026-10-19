@@ -206,15 +206,11 @@ export default function EsitiShowcase() {
   const Scene = ESITI[active].Scene;
 
   return (
-    <Entrance as="div"
+    <div
       className="esiti"
       ref={showcaseRef}
-      initial={{ opacity: 0, transform: 'translateY(26px)' }}
-      whileInView={{ opacity: 1, transform: 'none' }}
-      viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: 0.7, ease: EASE_MODAL }}
     >
-      <div className="esiti__list" role="tablist" aria-label="Cosa cambia per chi guida l'azienda">
+      <Entrance direction="left" className="esiti__list" role="tablist" aria-label="Cosa cambia per chi guida l'azienda">
         {ESITI.map((e, i) => {
           const on = i === active;
           return (
@@ -245,9 +241,9 @@ export default function EsitiShowcase() {
             </button>
           );
         })}
-      </div>
+      </Entrance>
 
-      <div className="esiti__stage">
+      <Entrance direction="right" className="esiti__stage">
         <AnimatePresence mode="wait">
           <motion.div
             key={active}
@@ -261,7 +257,7 @@ export default function EsitiShowcase() {
           </motion.div>
         </AnimatePresence>
         <span className="esiti__stage-glow" aria-hidden="true" />
-      </div>
-    </Entrance>
+      </Entrance>
+    </div>
   );
 }

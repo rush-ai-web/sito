@@ -16,7 +16,7 @@ import {
   MoreHorizontal,
 } from 'lucide-react';
 import { DUR, EASE_MODAL, inView } from '../lib/motion';
-import { Group, Item, LiveDot, Pill, Section } from './ui';
+import { Item, LiveDot, Pill, Section } from './ui';
 
 /* URL della funzione che invia l'email (Cloudflare Worker + Resend).
    Si può sovrascrivere in build con VITE_CONTACT_ENDPOINT. */
@@ -159,24 +159,25 @@ export default function Cta() {
       <span aria-hidden="true" className="cta-bulb cta-bulb--l" />
       <span aria-hidden="true" className="cta-bulb cta-bulb--r" />
       <div className="row2" style={{ alignItems: 'start', position: 'relative', zIndex: 1 }}>
-        <Group className="row2__text stack contact-copy" each={0.08}>
-          <Item>
+        <Entrance direction="left" className="row2__text stack contact-copy">
+          <Item initial={false}>
             <Pill icon={Mail}>Contatti</Pill>
           </Item>
-          <Item as="h2" className="t-sec">
+          <Item initial={false} as="h2" className="t-sec">
             DOVE PERDI TEMPO OGGI, PUOI RECUPERARE VALORE DOMANI
           </Item>
-          <Item as="p" className="t-body">
+          <Item initial={false} as="p" className="t-body">
             Raccontaci quali strumenti usi e quali passaggi rallentano il lavoro. Nel primo incontro valutiamo cosa collegare, dove semplificare e come RUSH può esserti utile. Con un quadro chiaro di attività, tempi e costi.
           </Item>
-          <Item as="p" className="t-small" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <Item initial={false} as="p" className="t-small" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <LiveDot />
             Rispondiamo entro due giorni lavorativi.
           </Item>
-        </Group>
+        </Entrance>
 
         <Entrance as="div"
           className="card card--lg contrast-card contact-card"
+          direction="right"
           initial={{ opacity: 0, transform: 'translateY(24px)' }}
           whileInView={{ opacity: 1, transform: 'none' }}
           viewport={inView}

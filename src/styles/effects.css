@@ -978,7 +978,7 @@
 }
 
 /* ------------------------------------------------------------
-   Mobile: testata (pillola, titolo, sommario) e card prezzi ferme.
+   Mobile: testata (pillola, titolo, sommario) ferma.
    Il rilevamento JS del mobile (useIsMobile) puo' non attivarsi in
    tempo per via del prerender/idratazione, lasciando attiva
    l'animazione d'ingresso desktop. Qui la neutralizziamo via CSS in
@@ -988,8 +988,7 @@
    continua a rivelarsi allo scroll.
    ------------------------------------------------------------ */
 @media (max-width: 760px) {
-  .head > *,
-  .prezzi2__frame {
+  .head > * {
     opacity: 1 !important;
     transform: none !important;
   }
@@ -1414,6 +1413,8 @@
   pointer-events: none;
 }
 .eco__core-ring {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1429,19 +1430,22 @@
   box-shadow:
     0 0 0 6px color-mix(in srgb, var(--accent) 8%, transparent),
     0 10px 30px -8px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.eco__core-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
+  box-shadow:
+    0 0 0 10px color-mix(in srgb, var(--accent) 12%, transparent),
+    0 14px 40px -6px color-mix(in srgb, var(--accent) 60%, transparent);
   animation: ecoCorePulse 4.5s ease-in-out infinite;
 }
 @keyframes ecoCorePulse {
-  0%, 100% {
-    box-shadow:
-      0 0 0 6px color-mix(in srgb, var(--accent) 8%, transparent),
-      0 10px 30px -8px color-mix(in srgb, var(--accent) 45%, transparent);
-  }
-  50% {
-    box-shadow:
-      0 0 0 10px color-mix(in srgb, var(--accent) 12%, transparent),
-      0 14px 40px -6px color-mix(in srgb, var(--accent) 60%, transparent);
-  }
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }
 /* il logotipo Rush dentro al nodo centrale */
 .eco__core-mark {
@@ -1505,7 +1509,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .eco__halo, .eco__core-ring { animation: none; }
+  .eco__halo, .eco__core-ring::before { animation: none; }
 }
 
 /* ---- Mobile: stack verticale ---- */

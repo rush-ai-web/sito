@@ -76,6 +76,7 @@ html.lenis body {
 #metodo,
 #ristorazione,
 #principi,
+#prezzi,
 #faq,
 #avvio,
 #contatti {
@@ -532,8 +533,12 @@ main {
 [data-entry-pending] {
   opacity: 0;
 }
+[data-entry-prepared] {
+  will-change: transform, opacity;
+}
 @media (prefers-reduced-motion: reduce) {
   [data-entry-pending] { opacity: 1; }
+  [data-entry-prepared] { will-change: auto; }
 }
 
 [data-motion-active='false'],
@@ -6172,41 +6177,41 @@ textarea.input::-webkit-scrollbar {
 }
 
 /* ---- cornice con bordo animato + glow ---- */
-@property --prezzi-angle {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
-}
-
 .prezzi2__frame {
   position: relative;
   border-radius: 20px;
   padding: 2px; /* spessore uniforme del bordo */
-  background: conic-gradient(
-    from var(--prezzi-angle),
+  --prezzi-highlight: #cbdcff;
+  --prezzi-border: conic-gradient(
     color-mix(in srgb, var(--accent) 10%, transparent) 0deg,
     color-mix(in srgb, var(--accent) 10%, transparent) 150deg,
     color-mix(in srgb, var(--accent) 40%, transparent) 205deg,
     var(--accent) 252deg,
-    #cbdcff 274deg,
+    var(--prezzi-highlight) 274deg,
     var(--accent) 296deg,
     color-mix(in srgb, var(--accent) 35%, transparent) 336deg,
     color-mix(in srgb, var(--accent) 10%, transparent) 360deg
   );
-  animation: prezziSpin 4s linear infinite;
   isolation: isolate;
 }
 
-/* Alone sincronizzato con un'animazione locale, non ereditata. */
+.prezzi2__frame-ring,
 .prezzi2__frame-glow {
-  animation: prezziSpin 4s linear infinite;
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  z-index: -1;
+  overflow: hidden;
   pointer-events: none;
-  background: conic-gradient(
-    from var(--prezzi-angle),
+}
+.prezzi2__frame-ring {
+  background: var(--prezzi-border);
+}
+
+/* Rotate an already painted gradient, rather than recomputing its angle
+   and repainting the whole card plus blur on every animation frame. */
+.prezzi2__frame-glow {
+  z-index: -1;
+  --prezzi-glow: conic-gradient(
     transparent 0deg,
     transparent 200deg,
     color-mix(in srgb, var(--accent) 55%, transparent) 250deg,
@@ -6215,16 +6220,42 @@ textarea.input::-webkit-scrollbar {
     transparent 348deg,
     transparent 360deg
   );
+  background: var(--prezzi-glow);
   filter: blur(13px);
   opacity: 0.75;
 }
 
+@supports (width: 1cqmax) {
+  .prezzi2__frame-ring,
+  .prezzi2__frame-glow {
+    /* Absolutely positioned: size containment does not change card height. */
+    container-type: size;
+    background: none;
+  }
+  .prezzi2__frame-ring::before,
+  .prezzi2__frame-glow::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    /* Cover the diagonal even when copy wraps onto a taller mobile card. */
+    width: 142cqmax;
+    height: 142cqmax;
+    background: var(--prezzi-border);
+    animation: prezziSpin 4s linear infinite;
+  }
+  .prezzi2__frame-glow::before { background: var(--prezzi-glow); }
+}
 @keyframes prezziSpin {
-  to { --prezzi-angle: 360deg; }
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .prezzi2__frame, .prezzi2__frame-glow { animation: none; }
+  .prezzi2__frame-ring::before, .prezzi2__frame-glow::before {
+    animation: none;
+    transform: translate(-50%, -50%);
+  }
 }
 
 /* Card invertita: sfondo bianco in dark, nero in light */
@@ -7532,17 +7563,7 @@ textarea.input::-webkit-scrollbar {
 }
 
 .risto-orange .prezzi2__frame {
-  background: conic-gradient(
-    from var(--prezzi-angle),
-    color-mix(in srgb, var(--accent) 10%, transparent) 0deg,
-    color-mix(in srgb, var(--accent) 10%, transparent) 150deg,
-    color-mix(in srgb, var(--accent) 40%, transparent) 205deg,
-    var(--accent) 252deg,
-    #ffd0b8 274deg,
-    var(--accent) 296deg,
-    color-mix(in srgb, var(--accent) 35%, transparent) 336deg,
-    color-mix(in srgb, var(--accent) 10%, transparent) 360deg
-  );
+  --prezzi-highlight: #ffd0b8;
 }
 .risto-orange .prezzi-feat-ic {
   background: rgba(255, 100, 47, 0.16);

@@ -13,7 +13,6 @@ import {
 } from 'lucide-react';
 import { Section, Head } from './ui';
 import { EASE_MODAL } from '../lib/motion';
-import { useIsMobile } from '../lib/hooks';
 
 const INCLUSO = [
   { Icon: SlidersHorizontal, label: 'Centro operativo configurato sui tuoi processi' },
@@ -45,18 +44,9 @@ const COME_FUNZIONA = [
   },
 ];
 
-const FRAME_REVEAL = {
-  hidden: { opacity: 0, transform: 'translateY(20px)' },
-  show: { opacity: 1, transform: 'none', transition: { duration: 0.6, ease: EASE_MODAL } },
-};
-const INFO_REVEAL = {
-  hidden: { opacity: 0, transform: 'translateY(20px)' },
-  show: { opacity: 1, transform: 'none', transition: { duration: 0.6, ease: EASE_MODAL, delay: 0.1 } },
-};
 
 export default function Prezzi() {
   const [yearly, setYearly] = useState(true);
-  const isMobile = useIsMobile();
 
   return (
     <Section id="prezzi" large>
@@ -83,11 +73,12 @@ export default function Prezzi() {
         {/* colonna sinistra - prezzo, dentro una cornice animata */}
         <Entrance
           className="prezzi2__frame"
-          initial={isMobile ? false : FRAME_REVEAL.hidden}
+          direction="left"
           whileInView={{ opacity: 1, transform: 'none' }}
-          transition={FRAME_REVEAL.show.transition}
+          transition={{ duration: 0.6, ease: EASE_MODAL }}
           viewport={{ once: true, amount: 0.3 }}
         >
+          <span className="prezzi2__frame-ring" aria-hidden="true" />
           <span className="prezzi2__frame-glow" aria-hidden="true" />
           <div className="prezzi2__card">
             {/* toggle */}
@@ -169,9 +160,9 @@ export default function Prezzi() {
         {/* colonna destra - come funziona */}
         <Entrance
           className="prezzi2__info"
-          initial={isMobile ? false : INFO_REVEAL.hidden}
+          direction="right"
           whileInView={{ opacity: 1, transform: 'none' }}
-          transition={INFO_REVEAL.show.transition}
+          transition={{ duration: 0.6, ease: EASE_MODAL }}
           viewport={{ once: true, amount: 0.3 }}
         >
           <div className="prezzi2__steps">

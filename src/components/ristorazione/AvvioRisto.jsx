@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Entrance } from '../Entrance';
 import { motion } from 'framer-motion';
 import { useReducedMotion } from '../../lib/preferences';
 import { Compass, PhoneCall, UploadCloud, GraduationCap, CheckCircle2 } from 'lucide-react';
@@ -90,7 +91,7 @@ export default function AvvioRisto() {
 
         <div className="onb__steps">
           {PASSI.map(({ icon: Icon, t, d }, i) => (
-            <article
+            <Entrance as="article" direction={i % 2 === 0 ? 'left' : 'right'}
               className={`onb__step${activeStep === i ? ' is-active' : ''}`}
               key={t}
             >
@@ -100,7 +101,7 @@ export default function AvvioRisto() {
               </div>
               <p className="onb__d">{d}</p>
               <span className="onb__num" aria-hidden="true">{i + 1}</span>
-            </article>
+            </Entrance>
           ))}
         </div>
       </div>

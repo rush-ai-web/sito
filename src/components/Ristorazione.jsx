@@ -45,6 +45,7 @@ export default function Ristorazione() {
       <div className="risto2">
         <Entrance as="div"
           className="risto2__text"
+          direction="left"
           initial={{ opacity: 0, transform: 'translateY(24px)' }}
           whileInView={{ opacity: 1, transform: 'none' }}
           viewport={inView}
@@ -85,6 +86,7 @@ export default function Ristorazione() {
           ref={cardRef}
           onPointerMove={onMove}
           className="risto2__card contrast-card restaurant-card"
+          direction="right"
           initial={{ opacity: 0, transform: 'translateY(24px)' }}
           whileInView={{ opacity: 1, transform: 'none' }}
           viewport={inView}

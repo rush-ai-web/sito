@@ -1,6 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { fadeUp, wordUp, scaleIn, DUR, EASE_MODAL } from '../src/lib/motion.js';
+import { fadeUp, wordUp, scaleIn, DUR, EASE_MODAL, columnEntrance, inView } from '../src/lib/motion.js';
+
+test('opposing columns move inward and the shared entrance threshold is inside the physical viewport', () => {
+  assert.equal(columnEntrance.left.transform, 'translateX(-32px)');
+  assert.equal(columnEntrance.right.transform, 'translateX(32px)');
+  assert.equal(columnEntrance.left.opacity, 0);
+  assert.equal(columnEntrance.right.opacity, 0);
+  assert.equal(inView.margin, '0px');
+  assert.ok(inView.amount > 0);
+});
 
 test('shared entrances use full transforms eligible for browser animation', () => {
   for (const variants of [fadeUp, wordUp]) {
