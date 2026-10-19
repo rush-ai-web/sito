@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { Entrance } from './Entrance';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { watchSectionProgress } from '../lib/scrollControls';
 import { useReducedMotion } from '../lib/preferences';
@@ -59,15 +58,14 @@ const TOTAL = 1120;
    Con offset start-center → end-center, a quella frazione il punto è a metà schermo. */
 const FRAC = NODES.map((n) => n.cy / TOTAL);
 
-/* finestra di reveal: parte appena prima e si completa appena dopo che la
-   linea tocca il punto - così la card esce quando la linea lo raggiunge. */
-const LEAD_IN = 0.04;
-const LEAD_OUT = 0.02;
+/* Il reveal parte nel momento esatto in cui il riempimento raggiunge il nodo.
+   La breve coda mantiene l'entrata laterale fluida senza anticiparla. */
+const REVEAL_SPAN = 0.035;
 
 /* NodeDot - appare in sincrono con la linea che lo raggiunge */
 function NodeDot({ cx, cy, frac, progress, reduce }) {
-  const opacity = useTransform(progress, [frac - LEAD_IN, frac + LEAD_OUT], [0, 1]);
-  const scale = useTransform(progress, [frac - LEAD_IN, frac + LEAD_OUT], [0.6, 1]);
+  const opacity = useTransform(progress, [frac, frac + REVEAL_SPAN], [0, 1]);
+  const scale = useTransform(progress, [frac, frac + REVEAL_SPAN], [0.6, 1]);
   if (reduce) {
     return (
       <circle cx={cx} cy={cy} r="9" fill="var(--accent)" stroke="var(--bg)" strokeWidth="3" />
@@ -84,13 +82,22 @@ function NodeDot({ cx, cy, frac, progress, reduce }) {
   );
 }
 
-/* Each card enters once when visible; scrolling only drives the center line. */
-function StepCard({ passo, idx }) {
+/* Ogni card usa lo stesso progresso della linea: resta nascosta fino a quando
+   il riempimento raggiunge il suo nodo, poi entra dal lato corrispondente. */
+function StepCard({ passo, idx, frac, progress, reduce }) {
   const { icon: Icon, t, d } = passo;
+  const opacity = useTransform(progress, [frac, frac + REVEAL_SPAN], [0, 1]);
+  const x = useTransform(
+    progress,
+    [frac, frac + REVEAL_SPAN],
+    [passo.side === 'left' ? -32 : 32, 0],
+  );
+  const style = reduce ? { gridRow: idx + 1 } : { gridRow: idx + 1, opacity, x };
+
   return (
-    <Entrance direction={passo.side}
+    <motion.div
       className={`tl-item tl-item--${passo.side}`}
-      style={{ gridRow: idx + 1 }}
+      style={style}
     >
       <div className="tl-item__header">
         <span className="icon-tile icon-tile--sm">
@@ -99,7 +106,7 @@ function StepCard({ passo, idx }) {
         <h3 className="tl-item__t">{t}</h3>
       </div>
       <p className="tl-item__d">{d}</p>
-    </Entrance>
+    </motion.div>
   );
 }
 
@@ -117,7 +124,7 @@ export default function Metodo() {
   const strokeBase = isMobile ? 3.5 : 2;
   const strokeAccent = isMobile ? 4.5 : 2.5;
 
-  /* La linea e i dot seguono lo scroll; le card entrano quando visibili. */
+  /* Linea, dot e card condividono lo stesso progresso di scroll. */
   const scrollYProgress = useMotionValue(0);
   useEffect(() => {
     if (reduce) { scrollYProgress.set(1); return; }
@@ -186,6 +193,9 @@ export default function Metodo() {
             key={i}
             passo={passo}
             idx={i}
+            frac={FRAC[i]}
+            progress={scrollYProgress}
+            reduce={reduce}
           />
         ))}
       </div>

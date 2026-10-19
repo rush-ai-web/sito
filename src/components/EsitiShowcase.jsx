@@ -196,12 +196,13 @@ export default function EsitiShowcase() {
   const reduce = useReducedMotion();
   const [showcaseRef, inView] = useAnimationActivity();
   const [active, setActive] = useState(0);
+  const [stageReady, setStageReady] = useState(false);
 
   useEffect(() => {
-    if (reduce || !inView) return undefined;
+    if (reduce || !inView || !stageReady) return undefined;
     const id = setInterval(() => setActive((a) => (a + 1) % ESITI.length), ROTATE_MS);
     return () => clearInterval(id);
-  }, [reduce, active, inView]);
+  }, [reduce, active, inView, stageReady]);
 
   const Scene = ESITI[active].Scene;
 
@@ -229,7 +230,7 @@ export default function EsitiShowcase() {
                 <b>{e.t}</b>
                 <em>{e.d}</em>
               </span>
-              {on && !reduce && inView && (
+              {on && !reduce && inView && stageReady && (
                 <motion.span
                   className="esiti__prog"
                   key={active}
@@ -243,17 +244,17 @@ export default function EsitiShowcase() {
         })}
       </Entrance>
 
-      <Entrance direction="right" className="esiti__stage">
+      <Entrance direction="right" className="esiti__stage" onEntered={() => setStageReady(true)}>
         <AnimatePresence mode="wait">
           <motion.div
             key={active}
             className="esiti__scene"
-            initial={reduce ? false : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={reduce ? undefined : { opacity: 0, y: -14 }}
+            initial={reduce || !stageReady ? false : { opacity: 0, transform: 'translateY(14px)' }}
+            animate={{ opacity: 1, transform: 'translateY(0px)' }}
+            exit={reduce ? undefined : { opacity: 0, transform: 'translateY(-14px)' }}
             transition={{ duration: 0.6, ease: EASE_MODAL }}
           >
-            <Scene reduce={reduce || !inView} />
+            <Scene reduce={reduce || !inView || !stageReady} />
           </motion.div>
         </AnimatePresence>
         <span className="esiti__stage-glow" aria-hidden="true" />

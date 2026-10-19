@@ -530,6 +530,10 @@ main {
 }
 
 /* Pause offscreen decorative loops, not Motion's one-shot entrances. */
+[data-entrance] {
+  /* A moving entrance must not become the browser's scroll anchor. */
+  overflow-anchor: none;
+}
 [data-entry-pending] {
   opacity: 0;
 }
@@ -541,6 +545,24 @@ main {
   [data-entry-prepared] { will-change: auto; }
 }
 
+[data-entry-pending],
+[data-entry-pending]::before,
+[data-entry-pending]::after,
+[data-entry-pending] *,
+[data-entry-pending] *::before,
+[data-entry-pending] *::after,
+[data-entry-running],
+[data-entry-running]::before,
+[data-entry-running]::after,
+[data-entry-running] *,
+[data-entry-running] *::before,
+[data-entry-running] *::after,
+[data-scene-entering],
+[data-scene-entering]::before,
+[data-scene-entering]::after,
+[data-scene-entering] *,
+[data-scene-entering] *::before,
+[data-scene-entering] *::after,
 [data-motion-active='false'],
 [data-motion-active='false']::before,
 [data-motion-active='false']::after,
@@ -576,18 +598,6 @@ main {
 .glow {
   position: absolute;
   border-radius: 50%;
-}
-
-/* Sui dispositivi più lenti (in genere anche i touch) il blur pesante su
-   una decina di sagome per pagina costa parecchio in compositing: qui lo
-   alleggeriamo senza eliminare l'effetto. */
-@media (max-width: 760px), (pointer: coarse) {
-  .glow.beam {
-    filter: blur(40px);
-  }
-  .glow.haze {
-    filter: blur(56px);
-  }
 }
 
 /* --- forme --- */
@@ -630,6 +640,12 @@ main {
     color-mix(in srgb, var(--accent) 30%, transparent),
     transparent 70%
   );
+}
+
+/* Keep the mobile override AFTER the base rules at equal specificity. */
+@media (max-width: 760px), (pointer: coarse) {
+  .glow.beam { filter: blur(40px); }
+  .glow.haze { filter: blur(56px); }
 }
 
 /* rings: onde concentriche tenui - motivo diverso dai bulb, richiama la

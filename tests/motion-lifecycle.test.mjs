@@ -5,11 +5,12 @@ import { warmupScroll } from '../src/lib/warmup.js';
 test('static SVG icons are untouched and nested SMIL changes are deduplicated per batch', () => {
   const previous = { document: globalThis.document, IntersectionObserver: globalThis.IntersectionObserver, MutationObserver: globalThis.MutationObserver };
   let observer;
+  const mutations = [];
   const section = { dataset: {} }, card = { dataset: {} };
   const calls = [];
   const animated = {
     querySelector: () => ({}),
-    closest: () => [section, card].find(n => n.dataset.motionActive === 'false'),
+    closest: () => [section, card].find(n => n.dataset.motionActive === 'false' || 'entryPending' in n.dataset || 'entryRunning' in n.dataset || 'sceneEntering' in n.dataset),
     pauseAnimations: () => calls.push('pause'), unpauseAnimations: () => calls.push('play'),
   };
   const icon = {
@@ -27,12 +28,31 @@ test('static SVG icons are untouched and nested SMIL changes are deduplicated pe
     constructor(callback) { this.callback = callback; observer = this; }
     observe() {} unobserve() {} disconnect() {}
   };
-  globalThis.MutationObserver = class { observe() {} disconnect() {} };
+  globalThis.MutationObserver = class {
+    constructor(callback) { this.callback = callback; mutations.push(this); }
+    observe(node, options) { this.options = options; }
+    disconnect() {}
+  };
   let cleanup;
   try {
     cleanup = warmupScroll();
     assert.deepEqual(calls, ['pause']);
+    card.dataset.entryPending = '';
     observer.callback([{ target: section, isIntersecting: true }, { target: card, isIntersecting: true }]);
+    assert.deepEqual(calls, ['pause'], 'A visible section must not resume SVGs inside a pending card');
+    delete card.dataset.entryPending;
+    card.dataset.entryRunning = '';
+    const entries = mutations.find(m => m.options.attributeFilter);
+    assert.equal(entries.options.childList, undefined, 'Counter text changes must not trigger the lifecycle observer');
+    entries.callback([{ target: section }, { target: card }]);
+    assert.deepEqual(calls, ['pause'], 'SVGs stay paused while their parent enters');
+    delete card.dataset.entryRunning;
+    section.dataset.sceneEntering = '';
+    entries.callback([{ target: section }]);
+    assert.deepEqual(calls, ['pause'], 'A sibling entrance keeps the shared SVG paused');
+    assert.ok(entries.options.attributeFilter.includes('data-scene-entering'));
+    delete section.dataset.sceneEntering;
+    entries.callback([{ target: section }, { target: card }]);
     assert.deepEqual(calls, ['pause', 'play']);
     observer.callback([{ target: section, isIntersecting: true }, { target: card, isIntersecting: true }]);
     assert.deepEqual(calls, ['pause', 'play'], 'No repeated timing calls for unchanged state');

@@ -39,13 +39,13 @@ const KPI = [
 ];
 
 function Kpi({ label, to, prefix = '', suffix = '', d, dec = 0 }) {
-  const [ref, val] = useCountUp(to, { dec });
+  const [ref, val, numberRef] = useCountUp(to, { dec });
   return (
     <Item className="stair__col">
       <Pill>{label}</Pill>
       <p className="t-kpi num stair__val" ref={ref}>
         {prefix}
-        {val}
+        <span ref={numberRef}>{val}</span>
         {suffix}
       </p>
       <p className="t-small">{d}</p>

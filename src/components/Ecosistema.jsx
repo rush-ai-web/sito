@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { Section, Head, IconTile } from './ui';
 import { EASE_MODAL, scaleIn } from '../lib/motion';
-import { useIsMobile } from '../lib/hooks';
+import { useIsMobile, useSceneEntrancePause } from '../lib/hooks';
 
 /* ------------------------------------------------------------
    Ecosistema - il diagramma "tutto in un unico posto".
@@ -59,6 +59,7 @@ const OUT_PATH = `M ${NODE_CX + NODE_R + 6},${NODE_CY} L ${DEST_L},${NODE_CY}`;
 /* ---- Desktop: diagramma completo con linee animate ---- */
 function EcosistemaDesktop() {
   const reduce = useReducedMotion();
+  const sceneRef = useSceneEntrancePause();
 
   return (
     <Section id="ecosistema" large>
@@ -81,7 +82,7 @@ function EcosistemaDesktop() {
       />
 
       <div className="eco">
-        <div className="eco__stage" aria-hidden="true">
+        <div className="eco__stage" ref={sceneRef} aria-hidden="true">
           {/* alone d'accento morbido dietro al nodo: sfondo smooth, non invadente */}
           <span className="eco__halo" />
 
@@ -253,6 +254,7 @@ function EcosistemaDesktop() {
 /* ---- Mobile: stack verticale, stessa storia in colonna ---- */
 function EcosistemaMobile() {
   const reduce = useReducedMotion();
+  const sceneRef = useSceneEntrancePause();
   return (
     <Section id="ecosistema" large>
       <Head
@@ -273,7 +275,7 @@ function EcosistemaMobile() {
         }
       />
 
-      <div className="eco-m">
+      <div className="eco-m" ref={sceneRef}>
         <div className="eco-m__mods">
           {MODULES.map((m, i) => {
             const Icon = m.icon;

@@ -2,14 +2,17 @@
 // per card/path. WAAPI owns every frame; no React state updates while entering.
 const observers = new Map();
 const completed = new WeakSet();
+// A child can wait for its parent's native animation without another observer
+// or per-frame React updates. "completed" means one-shot started; settlement
+// means its movement has actually finished.
+const settlements = new WeakMap();
 
-// Allocate and pause nearby HTML animations before the visibility crossing.
-// No movement or ghost content outside the real viewport. The crossing only
-// starts a prepared animation instead of constructing many effects at once.
-// Keep the layer until it leaves this buffer, avoiding a second repaint at
-// the exact end of the entrance. SVG paths are deliberately not promoted.
+// Prepare the compositor without applying keyframes to the observed node.
+// A paused, translated effect changes its intersection geometry before entry.
+// Retain the hint until offscreen so finishing an entry doesn't demote a
+// visible card and repaint its contents. SVG paths are not promoted.
 let preparation;
-function prepareEntrance(node, target, prepare, discard) {
+function prepareEntrance(node, target) {
   if (!preparation) {
     const callbacks = new Map();
     const observer = new IntersectionObserver(entries => {
@@ -31,12 +34,10 @@ function prepareEntrance(node, target, prepare, discard) {
   const update = entry => {
     if (entry.isIntersecting) {
       node.dataset.entryPrepared = '';
-      if (!completed.has(node)) prepare();
     }
     else {
       delete node.dataset.entryPrepared;
       if (completed.has(node)) stop();
-      else discard();
     }
   };
   if (!pool.callbacks.has(target)) pool.callbacks.set(target, new Set());
@@ -45,9 +46,21 @@ function prepareEntrance(node, target, prepare, discard) {
   return stop;
 }
 
-export function observeEntrance(node, { from, to, duration = 0.62, delay = 0, ease = [0.16, 1, 0.3, 1], amount = 0.2, margin = '0px' }, target = node) {
+export function observeEntrance(node, { from, to, duration = 0.62, delay = 0, ease = [0.16, 1, 0.3, 1], amount = 0.2, margin = '0px', onEntered }, target = node) {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (completed.has(node) || reduce.matches || !node.animate || !window.IntersectionObserver) return;
+  const settlement = { done: false, listeners: new Set() };
+  settlements.set(node, settlement);
+  const settle = () => {
+    if (settlement.done) return;
+    settlement.done = true;
+    onEntered?.();
+    settlement.listeners.forEach(listener => listener());
+    settlement.listeners.clear();
+  };
+  if (completed.has(node) || reduce.matches || !node.animate || !window.IntersectionObserver) {
+    settle();
+    return;
+  }
   const key = `${amount}|${margin}`;
   let pool = observers.get(key);
   if (!pool) {
@@ -67,6 +80,8 @@ export function observeEntrance(node, { from, to, duration = 0.62, delay = 0, ea
   }
   let animation;
   let stopPreparation;
+  let stopWaiting;
+  let eligible = false;
   const unobserve = () => {
     const callbacks = pool.callbacks.get(target);
     callbacks?.delete(update);
@@ -81,6 +96,7 @@ export function observeEntrance(node, { from, to, duration = 0.62, delay = 0, ea
   };
   let initialized = false;
   const update = (entry, viewport) => {
+    eligible = entry.isIntersecting && entry.intersectionRatio >= amount;
     if (!initialized) {
       initialized = true;
       update.needsViewport = false;
@@ -92,34 +108,50 @@ export function observeEntrance(node, { from, to, duration = 0.62, delay = 0, ea
         animation?.cancel();
         stopPreparation?.();
         unobserve();
+        settle();
         return;
       }
       node.dataset.entryPending = '';
     }
-    if (entry.isIntersecting && entry.intersectionRatio >= amount) reveal();
+    if (eligible) reveal();
   };
   const createAnimation = () => node.animate([from, to], {
     duration: duration * 1000, delay: delay * 1000,
     easing: Array.isArray(ease) ? `cubic-bezier(${ease.join(',')})` : ease,
     fill: 'backwards',
   });
-  const prepare = () => {
-    if (animation || reduce.matches) return;
-    animation = createAnimation();
-    animation.pause();
-    animation.currentTime = 0;
-  };
-  const discard = () => { animation?.cancel(); animation = undefined; };
+  const finish = () => { delete node.dataset.entryRunning; settle(); };
   const reveal = () => {
+    stopWaiting?.();
+    stopWaiting = undefined;
+    if (!eligible || settlement.done) return;
+    // CSS animation-play-state doesn't pause WAAPI entrances. Explicitly
+    // sequence nested entrances instead of moving two translucent layers.
+    const parent = node.parentElement?.closest('[data-entrance]');
+    const parentSettlement = parent && settlements.get(parent);
+    if (parentSettlement && !parentSettlement.done) {
+      parentSettlement.listeners.add(reveal);
+      stopWaiting = () => parentSettlement.listeners.delete(reveal);
+      return;
+    }
     unobserve();
-    delete node.dataset.entryPending;
     completed.add(node);
-    if (reduce.matches) { stopPreparation?.(); return; }
-    if (animation) animation.play();
-    else animation = createAnimation();
+    if (reduce.matches) {
+      delete node.dataset.entryPending;
+      stopPreparation?.();
+      settle();
+      return;
+    }
+    // Decorative children stay paused until the card finishes moving. This
+    // lets its entrance reuse a stable texture instead of repainting SVGs,
+    // gradients and inner CSS loops at the same time as the scroll.
+    node.dataset.entryRunning = '';
+    animation = createAnimation();
+    animation.onfinish = finish;
+    delete node.dataset.entryPending;
   };
   const stopForReducedMotion = () => {
-    if (reduce.matches) { animation?.cancel(); unobserve(); stopPreparation?.(); delete node.dataset.entryPending; }
+    if (reduce.matches) { stopWaiting?.(); animation?.cancel(); finish(); unobserve(); stopPreparation?.(); delete node.dataset.entryPending; }
   };
   reduce.addEventListener?.('change', stopForReducedMotion);
   update.needsViewport = true;
@@ -127,10 +159,18 @@ export function observeEntrance(node, { from, to, duration = 0.62, delay = 0, ea
   pool.callbacks.get(target).add(update);
   pool.observer.observe(target);
   if (node.namespaceURI === 'http://www.w3.org/1999/xhtml' && from.transform) {
-    stopPreparation = prepareEntrance(node, target, prepare, discard);
+    stopPreparation = prepareEntrance(node, target);
   }
   return () => {
+    stopWaiting?.();
     animation?.cancel();
+    delete node.dataset.entryRunning;
+    settlement.done = true;
+    settlements.delete(node);
+    // A dependency change can replace a parent effect while children remain.
+    // Release those waiters as well; otherwise they could stay hidden.
+    settlement.listeners.forEach(listener => listener());
+    settlement.listeners.clear();
     unobserve();
     stopPreparation?.();
     delete node.dataset.entryPending;

@@ -202,6 +202,7 @@ function SoluzioneDesktop() {
   const reduce = useReducedMotion();
   const [openId, setOpenId] = useState(null);
   const [entered, setEntered] = useState(false);
+  const [orbitReady, setOrbitReady] = useState(false);
 
   const angleRef = useRef(0);
   const focusRef = useRef(null);
@@ -243,6 +244,7 @@ function SoluzioneDesktop() {
         entries.forEach((e) => {
           if (e.isIntersecting) {
             setEntered(true);
+            io.disconnect();
           }
         });
       },
@@ -254,10 +256,10 @@ function SoluzioneDesktop() {
 
   useEffect(() => {
     applyPositions();
-    if (reduce || !active) return undefined;
+    if (reduce || !active || (!orbitReady && openId === null)) return undefined;
     let last = performance.now();
     const loop = (now) => {
-      const dt = now - last;
+      const dt = Math.min(now - last, 64);
       last = now;
       const f = focusRef.current;
       if (f) {
@@ -270,11 +272,12 @@ function SoluzioneDesktop() {
         angleRef.current = (angleRef.current + AUTO_SPEED * dt) % 360;
         applyPositions();
       }
-      rafRef.current = requestAnimationFrame(loop);
+      // An open, settled detail doesn't need an idle RAF loop.
+      if (focusRef.current || openIdRef.current === null) rafRef.current = requestAnimationFrame(loop);
     };
     rafRef.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [reduce, active]);
+  }, [reduce, active, orbitReady, openId]);
 
   const focusNode = (id) => {
     const idx = ORBIT.findIndex((o) => o.id === id);
@@ -338,6 +341,9 @@ function SoluzioneDesktop() {
                 }
               }}
               aria-expanded={isOpen}
+              onAnimationEnd={(event) => {
+                if (idx === ORBIT.length - 1 && event.target === event.currentTarget && event.animationName === 'orbitPillIn') setOrbitReady(true);
+              }}
               aria-label={`${isOpen ? 'Chiudi' : 'Apri'} il dettaglio: ${item.t.replace('\n', ' ')}`}
             >
               <div className="orbit-card__row">

@@ -6,6 +6,17 @@ export function warmupScroll() {
   const sections = new Map();
   const nearby = new Set();
   const svgStates = new WeakMap();
+  const animatedSVGs = (scope) => Array.from(scope.querySelectorAll('svg')).filter(svg =>
+    typeof svg.pauseAnimations === 'function' && svg.querySelector('animate, animateMotion, animateTransform'));
+  const syncSVGs = (svgs) => {
+    for (const svg of svgs) {
+      const active = !document.hidden && !svg.closest('[data-motion-active="false"], [data-entry-pending], [data-entry-running], [data-scene-entering]');
+      if (svgStates.get(svg) === active) continue;
+      svgStates.set(svg, active);
+      if (active) svg.unpauseAnimations();
+      else svg.pauseAnimations();
+    }
+  };
   const sync = (changed) => {
     const affected = new Set();
     // Finish all scope writes before resolving nested SVG activity. This
@@ -15,13 +26,7 @@ export function warmupScroll() {
       if (section.dataset.motionActive !== active) section.dataset.motionActive = active;
       sections.get(section)?.forEach(svg => affected.add(svg));
     }
-    for (const svg of affected) {
-      const active = !document.hidden && !svg.closest('[data-motion-active="false"]');
-      if (svgStates.get(svg) === active) continue;
-      svgStates.set(svg, active);
-      if (active) svg.unpauseAnimations();
-      else svg.pauseAnimations();
-    }
+    syncSVGs(affected);
   };
   const observer = new IntersectionObserver(entries => {
     for (const entry of entries) {
@@ -34,8 +39,7 @@ export function warmupScroll() {
     if (sections.has(section)) return;
     // Lucide icons have an SVG timing API too, but no SMIL animation. Calling
     // it on every icon at each crossing needlessly touches static SVG trees.
-    sections.set(section, Array.from(section.querySelectorAll('svg')).filter(svg =>
-      typeof svg.pauseAnimations === 'function' && svg.querySelector('animate, animateMotion, animateTransform')));
+    sections.set(section, animatedSVGs(section));
     section.dataset.motionActive = 'false';
     observer.observe(section);
   };
@@ -46,8 +50,17 @@ export function warmupScroll() {
   };
   // A tall feature section can contain many offscreen animated cards. Track
   // each expensive scene as well, on desktop and mobile, with the same pool.
-  const scopes = '.buildcard, .eco__stage';
+  const scopes = '.buildcard, .eco__stage, .eco-m';
   main.querySelectorAll(`:scope > section, ${scopes}`).forEach(track);
+  // Observe lifecycle attributes only, never per-frame styles or text updates
+  // from the counters. Batch SVGs when nested entrances change together.
+  const entryMutations = new MutationObserver(records => {
+    const affected = new Set();
+    for (const record of records) animatedSVGs(record.target).forEach(svg => affected.add(svg));
+    syncSVGs(affected);
+  });
+  entryMutations.observe(main, { subtree: true, attributes: true,
+    attributeFilter: ['data-entry-pending', 'data-entry-running', 'data-scene-entering'] });
   // Some sections swap their desktop/mobile variant after mount: the new
   // <section> must be suspended offscreen like the one it replaces.
   const mutations = new MutationObserver(records => {
@@ -75,6 +88,7 @@ export function warmupScroll() {
   visibility();
   return () => {
     mutations.disconnect();
+    entryMutations.disconnect();
     observer.disconnect();
     document.removeEventListener('visibilitychange', visibility);
     document.documentElement.classList.remove('page-hidden');

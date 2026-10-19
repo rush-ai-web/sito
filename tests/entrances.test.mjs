@@ -2,6 +2,50 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { observeEntrance } from '../src/lib/entrances.js';
 
+test('nested entrances wait for the parent, respect visibility, and release on reduced motion', () => {
+  const previous = { window: globalThis.window, IntersectionObserver: globalThis.IntersectionObserver };
+  const media = Object.assign(new EventTarget(), { matches: false });
+  let observer;
+  class Observer {
+    constructor(callback) { this.callback = callback; observer = this; }
+    observe() {} unobserve() {} disconnect() {}
+  }
+  globalThis.window = { innerHeight: 800, innerWidth: 1200, matchMedia: () => media, IntersectionObserver: Observer };
+  globalThis.IntersectionObserver = Observer;
+  const make = (parent) => ({
+    parentElement: { closest: () => parent }, dataset: {}, calls: 0,
+    animate() { this.calls++; return this.animation = { cancel() {} }; },
+  });
+  const options = { from: { opacity: 0, transform: 'translateY(24px)' }, to: { opacity: 1, transform: 'none' } };
+  const parent = make(), child = make(parent), leaving = make(parent);
+  let settled = 0;
+  const cleanups = [];
+  try {
+    cleanups.push(observeEntrance(parent, { ...options, onEntered: () => settled++ }));
+    cleanups.push(observeEntrance(child, options), observeEntrance(leaving, options));
+    const emit = (nodes, visible) => observer.callback(nodes.map(target => ({ target,
+      boundingClientRect: { top: 1000, bottom: 1200, left: 0, right: 300 },
+      isIntersecting: visible, intersectionRatio: visible ? 1 : 0,
+    })));
+    emit([parent, child, leaving], false);
+    // Child callbacks may arrive before the parent's visibility callback.
+    emit([child, leaving, parent], true);
+    assert.equal(parent.calls, 1);
+    assert.equal(child.calls, 0);
+    assert.equal(leaving.calls, 0);
+    emit([leaving], false);
+    parent.animation.onfinish();
+    assert.equal(settled, 1);
+    assert.equal(child.calls, 1);
+    assert.equal(leaving.calls, 0, 'Do not start a deferred child after it left the viewport');
+    emit([leaving], true);
+    assert.equal(leaving.calls, 1);
+    media.matches = true; media.dispatchEvent(new Event('change'));
+    assert.equal(settled, 1, 'Completion callback runs once');
+    assert.ok([parent,child,leaving].every(n => !('entryPending' in n.dataset) && !('entryRunning' in n.dataset)));
+  } finally { cleanups.forEach(stop => stop?.()); Object.assign(globalThis, previous); }
+});
+
 test('native entries share observers, animate once, and clean up without hiding content', () => {
   const previous = { window: globalThis.window, IntersectionObserver: globalThis.IntersectionObserver };
   const observers = [];
@@ -121,27 +165,26 @@ test('HTML layers prepare nearby, survive the entrance and release offscreen; SV
     entry.callback([a,b,svg].map(target => ({ target, boundingClientRect: rect, isIntersecting: false, intersectionRatio: 0 })));
     preparation.callback([{ target: a, isIntersecting: true }]);
     assert.ok('entryPrepared' in a.dataset);
-    assert.equal(a.calls.length, 1, 'Construct the effect before the entrance crossing');
-    assert.equal(a.animation.state, 'paused', 'Preparation must never play offscreen');
-    assert.equal(a.animation.currentTime, 0);
-    assert.equal(a.calls[0][0].opacity, 0, 'No faint content before the visible entrance');
+    assert.equal(a.calls.length, 0, 'Preparation must not change the observed intersection geometry');
     assert.ok(!('entryPrepared' in b.dataset));
     entry.callback([{ target: a, isIntersecting: true, intersectionRatio: 0.05 }]);
-    assert.equal(a.animation.state, 'paused', 'Wait until the visible threshold is crossed');
+    assert.equal(a.calls.length, 0, 'Wait until the visible threshold is crossed');
     assert.ok('entryPending' in a.dataset);
     entry.callback([{ target: a, isIntersecting: true, intersectionRatio: 0.5 }]);
-    assert.equal(a.calls.length, 1, 'Reuse the prepared effect at entry');
+    assert.equal(a.calls.length, 1, 'Start one effect at entry');
     assert.equal(a.animation.state, 'running');
+    assert.ok('entryRunning' in a.dataset, 'Pause decorative descendants during the entrance');
+    a.animation.onfinish();
+    assert.ok(!('entryRunning' in a.dataset), 'Release decorative descendants after the entrance');
     assert.ok('entryPrepared' in a.dataset, 'Do not demote while visible');
     preparation.callback([{ target: a, isIntersecting: false }]);
     assert.ok(!('entryPrepared' in a.dataset));
     assert.ok(!preparation.targets.has(a));
     preparation.callback([{ target: b, isIntersecting: true }]);
-    const abandoned = b.animation;
     preparation.callback([{ target: b, isIntersecting: false }]);
-    assert.equal(abandoned.state, 'cancelled');
+    assert.equal(b.calls.length, 0, 'Passing near a card must not allocate and cancel an animation');
     preparation.callback([{ target: b, isIntersecting: true }]);
-    assert.equal(b.animation.state, 'paused');
+    assert.equal(b.calls.length, 0);
     media.matches = true; media.dispatchEvent(new Event('change'));
     assert.ok(!('entryPrepared' in b.dataset));
     assert.equal(preparation.targets.size, 0);

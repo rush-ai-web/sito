@@ -1,10 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { animate, useInView, useMotionValue } from 'framer-motion';
+import { animate, useInView } from 'framer-motion';
 import { useMediaQuery, useReducedMotion } from './preferences';
 import { warmupScroll } from './warmup';
 import { EASE_MODAL } from './motion';
 import { watchMobileKeyboard } from './mobileKeyboard';
 import { onPrerenderReleased, releasePrerender } from './boot';
+import { watchSceneEntrances } from './sceneMotion';
 
 /* The page is immediately usable. Let the browser prioritize visible assets
    instead of eagerly decoding logos and images belonging to other sections. */
@@ -47,7 +48,7 @@ export function useSmoothScroll(enabled = true) {
 }
 
 /* Demo loops run near the viewport, never in a background tab. */
-export function useAnimationActivity() {
+export function useAnimationActivity({ pauseDuringEntrance = false } = {}) {
   const ref = useRef(null);
   const [active, setActive] = useState(false);
   useEffect(() => {
@@ -55,7 +56,12 @@ export function useAnimationActivity() {
     if (!node) return undefined;
     let nearby = false;
     let released = false;
-    const update = () => setActive(nearby && released && !document.hidden);
+    let idle = true;
+    const update = () => setActive(nearby && released && idle && !document.hidden);
+    const stopScene = pauseDuringEntrance ? watchSceneEntrances(node, value => {
+      idle = value;
+      update();
+    }) : undefined;
     const observer = new IntersectionObserver(([entry]) => {
       nearby = entry.isIntersecting;
       update();
@@ -68,11 +74,21 @@ export function useAnimationActivity() {
     document.addEventListener('visibilitychange', update);
     return () => {
       stopWaiting();
+      stopScene?.();
       observer.disconnect();
       document.removeEventListener('visibilitychange', update);
     };
-  }, []);
+  }, [pauseDuringEntrance]);
   return [ref, active];
+}
+
+// CSS/SMIL-only scenes need no React state at all for their entrance gate.
+export function useSceneEntrancePause() {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (ref.current) return watchSceneEntrances(ref.current);
+  }, []);
+  return ref;
 }
 
 /* ---------- Tema: light di default, dark alla pari ---------- */
@@ -142,32 +158,34 @@ export const fmt = (n, dec = 0) => {
    finale. Con prefers-reduced-motion mostra subito il valore. */
 export function useCountUp(target, { dec = 0, duration = 1.5 } = {}) {
   const ref = useRef(null);
+  const numberRef = useRef(null);
   const seen = useInView(ref, { once: true, amount: 0.35 });
   const reduce = useReducedMotion();
-  const mv = useMotionValue(0);
-  /* l'HTML prerenderizzato mostra il valore finale: lo stato parte uguale
-     per l'idratazione e torna a zero prima del paint, pronto a contare. */
-  const [text, setText] = useState(() => fmt(target, dec));
+  // Keep the server's final value for hydration and accessibility fallback.
+  // Only the dedicated number span changes while counting, not the whole
+  // KPI/Entrance subtree. Rounded duplicate frames need no DOM write.
+  const text = fmt(target, dec);
 
   (typeof window === 'undefined' ? useEffect : useLayoutEffect)(() => {
-    if (!reduce) setText(fmt(0, dec));
-  }, []);
+    if (numberRef.current) numberRef.current.textContent = reduce ? text : fmt(0, dec);
+  }, [target, dec, reduce]);
 
   useEffect(() => {
-    if (!seen) return;
-    if (reduce) {
-      setText(fmt(target, dec));
-      return;
-    }
-    const controls = animate(mv, target, {
+    const node = numberRef.current;
+    if (!node || !seen || reduce) return;
+    let previous = node.textContent;
+    const controls = animate(0, target, {
       duration,
       ease: EASE_MODAL,
-      onUpdate: (v) => setText(fmt(v, dec)),
+      onUpdate: (v) => {
+        const next = fmt(v, dec);
+        if (next !== previous) { node.textContent = next; previous = next; }
+      },
     });
     return () => controls.stop();
-  }, [seen, target, dec, duration, reduce, mv]);
+  }, [seen, target, dec, duration, reduce]);
 
-  return [ref, text];
+  return [ref, text, numberRef];
 }
 
 /* ---------- Tono della fascia sotto la navbar ----------
