@@ -180,8 +180,8 @@ export default function HeroScene() {
             {/* menu laterale */}
             <aside className="dash__side">
               <div className="dash__brand">
-                <img className="dash__brand-logo win__logo--l" src={logoLight} srcSet={logoLightSrcSet} sizes="76px" alt="" width="800" height="200" loading="lazy" />
-                <img className="dash__brand-logo win__logo--d" src={logoDark} srcSet={logoDarkSrcSet} sizes="76px" alt="" width="800" height="200" loading="lazy" />
+                <img className="dash__brand-logo win__logo--l" src={logoLight} srcSet={logoLightSrcSet} sizes="76px" alt="Rush" width="800" height="200" loading="lazy" />
+                <img className="dash__brand-logo win__logo--d" src={logoDark} srcSet={logoDarkSrcSet} sizes="76px" alt="Rush" width="800" height="200" loading="lazy" />
                 <span className="dash__brand-label">LA TUA ATTIVITÀ</span>
               </div>
 
@@ -242,8 +242,8 @@ export default function HeroScene() {
 
               <div className="dash__scroll">
                 <div className="dash__greet">
-                  <h4>Buongiorno, Mario</h4>
-                  <p>I dati della tua attività, riuniti in un’unica vista.</p>
+                  <p className="dash__greet-title">Buongiorno, Mario</p>
+                  <p className="dash__greet-copy">I dati della tua attività, riuniti in un’unica vista.</p>
                 </div>
 
                 <div className="dash__kpis">
@@ -256,7 +256,7 @@ export default function HeroScene() {
                   {/* grafico */}
                   <div className="dash__panel">
                     <div className="dash__panel-hd">
-                      <h5>Incassi vs spese - ultimi 6 periodi</h5>
+                      <p className="dash__panel-title">Incassi vs spese - ultimi 6 periodi</p>
                       <span className="dash__legend">
                         <span className="dash__leg is-inc"><i />Incassi</span>
                         <span className="dash__leg is-spe"><i />Spese</span>
@@ -293,7 +293,7 @@ export default function HeroScene() {
                   {/* alert */}
                   <div className="dash__panel">
                     <div className="dash__panel-hd">
-                      <h5>Alert e anomalie - da gestire</h5>
+                      <p className="dash__panel-title">Alert e anomalie - da gestire</p>
                     </div>
                     <div className="dash__alerts">
                       <AnimatePresence initial={false} mode="popLayout">

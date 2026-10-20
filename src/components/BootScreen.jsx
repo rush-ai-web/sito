@@ -13,8 +13,8 @@ export default function BootScreen({
   return (
     <div className="boot-screen" role="status" aria-live="polite" aria-label={ariaLabel}>
       <div className="boot-screen__mark" aria-hidden="true">
-        <img className="boot-screen__logo boot-screen__logo--light" src={logoLight} width="192" height="48" alt="" />
-        <img className="boot-screen__logo boot-screen__logo--dark" src={logoDark} width="192" height="48" alt="" />
+        <img className="boot-screen__logo boot-screen__logo--light" src={logoLight} width="192" height="48" alt="Rush" />
+        <img className="boot-screen__logo boot-screen__logo--dark" src={logoDark} width="192" height="48" alt="Rush" />
       </div>
 
       <span className="boot-screen__label" aria-hidden="true">

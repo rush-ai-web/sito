@@ -2432,14 +2432,15 @@ main {
   background: var(--accent);
 }
 
-.dash__greet h4 {
+.dash__greet-title {
   margin: 0;
   font-size: 22px;
   font-weight: 600;
+  line-height: 1.06;
   letter-spacing: -0.02em;
 }
 
-.dash__greet p {
+.dash__greet-copy {
   margin: 4px 0 0;
   font-size: 12.5px;
   color: var(--text-3);
@@ -2529,7 +2530,7 @@ main {
   margin-bottom: 16px;
 }
 
-.dash__panel-hd h5 {
+.dash__panel-title {
   margin: 0;
   font-size: 10.5px;
   font-weight: 600;
@@ -4414,7 +4415,7 @@ textarea.input::-webkit-scrollbar {
   }
 
   /* riduce titolo greet */
-  .dash__greet h4 {
+  .dash__greet-title {
     font-size: 17px;
   }
 

@@ -20,7 +20,7 @@ export default function HeroRisto() {
           />
           <img
             src="./rush-logo-orange-dark.webp"
-            alt=""
+            alt="Rush Ristorazione"
             aria-hidden="true"
             width="800"
             height="200"

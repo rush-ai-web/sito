@@ -31,6 +31,13 @@ try {
   for (const [file, restaurant] of [['index.html', false], ['ristorazione.html', true]]) {
     const { html, schema } = render(restaurant);
     assert.equal((html.match(/<h1\b/g) || []).length, 1, 'Exactly one H1 required');
+    const headings = [...html.matchAll(/<h([1-6])\b/g)].map((match) => Number(match[1]));
+    for (let index = 1; index < headings.length; index += 1) {
+      assert(headings[index] <= headings[index - 1] + 1, `Heading level skipped: H${headings[index - 1]} to H${headings[index]}`);
+    }
+    for (const [image] of html.matchAll(/<img\b[^>]*>/g)) {
+      assert(/\balt="[^"]+"/.test(image), `Image without descriptive alt text: ${image}`);
+    }
     const main = html.match(/<main>([\s\S]*?)<\/main>/)?.[1] || '';
     const words = main.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).length;
     assert(words >= 300, 'At least 300 words must be in the initial HTML');
@@ -40,8 +47,13 @@ try {
     assert(!main.includes('Dati e AI: riferimenti per approfondire'));
     const path = `docs/${file}`;
     let document = await readFile(path, 'utf8');
+    const title = document.match(/<title>([^<]+)<\/title>/)?.[1];
+    assert(title && title.length >= 50 && title.length <= 60, 'Title length');
     const description = document.match(/name="description"\s+content="([^"]+)"/)?.[1];
-    assert(description && description.length >= 50 && description.length <= 160, 'Description length');
+    assert(description && description.length >= 50 && description.length <= 135, 'Description length');
+    assert(document.includes('<meta name="robots" content="index, follow" />'), 'Indexable robots directive');
+    assert(document.includes('hreflang="it-IT"'), 'Italian hreflang');
+    assert(document.includes('hreflang="x-default"'), 'Default hreflang');
     document = document.replace('<div id="root"></div>', `<div id="root" data-prerender>${html}</div>`);
     const css = document.match(/<style data-rush-critical>([\s\S]*?)<\/style>/)?.[1];
     assert(css, 'Critical CSS must exist before page-specific pruning');

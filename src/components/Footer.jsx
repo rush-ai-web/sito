@@ -118,7 +118,7 @@ export default function Footer({ logoVariant = 'default', columns = COLONNE }) {
 
         {/* logo gigante, sfumato verso il basso */}
         <span className="wordmark" aria-hidden="true">
-          <img src={logoSrc} srcSet={logoSrcSet} sizes="(max-width: 1160px) 100vw, 1120px" alt="" width="800" height="200" loading="lazy" className="wordmark__logo" />
+          <img src={logoSrc} srcSet={logoSrcSet} sizes="(max-width: 1160px) 100vw, 1120px" alt={isRisto ? 'Rush Ristorazione' : 'Rush'} width="800" height="200" loading="lazy" className="wordmark__logo" />
         </span>
       </div>
     </footer>

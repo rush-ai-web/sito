@@ -25,13 +25,14 @@ const LOGO_SETS = {
 
 function LogoMark({ variant = 'default' }) {
   const set = LOGO_SETS[variant] || LOGO_SETS.default;
+  const alt = variant === 'ristorazione' ? 'Rush Ristorazione' : 'Rush';
   return (
     <span className={`nav__logo-wrap${variant === 'ristorazione' ? ' nav__logo-wrap--ristorazione' : ''}`}>
       <img
         src={set.dark.src}
         srcSet={set.dark.srcSet}
         sizes={set.dark.srcSet ? '(max-width: 980px) 76px, 96px' : undefined}
-        alt="Logo Rush"
+        alt={alt}
         width="800"
         height="200"
         loading="eager"
@@ -41,7 +42,7 @@ function LogoMark({ variant = 'default' }) {
         src={set.light.src}
         srcSet={set.light.srcSet}
         sizes={set.light.srcSet ? '(max-width: 980px) 76px, 96px' : undefined}
-        alt=""
+        alt={alt}
         aria-hidden="true"
         width="800"
         height="200"
