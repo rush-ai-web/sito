@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Entrance } from '../Entrance';
 import { useReducedMotion } from '../../lib/preferences';
+import { watchSectionProgress } from '../../lib/scrollControls';
 import { Compass, PhoneCall, UploadCloud, GraduationCap, CheckCircle2 } from 'lucide-react';
 import { Section, Head, IconTile } from '../ui';
 import { EASE_MODAL } from '../../lib/motion';
@@ -14,13 +15,17 @@ const MOBILE_ROUTE = 'M 26 80 L 26 920';
 
 // Native stroke animation: pause the existing effect during card entrances
 // and offscreen, then continue at the same position instead of jumping/resetting.
-function RoutePulse({ d, progress, active, reduce }) {
+// On mobile `continuous` is set: progress comes straight from the scroll
+// position, already smooth frame by frame, so the extra WAAPI tween (made
+// for the desktop timer's discrete jumps) would only fight it and is skipped.
+function RoutePulse({ d, progress, active, reduce, continuous }) {
   const ref = useRef(null);
   const animation = useRef(null);
   const previous = useRef(progress);
   const activeRef = useRef(active);
   activeRef.current = active;
   useEffect(() => {
+    if (continuous) return undefined;
     const from = previous.current;
     previous.current = progress;
     if (reduce || from === progress || !ref.current?.animate) return;
@@ -31,13 +36,14 @@ function RoutePulse({ d, progress, active, reduce }) {
     animation.current = effect;
     if (!activeRef.current) effect.pause();
     return () => { effect.cancel(); animation.current = null; };
-  }, [progress, reduce]);
+  }, [progress, reduce, continuous]);
   useEffect(() => {
+    if (continuous) return undefined;
     const effect = animation.current;
     if (!effect || effect.playState === 'finished') return;
     if (active) effect.play();
     else effect.pause();
-  }, [active]);
+  }, [active, continuous]);
   return <path ref={ref} className="onb__route-pulse" d={d}
     pathLength="1" strokeDasharray="1" strokeDashoffset={1 - progress} />;
 }
@@ -70,18 +76,36 @@ export default function AvvioRisto() {
   const [stepsRef, active] = useAnimationActivity({ pauseDuringEntrance: true });
   const compact = useIsMobile();
   const [activeStep, setActiveStep] = useState(0);
+  const [mobileProgress, setMobileProgress] = useState(0);
   const route = compact ? MOBILE_ROUTE : DESKTOP_ROUTE;
-  const progress = (compact ? MOBILE_ROUTE_PROGRESS : DESKTOP_ROUTE_PROGRESS)[activeStep];
 
+  /* desktop: le card si accendono una alla volta, a ciclo, come prima */
   useEffect(() => {
-    if (reduceMotion || !active) return undefined;
+    if (compact || reduceMotion || !active) return undefined;
 
     const intervalId = window.setInterval(() => {
       setActiveStep((step) => (step + 1) % PASSI.length);
     }, STEP_DURATION);
 
     return () => window.clearInterval(intervalId);
-  }, [reduceMotion, active]);
+  }, [compact, reduceMotion, active]);
+
+  /* mobile: niente ciclo automatico - linea e card seguono lo scroll */
+  useEffect(() => {
+    if (!compact || reduceMotion) return undefined;
+    return watchSectionProgress(stepsRef.current, setMobileProgress);
+  }, [compact, reduceMotion]);
+
+  const mobileStep = MOBILE_ROUTE_PROGRESS.reduce(
+    (acc, frac, i) => (mobileProgress >= frac - 0.001 ? i : acc),
+    0,
+  );
+  const currentStep = compact ? mobileStep : activeStep;
+  const progress = reduceMotion
+    ? 0
+    : compact
+      ? mobileProgress
+      : DESKTOP_ROUTE_PROGRESS[activeStep];
 
   return (
     <Section id="avvio" large>
@@ -101,14 +125,14 @@ export default function AvvioRisto() {
         <svg className={`onb__route onb__route--${compact ? 'mobile' : 'desktop'}`}
           viewBox={compact ? '0 0 60 1000' : '0 0 1000 1000'} preserveAspectRatio="none" aria-hidden="true">
           <path className="onb__route-base" d={route} />
-          <RoutePulse d={route} progress={reduceMotion ? 0 : progress}
-            active={active} reduce={reduceMotion} />
+          <RoutePulse d={route} progress={progress}
+            active={active} reduce={reduceMotion} continuous={compact} />
         </svg>
 
         <div className="onb__steps">
           {PASSI.map(({ icon: Icon, t, d }, i) => (
             <Entrance as="article" direction={i % 2 === 0 ? 'left' : 'right'}
-              className={`onb__step${activeStep === i ? ' is-active' : ''}`}
+              className={`onb__step${currentStep === i ? ' is-active' : ''}`}
               key={t}
             >
               <div className="onb__meta">
