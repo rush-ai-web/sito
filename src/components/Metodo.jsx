@@ -4,7 +4,6 @@ import { watchSectionProgress } from '../lib/scrollControls';
 import { useReducedMotion } from '../lib/preferences';
 import { GitBranch, Search, PenTool, Rocket, RefreshCw } from 'lucide-react';
 import { Section, Head } from './ui';
-import { useIsMobile } from '../lib/hooks';
 
 const PASSI = [
   {
@@ -49,23 +48,20 @@ const NODES = [
   { cx: 144, cy: 980 },
 ];
 
-/* mobile: linea dritta sulla sinistra, tutti i nodi sulla stessa verticale */
-const M_PATH_D = 'M 20 0 L 20 1120';
-const M_NODES = NODES.map((n) => ({ cx: 20, cy: n.cy }));
-
 const TOTAL = 1120;
 /* frazione di scroll a cui la linea raggiunge ogni nodo (cy / altezza totale).
    Con offset start-center → end-center, a quella frazione il punto è a metà schermo. */
 const FRAC = NODES.map((n) => n.cy / TOTAL);
 
-/* Il reveal parte nel momento esatto in cui il riempimento raggiunge il nodo.
-   La breve coda mantiene l'entrata laterale fluida senza anticiparla. */
+/* Il reveal si conclude nel momento esatto in cui il riempimento raggiunge
+   il nodo: parte un po' prima così dot e card sono già leggibili al 100%
+   non appena la linea li tocca, invece di completarsi un istante dopo. */
 const REVEAL_SPAN = 0.035;
 
 /* NodeDot - appare in sincrono con la linea che lo raggiunge */
 function NodeDot({ cx, cy, frac, progress, reduce }) {
-  const opacity = useTransform(progress, [frac, frac + REVEAL_SPAN], [0, 1]);
-  const scale = useTransform(progress, [frac, frac + REVEAL_SPAN], [0.6, 1]);
+  const opacity = useTransform(progress, [frac - REVEAL_SPAN, frac], [0, 1]);
+  const scale = useTransform(progress, [frac - REVEAL_SPAN, frac], [0.6, 1]);
   if (reduce) {
     return (
       <circle cx={cx} cy={cy} r="9" fill="var(--accent)" stroke="var(--bg)" strokeWidth="3" />
@@ -86,10 +82,10 @@ function NodeDot({ cx, cy, frac, progress, reduce }) {
    il riempimento raggiunge il suo nodo, poi entra dal lato corrispondente. */
 function StepCard({ passo, idx, frac, progress, reduce }) {
   const { icon: Icon, t, d } = passo;
-  const opacity = useTransform(progress, [frac, frac + REVEAL_SPAN], [0, 1]);
+  const opacity = useTransform(progress, [frac - REVEAL_SPAN, frac], [0, 1]);
   const x = useTransform(
     progress,
-    [frac, frac + REVEAL_SPAN],
+    [frac - REVEAL_SPAN, frac],
     [passo.side === 'left' ? -32 : 32, 0],
   );
   const style = reduce ? { gridRow: idx + 1 } : { gridRow: idx + 1, opacity, x };
@@ -113,16 +109,16 @@ function StepCard({ passo, idx, frac, progress, reduce }) {
 export default function Metodo() {
   const tlRef = useRef(null);
   const reduce = useReducedMotion();
-  const isMobile = useIsMobile('(max-width: 680px)');
 
-  /* su mobile la linea è dritta a sinistra e più spessa; su desktop resta
-     il percorso che serpeggia tra le card alternate */
-  const path = isMobile ? M_PATH_D : PATH_D;
-  const nodes = isMobile ? M_NODES : NODES;
-  const viewBox = isMobile ? '0 0 40 1120' : '0 0 160 1120';
-  const clipW = isMobile ? 40 : 160;
-  const strokeBase = isMobile ? 3.5 : 2;
-  const strokeAccent = isMobile ? 4.5 : 2.5;
+  /* stesso tracciato ovunque: lo stesso viewBox, reso su un box più stretto
+     su mobile (via CSS), fa serpeggiare la linea da un bordo all'altro dello
+     schermo invece che restare confinata in una colonna stretta. */
+  const path = PATH_D;
+  const nodes = NODES;
+  const viewBox = '0 0 160 1120';
+  const clipW = 160;
+  const strokeBase = 2;
+  const strokeAccent = 2.5;
 
   /* Linea, dot e card condividono lo stesso progresso di scroll. */
   const scrollYProgress = useMotionValue(0);

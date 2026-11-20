@@ -68,7 +68,8 @@ function SceneDash({ reduce }) {
             transition={{ duration: 0.8, ease: EASE_MODAL, delay: 0.15 }}
           />
           {!reduce && (
-            <circle r="3.4" fill="var(--accent)" stroke="var(--surface-top)" strokeWidth="1.4" vectorEffect="non-scaling-stroke">
+            <circle r="3.4" fill="var(--accent)" stroke="var(--surface-top)" strokeWidth="1.4" vectorEffect="non-scaling-stroke" opacity="0">
+              <set attributeName="opacity" to="1" begin="1s" fill="freeze" />
               <animateMotion dur="3.4s" begin="1s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
                 <mpath href="#dashLine" />
               </animateMotion>

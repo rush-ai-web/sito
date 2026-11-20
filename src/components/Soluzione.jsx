@@ -153,19 +153,9 @@ function SoluzioneMobile() {
                 </span>
               </span>
 
-              <AnimatePresence initial={false}>
-                {isOpen && (
-                  <motion.span
-                    className="sol-card__body"
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3, ease: EASE_MODAL }}
-                  >
-                    <span className="sol-card__body-in">{item.body}</span>
-                  </motion.span>
-                )}
-              </AnimatePresence>
+              <span className="sol-card__body">
+                <span className="sol-card__body-in">{item.body}</span>
+              </span>
 
               {isOpen ? (
                 <span className="sol-card__close" aria-hidden="true">

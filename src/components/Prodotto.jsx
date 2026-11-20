@@ -132,7 +132,8 @@ function VizDati({ reduce }) {
       />
       {/* dot che scorre */}
       {!reduce && (
-        <circle r="4" fill="var(--accent)" stroke="var(--surface-top)" strokeWidth="1.5">
+        <circle r="4" fill="var(--accent)" stroke="var(--surface-top)" strokeWidth="1.5" opacity="0">
+          <set attributeName="opacity" to="1" begin="1s" fill="freeze" />
           <animateMotion dur="3.6s" begin="1s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
             <mpath href="#datiLine" />
           </animateMotion>

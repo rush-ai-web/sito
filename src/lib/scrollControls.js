@@ -96,6 +96,34 @@ export function watchBackToTop(onChange) {
   };
 }
 
+// Scroll-spy per il menu: segnala la sezione la cui parte alta attraversa
+// una fascia vicina alla cima dello schermo, così la voce di menu
+// corrispondente può evidenziarsi mentre si scorre.
+export function watchActiveSection(ids, onChange) {
+  const sections = ids
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+  if (!sections.length || !window.IntersectionObserver) return () => {};
+
+  let current = null;
+  const publish = id => {
+    if (id === current) return;
+    current = id;
+    onChange(id);
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    const visible = entries.filter(e => e.isIntersecting);
+    if (!visible.length) return;
+    // Più in alto nello schermo vince: è la sezione che stiamo attraversando.
+    visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+    publish(visible[0].target.id);
+  }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
+
+  sections.forEach(section => observer.observe(section));
+  return () => observer.disconnect();
+}
+
 // Cache section geometry when the browser supplies it, not on every scroll.
 // The Method timeline keeps exactly its start-center/end-center progression.
 export function watchSectionProgress(node, onProgress) {

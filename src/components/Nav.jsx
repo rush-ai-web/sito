@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useMotionValue } from 'framer-motion';
-import { watchNavWidth } from '../lib/scrollControls';
+import { watchNavWidth, watchActiveSection } from '../lib/scrollControls';
 import { ArrowRight, Menu, UtensilsCrossed, X } from 'lucide-react';
 import { EASE_MODAL } from '../lib/motion';
 
@@ -82,6 +82,12 @@ export default function Nav({ logoVariant = 'default', links = LINKS, contactLab
   const navW = useMotionValue(1160);
   useEffect(() => watchNavWidth(width => navW.set(width)), [navW]);
 
+  const [activeHref, setActiveHref] = useState(null);
+  useEffect(() => {
+    const ids = links.map(([, href]) => href.replace('#', ''));
+    return watchActiveSection(ids, id => setActiveHref(id ? `#${id}` : null));
+  }, [links]);
+
   useEffect(() => {
     const closeWithKeyboard = (event) => {
       if (event.key === 'Escape') setMobileOpen(false);
@@ -117,7 +123,11 @@ export default function Nav({ logoVariant = 'default', links = LINKS, contactLab
 
         <nav className="nav__links" aria-label="Navigazione principale">
           {links.map(([label, href]) => (
-            <a key={href} className="nav__link" href={href}>
+            <a
+              key={href}
+              className={`nav__link${href === activeHref ? ' is-active' : ''}`}
+              href={href}
+            >
               {label}
             </a>
           ))}

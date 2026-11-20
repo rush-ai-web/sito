@@ -148,7 +148,8 @@ function EcosistemaDesktop() {
             {/* puntini che scorrono lungo i tracciati (off in reduced-motion) */}
             {!reduce &&
               MODULES.map((m, i) => (
-                <circle key={m.t} r="3" fill="var(--accent)">
+                <circle key={m.t} r="3" fill="var(--accent)" opacity="0">
+                  <set attributeName="opacity" to="1" begin={`${1 + i * 0.18}s`} fill="freeze" />
                   <animateMotion
                     dur={`${2.6 + i * 0.25}s`}
                     begin={`${1 + i * 0.18}s`}
@@ -162,7 +163,8 @@ function EcosistemaDesktop() {
                 </circle>
               ))}
             {!reduce && (
-              <circle r="3.5" fill="var(--accent)">
+              <circle r="3.5" fill="var(--accent)" opacity="0">
+                <set attributeName="opacity" to="1" begin="1.6s" fill="freeze" />
                 <animateMotion dur="1.8s" begin="1.6s" repeatCount="indefinite">
                   <mpath href="#eco-out" />
                 </animateMotion>
