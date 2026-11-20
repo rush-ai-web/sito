@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Entrance } from '../Entrance';
 import { useReducedMotion } from '../../lib/preferences';
-import { watchSectionProgress } from '../../lib/scrollControls';
+import { watchSectionProgress, watchCenteredElement } from '../../lib/scrollControls';
 import { Compass, PhoneCall, UploadCloud, GraduationCap, CheckCircle2 } from 'lucide-react';
 import { Section, Head, IconTile } from '../ui';
 import { EASE_MODAL } from '../../lib/motion';
@@ -9,7 +9,6 @@ import { useAnimationActivity, useIsMobile } from '../../lib/hooks';
 
 const STEP_DURATION = 1900;
 const DESKTOP_ROUTE_PROGRESS = [0, 0.339, 0.67, 1];
-const MOBILE_ROUTE_PROGRESS = [0, 1 / 3, 2 / 3, 1];
 const DESKTOP_ROUTE = 'M 460 110 H 750 Q 770 110 770 130 V 350 Q 770 370 750 370 H 250 Q 230 370 230 390 V 610 Q 230 630 250 630 H 750 Q 770 630 770 650 V 870 Q 770 890 750 890 H 540';
 const MOBILE_ROUTE = 'M 30 80 L 30 920';
 
@@ -77,6 +76,8 @@ export default function AvvioRisto() {
   const compact = useIsMobile();
   const [activeStep, setActiveStep] = useState(0);
   const [mobileProgress, setMobileProgress] = useState(0);
+  const [mobileCenteredStep, setMobileCenteredStep] = useState(0);
+  const cardRefs = useRef([]);
   const route = compact ? MOBILE_ROUTE : DESKTOP_ROUTE;
 
   /* desktop: le card si accendono una alla volta, a ciclo, come prima */
@@ -90,17 +91,22 @@ export default function AvvioRisto() {
     return () => window.clearInterval(intervalId);
   }, [compact, reduceMotion, active]);
 
-  /* mobile: niente ciclo automatico - linea e card seguono lo scroll */
+  /* mobile: niente ciclo automatico - la linea segue lo scroll */
   useEffect(() => {
     if (!compact || reduceMotion) return undefined;
     return watchSectionProgress(stepsRef.current, setMobileProgress);
   }, [compact, reduceMotion]);
 
-  const mobileStep = MOBILE_ROUTE_PROGRESS.reduce(
-    (acc, frac, i) => (mobileProgress >= frac - 0.001 ? i : acc),
-    0,
-  );
-  const currentStep = compact ? mobileStep : activeStep;
+  /* la card che si accende è quella davvero al centro dello schermo in
+     questo momento, non una stimata dall'altezza media delle card (che
+     non sono tutte alte uguale e facevano scattare il cambio in punti
+     diversi a seconda della card). */
+  useEffect(() => {
+    if (!compact || reduceMotion) return undefined;
+    return watchCenteredElement(cardRefs.current, setMobileCenteredStep);
+  }, [compact, reduceMotion]);
+
+  const currentStep = compact ? mobileCenteredStep : activeStep;
   const progress = reduceMotion
     ? 0
     : compact
@@ -134,6 +140,7 @@ export default function AvvioRisto() {
             <Entrance as="article" direction={i % 2 === 0 ? 'left' : 'right'}
               className={`onb__step${currentStep === i ? ' is-active' : ''}`}
               key={t}
+              ref={(el) => { cardRefs.current[i] = el; }}
             >
               <div className="onb__meta">
                 <IconTile icon={Icon} size="sm" />

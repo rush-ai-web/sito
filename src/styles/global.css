@@ -3082,7 +3082,9 @@ main {
   flex-direction: column;
   align-items: flex-start;
   gap: 12px;
-  padding: 20px;
+  /* lo spazio per la X resta riservato sempre: aprire la card non deve
+     restringere la larghezza disponibile al titolo e farlo andare a capo */
+  padding: 20px 52px 20px 20px;
   border-radius: 20px;
   background-color: var(--bg);
   background-image: var(--card-vig);
@@ -3094,7 +3096,6 @@ main {
   transition: border-color 0.25s ease;
 }
 .sol-card.is-open {
-  padding-right: 52px;
   border-color: color-mix(in srgb, var(--accent) 55%, var(--hairline-strong));
 }
 
@@ -4832,11 +4833,18 @@ textarea.input::-webkit-scrollbar {
     grid-column: 1;
     position: relative;
     z-index: 1;
-    padding: 0 28px;
     align-items: flex-start;
     text-align: left;
     min-height: 200px;
     height: auto;
+  }
+  /* il testo resta dalla parte opposta rispetto al polo dove passa il
+     pallino di quel passo, così non ci finisce mai sopra */
+  .tl-item--left {
+    padding: 0 24px 0 92px;
+  }
+  .tl-item--right {
+    padding: 0 92px 0 24px;
   }
   .tl-item--left .tl-item__d {
     margin-left: 0;
@@ -6768,11 +6776,19 @@ textarea.input::-webkit-scrollbar {
     grid-column: 1;
     position: relative;
     z-index: 1;
-    padding: 0 28px;
     align-items: flex-start;
     text-align: left;
     height: auto;
     min-height: 200px;
+  }
+
+  /* il testo resta dalla parte opposta rispetto al polo dove passa il
+     pallino di quel passo, così non ci finisce mai sopra */
+  .tl-item--left {
+    padding: 0 24px 0 92px;
+  }
+  .tl-item--right {
+    padding: 0 92px 0 24px;
   }
 
   .tl-item--left .tl-item__header {
@@ -8121,6 +8137,7 @@ body.risto-orange-page .hero__title {
 
 .onb__step {
   position: relative;
+  z-index: 0;
   width: 46%;
   min-height: 190px;
   padding: 28px 76px 26px 28px;
@@ -8150,9 +8167,12 @@ body.risto-orange-page .hero__title {
   content: '';
   position: absolute;
   z-index: -1;
-  inset: 10px;
+  /* inset:0 così il bordo del bagliore combacia esattamente con quello
+     della card: un inset più piccolo con lo stesso raggio ereditato
+     lasciava un angolo "staccato" nello spigolo con raggio minore (8px) */
+  inset: 0;
   border-radius: inherit;
-  background: radial-gradient(circle at 50% 0%, var(--accent-soft), transparent 68%);
+  background: radial-gradient(circle at 50% 0%, var(--accent-soft), transparent 60%);
   opacity: 0;
   transition: opacity 320ms var(--e-modal);
 }

@@ -124,6 +124,34 @@ export function watchActiveSection(ids, onChange) {
   return () => observer.disconnect();
 }
 
+// Segnala quale di una lista di elementi è più vicino al centro verticale
+// dello schermo in questo momento: usato per accendere la card su cui lo
+// scroll si trova davvero, invece di stimarlo da una frazione di scroll
+// che assume (a torto) card tutte della stessa altezza.
+export function watchCenteredElement(elements, onChange) {
+  const nodes = elements.filter(Boolean);
+  if (!nodes.length || !window.IntersectionObserver) return () => {};
+
+  let current = -1;
+  const publish = index => {
+    if (index === current) return;
+    current = index;
+    onChange(index);
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    const visible = entries.filter(e => e.isIntersecting);
+    if (!visible.length) return;
+    const mid = window.innerHeight / 2;
+    const distance = rect => Math.abs(rect.top + rect.height / 2 - mid);
+    visible.sort((a, b) => distance(a.boundingClientRect) - distance(b.boundingClientRect));
+    publish(nodes.indexOf(visible[0].target));
+  }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
+
+  nodes.forEach(node => observer.observe(node));
+  return () => observer.disconnect();
+}
+
 // Cache section geometry when the browser supplies it, not on every scroll.
 // The Method timeline keeps exactly its start-center/end-center progression.
 export function watchSectionProgress(node, onProgress) {

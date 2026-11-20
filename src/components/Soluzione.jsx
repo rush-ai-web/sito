@@ -85,7 +85,7 @@ function easeInOutCubic(t) {
 
 /* ---- Mobile: carosello orizzontale con card tap-to-expand ---- */
 function SoluzioneMobile() {
-  const [openId, setOpenId] = useState(null);
+  const [allOpen, setAllOpen] = useState(false);
   const [active, setActive] = useState(0);
   const trackRef = useRef(null);
 
@@ -128,7 +128,7 @@ function SoluzioneMobile() {
 
       <div className="sol-track" ref={trackRef} onScroll={onScroll}>
         {ORBIT.map((item, idx) => {
-          const isOpen = openId === item.id;
+          const isOpen = allOpen;
           const Icon = item.icon;
           return (
             <Entrance as="button"
@@ -139,7 +139,7 @@ function SoluzioneMobile() {
               whileInView={{ opacity: 1, transform: 'none' }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.5, ease: EASE_MODAL, delay: (idx % 2) * 0.08 }}
-              onClick={() => setOpenId(isOpen ? null : item.id)}
+              onClick={() => setAllOpen((open) => !open)}
               aria-expanded={isOpen}
             >
               <span className="sol-card__top">
