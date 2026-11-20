@@ -3112,20 +3112,22 @@ main {
 }
 
 .sol-card__body {
-  display: grid;
-  grid-template-rows: 0fr;
+  /* max-height (non grid-template-rows, non sempre interpolato in modo
+     fluido dai motori CSS) resta la via più affidabile per un'animazione
+     d'apertura sempre morbida, su qualunque browser */
+  display: block;
+  max-height: 0;
+  overflow: hidden;
   align-self: stretch;
   opacity: 0;
-  transition: grid-template-rows 0.38s var(--e-lift), opacity 0.28s ease;
+  transition: max-height 0.38s var(--e-lift), opacity 0.28s ease;
 }
 .sol-card.is-open .sol-card__body {
-  grid-template-rows: 1fr;
+  max-height: 140px;
   opacity: 1;
 }
 .sol-card__body-in {
   display: block;
-  min-height: 0;
-  overflow: hidden;
   padding-top: 4px;
   font-size: 14px;
   line-height: 1.55;

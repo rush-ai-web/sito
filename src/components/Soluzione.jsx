@@ -35,14 +35,14 @@ const ORBIT = [
   {
     id: 3,
     icon: Smartphone,
-    t: 'Il tuo centro operativo,\nanche da mobile',
+    t: 'Sempre con te,\nanche da mobile',
     body: 'Consulta informazioni, priorità e attività da desktop o smartphone, anche quando sei fuori sede.',
     related: [2, 4],
   },
   {
     id: 4,
     icon: Workflow,
-    t: 'Collegato ai processi\ndella tua attività',
+    t: 'Segue i processi\ndella tua attività',
     body: 'RUSH segue il modo in cui lavorano davvero i tuoi reparti, senza imporre procedure estranee alla tua azienda.',
     related: [3, 5],
   },
@@ -56,7 +56,7 @@ const ORBIT = [
   {
     id: 6,
     icon: Activity,
-    t: 'Meno passaggi manuali,\npiù tempo utile',
+    t: 'Meno manuale,\npiù tempo utile',
     body: 'Automazioni e dati collegati riducono copie, controlli ripetitivi e operazioni che rallentano il team.',
     related: [5, 1],
   },
