@@ -4,7 +4,6 @@ import { watchSectionProgress } from '../lib/scrollControls';
 import { useReducedMotion } from '../lib/preferences';
 import { GitBranch, Search, PenTool, Rocket, RefreshCw } from 'lucide-react';
 import { Section, Head } from './ui';
-import { useIsMobile } from '../lib/hooks';
 
 const PASSI = [
   {
@@ -48,19 +47,6 @@ const NODES = [
   { cx: 16,  cy: 700 },
   { cx: 144, cy: 980 },
 ];
-
-/* mobile: stessa serpentina del desktop, scalata sulla larghezza ridotta
-   del tracciato (40 invece di 160) così la linea resta sottile e curva
-   invece che dritta, e il testo riprende la stessa cadenza del pc */
-const M_PATH_D = [
-  'M 20 0',
-  'C 20 45 4 95 4 140',
-  'C 0.75 230 39.25 330 36 420',
-  'C 39.25 510 0.75 610 4 700',
-  'C 0.75 790 39.25 890 36 980',
-  'C 39.25 1065 20 1095 20 1120',
-].join(' ');
-const M_NODES = NODES.map((n) => ({ cx: n.cx === 16 ? 4 : 36, cy: n.cy }));
 
 const TOTAL = 1120;
 /* frazione di scroll a cui la linea raggiunge ogni nodo (cy / altezza totale).
@@ -123,14 +109,14 @@ function StepCard({ passo, idx, frac, progress, reduce }) {
 export default function Metodo() {
   const tlRef = useRef(null);
   const reduce = useReducedMotion();
-  const isMobile = useIsMobile('(max-width: 680px)');
 
-  /* su mobile la linea è dritta a sinistra e più spessa; su desktop resta
-     il percorso che serpeggia tra le card alternate */
-  const path = isMobile ? M_PATH_D : PATH_D;
-  const nodes = isMobile ? M_NODES : NODES;
-  const viewBox = isMobile ? '0 0 40 1120' : '0 0 160 1120';
-  const clipW = isMobile ? 40 : 160;
+  /* stesso tracciato ovunque: lo stesso viewBox, reso su un box più stretto
+     su mobile (via CSS), fa serpeggiare la linea da un bordo all'altro dello
+     schermo invece che restare confinata in una colonna stretta. */
+  const path = PATH_D;
+  const nodes = NODES;
+  const viewBox = '0 0 160 1120';
+  const clipW = 160;
   const strokeBase = 2;
   const strokeAccent = 2.5;
 

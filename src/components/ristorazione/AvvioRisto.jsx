@@ -11,7 +11,7 @@ const STEP_DURATION = 1900;
 const DESKTOP_ROUTE_PROGRESS = [0, 0.339, 0.67, 1];
 const MOBILE_ROUTE_PROGRESS = [0, 1 / 3, 2 / 3, 1];
 const DESKTOP_ROUTE = 'M 460 110 H 750 Q 770 110 770 130 V 350 Q 770 370 750 370 H 250 Q 230 370 230 390 V 610 Q 230 630 250 630 H 750 Q 770 630 770 650 V 870 Q 770 890 750 890 H 540';
-const MOBILE_ROUTE = 'M 26 80 L 26 920';
+const MOBILE_ROUTE = 'M 30 80 L 30 920';
 
 // Native stroke animation: pause the existing effect during card entrances
 // and offscreen, then continue at the same position instead of jumping/resetting.
