@@ -4,3 +4,4 @@ node_modules/
 .vite/
 
 # docs/ NON è ignorata: è l'output di build che GitHub Pages serve
+.video-export/
