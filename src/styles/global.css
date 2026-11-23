@@ -1121,7 +1121,7 @@ main {
 }
 
 .chip--accent {
-  color: var(--accent);
+  color: var(--accent-text);
   background: var(--accent-soft);
 }
 .chip--pos {
@@ -2121,7 +2121,7 @@ main {
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .dash__nav {
@@ -3141,7 +3141,7 @@ main {
   margin-top: auto;
   font-size: 12px;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* dot indicatori: segnalano che il carosello scorre e a che punto sei */
@@ -4063,7 +4063,7 @@ textarea.input::-webkit-scrollbar {
 }
 
 .footer__col a:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .footer__base {
@@ -5755,7 +5755,7 @@ textarea.input::-webkit-scrollbar {
 }
 
 .cf-hcell--rush {
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 800;
 }
 
@@ -5968,7 +5968,7 @@ textarea.input::-webkit-scrollbar {
 }
 
 .prezzi-card--accent .prezzi-label {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .prezzi-price {
@@ -6135,7 +6135,7 @@ textarea.input::-webkit-scrollbar {
   padding: 2px 8px;
   border-radius: 999px;
   background: color-mix(in srgb, var(--accent) 14%, transparent);
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -6388,7 +6388,7 @@ textarea.input::-webkit-scrollbar {
   margin-top: 16px;
   font-size: 12.5px;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-text);
   text-align: center;
   transition: opacity var(--d-hover) var(--e-out);
 }
@@ -7515,7 +7515,7 @@ textarea.input::-webkit-scrollbar {
 }
 .rh-chat__msg--a .rh-chat__bubble strong,
 .rh-chat__msg--alert .rh-chat__bubble strong {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 .rh-chat__ai {
   flex: none;
@@ -7663,7 +7663,7 @@ body.risto-orange-page::-webkit-scrollbar-thumb {
 
 /* parola/e messe in risalto nel titolo hero della ristorazione */
 .hero-accent {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 body.risto-orange-page .hero__title {
@@ -7740,7 +7740,7 @@ body.risto-orange-page .hero__title {
   padding-top: 10px;
   font-size: 11.5px;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .rh-fx-modal {
@@ -7855,7 +7855,7 @@ body.risto-orange-page .hero__title {
   align-items: center;
   gap: 7px;
   margin-top: 16px;
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 14.5px;
   font-weight: 650;
 }

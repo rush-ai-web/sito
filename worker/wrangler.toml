@@ -12,3 +12,12 @@ compatibility_date = "2024-11-01"
 # routes = [
 #   { pattern = "api.rush-ai.it/contact", custom_domain = true }
 # ]
+
+# Opzionale: registro dei consensi cookie (POST /consent-log). Senza questo
+# binding l'endpoint risponde comunque 200 ma non salva nulla (vedi
+# handleConsentLog in index.js) — il banner funziona a prescindere.
+# Per attivarlo: crea il namespace (una volta sola) e scommenta il blocco,
+# sostituendo <ID> con l'id che il comando ti restituisce. Vedi README.md.
+# [[kv_namespaces]]
+# binding = "CONSENT_LOG"
+# id = "<ID>"

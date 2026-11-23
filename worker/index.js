@@ -932,6 +932,53 @@ async function handleChatSummary(request, env, origin) {
   return json({ ok: true }, 200, origin);
 }
 
+/* POST /consent-log — { action: 'accept_all'|'reject_all'|'custom', statistiche: bool, page }
+   Inviato fire-and-forget dal banner cookie (public/cookie-consent.js) ogni
+   volta che un visitatore fa o cambia la sua scelta sui cookie. Scrive un
+   record minimo e anonimo nel namespace KV CONSENT_LOG, come prova
+   verificabile (lato server, non solo nel browser del visitatore) di quando
+   e cosa è stato accettato — utile in caso di controllo del Garante.
+
+   Nessun dato identificativo: niente IP, niente user agent, nessun cookie o
+   id persistente. Senza questi dati il log non può essere usato per
+   ricostruire la cronologia di un singolo visitatore, solo per dimostrare
+   che il banner ha funzionato correttamente nel tempo. */
+async function handleConsentLog(request, env, origin) {
+  if (!env.CONSENT_LOG) {
+    // namespace non configurato su questo Worker: non è un errore del
+    // client, semplicemente il log server-side non è (ancora) attivo.
+    return json({ ok: true, logged: false }, 200, origin);
+  }
+
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ ok: false }, 400, origin);
+  }
+
+  const action = ['accept_all', 'reject_all', 'custom'].includes(body.action) ? body.action : null;
+  const statistiche = typeof body.statistiche === 'boolean' ? body.statistiche : null;
+  if (!action || statistiche === null) {
+    return json({ ok: false, error: 'Corpo non valido' }, 422, origin);
+  }
+  const page = typeof body.page === 'string' ? body.page.slice(0, 80) : '';
+
+  const record = { ts: new Date().toISOString(), action, categories: { statistiche }, page };
+  const key = `${Date.now()}-${crypto.randomUUID()}`;
+
+  try {
+    // due anni: ragionevole finestra di prova del consenso senza conservarlo
+    // a tempo indefinito. Alza/togli expirationTtl se serve una finestra diversa.
+    await env.CONSENT_LOG.put(key, JSON.stringify(record), { expirationTtl: 60 * 60 * 24 * 730 });
+  } catch (err) {
+    console.error('consent-log KV put failed:', err);
+    // fire-and-forget anche qui: un errore di log non deve mai bloccare il banner
+  }
+
+  return json({ ok: true, logged: true }, 200, origin);
+}
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
@@ -948,6 +995,7 @@ export default {
        sulla root per non rompere chi già punta a CONTACT_ENDPOINT senza path. */
     if (pathname === '/chat') return handleChat(request, env, origin);
     if (pathname === '/chat-summary') return handleChatSummary(request, env, origin);
+    if (pathname === '/consent-log') return handleConsentLog(request, env, origin);
 
     let body;
     try {

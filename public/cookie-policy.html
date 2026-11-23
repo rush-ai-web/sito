@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <script>
+      try {
+        var t = localStorage.getItem('rush-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#FAFAF9" />
+    <title>Cookie Policy | Rush</title>
+    <meta name="description" content="Quali cookie usa rush-ai.it, perché, per quanto tempo e come gestire o revocare le tue preferenze in qualsiasi momento." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://rush-ai.it/cookie-policy.html" />
+    <link rel="icon" type="image/png" href="./favicon.png" />
+    <link rel="stylesheet" href="./legal.css" />
+    <script src="./consent.js"></script>
+  </head>
+  <body>
+    <header class="lg-header">
+      <a class="lg-brand" href="./">Rush</a>
+      <a class="lg-back" href="./">&larr; Torna al sito</a>
+    </header>
+
+    <main class="lg-main">
+      <h1>Cookie Policy</h1>
+      <p class="lg-updated">Ultimo aggiornamento: 23 novembre 2026</p>
+
+      <p>
+        Un cookie è un piccolo file che un sito salva nel tuo browser. Questa pagina spiega quali cookie e
+        tecnologie simili (es. localStorage) usa rush-ai.it, perché, per quanto tempo e come gestirli — in
+        linea con il GDPR e le linee guida del Garante Privacy sui cookie.
+      </p>
+
+      <p style="margin: 0 0 28px;">
+        <button type="button" class="lg-cta-btn" onclick="window.rushReopenConsent && window.rushReopenConsent()">
+          Gestisci le tue preferenze cookie
+        </button>
+      </p>
+
+      <h2>1. Cookie tecnici necessari — sempre attivi</h2>
+      <p>Non richiedono consenso perché indispensabili al funzionamento del sito.</p>
+      <table class="lg-table">
+        <thead>
+          <tr><th>Nome</th><th>Tipo</th><th>Finalità</th><th>Durata</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>rush-theme</td>
+            <td>localStorage (1ª parte)</td>
+            <td>Ricorda se preferisci il tema chiaro o scuro del sito.</td>
+            <td>Fino a cancellazione manuale</td>
+          </tr>
+          <tr>
+            <td>rush-consent</td>
+            <td>localStorage (1ª parte)</td>
+            <td>Ricorda la tua scelta sui cookie (data, categorie accettate), così non ti richiediamo di nuovo la stessa scelta.</td>
+            <td>Fino a nuova scelta o aggiornamento di questa policy</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>2. Cookie statistici — solo con il tuo consenso</h2>
+      <p>Si attivano solo se scegli "Accetta tutti" o abiliti "Statistiche" in "Personalizza".</p>
+      <table class="lg-table">
+        <thead>
+          <tr><th>Nome</th><th>Fornitore</th><th>Finalità</th><th>Durata</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>_ga, _ga_&lt;id&gt;</td>
+            <td>Google Analytics 4 (Google LLC)</td>
+            <td>Statistiche aggregate e anonimizzate su come viene usato il sito (pagine viste, provenienza del traffico). Nessuna profilazione pubblicitaria.</td>
+            <td>Fino a 14 mesi</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="lg-note">
+        Prima del tuo consenso non viene inviata nessuna richiesta a Google: usiamo Google Consent Mode v2,
+        che blocca il caricamento di Google Analytics fino a quando non accetti.
+      </p>
+
+      <h2>3. Cookie di marketing o profilazione</h2>
+      <p>Il sito non usa cookie di marketing, retargeting o profilazione pubblicitaria.</p>
+
+      <h2>4. Come gestire o revocare la tua scelta</h2>
+      <p>
+        Puoi cambiare idea in qualsiasi momento: usa il bottone "Gestisci le tue preferenze cookie" qui sopra
+        o il pulsante 🍪 sempre visibile in basso a sinistra su ogni pagina del sito. La modifica è
+        altrettanto semplice quanto dare il consenso, come richiesto dal GDPR.
+      </p>
+      <p>
+        Puoi anche bloccare o cancellare i cookie direttamente dalle impostazioni del tuo browser (nelle
+        guide di Chrome, Firefox, Safari o Edge, cerca "gestione cookie"); questo potrebbe limitare alcune
+        funzionalità dei siti che visiti, incluso il nostro.
+      </p>
+
+      <h2>5. Come registriamo il tuo consenso</h2>
+      <p>
+        La scelta che fai nel banner viene salvata nel localStorage del tuo browser, con data, ora e
+        categorie scelte (cookie <strong>rush-consent</strong> sopra): puoi consultarla o modificarla in ogni
+        momento riaprendo le preferenze. Una copia minima della stessa scelta (data/ora, categoria accettata o
+        no, pagina) viene anche registrata sulla nostra infrastruttura (Cloudflare), come prova verificabile
+        anche lato server che il banner ha funzionato correttamente — senza alcun dato che permetta di
+        identificarti (nessun indirizzo IP, nessun identificativo del dispositivo). Questa copia viene
+        conservata per un massimo di 2 anni e poi eliminata automaticamente.
+      </p>
+
+      <h2>6. Base giuridica</h2>
+      <p>
+        I cookie non necessari sono installati solo previo consenso libero, specifico, informato e
+        revocabile (art. 7 GDPR, art. 122 Codice Privacy). Per i dettagli sui trattamenti e i tuoi diritti,
+        vedi la <a href="./privacy.html">Privacy Policy</a>.
+      </p>
+    </main>
+
+    <footer class="lg-footer">
+      <nav class="lg-footer-links" aria-label="Documenti legali">
+        <a href="./privacy.html">Privacy Policy</a>
+        <a href="./cookie-policy.html">Cookie Policy</a>
+        <a href="./termini.html">Termini e Condizioni</a>
+        <button type="button" onclick="window.rushReopenConsent && window.rushReopenConsent()">Preferenze cookie</button>
+      </nav>
+      <span class="lg-footer-copy">© <span id="lg-year"></span> Rush. Tutti i diritti riservati.</span>
+    </footer>
+    <script>document.getElementById('lg-year').textContent = new Date().getFullYear();</script>
+    <script defer src="./cookie-consent.js"></script>
+  </body>
+</html>
