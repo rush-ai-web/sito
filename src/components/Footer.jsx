@@ -90,25 +90,18 @@ export default function Footer({ logoVariant = 'default', columns = COLONNE }) {
 
         <div className="footer__base">
           <span suppressHydrationWarning>{`© ${new Date().getFullYear()} Rush. Tutti i diritti riservati.`}</span>
-          <span style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-            <a
-              href="https://www.iubenda.com/privacy-policy/64941360"
-              title="Privacy Policy"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+          <span style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
+            <a href="./privacy.html" title="Privacy Policy">
               Privacy Policy
             </a>
-            <a
-              href="https://www.iubenda.com/privacy-policy/64941360/cookie-policy"
-              title="Cookie Policy"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="./cookie-policy.html" title="Cookie Policy">
               Cookie Policy
             </a>
+            <a href="./termini.html" title="Termini e Condizioni">
+              Termini e Condizioni
+            </a>
             <button
-              onClick={() => window.CookieScript?.instance?.show()}
+              onClick={() => window.rushReopenConsent?.()}
               style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: 'inherit', color: 'inherit' }}
             >
               Gestisci i cookie

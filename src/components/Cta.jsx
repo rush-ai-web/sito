@@ -23,7 +23,7 @@ import { Item, LiveDot, Pill, Section } from './ui';
 const CONTACT_ENDPOINT =
   import.meta.env.VITE_CONTACT_ENDPOINT || 'https://rush-contact.withered-voice-c323.workers.dev';
 
-const PRIVACY_URL = 'https://www.iubenda.com/privacy-policy/64941360';
+const PRIVACY_URL = './privacy.html';
 
 /* obiettivo del contatto: sceglie il tono del resto del percorso */
 const AUDIENCES = [

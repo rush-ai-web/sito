@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <script>
+      try {
+        var t = localStorage.getItem('rush-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#FAFAF9" />
+    <title>Termini e Condizioni | Rush</title>
+    <meta name="description" content="Termini di utilizzo del sito rush-ai.it: condizioni d'uso, proprietà intellettuale, responsabilità e legge applicabile." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://rush-ai.it/termini.html" />
+    <link rel="icon" type="image/png" href="./favicon.png" />
+    <link rel="stylesheet" href="./legal.css" />
+    <script src="./consent.js"></script>
+  </head>
+  <body>
+    <header class="lg-header">
+      <a class="lg-brand" href="./">Rush</a>
+      <a class="lg-back" href="./">&larr; Torna al sito</a>
+    </header>
+
+    <main class="lg-main">
+      <h1>Termini e Condizioni</h1>
+      <p class="lg-updated">Ultimo aggiornamento: 23 novembre 2026</p>
+
+      <p>
+        Questi termini regolano l'uso del sito rush-ai.it ("il sito"), vetrina informativa del prodotto Rush.
+        Non riguardano un eventuale contratto di fornitura del software Rush, che viene definito
+        separatamente con ogni cliente dopo l'analisi iniziale.
+      </p>
+
+      <h2>1. Oggetto</h2>
+      <p>
+        Il sito ha finalità informativa e di presentazione commerciale: descrive il prodotto Rush, permette
+        di richiedere un contatto tramite i form "Contatti" / "Prenota una demo" e offre un assistente di
+        chat ("Chiedi a Rush") per rispondere a domande generali sul prodotto.
+      </p>
+      <p>
+        Nessun contenuto del sito costituisce un'offerta contrattuale vincolante: prezzi, moduli e tempistiche
+        indicati hanno valore indicativo e vengono confermati in un preventivo scritto dopo un primo contatto.
+      </p>
+
+      <h2>2. Proprietà intellettuale</h2>
+      <p>
+        Testi, immagini, logo, marchio "Rush" e il codice del sito sono di proprietà di Rush o concessi in
+        licenza a Rush, salvo quanto diversamente indicato. È consentita la consultazione e la condivisione
+        di link al sito; non è consentita la riproduzione, copia o redistribuzione dei contenuti per finalità
+        commerciali senza autorizzazione scritta.
+      </p>
+
+      <h2>3. Uso consentito del sito</h2>
+      <p>Visitando il sito ti impegni a non:</p>
+      <ul>
+        <li>tentare di accedere senza autorizzazione a sistemi o dati non pubblici;</li>
+        <li>effettuare scraping massivo, automatizzato e non dichiarato dei contenuti;</li>
+        <li>usare il sito per diffondere malware o compiere attacchi informatici;</li>
+        <li>utilizzare l'assistente "Chiedi a Rush" per scopi diversi da informarsi sul prodotto Rush, o per inviare contenuti illeciti, offensivi o dati personali di terzi senza il loro consenso.</li>
+      </ul>
+
+      <h2>4. Assistente "Chiedi a Rush"</h2>
+      <p>
+        Il widget di chat è un assistente automatico basato su modelli di intelligenza artificiale di terze
+        parti (vedi <a href="./privacy.html">Privacy Policy</a>) e usa come unica fonte i contenuti pubblici
+        del sito. Le risposte sono fornite a scopo informativo: non sono consulenza vincolante e non
+        sostituiscono un preventivo o un contratto scritto. In caso di incertezza, fai sempre riferimento a
+        quanto confermato per iscritto dal team Rush.
+      </p>
+
+      <h2>5. Link a siti terzi</h2>
+      <p>
+        Il sito può contenere link a siti di terzi (es. social network, pagine di partner). Rush non controlla
+        e non è responsabile dei contenuti o delle policy privacy di siti esterni.
+      </p>
+
+      <h2>6. Limitazione di responsabilità</h2>
+      <p>
+        Il sito e il suo contenuto sono forniti "così come sono". Pur impegnandoci a mantenere le
+        informazioni accurate e aggiornate, non garantiamo l'assenza totale di errori o interruzioni del
+        servizio (es. per manutenzione dell'infrastruttura di hosting). Nei limiti consentiti dalla legge,
+        Rush non è responsabile per danni indiretti derivanti dall'uso del sito.
+      </p>
+
+      <h2>7. Modifiche ai termini</h2>
+      <p>
+        Questi termini possono essere aggiornati nel tempo; la data in cima alla pagina indica l'ultimo
+        aggiornamento. L'uso continuato del sito dopo una modifica implica l'accettazione dei nuovi termini.
+      </p>
+
+      <h2>8. Legge applicabile e foro competente</h2>
+      <p>
+        Questi termini sono regolati dalla legge italiana. Per qualsiasi controversia relativa all'uso del
+        sito, salvo norme inderogabili a tutela del consumatore, è competente il foro del luogo di residenza
+        o domicilio dell'utente, se consumatore; altrimenti il foro competente secondo le norme ordinarie.
+      </p>
+
+      <h2>9. Contatti</h2>
+      <p>
+        Per qualsiasi domanda su questi termini: <a href="mailto:info@rush-ai.it">info@rush-ai.it</a>.
+      </p>
+    </main>
+
+    <footer class="lg-footer">
+      <nav class="lg-footer-links" aria-label="Documenti legali">
+        <a href="./privacy.html">Privacy Policy</a>
+        <a href="./cookie-policy.html">Cookie Policy</a>
+        <a href="./termini.html">Termini e Condizioni</a>
+        <button type="button" onclick="window.rushReopenConsent && window.rushReopenConsent()">Preferenze cookie</button>
+      </nav>
+      <span class="lg-footer-copy">© <span id="lg-year"></span> Rush. Tutti i diritti riservati.</span>
+    </footer>
+    <script>document.getElementById('lg-year').textContent = new Date().getFullYear();</script>
+    <script defer src="./cookie-consent.js"></script>
+  </body>
+</html>
