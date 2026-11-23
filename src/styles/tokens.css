@@ -20,6 +20,9 @@
   /* accento: identità di brand. Mai su testo piccolo, mai su un bottone. */
   --accent: #5b7fe0;
   --accent-soft: rgba(91, 127, 224, 0.1);
+  /* variante di --accent per le rare eccezioni di testo piccolo: stessa
+     tinta, scurita quanto basta per 4.5:1 (AA) su sfondo chiaro. */
+  --accent-text: #416bdb;
   --warn: #b45309; /* emergenza / rischio / da verificare */
   --pos: #15803d; /* esito positivo */
   --neg: #b91c1c; /* esito negativo / urgente */
@@ -103,6 +106,7 @@
 
   --accent: #5b7fe0; /* stesso valore nei due temi */
   --accent-soft: rgba(91, 127, 224, 0.16);
+  --accent-text: #5b7fe0; /* su sfondo scuro --accent è già a 4.5:1, nessuna scurificazione */
   --warn: #c2660b;
   --pos: #22a85a;
   --neg: #e14b4b;
@@ -150,6 +154,7 @@
   --hairline: rgba(255, 255, 255, 0.08);
   --hairline-strong: rgba(255, 255, 255, 0.14);
   --accent-soft: rgba(91, 127, 224, 0.16);
+  --accent-text: #5b7fe0;
   --warn: #c2660b;
   --pos: #22a85a;
   --neg: #e14b4b;
@@ -188,6 +193,7 @@
   --hairline: rgba(0, 0, 0, 0.06);
   --hairline-strong: rgba(0, 0, 0, 0.12);
   --accent-soft: rgba(91, 127, 224, 0.1);
+  --accent-text: #416bdb;
   --warn: #b45309;
   --pos: #15803d;
   --neg: #b91c1c;
@@ -223,12 +229,17 @@
 .risto-orange {
   --accent: #ff642f;
   --accent-soft: rgba(255, 100, 47, 0.1);
+  /* --accent arancione è sotto 4.5:1 su sfondo chiaro: variante scurita
+     per le poche eccezioni di testo piccolo (v. --accent-text sopra). */
+  --accent-text: #d73700;
 }
 :root[data-theme='dark'] .risto-orange {
   --accent-soft: rgba(255, 100, 47, 0.16);
+  --accent-text: #ff642f; /* su sfondo scuro --accent è già a 6:1 */
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) .risto-orange {
     --accent-soft: rgba(255, 100, 47, 0.16);
+    --accent-text: #ff642f;
   }
 }
