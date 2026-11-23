@@ -14,10 +14,18 @@
  * Bump CONSENT_VERSION se cambia in modo sostanziale cosa viene tracciato
  * (nuovo servizio, nuova categoria): le scelte già salvate con una versione
  * diversa non contano più e il banner torna a mostrarsi.
+ *
+ * Oltre a localStorage, ogni scelta viene anche inviata "fire-and-forget" a
+ * CONSENT_LOG_ENDPOINT (lo stesso Worker del form di contatto, vedi worker/
+ * README.md "Registro dei consensi cookie"): una prova verificabile anche
+ * lato server, non solo nel browser del visitatore. Se l'endpoint non
+ * risponde o non è configurato, il banner funziona comunque: non è mai una
+ * condizione bloccante.
  */
 (() => {
   const CONSENT_VERSION = 1;
   const STORAGE_KEY = 'rush-consent';
+  const CONSENT_LOG_ENDPOINT = 'https://rush-contact.withered-voice-c323.workers.dev/consent-log';
 
   function readConsent() {
     try {
@@ -38,6 +46,14 @@
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
     } catch {}
     window.dispatchEvent(new CustomEvent('rush-consent', { detail: { analytics: !!statistiche } }));
+    try {
+      fetch(CONSENT_LOG_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+        body: JSON.stringify({ action, statistiche: !!statistiche, page: window.location.pathname }),
+        keepalive: true,
+      }).catch(() => {});
+    } catch {}
     return record;
   }
 

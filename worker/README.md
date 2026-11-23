@@ -106,6 +106,61 @@ riserva devono fallire entrambi i provider, due volte di fila. Le soglie
 aggiornate: [console.groq.com](https://console.groq.com) e
 [ai.google.dev/pricing](https://ai.google.dev/pricing).
 
+## Registro dei consensi cookie (opzionale)
+
+Il banner cookie del sito (`public/cookie-consent.js`) salva la scelta di ogni
+visitatore nel suo browser (localStorage) e, in più, manda una copia
+"fire-and-forget" a questo Worker su `POST /consent-log`: se il namespace KV
+sotto non è configurato, il Worker risponde comunque 200 e il banner
+funziona lo stesso — semplicemente non rimane nessuna prova lato server.
+Attivalo solo se vuoi una prova del consenso verificabile anche da un server
+(utile in caso di controllo del Garante), non solo nel browser di chi visita.
+
+Ogni record salvato contiene solo: data/ora, l'azione (`accept_all` /
+`reject_all` / `custom`), se la categoria Statistiche è stata accettata, e la
+pagina. Nessun IP, nessun user agent, nessun identificativo del visitatore:
+il log prova che il banner ha funzionato correttamente nel tempo, non chi ha
+cliccato cosa. Conservazione: 2 anni (poi i record scadono da soli), modificabile
+in `index.js` (`expirationTtl` in `handleConsentLog`).
+
+### Attivazione — Opzione A, dal browser
+
+1. Vai su https://dash.cloudflare.com → **Workers e Pages** → **KV** (nel
+   menu laterale, a volte sotto *Storage & Databases*)
+2. **Crea un namespace**: nome `CONSENT_LOG` → **Crea**
+3. Apri il Worker `rush-contact` → **Impostazioni** → **Variabili e Secret**
+   (o **Bindings**, a seconda della versione della dashboard) → **Aggiungi
+   binding** → tipo **KV Namespace** → nome variabile `CONSENT_LOG` → scegli
+   il namespace creato al passo 2 → **Salva e distribuisci**
+4. Aggiorna anche il codice del Worker con l'ultima versione di `index.js`
+   (vedi sopra, punto 4 della configurazione base) se non l'hai già fatto
+
+### Attivazione — Opzione B, da terminale
+
+```bash
+cd worker
+npx wrangler kv namespace create CONSENT_LOG
+```
+Copia l'`id` che il comando restituisce, incollalo in `wrangler.toml` (vedi il
+blocco commentato `[[kv_namespaces]]`), scommenta quel blocco, poi:
+```bash
+npx wrangler deploy
+```
+
+### Consultare o esportare il registro
+
+Non c'è (volutamente) un endpoint pubblico per leggerlo: evita di esporre
+anche un log minimo senza autenticazione. Per consultarlo:
+
+```bash
+# elenca le chiavi (una per consenso registrato)
+npx wrangler kv key list --binding=CONSENT_LOG --remote
+
+# legge un record specifico
+npx wrangler kv key get "<chiave>" --binding=CONSENT_LOG --remote
+```
+oppure dalla dashboard: **Workers e Pages → KV → CONSENT_LOG → View**.
+
 ## Dominio personalizzato (opzionale)
 
 Se il dominio `rush-ai.it` è gestito su Cloudflare, puoi servire l'endpoint
