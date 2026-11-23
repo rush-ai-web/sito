@@ -58,7 +58,7 @@
   }
 
   const CSS = `
-.rc-banner, .rc-fab { position: fixed; z-index: 2147483000; font-family: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+.rc-banner { position: fixed; z-index: 2147483000; font-family: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 .rc-banner { left: 0; right: 0; bottom: 0; display: flex; justify-content: center; padding: 16px; pointer-events: none; }
 .rc-banner.is-hidden { display: none; }
 .rc-card {
@@ -72,7 +72,15 @@
   box-shadow: 0 20px 50px -20px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.12);
   padding: 20px 22px;
 }
-.rc-title { margin: 0 0 8px; font-size: 15.5px; font-weight: 700; color: var(--rc-text); }
+.rc-head { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; }
+.rc-badge {
+  flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  background: radial-gradient(circle at 32% 28%, color-mix(in srgb, var(--rc-accent) 55%, white 25%), var(--rc-accent) 60%);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,.55), inset 0 -2px 4px rgba(0,0,0,.18), 0 2px 6px rgba(0,0,0,.18);
+  color: #fff;
+}
+.rc-badge svg { width: 19px; height: 19px; filter: drop-shadow(0 1px 1px rgba(0,0,0,.2)); }
+.rc-title { margin: 0; font-size: 15.5px; font-weight: 700; color: var(--rc-text); }
 .rc-text { margin: 0 0 14px; font-size: 13.5px; line-height: 1.5; color: var(--rc-text-2); }
 .rc-text a { color: var(--rc-accent); text-decoration: underline; }
 .rc-actions { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -128,18 +136,6 @@
 .rc-switch input:checked ~ .rc-switch-thumb { transform: translateX(16px); }
 .rc-switch input:disabled ~ .rc-switch-track { background: var(--rc-accent); opacity: .55; }
 .rc-switch input:focus-visible ~ .rc-switch-track { outline: 2px solid var(--rc-accent); outline-offset: 2px; }
-.rc-fab {
-  left: 18px; bottom: 18px;
-  width: 46px; height: 46px; border-radius: 50%;
-  background: var(--rc-bg); color: var(--rc-text);
-  border: 1px solid var(--rc-border);
-  box-shadow: 0 10px 24px -10px rgba(0,0,0,.3);
-  display: grid; place-items: center;
-  cursor: pointer; font-size: 20px; line-height: 1;
-}
-.rc-fab:hover { opacity: .9; }
-.rc-fab:focus-visible { outline: 2px solid var(--rc-accent); outline-offset: 2px; }
-.rc-fab.is-hidden { display: none; }
 @media (max-width: 480px) {
   .rc-banner { padding: 10px; }
   .rc-card { padding: 16px; border-radius: 16px; }
@@ -174,18 +170,29 @@
     const card = document.createElement('div');
     card.className = 'rc-card';
 
+    const head = document.createElement('div');
+    head.className = 'rc-head';
+    const badge = document.createElement('span');
+    badge.className = 'rc-badge';
+    badge.setAttribute('aria-hidden', 'true');
+    /* icona "cookie" (lucide), su una pasticca con shine per un tocco lucido */
+    badge.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+      'stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/>' +
+      '<path d="M8.5 8.5v.01"/><path d="M16 15.5v.01"/><path d="M12 12v.01"/><path d="M11 17v.01"/><path d="M7 14v.01"/></svg>';
     const title = document.createElement('p');
     title.className = 'rc-title';
     title.textContent = 'Usiamo i cookie';
-    card.appendChild(title);
+    head.appendChild(badge);
+    head.appendChild(title);
+    card.appendChild(head);
 
     const text = document.createElement('p');
     text.className = 'rc-text';
     text.innerHTML =
-      `Usiamo cookie tecnici necessari al funzionamento del sito (sempre attivi) e, solo se li accetti, ` +
-      `cookie statistici (Google Analytics) per capire come viene usato il sito. Nessun cookie di marketing o ` +
-      `profilazione. Dettagli nella <a href="${basePath()}cookie-policy.html">Cookie Policy</a> e nella ` +
-      `<a href="${basePath()}privacy.html">Privacy Policy</a>.`;
+      `Cookie tecnici sempre attivi e, solo se li accetti, cookie statistici (Google Analytics). ` +
+      `Nessun cookie di marketing o profilazione. Dettagli nella <a href="${basePath()}cookie-policy.html">Cookie Policy</a> ` +
+      `e nella <a href="${basePath()}privacy.html">Privacy Policy</a>.`;
     card.appendChild(text);
 
     const panel = document.createElement('div');
@@ -298,19 +305,10 @@
 
     const existing = readConsent();
 
-    const fab = document.createElement('button');
-    fab.type = 'button';
-    fab.className = 'rc-fab is-hidden';
-    fab.setAttribute('aria-label', 'Preferenze cookie');
-    fab.title = 'Preferenze cookie';
-    fab.textContent = '🍪';
-    document.body.appendChild(fab);
-
     let bannerEl = null;
 
     function showBanner(prefill) {
       if (bannerEl) bannerEl.remove();
-      fab.classList.add('is-hidden');
       bannerEl = buildBanner({
         initialStatistiche: !!prefill,
         onAcceptAll: () => finish('accept_all', true),
@@ -326,22 +324,13 @@
         bannerEl.remove();
         bannerEl = null;
       }
-      fab.classList.remove('is-hidden');
     }
 
-    if (!existing) {
-      showBanner(false);
-    } else {
-      fab.classList.remove('is-hidden');
-    }
+    if (!existing) showBanner(false);
 
-    fab.addEventListener('click', () => {
-      const current = readConsent();
-      showBanner(current ? current.categories.statistiche : false);
-    });
-
-    /* così il link "Preferenze cookie" nel footer (pagine React) e nelle
-       pagine legali statiche può riaprire il banner senza duplicare markup. */
+    /* nessuna icona fissa a schermo: il banner si riapre solo dal link
+       "Gestisci i cookie" / "Preferenze cookie" nel footer e nelle pagine
+       legali (vedi Footer.jsx, cookie-policy.html, privacy.html, termini.html). */
     window.rushReopenConsent = () => {
       const current = readConsent();
       showBanner(current ? current.categories.statistiche : false);
