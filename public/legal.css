@@ -59,7 +59,15 @@ body {
   margin: 0 auto;
   padding: 22px 20px;
 }
-.lg-brand { font-size: 17px; font-weight: 800; color: var(--text); text-decoration: none; }
+.lg-brand { display: inline-flex; align-items: center; text-decoration: none; }
+.lg-brand img { height: 22px; width: auto; display: block; }
+.lg-brand .lg-logo-dark { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .lg-brand .lg-logo-light { display: none; }
+  :root:not([data-theme='light']) .lg-brand .lg-logo-dark { display: block; }
+}
+:root[data-theme='dark'] .lg-brand .lg-logo-light { display: none; }
+:root[data-theme='dark'] .lg-brand .lg-logo-dark { display: block; }
 .lg-back { font-size: 13.5px; font-weight: 600; color: var(--text-2); text-decoration: none; }
 .lg-back:hover { color: var(--accent-text); }
 
