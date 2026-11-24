@@ -64,7 +64,7 @@
 .rc-card {
   pointer-events: auto;
   width: 100%;
-  max-width: 560px;
+  max-width: 680px;
   background: var(--rc-bg);
   color: var(--rc-text);
   border: 1px solid var(--rc-border);
@@ -279,7 +279,9 @@
 
     const customizeBtn = document.createElement('button');
     customizeBtn.type = 'button';
-    customizeBtn.className = 'rc-btn--text';
+    customizeBtn.className = 'rc-btn rc-btn--outline';
+    customizeBtn.style.width = '100%';
+    customizeBtn.style.marginTop = '10px';
     customizeBtn.textContent = 'Personalizza';
     customizeBtn.setAttribute('aria-expanded', 'false');
     customizeBtn.addEventListener('click', () => {
