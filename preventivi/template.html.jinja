@@ -21,8 +21,9 @@
     --paper: #ffffff;
     --muted-bg: #f4f6fb;
     --text: #13141a;
-    --text-soft: #5b6372;
+    --text-soft: #454c5c;
     --line: #e2e6f0;
+    --line-accent: #aebdf5;
   }
 
   * { box-sizing: border-box; }
@@ -216,8 +217,6 @@
     border-radius: 1mm;
     background: linear-gradient(90deg, var(--accent-light), var(--accent-deep));
   }
-  .section-rule.neutral { background: var(--line); }
-
   .block-title {
     font-size: 4.3mm;
     font-weight: 700;
@@ -230,8 +229,6 @@
   .cat-block:first-of-type { margin-top: 0; }
   .cat-title {
     font-size: 3.8mm; font-weight: 600; color: var(--text);
-    padding-bottom: 2.2mm;
-    border-bottom: 1px solid var(--line);
     margin-bottom: 4mm;
   }
 
@@ -240,7 +237,7 @@
   table.plain { width: 100%; border-collapse: collapse; }
   table.plain th {
     text-align: left; font-size: 2.5mm; text-transform: uppercase; letter-spacing: 1px;
-    color: var(--text-soft); font-weight: 600; padding: 2.5mm 3mm; border-bottom: 1.5px solid var(--text);
+    color: var(--text-soft); font-weight: 600; padding: 2.5mm 3mm; border-bottom: 1.5px solid var(--line-accent);
   }
   table.plain th.num, table.plain td.num { text-align: right; }
   table.plain tbody tr { break-inside: avoid; }
@@ -417,7 +414,7 @@
 <div class="page content">
 
   <h1 class="section-title">Dettaglio del servizio</h1>
-  <div class="section-rule neutral"></div>
+  <div class="section-rule"></div>
 
   {% for cat in dettaglio %}
   <div class="cat-block">
