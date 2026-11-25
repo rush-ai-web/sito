@@ -44,6 +44,9 @@
   .page { page-break-after: always; }
   .page:last-child { page-break-after: auto; }
 
+  .page.cover { display: flex; flex-direction: column; min-height: 297mm; }
+  .page.content { display: flex; flex-direction: column; min-height: 263mm; }
+
   p { margin: 0; }
 
   /* ---------- HERO (pagina 1, a tutta pagina) ---------- */
@@ -105,7 +108,7 @@
   .tab-card .cell:last-child { border-right: none; }
 
   /* ---------- CORPO PAGINA 1 (margini manuali: pagina 1 non usa @page margin) ---------- */
-  .cover-body { padding: 10mm 16mm 17mm 16mm; }
+  .cover-body { flex: 1; display: flex; flex-direction: column; padding: 10mm 16mm 17mm 16mm; }
 
   /* ---------- META / CLIENTE / OGGETTO ---------- */
   .field-label {
@@ -178,9 +181,9 @@
   }
   .grand-total .amount { color: #fff; font-size: 6mm; font-weight: 700; }
 
-  /* ---------- CONTATTI (pagina 1 e ultima pagina) ---------- */
+  /* ---------- CONTATTI (pagina 1 e ultima pagina, ancorati in fondo) ---------- */
   .contact-footer {
-    margin-top: 12mm;
+    margin-top: auto;
     padding-top: 6mm;
     border-top: 1px solid var(--line);
     display: flex;
@@ -213,6 +216,14 @@
     border-radius: 1mm;
     background: linear-gradient(90deg, var(--accent-light), var(--accent-deep));
   }
+  .section-rule.neutral { background: var(--line); }
+
+  .block-title {
+    font-size: 4.3mm;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4mm;
+  }
 
   /* ---------- PAGINA 2: DETTAGLIO ---------- */
   .cat-block { margin-top: 8mm; break-inside: avoid; }
@@ -220,7 +231,7 @@
   .cat-title {
     font-size: 3.8mm; font-weight: 600; color: var(--text);
     padding-bottom: 2.2mm;
-    border-bottom: 2px solid var(--accent);
+    border-bottom: 1px solid var(--line);
     margin-bottom: 4mm;
   }
 
@@ -246,6 +257,10 @@
   ul.simple li::before { content: '–'; position: absolute; left: 0; color: var(--text-soft); }
 
   /* ---------- PAGINA 3: TEMPISTICHE E PAGAMENTO ---------- */
+  .stat-block { margin-top: 4mm; }
+  .stat-value { font-size: 10mm; font-weight: 700; color: var(--text); }
+  .stat-caption { font-size: 3.2mm; color: var(--text-soft); margin-top: 1.5mm; }
+
   .pay-cards { display: flex; gap: 8mm; margin-top: 4mm; }
   .pay-card {
     flex: 1;
@@ -275,7 +290,7 @@
 <!-- =========================================================
      PAGINA 1 — RIEPILOGO
      ========================================================= -->
-<div class="page">
+<div class="page cover">
 
   <div class="hero">
     <svg class="hero-waves" viewBox="0 0 794 212" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -399,10 +414,10 @@
 <!-- =========================================================
      PAGINA 2 — DETTAGLIO SERVIZIO
      ========================================================= -->
-<div class="page">
+<div class="page content">
 
   <h1 class="section-title">Dettaglio del servizio</h1>
-  <div class="section-rule"></div>
+  <div class="section-rule neutral"></div>
 
   {% for cat in dettaglio %}
   <div class="cat-block">
@@ -432,7 +447,7 @@
 
   {% if incluso or escluso %}
   <div class="detail-section">
-    <p class="field-label">Cosa comprende</p>
+    <p class="block-title">Cosa comprende</p>
     <div class="pair-lists">
       <div class="col">
         <p class="pill-title">Incluso</p>
@@ -455,30 +470,24 @@
 <!-- =========================================================
      PAGINA 3 — TEMPISTICHE E PAGAMENTO (sempre su pagina propria)
      ========================================================= -->
-<div class="page">
+<div class="page content">
 
   <h1 class="section-title">Tempistiche e pagamento</h1>
   <div class="section-rule"></div>
 
   {% if tempistiche %}
   <div class="detail-section" style="margin-top:0;">
-    <p class="field-label">Tempistiche</p>
-    <table class="plain">
-      <thead>
-        <tr><th>Fase</th><th>Durata stimata</th><th class="num">Consegna</th></tr>
-      </thead>
-      <tbody>
-        {% for t in tempistiche %}
-        <tr><td>{{ t.fase }}</td><td>{{ t.durata }}</td><td class="num">{{ t.consegna }}</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <p class="block-title">Tempistiche</p>
+    <div class="stat-block">
+      <div class="stat-value">{{ tempistiche.durata }}</div>
+      <div class="stat-caption">Tempo di consegna stimato{% if tempistiche.nota %} {{ tempistiche.nota }}{% endif %}</div>
+    </div>
   </div>
   {% endif %}
 
   {% if pagamento %}
   <div class="detail-section">
-    <p class="field-label">Modalità di pagamento</p>
+    <p class="block-title">Modalità di pagamento</p>
     <div class="pay-cards">
       {% for p in pagamento %}
       <div class="pay-card">

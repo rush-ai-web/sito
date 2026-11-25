@@ -57,11 +57,10 @@
     "Copywriting dei testi (fornito dal cliente)",
     "Rinnovo annuale di dominio e hosting (dal secondo anno)"
   ],
-  "tempistiche": [
-    { "fase": "Progettazione e approvazione design", "durata": "1 settimana", "consegna": "Settimana 1" },
-    { "fase": "Sviluppo del sito", "durata": "2 settimane", "consegna": "Settimana 3" },
-    { "fase": "Test, revisioni e pubblicazione", "durata": "1 settimana", "consegna": "Settimana 4" }
-  ],
+  "tempistiche": {
+    "durata": "4 settimane",
+    "nota": "dalla conferma dell'incarico"
+  },
   "pagamento": [
     { "fase": "Acconto all'avvio dei lavori", "percentuale": "30%", "importo": "€ 750,00" },
     { "fase": "Saldo alla consegna", "percentuale": "70%", "importo": "€ 1.750,00" }

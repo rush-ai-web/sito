@@ -4,7 +4,7 @@ Qui dentro c'è il template grafico per i tuoi preventivi (stile sito: header co
 
 1. **Pagina 1 — Riepilogo**: header con logo, dati cliente, oggetto, voci macro, totale in evidenza, contatti in fondo.
 2. **Pagina 2 — Dettaglio**: voci spacchettate per categoria, cosa è incluso/escluso.
-3. **Pagina 3 — Tempistiche e pagamento**: sempre su una pagina a sé, con le fasi di consegna e le percentuali di pagamento in evidenza, contatti in fondo.
+3. **Pagina 3 — Tempistiche e pagamento**: sempre su una pagina a sé, con il tempo di consegna totale (non diviso per fase) e le percentuali di pagamento in evidenza, contatti in fondo.
 
 Se il dettaglio (pagina 2) ha tanta roba dentro, può "sforare" su una pagina in più in automatico — non si taglia mai niente, semplicemente continua. La pagina "Tempistiche e pagamento" invece parte sempre da capo, mai mischiata con le voci di dettaglio.
 
