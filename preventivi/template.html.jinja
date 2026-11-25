@@ -186,7 +186,7 @@
   .contact-footer {
     margin-top: auto;
     padding-top: 6mm;
-    border-top: 1px solid var(--line);
+    border-top: 1.5px solid #c7cdd9;
     display: flex;
     justify-content: center;
     gap: 14mm;
@@ -218,6 +218,7 @@
     background: linear-gradient(90deg, var(--accent-light), var(--accent-deep));
   }
   .block-title {
+    text-align: center;
     font-size: 4.3mm;
     font-weight: 700;
     color: var(--text);
@@ -244,17 +245,32 @@
   table.plain td { font-size: 3mm; padding: 3mm; border-bottom: 1px solid var(--line); color: var(--text); }
 
   .pair-lists { display: flex; gap: 10mm; margin-top: 4mm; }
-  .pair-lists .col { flex: 1; }
-  .pill-title { font-size: 3.1mm; font-weight: 600; color: var(--text); margin-bottom: 2.5mm; }
-  ul.simple { margin: 0; padding: 0; list-style: none; }
-  ul.simple li {
-    font-size: 3mm; color: var(--text-soft); line-height: 1.65;
-    padding-left: 3.2mm; position: relative; margin-bottom: 1mm;
+  .pair-lists .col { flex: 1; text-align: center; }
+  .pill-title {
+    display: inline-flex; align-items: center; gap: 2.2mm;
+    font-size: 3.3mm; font-weight: 600; color: var(--text); margin-bottom: 3.5mm;
   }
-  ul.simple li::before { content: '–'; position: absolute; left: 0; color: var(--text-soft); }
+  .pill-icon {
+    width: 5.2mm; height: 5.2mm; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex: none;
+  }
+  .pill-icon.yes { background: var(--accent-deep); }
+  .pill-icon.no { background: var(--line); }
+  .pill-icon svg { width: 3mm; height: 3mm; }
+
+  ul.simple { margin: 0; padding: 0; list-style: none; text-align: left; }
+  ul.simple li {
+    display: flex; align-items: flex-start; gap: 2.4mm;
+    font-size: 3mm; color: var(--text-soft); line-height: 1.5;
+    margin-bottom: 2mm;
+  }
+  ul.simple li svg { flex: none; margin-top: 0.4mm; }
+  ul.simple.yes li svg { color: var(--accent-deep); }
+  ul.simple.no li svg { color: #9aa3b4; }
 
   /* ---------- PAGINA 3: TEMPISTICHE E PAGAMENTO ---------- */
-  .stat-block { margin-top: 4mm; }
+  .stat-block { margin-top: 4mm; text-align: center; }
   .stat-value { font-size: 10mm; font-weight: 700; color: var(--text); }
   .stat-caption { font-size: 3.2mm; color: var(--text-soft); margin-top: 1.5mm; }
 
@@ -447,15 +463,35 @@
     <p class="block-title">Cosa comprende</p>
     <div class="pair-lists">
       <div class="col">
-        <p class="pill-title">Incluso</p>
-        <ul class="simple">
-          {% for i in incluso %}<li>{{ i }}</li>{% endfor %}
+        <p class="pill-title">
+          <span class="pill-icon yes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Incluso
+        </p>
+        <ul class="simple yes">
+          {% for i in incluso %}
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="3.6mm" height="3.6mm"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>{{ i }}</span>
+          </li>
+          {% endfor %}
         </ul>
       </div>
       <div class="col">
-        <p class="pill-title">Non incluso</p>
-        <ul class="simple">
-          {% for e in escluso %}<li>{{ e }}</li>{% endfor %}
+        <p class="pill-title">
+          <span class="pill-icon no">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-soft)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </span>
+          Non incluso
+        </p>
+        <ul class="simple no">
+          {% for e in escluso %}
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="3.6mm" height="3.6mm"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <span>{{ e }}</span>
+          </li>
+          {% endfor %}
         </ul>
       </div>
     </div>
