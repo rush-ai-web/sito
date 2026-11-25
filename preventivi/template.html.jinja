@@ -21,7 +21,7 @@
     --paper: #ffffff;
     --muted-bg: #f4f6fb;
     --text: #13141a;
-    --text-soft: #454c5c;
+    --text-soft: #313339;
     --line: #e2e6f0;
     --line-accent: #aebdf5;
   }
@@ -222,7 +222,7 @@
     font-size: 4.3mm;
     font-weight: 700;
     color: var(--text);
-    margin-bottom: 4mm;
+    margin-bottom: 8mm;
   }
 
   /* ---------- PAGINA 2: DETTAGLIO ---------- */
@@ -254,7 +254,7 @@
   .pair-lists .col { flex: 1; text-align: center; }
   .pill-title {
     display: inline-flex; align-items: center; gap: 2.2mm;
-    font-size: 3.3mm; font-weight: 600; color: var(--text); margin-bottom: 3.5mm;
+    font-size: 3.3mm; font-weight: 600; color: var(--text); margin-bottom: 6mm;
   }
   .pill-icon {
     width: 5.2mm; height: 5.2mm; border-radius: 50%;
@@ -395,6 +395,10 @@
   <div class="totals">
     <div class="totals-box">
       {% if sconto %}
+      <div class="totals-row">
+        <span>Subtotale</span>
+        <span>{{ subtotale }}</span>
+      </div>
       <div class="totals-row">
         <span>{{ sconto.etichetta }}</span>
         <span>− {{ sconto.importo }}</span>
