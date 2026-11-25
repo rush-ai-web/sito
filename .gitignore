@@ -5,3 +5,7 @@ node_modules/
 
 # docs/ NON è ignorata: è l'output di build che GitHub Pages serve
 .video-export/
+
+# preventivi: output generati, non template
+preventivi/_rendered_preview.html
+preventivi/*.pdf
