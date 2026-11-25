@@ -8,9 +8,24 @@
   "oggetto": "Siti one-page per 4 piloti Sorpasso",
   "riepilogo": [
     {
-      "voce": "Siti one-page per 4 piloti (€ 600,00 cadauno)",
-      "descrizione": "Un template one-page condiviso, con una direzione visiva ispirata a landonorris.com e conciliata con lo stile Sorpasso (rosso, righe distintive, font), riadattato e personalizzato per Davide Dotta, Noah Dettwiler, Nicolò Fasciano e Alessandro Binder: 4 siti a € 600,00 cadauno.",
-      "importo": "€ 2.400,00"
+      "voce": "Sito one-page – Davide Dotta",
+      "descrizione": "Basato sul template one-page condiviso, ispirato a landonorris.com e conciliato con lo stile Sorpasso",
+      "importo": "€ 600,00"
+    },
+    {
+      "voce": "Sito one-page – Noah Dettwiler",
+      "descrizione": "Basato sul template one-page condiviso, ispirato a landonorris.com e conciliato con lo stile Sorpasso",
+      "importo": "€ 600,00"
+    },
+    {
+      "voce": "Sito one-page – Nicolò Fasciano",
+      "descrizione": "Basato sul template one-page condiviso, ispirato a landonorris.com e conciliato con lo stile Sorpasso",
+      "importo": "€ 600,00"
+    },
+    {
+      "voce": "Sito one-page – Alessandro Binder",
+      "descrizione": "Basato sul template one-page condiviso, ispirato a landonorris.com e conciliato con lo stile Sorpasso",
+      "importo": "€ 600,00"
     }
   ],
   "subtotale": "€ 2.400,00",
