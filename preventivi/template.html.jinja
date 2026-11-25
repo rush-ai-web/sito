@@ -17,6 +17,7 @@
     --accent: #2a4bff;
     --accent-deep: #1e34c8;
     --accent-light: #6aa3ff;
+    --accent-pale: #cfe0ff;
     --paper: #ffffff;
     --muted-bg: #f4f6fb;
     --text: #13141a;
@@ -48,8 +49,8 @@
   /* ---------- HERO (pagina 1, a tutta pagina) ---------- */
   .hero {
     position: relative;
-    height: 52mm;
-    background: var(--ink);
+    height: 58mm;
+    background: var(--paper);
     overflow: hidden;
   }
   .hero-waves { position: absolute; inset: 0; width: 100%; height: 100%; }
@@ -58,9 +59,9 @@
     position: relative;
     z-index: 2;
     height: 100%;
-    padding: 0 16mm;
+    padding: 11mm 16mm 0 16mm;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
   }
 
@@ -68,21 +69,40 @@
 
   .mark {
     width: 14mm; height: 14mm;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 5px rgba(10, 15, 40, 0.18);
+    display: flex; align-items: center; justify-content: center;
     flex: none;
+    overflow: hidden;
   }
-  .mark img { width: 100%; height: 100%; display: block; }
+  .mark img { width: 88%; height: 88%; object-fit: contain; }
 
-  .brand-name { font-size: 5mm; font-weight: 600; color: #fff; white-space: nowrap; }
-  .brand-tag { font-size: 2.7mm; font-weight: 500; color: var(--accent-light); margin-top: 0.8mm; white-space: nowrap; }
+  .brand-name { font-size: 5mm; font-weight: 600; color: var(--text); white-space: nowrap; }
+  .brand-tag { font-size: 2.7mm; font-weight: 500; color: var(--accent-deep); margin-top: 0.8mm; white-space: nowrap; }
 
   .doc-title-wrap { text-align: right; white-space: nowrap; }
   .doc-title {
     font-size: 8.5mm;
     font-weight: 700;
     letter-spacing: 0.5px;
-    color: #fff;
+    color: var(--text);
   }
-  .doc-date { font-size: 3.1mm; color: var(--accent-light); margin-top: 1.8mm; font-weight: 500; }
+  .doc-date { font-size: 3.1mm; color: var(--text-soft); margin-top: 1.8mm; font-weight: 500; }
+
+  /* ---------- TAB CARD (sovrapposta al bordo dell'hero) ---------- */
+  .tab-card {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    margin: -15mm 16mm 0 16mm;
+    background: var(--paper);
+    border-radius: 2.5mm;
+    box-shadow: 0 6px 18px rgba(10, 15, 40, 0.12);
+    overflow: hidden;
+  }
+  .tab-card .cell { flex: 1; padding: 5mm 6mm; border-right: 1px solid var(--line); }
+  .tab-card .cell:last-child { border-right: none; }
 
   /* ---------- CORPO PAGINA 1 (margini manuali: pagina 1 non usa @page margin) ---------- */
   .cover-body { padding: 10mm 16mm 17mm 16mm; }
@@ -101,19 +121,12 @@
     display: flex;
     justify-content: space-between;
     gap: 10mm;
+    margin-top: 10mm;
   }
   .meta-col.align-right { text-align: right; }
-  .meta-col .field-label.spaced { margin-top: 4.5mm; }
 
   .oggetto-block { margin-top: 7mm; }
   .oggetto-text { font-size: 3.6mm; font-weight: 600; color: var(--text); }
-
-  .intro {
-    font-size: 3.2mm;
-    line-height: 1.65;
-    color: var(--text-soft);
-    margin-top: 6mm;
-  }
 
   /* ---------- TABLE ---------- */
   table.items { width: 100%; border-collapse: collapse; margin-top: 8mm; }
@@ -165,39 +178,49 @@
   }
   .grand-total .amount { color: #fff; font-size: 6mm; font-weight: 700; }
 
-  /* ---------- FIRMA PAGINA 1 ---------- */
-  .sign-block {
-    margin-top: 10mm;
+  /* ---------- CONTATTI (pagina 1 e ultima pagina) ---------- */
+  .contact-footer {
+    margin-top: 12mm;
     padding-top: 6mm;
     border-top: 1px solid var(--line);
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    justify-content: center;
+    gap: 14mm;
   }
-  .thanks { font-size: 3.6mm; font-weight: 600; color: var(--text); }
-  .thanks-sub { font-size: 2.9mm; color: var(--text-soft); margin-top: 1.2mm; }
-  .sign { text-align: right; }
-  .sign-name { font-size: 4.2mm; font-weight: 600; color: var(--text); margin-bottom: 1mm; }
-  .sign-line { width: 42mm; border-top: 1px solid var(--text); margin: 1mm 0 1.2mm auto; }
-  .sign-cap { font-size: 2.6mm; color: var(--text-soft); }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 2.6mm;
+    color: var(--text-soft);
+    font-size: 3mm;
+    font-weight: 500;
+  }
+  .contact-item svg { flex: none; color: var(--accent-deep); }
 
-  /* ---------- PAGINA 2: DETTAGLIO ---------- */
-  .detail-title {
+  /* ---------- TITOLI DI SEZIONE (pagine 2 e 3) ---------- */
+  .section-title {
     text-align: center;
     font-size: 5.6mm;
     font-weight: 700;
     letter-spacing: 1.8px;
     text-transform: uppercase;
     color: var(--text);
-    margin: 0 0 12mm 0;
+    margin: 0 auto 4mm auto;
+  }
+  .section-rule {
+    width: 26mm; height: 1.2mm;
+    margin: 0 auto 12mm auto;
+    border-radius: 1mm;
+    background: linear-gradient(90deg, var(--accent-light), var(--accent-deep));
   }
 
+  /* ---------- PAGINA 2: DETTAGLIO ---------- */
   .cat-block { margin-top: 8mm; break-inside: avoid; }
   .cat-block:first-of-type { margin-top: 0; }
   .cat-title {
     font-size: 3.8mm; font-weight: 600; color: var(--text);
     padding-bottom: 2.2mm;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 2px solid var(--accent);
     margin-bottom: 4mm;
   }
 
@@ -222,8 +245,22 @@
   }
   ul.simple li::before { content: '–'; position: absolute; left: 0; color: var(--text-soft); }
 
+  /* ---------- PAGINA 3: TEMPISTICHE E PAGAMENTO ---------- */
+  .pay-cards { display: flex; gap: 8mm; margin-top: 4mm; }
+  .pay-card {
+    flex: 1;
+    text-align: center;
+    border: 1px solid var(--line);
+    border-top: 2.5px solid var(--accent);
+    border-radius: 2.5mm;
+    padding: 7mm 6mm;
+  }
+  .pay-card .pct { font-size: 9mm; font-weight: 700; color: var(--accent-deep); }
+  .pay-card .fase { font-size: 3.2mm; font-weight: 600; color: var(--text); margin-top: 2.5mm; }
+  .pay-card .importo { font-size: 3mm; color: var(--text-soft); margin-top: 1mm; }
+
   .note-box {
-    margin-top: 8mm;
+    margin-top: 10mm;
     background: var(--muted-bg);
     border-radius: 1.5mm;
     padding: 4.5mm 5.5mm;
@@ -231,31 +268,6 @@
     color: var(--text-soft);
     line-height: 1.6;
   }
-
-  .accept-row { display: flex; gap: 8mm; margin-top: 11mm; break-inside: avoid; }
-  .accept-box { flex: 1; border: 1px solid var(--line); border-radius: 2mm; padding: 5mm 6mm; }
-  .accept-box .t { font-size: 2.7mm; color: var(--text-soft); font-weight: 600; margin-bottom: 7mm; }
-  .accept-box .l { border-top: 1px solid var(--text); margin-bottom: 1.5mm; }
-  .accept-box .cap { font-size: 2.6mm; color: var(--text-soft); }
-
-  /* ---------- CONTATTI (solo ultima pagina) ---------- */
-  .contact-footer {
-    margin-top: 14mm;
-    padding-top: 6mm;
-    border-top: 1px solid var(--line);
-    display: flex;
-    justify-content: center;
-    gap: 14mm;
-  }
-  .contact-item {
-    display: flex;
-    align-items: center;
-    gap: 2.6mm;
-    color: var(--text-soft);
-    font-size: 3mm;
-    font-weight: 500;
-  }
-  .contact-item svg { flex: none; color: var(--accent-deep); }
 </style>
 </head>
 <body>
@@ -266,10 +278,10 @@
 <div class="page">
 
   <div class="hero">
-    <svg class="hero-waves" viewBox="0 0 794 196" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0,110 C150,160 280,80 470,105 C600,125 700,95 794,118 L794,196 L0,196 Z" fill="#0f1830" opacity="0.6"/>
-      <path d="M0,130 C180,170 320,105 500,130 C650,150 720,120 794,138 L794,196 L0,196 Z" fill="#162454" opacity="0.5"/>
-      <path d="M0,150 C200,182 360,138 540,155 C670,168 730,145 794,157 L794,196 L0,196 Z" fill="url(#g1)"/>
+    <svg class="hero-waves" viewBox="0 0 794 212" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,110 C150,150 280,95 470,120 C600,140 700,110 794,130 L794,212 L0,212 Z" fill="#cfe0ff" opacity="0.55"/>
+      <path d="M0,135 C180,170 320,118 500,140 C650,158 720,132 794,148 L794,212 L0,212 Z" fill="#6aa3ff" opacity="0.5"/>
+      <path d="M0,160 C200,188 360,148 540,163 C670,174 730,153 794,163 L794,212 L0,212 Z" fill="url(#g1)"/>
       <defs>
         <linearGradient id="g1" x1="0" y1="0" x2="794" y2="0">
           <stop offset="0" stop-color="#1e34c8"/>
@@ -292,7 +304,23 @@
     </div>
   </div>
 
+  <div class="tab-card">
+    <div class="cell">
+      <p class="field-label">Data</p>
+      <p class="field-value">{{ data }}</p>
+    </div>
+    <div class="cell">
+      <p class="field-label">Validità offerta</p>
+      <p class="field-value">{{ validita }}</p>
+    </div>
+    <div class="cell">
+      <p class="field-label">Referente</p>
+      <p class="field-value">Sebastian Marzola</p>
+    </div>
+  </div>
+
   <div class="cover-body">
+
   <div class="meta-grid">
     <div class="meta-col">
       <p class="field-label">Spett.le</p>
@@ -302,19 +330,10 @@
       {% if cliente.telefono %}<p class="field-sub">{{ cliente.telefono }}</p>{% endif %}
     </div>
     <div class="meta-col align-right">
-      <p class="field-label">Validità offerta</p>
-      <p class="field-value">{{ validita }}</p>
-      <p class="field-label spaced">Referente</p>
-      <p class="field-value">Sebastian Marzola</p>
+      <p class="field-label">Oggetto</p>
+      <p class="oggetto-text">{{ oggetto }}</p>
     </div>
   </div>
-
-  <div class="oggetto-block">
-    <p class="field-label">Oggetto</p>
-    <p class="oggetto-text">{{ oggetto }}</p>
-  </div>
-
-  {% if intro %}<p class="intro">{{ intro }}</p>{% endif %}
 
   <table class="items">
     <thead>
@@ -351,15 +370,27 @@
     </div>
   </div>
 
-  <div class="sign-block">
-    <div>
-      <p class="thanks">Grazie per la fiducia.</p>
-      <p class="thanks-sub">Rimango a disposizione per qualsiasi chiarimento.</p>
+  <div class="contact-footer">
+    <div class="contact-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="4.2mm" height="4.2mm">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+      </svg>
+      <span>389 902 1020</span>
     </div>
-    <div class="sign">
-      <p class="sign-name">Sebastian Marzola</p>
-      <div class="sign-line"></div>
-      <p class="sign-cap">Firma</p>
+    <div class="contact-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="4.2mm" height="4.2mm">
+        <rect x="2" y="4" width="20" height="16" rx="2"/>
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+      </svg>
+      <span>sebastianmarzola.work@gmail.com</span>
+    </div>
+    <div class="contact-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="4.2mm" height="4.2mm">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+        <path d="M2 12h20"/>
+      </svg>
+      <span>sebastian-marzola.it</span>
     </div>
   </div>
   </div>
@@ -370,7 +401,8 @@
      ========================================================= -->
 <div class="page">
 
-  <h1 class="detail-title">Dettaglio del servizio</h1>
+  <h1 class="section-title">Dettaglio del servizio</h1>
+  <div class="section-rule"></div>
 
   {% for cat in dettaglio %}
   <div class="cat-block">
@@ -417,9 +449,19 @@
     </div>
   </div>
   {% endif %}
+</div>
+
+{% if tempistiche or pagamento %}
+<!-- =========================================================
+     PAGINA 3 — TEMPISTICHE E PAGAMENTO (sempre su pagina propria)
+     ========================================================= -->
+<div class="page">
+
+  <h1 class="section-title">Tempistiche e pagamento</h1>
+  <div class="section-rule"></div>
 
   {% if tempistiche %}
-  <div class="detail-section">
+  <div class="detail-section" style="margin-top:0;">
     <p class="field-label">Tempistiche</p>
     <table class="plain">
       <thead>
@@ -437,35 +479,21 @@
   {% if pagamento %}
   <div class="detail-section">
     <p class="field-label">Modalità di pagamento</p>
-    <table class="plain">
-      <thead>
-        <tr><th>Fase</th><th class="num">Percentuale</th><th class="num">Importo</th></tr>
-      </thead>
-      <tbody>
-        {% for p in pagamento %}
-        <tr><td>{{ p.fase }}</td><td class="num">{{ p.percentuale }}</td><td class="num">{{ p.importo }}</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="pay-cards">
+      {% for p in pagamento %}
+      <div class="pay-card">
+        <div class="pct">{{ p.percentuale }}</div>
+        <div class="fase">{{ p.fase }}</div>
+        <div class="importo">{{ p.importo }}</div>
+      </div>
+      {% endfor %}
+    </div>
   </div>
   {% endif %}
 
   {% if note %}
   <div class="note-box">{{ note }}</div>
   {% endif %}
-
-  <div class="accept-row">
-    <div class="accept-box">
-      <p class="t">Per accettazione — Cliente</p>
-      <div class="l"></div>
-      <p class="cap">Nome, data e firma</p>
-    </div>
-    <div class="accept-box">
-      <p class="t">Sebastian Marzola</p>
-      <div class="l"></div>
-      <p class="cap">Data e firma</p>
-    </div>
-  </div>
 
   <div class="contact-footer">
     <div class="contact-item">
@@ -491,6 +519,7 @@
     </div>
   </div>
 </div>
+{% endif %}
 
 </body>
 </html>

@@ -1,11 +1,12 @@
 # Preventivi — come funziona
 
-Qui dentro c'è il template grafico per i tuoi preventivi (quello con lo stesso stile del tuo sito: fondo scuro, blu elettrico, font Inter). Ogni preventivo esce in PDF, **2 pagine**:
+Qui dentro c'è il template grafico per i tuoi preventivi (stile sito: header con onde blu, logo, font Inter). Ogni preventivo esce in PDF, **3 pagine**:
 
-1. **Pagina 1 — Riepilogo**: intestazione con i tuoi contatti, dati cliente, voci macro e totale in evidenza.
-2. **Pagina 2 — Dettaglio**: voci spacchettate per categoria, cosa è incluso/escluso, tempistiche, modalità di pagamento, firma per accettazione.
+1. **Pagina 1 — Riepilogo**: header con logo, dati cliente, oggetto, voci macro, totale in evidenza, contatti in fondo.
+2. **Pagina 2 — Dettaglio**: voci spacchettate per categoria, cosa è incluso/escluso.
+3. **Pagina 3 — Tempistiche e pagamento**: sempre su una pagina a sé, con le fasi di consegna e le percentuali di pagamento in evidenza, contatti in fondo.
 
-Se un preventivo ha tanta roba dentro, la pagina 2 può "sforare" su una pagina 3 in automatico — non si taglia mai niente, semplicemente continua.
+Se il dettaglio (pagina 2) ha tanta roba dentro, può "sforare" su una pagina in più in automatico — non si taglia mai niente, semplicemente continua. La pagina "Tempistiche e pagamento" invece parte sempre da capo, mai mischiata con le voci di dettaglio.
 
 ## Come genero un nuovo preventivo (in chat, con me)
 
@@ -28,6 +29,7 @@ Il PDF viene salvato nella stessa cartella con il nome `Preventivo <numero> - <c
 - `esempio-dati.json` — un esempio di preventivo compilato, usalo come riferimento per la struttura dati
 - `genera_pdf.py` — lo script che trasforma i dati in PDF
 - `assets/inter.woff2` — il font Inter usato nel template (lo stesso del sito)
+- `assets/logo.png` — il tuo logo
 
 ## Cosa NON fa questo sistema
 

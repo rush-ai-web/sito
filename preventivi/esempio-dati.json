@@ -9,7 +9,6 @@
     "telefono": "347 123 4567"
   },
   "oggetto": "Sito vetrina con prenotazioni online",
-  "intro": "Di seguito il preventivo per la realizzazione del sito web del ristorante, comprensivo di menù digitale e modulo di prenotazione online.",
   "riepilogo": [
     { "voce": "Progettazione e design", "descrizione": "Struttura del sito, grafica e impaginazione su misura", "importo": "€ 600,00" },
     { "voce": "Sviluppo del sito", "descrizione": "5 pagine, responsive, ottimizzato per mobile", "importo": "€ 1.200,00" },
