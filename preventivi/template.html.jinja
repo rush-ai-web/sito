@@ -38,41 +38,54 @@
   }
 
   @page { size: A4; margin: 17mm 16mm; }
+  @page :first { margin: 0; }
 
   .page { page-break-after: always; }
   .page:last-child { page-break-after: auto; }
 
   p { margin: 0; }
 
-  /* ---------- HEADER (pagina 1) ---------- */
+  /* ---------- HERO (pagina 1, a tutta pagina) ---------- */
+  .hero {
+    position: relative;
+    height: 52mm;
+    background: var(--ink);
+    overflow: hidden;
+  }
+  .hero-waves { position: absolute; inset: 0; width: 100%; height: 100%; }
+
   .doc-header {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    padding: 0 16mm;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
   }
 
   .brand { display: flex; align-items: center; gap: 4mm; white-space: nowrap; }
 
   .mark {
-    width: 11mm; height: 11mm;
-    border-radius: 2.5mm;
-    background: var(--ink);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 600; color: #fff; font-size: 4.2mm;
+    width: 14mm; height: 14mm;
     flex: none;
   }
+  .mark img { width: 100%; height: 100%; display: block; }
 
-  .brand-name { font-size: 5mm; font-weight: 600; color: var(--text); white-space: nowrap; }
-  .brand-tag { font-size: 2.7mm; font-weight: 500; color: var(--text-soft); margin-top: 0.8mm; white-space: nowrap; }
+  .brand-name { font-size: 5mm; font-weight: 600; color: #fff; white-space: nowrap; }
+  .brand-tag { font-size: 2.7mm; font-weight: 500; color: var(--accent-light); margin-top: 0.8mm; white-space: nowrap; }
 
   .doc-title-wrap { text-align: right; white-space: nowrap; }
   .doc-title {
     font-size: 8.5mm;
     font-weight: 700;
     letter-spacing: 0.5px;
-    color: var(--text);
+    color: #fff;
   }
-  .doc-date { font-size: 3.1mm; color: var(--text-soft); margin-top: 1.5mm; font-weight: 500; }
+  .doc-date { font-size: 3.1mm; color: var(--accent-light); margin-top: 1.8mm; font-weight: 500; }
+
+  /* ---------- CORPO PAGINA 1 (margini manuali: pagina 1 non usa @page margin) ---------- */
+  .cover-body { padding: 10mm 16mm 17mm 16mm; }
 
   /* ---------- META / CLIENTE / OGGETTO ---------- */
   .field-label {
@@ -88,9 +101,6 @@
     display: flex;
     justify-content: space-between;
     gap: 10mm;
-    margin-top: 13mm;
-    padding-top: 7mm;
-    border-top: 1px solid var(--line);
   }
   .meta-col.align-right { text-align: right; }
   .meta-col .field-label.spaced { margin-top: 4.5mm; }
@@ -255,20 +265,34 @@
      ========================================================= -->
 <div class="page">
 
-  <div class="doc-header">
-    <div class="brand">
-      <div class="mark">SM</div>
-      <div>
-        <div class="brand-name">Sebastian Marzola</div>
-        <div class="brand-tag">Sviluppatore Web</div>
+  <div class="hero">
+    <svg class="hero-waves" viewBox="0 0 794 196" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,110 C150,160 280,80 470,105 C600,125 700,95 794,118 L794,196 L0,196 Z" fill="#0f1830" opacity="0.6"/>
+      <path d="M0,130 C180,170 320,105 500,130 C650,150 720,120 794,138 L794,196 L0,196 Z" fill="#162454" opacity="0.5"/>
+      <path d="M0,150 C200,182 360,138 540,155 C670,168 730,145 794,157 L794,196 L0,196 Z" fill="url(#g1)"/>
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="794" y2="0">
+          <stop offset="0" stop-color="#1e34c8"/>
+          <stop offset="1" stop-color="#2a4bff"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="doc-header">
+      <div class="brand">
+        <div class="mark"><img src="assets/logo.png" alt=""></div>
+        <div>
+          <div class="brand-name">Sebastian Marzola</div>
+          <div class="brand-tag">Sviluppatore Web</div>
+        </div>
       </div>
-    </div>
-    <div class="doc-title-wrap">
-      <p class="doc-title">Preventivo</p>
-      <p class="doc-date">{{ data }}</p>
+      <div class="doc-title-wrap">
+        <p class="doc-title">Preventivo</p>
+        <p class="doc-date">{{ data }}</p>
+      </div>
     </div>
   </div>
 
+  <div class="cover-body">
   <div class="meta-grid">
     <div class="meta-col">
       <p class="field-label">Spett.le</p>
@@ -337,6 +361,7 @@
       <div class="sign-line"></div>
       <p class="sign-cap">Firma</p>
     </div>
+  </div>
   </div>
 </div>
 
