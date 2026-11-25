@@ -32,3 +32,7 @@ Il PDF viene salvato nella stessa cartella con il nome `Preventivo <numero> - <c
 ## Cosa NON fa questo sistema
 
 Non inventa mai prezzi: se in chat non ti do una cifra per una voce, significa che manca e va confermata prima di mandare il preventivo al cliente.
+
+## Modalità di pagamento di default
+
+Se non dico diversamente, uso sempre: **30% di acconto all'avvio dei lavori, 70% di saldo alla consegna**.
