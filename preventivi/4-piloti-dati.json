@@ -1,0 +1,70 @@
+{
+  "numero": "2026-03",
+  "data": "25 novembre 2026",
+  "validita": "30 giorni",
+  "cliente": {
+    "nome": "Matteo Olivieri"
+  },
+  "oggetto": "Siti one-page per 4 piloti Sorpasso",
+  "riepilogo": [
+    {
+      "voce": "Siti one-page per 4 piloti",
+      "descrizione": "Template one-page condiviso, ispirato a landonorris.com e conciliato con lo stile Sorpasso, riadattato e personalizzato per Davide Dotta, Noah Dettwiler, Nicolò Fasciano e Alessandro Binder",
+      "importo": "€ 1.900,00"
+    }
+  ],
+  "subtotale": "€ 1.900,00",
+  "sconto": null,
+  "totale": "€ 1.900,00",
+  "dettaglio": [
+    {
+      "categoria": "Progettazione template",
+      "elenco": [
+        "Moodboard e direzione visiva ispirata a landonorris.com",
+        "Adattamento di palette, tipografia e dettagli grafici allo stile Sorpasso (rosso, righe distintive, font)",
+        "Impaginazione one-page del template condiviso"
+      ]
+    },
+    {
+      "categoria": "Sviluppo",
+      "elenco": [
+        "Sviluppo del template one-page, responsive",
+        "Collegamento a repository Git per il deploy",
+        "Pubblicazione su Vercel dei 4 siti"
+      ]
+    },
+    {
+      "categoria": "Personalizzazione per pilota",
+      "elenco": [
+        "Adattamento di contenuti, foto e video per ciascuno dei 4 piloti",
+        "Leggere personalizzazioni grafiche per ogni pagina pilota"
+      ]
+    },
+    {
+      "categoria": "Contenuti",
+      "elenco": [
+        "Rielaborazione (editing e/o AI) delle foto e dei video forniti per ciascun pilota",
+        "Inserimento e impaginazione dei contenuti nelle rispettive pagine"
+      ]
+    }
+  ],
+  "incluso": [
+    "Hosting su Vercel per i 4 siti (piano gratuito)",
+    "Editing/rielaborazione dei materiali forniti (foto e video) per ciascun pilota",
+    "1 ciclo di revisione grafica per sito"
+  ],
+  "escluso": [
+    "Acquisto e rinnovo dei domini (a carico del cliente)",
+    "Produzione di nuove foto o video (il materiale di base va fornito per ogni pilota)",
+    "Copywriting dei testi"
+  ],
+  "tempistiche": {
+    "durata": "6 settimane",
+    "nota": "dalla conferma dell'incarico"
+  },
+  "pagamento": [
+    { "fase": "Acconto all'avvio dei lavori", "percentuale": "30%", "importo": "€ 570,00" },
+    { "fase": "Saldo alla consegna", "percentuale": "70%", "importo": "€ 1.330,00" }
+  ],
+  "note": ""
+}

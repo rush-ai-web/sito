@@ -3,7 +3,7 @@
 Qui dentro c'è il template grafico per i tuoi preventivi (stile sito: header con onde blu, logo, font Inter). Ogni preventivo esce in PDF, **3 pagine**:
 
 1. **Pagina 1 — Riepilogo**: header con logo, dati cliente, oggetto, voci macro, totale in evidenza, contatti in fondo.
-2. **Pagina 2 — Dettaglio**: voci spacchettate per categoria, cosa è incluso/escluso.
+2. **Pagina 2 — Dettaglio**: voci spacchettate per categoria (con prezzo per riga, oppure come semplice elenco puntato se il lavoro è a prezzo unico non spacchettato), cosa è incluso/escluso.
 3. **Pagina 3 — Tempistiche e pagamento**: sempre su una pagina a sé, con il tempo di consegna totale (non diviso per fase) e le percentuali di pagamento in evidenza, contatti in fondo.
 
 Se il dettaglio (pagina 2) ha tanta roba dentro, può "sforare" su una pagina in più in automatico — non si taglia mai niente, semplicemente continua. La pagina "Tempistiche e pagamento" invece parte sempre da capo, mai mischiata con le voci di dettaglio.
@@ -26,7 +26,8 @@ Il PDF viene salvato nella stessa cartella con il nome `Preventivo <numero> - <c
 ## File in questa cartella
 
 - `template.html.jinja` — il template grafico (non va toccato a mano se non per modifiche di stile)
-- `esempio-dati.json` — un esempio di preventivo compilato, usalo come riferimento per la struttura dati
+- `esempio-dati.json` — un esempio di preventivo compilato (voci con prezzo riga per riga), usalo come riferimento per la struttura dati
+- `noah-dettwiler-dati.json`, `4-piloti-dati.json` — i due preventivi per i siti dei piloti Sorpasso (prezzo unico, dettaglio come elenco puntato invece che tabella prezzata — vedi il campo `"elenco"` al posto di `"voci"` dentro `"dettaglio"`)
 - `genera_pdf.py` — lo script che trasforma i dati in PDF
 - `assets/inter.woff2` — il font Inter usato nel template (lo stesso del sito)
 - `assets/logo.png` — il tuo logo

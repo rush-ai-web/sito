@@ -275,6 +275,9 @@
   ul.simple.yes li svg { color: var(--accent-deep); }
   ul.simple.no li svg { color: #9aa3b4; }
 
+  ul.simple.plain li { padding-left: 3.4mm; position: relative; }
+  ul.simple.plain li::before { content: '–'; position: absolute; left: 0; color: var(--text-soft); }
+
   /* ---------- PAGINA 3: TEMPISTICHE E PAGAMENTO ---------- */
   .stat-block { margin-top: 4mm; text-align: center; }
   .stat-value { font-size: 10mm; font-weight: 700; color: var(--text); }
@@ -441,6 +444,11 @@
   {% for cat in dettaglio %}
   <div class="cat-block">
     <p class="cat-title">{{ cat.categoria }}</p>
+    {% if cat.elenco %}
+    <ul class="simple plain">
+      {% for d in cat.elenco %}<li>{{ d }}</li>{% endfor %}
+    </ul>
+    {% else %}
     <table class="plain">
       <thead>
         <tr>
@@ -461,6 +469,7 @@
         {% endfor %}
       </tbody>
     </table>
+    {% endif %}
   </div>
   {% endfor %}
 

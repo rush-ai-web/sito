@@ -1,0 +1,63 @@
+{
+  "numero": "2026-02",
+  "data": "25 novembre 2026",
+  "validita": "30 giorni",
+  "cliente": {
+    "nome": "Matteo Olivieri"
+  },
+  "oggetto": "Sito one-page per Noah Dettwiler",
+  "riepilogo": [
+    {
+      "voce": "Sito one-page – Noah Dettwiler",
+      "descrizione": "Design e sviluppo one-page ispirato a landonorris.com, conciliato con lo stile Sorpasso (rosso, righe distintive, font), con editing dei contenuti forniti e pubblicazione su Vercel",
+      "importo": "€ 600,00"
+    }
+  ],
+  "subtotale": "€ 600,00",
+  "sconto": null,
+  "totale": "€ 600,00",
+  "dettaglio": [
+    {
+      "categoria": "Progettazione e direzione creativa",
+      "elenco": [
+        "Moodboard e direzione visiva ispirata a landonorris.com",
+        "Adattamento di palette, tipografia e dettagli grafici allo stile Sorpasso (rosso, righe distintive, font)",
+        "Impaginazione one-page su misura per il pilota"
+      ]
+    },
+    {
+      "categoria": "Sviluppo",
+      "elenco": [
+        "Sviluppo del sito one-page, responsive",
+        "Collegamento a repository Git per il deploy",
+        "Pubblicazione su Vercel"
+      ]
+    },
+    {
+      "categoria": "Contenuti",
+      "elenco": [
+        "Rielaborazione (editing e/o AI) delle foto e dei video forniti",
+        "Inserimento e impaginazione dei contenuti nel sito"
+      ]
+    }
+  ],
+  "incluso": [
+    "Hosting su Vercel (piano gratuito)",
+    "Editing/rielaborazione dei materiali forniti (foto e video)",
+    "1 ciclo di revisione grafica"
+  ],
+  "escluso": [
+    "Acquisto e rinnovo del dominio (a carico del cliente)",
+    "Produzione di nuove foto o video (il materiale di base va fornito)",
+    "Copywriting dei testi"
+  ],
+  "tempistiche": {
+    "durata": "3 settimane",
+    "nota": "dalla conferma dell'incarico"
+  },
+  "pagamento": [
+    { "fase": "Acconto all'avvio dei lavori", "percentuale": "30%", "importo": "€ 180,00" },
+    { "fase": "Saldo alla consegna", "percentuale": "70%", "importo": "€ 420,00" }
+  ],
+  "note": ""
+}
